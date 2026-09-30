@@ -245,3 +245,18 @@ excluded:
     class: preflight_failed
     spec: osap_source/cache/b4e911e6/MS/spec.md
     date: "2026-10-01"
+  MomOffSeason11YrPlus:
+    reason: "data start: 55 off-season returns at lags 120..178 need the close at BME(t-179); with SEP from 1997-12 the first full-window signal is 2012-11-30, so only 109 of 276 decision months can score, under rebalance.min_months 120 (history_months equals the full window, the hard rule for return-window factors; OSAP's partial-window skipna scoring is not reproduced, decision momentum_partial_windows)"
+    class: data_start
+    spec: osap_source/cache/b4e911e6/MomOffSeason11YrPlus/spec.md
+    date: "2026-10-01"
+  MomOffSeason16YrPlus:
+    reason: "data start: 55 off-season returns at lags 180..238 need the close at BME(t-239); first full-window signal 2017-11-30, so only 49 of 276 decision months can score, under rebalance.min_months 120 (decision momentum_partial_windows)"
+    class: data_start
+    spec: osap_source/cache/b4e911e6/MomOffSeason16YrPlus/spec.md
+    date: "2026-10-01"
+  MomRev:
+    reason: "two-valued flag (1 = top Mom6m and bottom Mom36m quintile, 0 = the reverse, NaN otherwise): coverage 4.2-16.7% of the universe (mean 9.0%, pooled 8.0%), under 40% in every month; modal share 50.0-73.4% among scored names, at most 2 of 10 deciles fillable. Measured by osap-fetcher on the harness universe, 251 scorable months"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/MomRev/spec.md
+    date: "2026-10-01"
