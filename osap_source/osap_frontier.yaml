@@ -235,3 +235,8 @@ excluded:
     class: data_unavailable
     spec: osap_source/cache/b4e911e6/InvestPPEInv/spec.md
     date: "2026-10-01"
+  Mom6mJunk:
+    reason: "needs an S&P/CIQ credit rating (splticrm, comp.adsprate, CIQ fallback) to select junk-rated firms; no held Sharadar table carries ratings (EVENTS code 63 is credit enhancement, not a rating); OSAP does not zero-fill it (missing rating -> observation dropped)"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/Mom6mJunk/spec.md
+    date: "2026-10-01"
