@@ -1085,7 +1085,7 @@ def parse_result_blocks(text):
 REQUIRED_STAGE1_KEYS = [
     "stage", "factor", "harness_sha", "config_sha", "data_sha",
     "ic_mean", "icir", "ic_tstat", "ic_tstat_nw", "ic_half_min", "ls_sharpe",
-    "ls_ann_return_pct", "coverage_pct", "avg_names_per_decile", "n_months",
+    "ls_ann_return_pct", "ls_raw_ann_return_pct", "coverage_pct", "avg_names_per_decile", "n_months",
     "ls_n_months", "eval_start", "eval_end",
     "ls_beta_mean", "ls_raw_sharpe",        # the regime Sharpe is NA on a short sample, so it is printed, not required
 ]
@@ -1206,14 +1206,22 @@ def validate_results(parsed, expected_harness_sha, expected_config_sha, config,
 def stage1_checks(values, thresholds, ls_floor=None):
     """The Stage 1 bars as (name, value, bound, direction) from a flat dict of
     stats. Shared by the runner (which has the stats) and the evaluator (which
-    has the parsed block), so the two cannot drift."""
+    has the parsed block), so the two cannot drift.
+
+    The positive-spread bar reads the series `thresholds["ls_spread_series"]`
+    names: "raw" (the default, and the pre-registered choice, D11) reads the
+    RAW D10-D1 annual return (`ls_raw_ann_return_pct`); "hedged" reads the
+    market-hedged headline (`ls_ann_return_pct`). The row is named after the
+    series it read, so a printed bar and a registry row say which one decided.
+    An absent key never reinstates the hedged bar."""
     t = thresholds
+    spread_key = ("ls_ann_return_pct" if str(t.get("ls_spread_series", "raw")).lower() == "hedged"
+                  else "ls_raw_ann_return_pct")
     checks = [
         ("ic_mean", values.get("ic_mean"), t["min_ic_mean"], "ge"),
         ("ic_tstat_nw", values.get("ic_tstat_nw"), t["min_ic_tstat_nw"], "ge"),
         ("ic_half_min", values.get("ic_half_min"), t["min_ic_half_mean"], "ge"),
-        ("ls_ann_return_pct", values.get("ls_ann_return_pct"),
-         t["min_ls_ann_return_pct"], "ge"),
+        (spread_key, values.get(spread_key), t["min_ls_ann_return_pct"], "ge"),
         ("coverage_pct", values.get("coverage_pct"), t["min_coverage_pct"], "ge"),
         ("avg_names_per_decile", values.get("avg_names_per_decile"),
          t["min_avg_names_per_decile"], "ge"),

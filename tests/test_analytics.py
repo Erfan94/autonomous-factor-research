@@ -521,7 +521,7 @@ def test_stage3_blocks_are_distinct_by_variant():
 def _good_stage1():
     return {"stage": "1", "factor": "BM", "harness_sha": "abc", "config_sha": "def", "data_sha": "ghi",
             "ic_mean": 0.02, "icir": 0.3, "ic_tstat": 3.0, "ic_tstat_nw": 2.8, "ic_half_min": 0.01,
-            "ls_sharpe": 0.5, "ls_ann_return_pct": 4.0, "coverage_pct": 70.0,
+            "ls_sharpe": 0.5, "ls_ann_return_pct": 4.0, "ls_raw_ann_return_pct": 4.5, "coverage_pct": 70.0,
             "avg_names_per_decile": 200.0, "n_months": 324.0, "ls_n_months": 324.0,
             "eval_start": "1999-01-01", "eval_end": "2025-12-31", "survivorship_max_gone_pct": 45.0,
             "ls_beta_mean": -0.1, "ls_raw_sharpe": 0.45, "ls_sharpe_ex_top_years": 0.3}
@@ -591,7 +591,7 @@ def test_stage1_passes_a_strong_factor_and_lists_every_bar():
     passed, details = check_stage1(_good_stage1(), S1, min_ls_months=120)
     assert passed
     assert [d["check"] for d in details] == ["ic_mean", "ic_tstat_nw", "ic_half_min",
-                                             "ls_ann_return_pct", "coverage_pct",
+                                             "ls_raw_ann_return_pct", "coverage_pct",
                                              "avg_names_per_decile", "ls_n_months"]
 
 
@@ -602,14 +602,17 @@ def test_stage1_has_no_sharpe_or_hit_rate_bar():
 
 def test_stage1_has_no_cost_bar():
     names = [c[0] for c in stage1_checks(_good_stage1(), S1)]
-    assert "ls_net_ann_return_pct" not in names and "ls_ann_return_pct" in names
+    assert "ls_net_ann_return_pct" not in names and "ls_raw_ann_return_pct" in names
+    assert "ls_ann_return_pct" not in names, "the hedged headline is not a Stage 1 bar (D11)"
 
 
 def test_stage1_fails_on_one_regime_or_a_negative_gross_spread():
     r = _good_stage1(); r["ic_half_min"] = -0.002
     assert not check_stage1(r, S1)[0]
-    r = _good_stage1(); r["ls_ann_return_pct"] = -0.5
+    r = _good_stage1(); r["ls_raw_ann_return_pct"] = -0.5
     assert not check_stage1(r, S1)[0]
+    r = _good_stage1(); r["ls_ann_return_pct"] = -0.5     # the hedged headline is not read by Stage 1
+    assert check_stage1(r, S1)[0]
 
 
 def test_missing_value_fails_rather_than_passing_by_default():

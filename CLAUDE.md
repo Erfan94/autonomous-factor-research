@@ -23,8 +23,10 @@ before any candidate was screened. The selection rules are unchanged.
 2. **The long-short is hedged to the market by construction**
    (`market_hedge`): D10−D1 minus β_t × the universe's own cap-weighted
    return, β_t estimated on months t−36..t−1 only (β = 0 before 12 months of
-   history). Every LS number a bar reads is the hedged one; the raw series
-   and the β are printed and recorded beside it.
+   history). The hedge reaches the bars in exactly one place: the Stage 2
+   return guard reads the hedged family blend. The Stage 1 positive-spread
+   bar reads the RAW D10−D1, as the predecessor's did (D11). Every reported
+   headline is hedged, with the raw series and the β beside it.
 3. **Every block and every Stage 2 rung prints the long-short's β (full-window
    and ex-ante), the raw Sharpe, and a date-free ex-regime Sharpe**
    (`diagnostics`: Sharpe after removing the 3 best LS calendar years, plus
@@ -84,7 +86,8 @@ transaction cost is charged anywhere.** Turnover is reported, never decides.
   as the cross-check). D2 states why this block is a clean test of the
   selection but not an unbiased test of the construction change.
 - **Stage 1, standalone screen** (unchanged): mean IC ≥ 0.010; Newey-West IC
-  t ≥ 2.5; mean IC > 0 in both halves; hedged D10−D1 GROSS annual return > 0;
+  t ≥ 2.5; mean IC > 0 in both halves; RAW D10−D1 GROSS annual return > 0
+  (`ls_raw_ann_return_pct`, D11);
   coverage ≥ 40%; ≥ 30 names per decile; LS months ≥ floor.
 - **Families** (Phase C): every Stage 1 passer is assigned to one of fewer
   than ten families by economic definition (SignalDoc `Cat.Economic` is the

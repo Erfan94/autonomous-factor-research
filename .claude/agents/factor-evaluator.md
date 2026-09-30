@@ -37,10 +37,12 @@ a disagreement is `harness_defect_found`, stop, no row.
 
 Stage 1 passing earns a place in the family-assignment step (Phase C) and
 then a Stage 2 rung; its bars are information and a positive GROSS D10−D1
-spread — no cost is charged anywhere in this project. Stage 2 accepts on
-TWO bars: residual IC NW t STRICTLY GREATER THAN 2.0, and the guard that
-the family blend's gross LS return did not fall significantly (paired ΔLS
-t ≥ −2.0). The paired composite-ΔIC (`paired_delta_ic_tstat`),
+spread read on the RAW (unhedged) series — the bar row is named
+`ls_raw_ann_return_pct` (D11); the block's hedged headline
+`ls_ann_return_pct` is reported beside it and is NOT a Stage 1 bar. No cost
+is charged anywhere in this project. Stage 2 accepts on TWO bars: residual
+IC NW t STRICTLY GREATER THAN 2.0, and the guard that the family blend's
+HEDGED gross LS return did not fall significantly (paired ΔLS t ≥ −2.0). The paired composite-ΔIC (`paired_delta_ic_tstat`),
 `spanning_alpha_tstat_nw`, `spanning_r2`, `delta_ls_sharpe`,
 `maxdd_worsening_pct` are diagnostics — say what they did, never reject on
 them. So are the construction rows this project adds (docs/DECISIONS.md D5):

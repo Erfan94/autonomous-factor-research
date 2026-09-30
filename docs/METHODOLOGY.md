@@ -11,7 +11,7 @@
 - **Diagnostics on every block and rung** (never bars): full-window and ex-ante β, raw Sharpe, Sharpe ex the 3 best LS calendar years (with those years and their share of the summed return), Sharpe in bear and bull months (state = sign of the trailing 12-month market return at t−1).
 
 ## Stages
-1. **Stage 1** (standalone): IC ≥ 0.010, NW t ≥ 2.5, both halves > 0, hedged gross D10−D1 > 0, coverage ≥ 40%, ≥ 30 names per decile, LS months ≥ floor.
+1. **Stage 1** (standalone): IC ≥ 0.010, NW t ≥ 2.5, both halves > 0, RAW gross D10−D1 > 0 (the unhedged spread, D11), coverage ≥ 40%, ≥ 30 names per decile, LS months ≥ floor. The block's headline LS is hedged; the bar reads the raw figure beside it.
 2. **Families**: fewer than ten, assigned by economic definition after Stage 1, before any Stage 2 number.
 3. **Stage 2** (marginal information): residual IC NW t > 2.0 after projecting the candidate's normal score on every current leg's normal score (within-sector ranks); guard: paired Δ of the family blend's hedged gross LS return, t ≥ −2.0. Diagnostics: paired ΔIC, spanning alpha, R², ΔSharpe, ΔMaxDD, Δβ, Δ ex-regime Sharpe.
 4. **Stage 3** (construction, reported): equal decile, tier-neutral, ICIR-weighted, buffered, vol-targeted, each hedged as the search construction is. The institutional construction layer on the finished composite is `docs/CONSTRUCTION.md`, with the changes D7 owes it.

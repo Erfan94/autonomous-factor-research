@@ -17,6 +17,8 @@ from harness.analytics import (assign_composite_decile, compute_ic, fullwindow_b
                                regime_diagnostics, regime_params, trailing_beta, universe_market_return)
 from harness.provenance import load_config
 
+CFG = load_config()
+
 
 def test_config_declares_the_three_changes_and_the_windows():
     cfg = load_config()
@@ -189,3 +191,51 @@ def test_report_without_a_hedge_is_the_raw_series():
         st = print_summary("t", ret, cnt, compute_ic(audit), audit)
     assert st["hedge_on"] == "False" and st["ls_sharpe"] == pytest.approx(st["ls_raw_sharpe"])
     assert st["ls_beta_mean"] == 0.0 and "cut_holdout_n_months" not in st
+
+
+# =============================================================================
+# D11 — the Stage 1 spread bar reads the RAW D10−D1; the Stage 2 guard reads
+# the hedged blend. The hedge reaches the bars in exactly one place.
+# =============================================================================
+
+def _s1_values(raw, hedged):
+    return {"ic_mean": 0.02, "ic_tstat_nw": 3.0, "ic_half_min": 0.005, "coverage_pct": 70.0,
+            "avg_names_per_decile": 120.0, "ls_ann_return_pct": hedged, "ls_raw_ann_return_pct": raw}
+
+
+def test_the_config_declares_the_raw_spread_bar_and_the_bar_row_is_named_after_it():
+    from harness.analytics import stage1_checks
+    thr = CFG["acceptance_thresholds"]["stage1_standalone"]
+    assert thr["ls_spread_series"] == "raw"
+    names = [c[0] for c in stage1_checks(_s1_values(1.0, 1.0), thr)]
+    assert "ls_raw_ann_return_pct" in names and "ls_ann_return_pct" not in names
+
+
+def test_stage1_judges_the_raw_spread_not_the_hedged_one():
+    from harness.analytics import check_stage1
+    thr = CFG["acceptance_thresholds"]["stage1_standalone"]
+    assert not check_stage1(_s1_values(raw=-0.5, hedged=+3.0), thr)[0], "negative raw spread fails"
+    assert check_stage1(_s1_values(raw=+0.5, hedged=-3.0), thr)[0], "the hedged headline is not a bar"
+
+
+def test_an_absent_switch_defaults_to_raw_and_hedged_must_be_asked_for():
+    from harness.analytics import stage1_checks
+    thr = {k: v for k, v in CFG["acceptance_thresholds"]["stage1_standalone"].items() if k != "ls_spread_series"}
+    assert [c[0] for c in stage1_checks(_s1_values(1.0, 1.0), thr)][3] == "ls_raw_ann_return_pct"
+    thr["ls_spread_series"] = "hedged"
+    assert [c[0] for c in stage1_checks(_s1_values(1.0, 1.0), thr)][3] == "ls_ann_return_pct"
+
+
+def test_the_switch_has_no_effect_on_stage2():
+    from harness.analytics import stage2_checks
+    s2 = dict(CFG["acceptance_thresholds"]["stage2_marginal"])
+    vals = {"resid_ic_tstat_nw": 2.5, "paired_delta_ls_tstat": -0.5}
+    base = stage2_checks(vals, s2)
+    s2["ls_spread_series"] = "hedged"
+    assert stage2_checks(vals, s2) == base
+    assert [c[0] for c in base] == ["resid_ic_tstat_nw", "paired_delta_ls_tstat"]
+
+
+def test_a_stage1_block_must_carry_the_raw_spread():
+    from harness.analytics import REQUIRED_STAGE1_KEYS
+    assert "ls_raw_ann_return_pct" in REQUIRED_STAGE1_KEYS and "ls_ann_return_pct" in REQUIRED_STAGE1_KEYS

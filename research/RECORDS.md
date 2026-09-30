@@ -39,7 +39,7 @@ history_gate_months: null
 preflight: {masspoint_max_pct: 0.3, qcut_min_bins: 10, coverage_min_pct: 71.2}
 stage1:   # from the block, verbatim
   ic_mean: ..., ic_tstat_nw: ..., ic_half1_mean: ..., ic_half2_mean: ..., ls_sharpe: ...,
-  ls_ann_return_pct: ..., ls_maxdd_pct: ..., turnover_d10_pct: ..., coverage_pct: ..., avg_names_per_decile: ...,
+  ls_ann_return_pct: ..., ls_raw_ann_return_pct: ..., ls_maxdd_pct: ..., turnover_d10_pct: ..., coverage_pct: ..., avg_names_per_decile: ...,
   n_months: ..., ls_n_months: ..., ic_decay_h1: ..., ic_decay_h6: ..., tier_MEGA_ic_mean: ..., tier_SMALL_ic_mean: ...
   ls_raw_sharpe: ..., ls_beta_mean: ..., ls_beta_fullwindow: ..., ls_sharpe_ex_top_years: ..., ls_top_years: "...",
   ls_sharpe_bear: ..., ls_sharpe_bull: ...      # D5 diagnostics, verbatim from the block; never bars

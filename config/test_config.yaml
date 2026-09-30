@@ -11,13 +11,16 @@
 # selection rules are the predecessor's, unchanged (research/LESSONS.md 1-26):
 # select on INFORMATION with significance tests, never on the Sharpe or the
 # after-cost return of one construction. Costs appear nowhere in this file.
-# What is new (LESSONS 27-29, docs/DECISIONS.md D3-D5): ranks are formed
+# What is new (LESSONS 27-29, docs/DECISIONS.md D3-D5, D11): ranks are formed
 # within sector before the family blend; the long-short is hedged to the
 # market with an ex-ante trailing beta; every block carries the long-short's
-# beta and a date-free regime diagnostic. None of the three is a bar.
+# beta and a date-free regime diagnostic. None of the three is a bar. The
+# hedge reaches the bars in exactly one place: the Stage 2 return guard reads
+# the hedged family blend. The Stage 1 positive-spread bar reads the RAW
+# D10-D1 (`stage1_standalone.ls_spread_series`), as the predecessor's did.
 # =============================================================================
 
-schema_version: 5
+schema_version: 6
 
 # -----------------------------------------------------------------------------
 # UNIVERSE — US point-in-time, rebuilt from the snapshot at every signal date.
@@ -113,6 +116,9 @@ ranking:
 # `beta_min_months` of history -> beta = 0 (unhedged), never a two-month
 # estimate. The raw series and the beta are printed and recorded beside it on
 # every block (D4). Gross: no cost is charged on the hedge or anywhere else.
+# Which bars read the hedged series is decided under acceptance_thresholds,
+# not here: the Stage 2 guard does; the Stage 1 spread bar reads the raw
+# series (D11).
 # -----------------------------------------------------------------------------
 market_hedge:
   enabled: true
@@ -178,12 +184,16 @@ statistics:
 #
 # Stage 1 (standalone screen): is the signal informative, stable across the
 # sample, monotone enough that its tails earn a positive gross spread, and
-# measured on enough of the universe? The spread is the hedged D10-D1.
+# measured on enough of the universe? The spread bar reads the RAW D10-D1
+# (`ls_spread_series: raw`, D11): a standalone signal is judged on its own
+# spread, as the predecessor judged it. The block's headline LS is still the
+# hedged series, with the raw figure and the beta beside it.
 #
 # Stage 2 (marginal, the ratchet): does the signal carry information no
 # combination of the existing legs carries (residual IC, construction-free),
-# AND does the family blend's hedged long-short return not fall significantly
-# (guard, bound negative on purpose)? The paired composite-dIC, the spanning
+# AND does the family blend's HEDGED long-short return not fall significantly
+# (guard, bound negative on purpose)? The guard is the one bar the hedge
+# reaches: a leg is judged on what it does to the strategy that will be held. The paired composite-dIC, the spanning
 # alpha, R2, Sharpe and MaxDD deltas, the beta and the ex-regime Sharpe are
 # DIAGNOSTICS printed on every rung; none is a bar.
 #
@@ -202,7 +212,8 @@ acceptance_thresholds:
     min_ic_mean: 0.010
     min_ic_tstat_nw: 2.50            # Newey-West t of the monthly rank IC
     min_ic_half_mean: 0.0            # mean IC > 0 in BOTH halves of the window
-    min_ls_ann_return_pct: 0.0       # hedged D10-D1 GROSS annual return must be positive
+    min_ls_ann_return_pct: 0.0       # D10-D1 GROSS annual return must be positive, on the series named below
+    ls_spread_series: "raw"          # D11: the bar reads the RAW D10-D1 (ls_raw_ann_return_pct); "hedged" = the hedged headline
     min_coverage_pct: 40.0
     min_avg_names_per_decile: 30
 

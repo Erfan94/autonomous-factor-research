@@ -65,7 +65,8 @@ def build_index():
         rows.append({
             "name": r.get("name", p.stem), "status": r.get("status"), "batch": r.get("batch"),
             "ic": _g(s1, "ic_mean"), "ic_t": _g(s1, "ic_tstat_nw"), "sharpe": _g(s1, "ls_sharpe"),
-            "ret": _g(s1, "ls_ann_return_pct"), "cov": _g(s1, "coverage_pct"),
+            "ret": _g(s1, "ls_ann_return_pct"), "raw_ret": _g(s1, "ls_raw_ann_return_pct"),
+            "cov": _g(s1, "coverage_pct"),
             "resid_t": _g(s2, "resid_ic_tstat_nw"), "span_t": _g(s2, "spanning_alpha_tstat_nw"),
             "dic_t": _g(s2, "paired_delta_ic_tstat"), "dls_t": _g(s2, "paired_delta_ls_tstat"),
             "d_sharpe": _g(s2, "delta_ls_sharpe"),

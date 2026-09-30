@@ -82,9 +82,12 @@ Headline LS_t = (D10−D1)_t − β_t × M_t, where M is the universe's own
 cap-weighted holding-month return (never an index, so no series the
 snapshot does not hold) and β_t is the OLS slope of the raw LS on M over
 months t−36..t−1 only. Fewer than 12 prior months → β = 0 (unhedged), never
-a two-month estimate. The hedge applies to every LS a bar reads: the Stage 1
-positive-spread bar, the Stage 2 return guard, the baseline, the Stage 3
-variants. The raw series, the ex-ante β and the full-window β of the raw LS
+a two-month estimate. The hedged series is the headline of every block: the
+standalone screens, the Stage 2 arms, the baseline, the Stage 3 variants.
+Which BARS read it is D11: the Stage 2 return guard does; the Stage 1
+positive-spread bar reads the raw D10−D1. (As first written on 2026-09-30
+this entry hedged both bars; D11 records the owner's correction, made
+before any run existed.) The raw series, the ex-ante β and the full-window β of the raw LS
 are printed and recorded beside every hedged number, so the choice is
 auditable on every block. Gross: no cost is charged on the hedge or
 anywhere else. Parameters in `config market_hedge`.
@@ -114,9 +117,12 @@ two-level, renormalised); fewer than ten families assigned after Stage 1;
 Stage 2 order descending Stage 1 t, ladders of five; the broad relative
 universe with the 20/15 membership band; batches of 12 in alphabetical
 order; the flip rule at |t| ≥ 2.74. Tighter t bars, stability-in-thirds
-screens, family caps and a hedged Stage 2 guard all sat within noise of the
-as-run rules in the predecessor's six-fold walk-forward, and a large-cap
-universe was worse, so no pre-registration is spent on them.
+screens and family caps all sat within noise of the as-run rules in the
+predecessor's six-fold walk-forward, and a large-cap universe was worse, so
+no pre-registration is spent on them. A hedged Stage 2 guard also sat within
+noise there; it is adopted anyway (D11), for consistency with the hedged
+construction rather than for any measured gain, and the Stage 1 spread bar
+stays raw.
 
 ## D7 — 2026-09-30 — What Phase E must change in the construction layer, declared now (owner: loop)
 
@@ -170,3 +176,42 @@ before every acceptance and whenever a result looks too good. Subagents as
 in `docs/ORCHESTRATION.md`. The bootstrap session ran with knowledge of the
 predecessor's outcomes; nothing it wrote into V4 names a predictor's
 verdict, and the family list it left is the five seeds only.
+
+## D11 — 2026-09-30 — Which bars the hedge reaches: the Stage 2 guard, not the Stage 1 spread (owner: Erfan; principle)
+
+As bootstrapped, D4 hedged every long-short a bar reads, while D6 and
+LESSONS 28 listed "a hedged Stage 2 guard" among the tuning ideas not
+adopted: a rule contradicting itself (stop-and-ask 6), surfaced by the
+owner's verification of the bootstrap on 2026-09-30, before the snapshot
+was pulled and before any run existed. The owner's instructions had pulled
+in two directions: item 1 (hedge market beta) and item 4 (keep the
+selection process). The owner's decision, given in chat:
+
+* **Stage 1**: the positive-spread bar reads the **raw** D10−D1 annual
+  return (`ls_raw_ann_return_pct`; config
+  `stage1_standalone.ls_spread_series: raw`). A standalone signal is judged
+  on its own spread, exactly as the predecessor judged it, so the Stage 1
+  screen is unchanged in every bar and every level.
+* **Stage 2**: the return guard reads the **hedged** family blend (paired
+  Δ of the hedged LS, NW t ≥ −2.0). A leg is judged on what it does to the
+  strategy that will be held, which is the hedged one. LESSONS 28 measured
+  this guard as within noise of the raw one; it is adopted for consistency
+  with the construction, not for gain.
+* Everything reported stays hedged with the raw series and β beside it; the
+  spanning diagnostic hedges the candidate's solo LS the same way (like
+  with like); Stage 3 and the layer are unchanged.
+
+Implementation: one switch in the Stage 1 threshold block, read by the
+shared `stage1_checks`, so the runner and the evaluator cannot drift; the
+bar row is named after the series it read; `ls_raw_ann_return_pct` is a
+required Stage 1 block key. The switch defaults to `raw` in code so an
+absent key can never reinstate the rejected rule. Config schema 5 → 6.
+HARNESS_SHA and CONFIG_SHA move with no run behind them; the change was
+written from the predecessor's session under the owner's authorisation
+(this file sits in V4's `ask` tier). D4 and D6 are amended in place with a
+pointer here; the original wording is in the first commit.
+
+Not decided, and not to be revisited: a decile-monotonicity statistic. The
+owner declined to add one, even as a diagnostic; the decile table is read,
+as before, and IC plus the positive spread remain the only monotonicity
+proxies.
