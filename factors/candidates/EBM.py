@@ -53,7 +53,7 @@ DEVIATIONS FROM OSAP:
   - ceq -> SF1.equity, which includes preferred stock (OSAP ceq excludes it).
   - che -> cashneq + investmentsc.fillna(0): financing receivables for captive
     finance names are included, banks/insurers understated. NaN only if cashneq is NaN.
-  - Book side is the latest filed quarter (0-3 months old, capped at
+  - Book side is the latest filed quarter (usually 0-3 months old, at most 15:
     max_fundamental_age_months) vs OSAP annual items at datadate + 6 months
     (6-17 months old). M is the month-end value in both.
   - mve_permco -> DAILY.marketcap (primary-class ticker, all-class shares), a

@@ -83,7 +83,7 @@ guards: M > 0; EV > 0 (else NaN); fxusd == 1 (else NaN); non-finite -> NaN; nega
 ```
 Deviations: (a) `dc` (convertible debt), `dvpa`, `tstkp` always 0; (b) `debt` INCLUDES operating-lease liabilities (ASC 842 break, FY2019 filings) and
 bank repo, and is populated for financials where `debtc`/`debtnc` are ~20% null; the known-trap ruling "gate SF1.debt on debtc.notna()" would
-drop that ~20% (mostly financials/REITs) to mimic OSAP's un-zero-filled dltt/dlc; BPEBM did NOT gate, so follow BPEBM for consistency and log it;
+drop that ~20% (mostly financials/REITs) to mimic OSAP's un-zero-filled dltt/dlc; RESOLVED 2026-09-30: the unclassified_balance_sheet_block ruling applies, so EBM gates on debtc.notna() and BPEBM was brought into line (process_finding debt_gate_unapplied);
 (c) `equity` includes preferred (OSAP `ceq` excludes it; a preferred-only book adjustment is approx per ruling `book_equity_preferred_terms`);
 (d) `che` includes financing receivables for captive-finance names, understates for banks/insurers; (e) book side is the latest quarter, not the
 6-17-month-old fiscal year; (f) `mve_permco` -> company-level DAILY.marketcap (other classes priced at the primary's price), few-% error on <=2% of names;

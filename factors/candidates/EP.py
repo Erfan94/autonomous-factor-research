@@ -7,8 +7,8 @@ earns higher returns; long D10, short D1).
 Spec: osap_source/cache/b4e911e6/EP/spec.md
 
 CONSTRUCTION (as translated; every deviation from OSAP stated):
-  ib     = SF1.netinc + SF1.netincdis  (ART, latest filing known at the signal
-           date). netincdis carries the OPPOSITE sign to the discontinued-operations
+  ib     = SF1.netinc + SF1.netincdis  (ART, latest filing known SIX MONTHS before
+           the signal date: ctx.fundamentals(..., lag_months=6)). netincdis carries the OPPOSITE sign to the discontinued-operations
            income it describes (known trap sf1_netincdis_sign_inverted), so continuing
            income is netinc PLUS netincdis. netinccmn is NOT used (it is ibcom, after
            preferred dividends).
@@ -47,9 +47,15 @@ DEVIATIONS FROM OSAP:
     discontinued operations) -> netinc + netincdis: continuing income after
     non-controlling interest; Sharadar has no separate extraordinary-items line, so
     any extraordinary item stays in.
-  - Timing: ART (trailing four quarters) at the latest filing, 0-3 months old, vs OSAP's
-    annual ib at datadate + 6 months (6-17 months old). ART is a TTM sum (a level), no
-    smear and no dimension override.
+  - Timing: ART (trailing four quarters) from the latest filing known at t-6, so the
+    t-6 price is at or after the earnings period end, as in OSAP (annual ib at
+    datadate + 6 months, held 12 months; its t-6 price always falls after the fiscal
+    year-end). Reading the fresh filing at t instead would pair earnings with a price
+    set 1-5 months BEFORE the period ended (alpha_review batch08, medium). The
+    earnings are therefore 6-21 months past period end here vs OSAP's 6-17; the
+    ART update is quarterly, not annual. ART is a TTM sum (a level), no smear and
+    no dimension override. Thin early ART (1998Q1-Q3 ~50%) shortens coverage until
+    about 1999-09.
   - Lagged cap: SEP.close x SF1.sharesbas at the t-6 month-end, not CRSP
     mve_permco; shares step at filing dates; company-level all-class cap at the
     primary's price, few-% level error on <=2% of names. The t-6 price is read within
@@ -66,12 +72,16 @@ from harness.factor_def import FactorDef
 
 
 def _compute(ctx):
-    f = ctx.fundamentals(["netinc", "netincdis", "fxusd"])
+    # ib as known at t-6, so the t-6 price is at or after its period end (OSAP: annual ib
+    # public at datadate + 6m, price six months before t always after the fiscal year-end)
+    f = ctx.fundamentals(["netinc", "netincdis", "fxusd"], lag_months=6)
     ib = f["netinc"].astype(float) + f["netincdis"].astype(float)   # netincdis sign inverted: PLUS
     usd = f["fxusd"].astype(float) == 1.0
 
     p6 = ctx.at_month_end("SEP", ["close"], 6)
     sh = ctx.fundamentals_at_month_ends(["sharesbas"], [6])
+    if sh.empty:
+        return pd.Series(np.nan, index=ctx.ids)
     sh6 = (sh.pivot_table(index="ID", columns="months_back", values="sharesbas", aggfunc="last")
            .get(6, pd.Series(dtype=float)).astype(float).reindex(ctx.ids))
     c6 = p6["close"].astype(float).reindex(ctx.ids)
