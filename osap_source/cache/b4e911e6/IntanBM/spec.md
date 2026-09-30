@@ -76,3 +76,6 @@ months included, a look-ahead): it cannot be reproduced point-in-time, so a per-
 (quarterly refresh) rather than annual + 6 months; (f) cumulative return is the calendar closeadj ratio, OSAP's runs over merged rows only (breaks at months without a Compustat link) and uses 0 for a NaN return;
 (g) no delisting return; (h) regression sample is market-scope (as OSAP's all CRSP-Compustat firms), not the screened universe; (i) 60 calendar months, OSAP needs a row exactly 60 months back.
 Fields not in the map: none. Recommendation: approx (translate with the stated deviations; first scorable decision month 2004-01).
+
+## Addendum 2026-10-01 — route superseded (coordinator decision intanbm_me_source; alpha_review batch12 major)
+Sections 1, 4, 7, 8 and 10 above describe the DAILY.marketcap route (first signal 2003-12-31, 216 scoring months). The translation uses ME = SEP.close x SF1.sharesbas at t and t-60 (as CompEquIss/EP; sharefactor not applied, declared), per-month cs_trim of Ret60, market-scope ols_residual, fxusd == 1 at both ends. Re-measured on this snapshot with the translated file (scratch preflight, harness universe): first scorable signal 2002-12-31 (47.4%; 2002-10/11 0%); 2003-03 onward 73-76%; June probes 2004-2021 69.1-82.1%. Scoring months 2002-12..2021-11 = 228 of 276 (above min_months 120).

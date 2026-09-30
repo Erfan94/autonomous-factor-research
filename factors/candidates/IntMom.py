@@ -13,8 +13,8 @@ CONSTRUCTION (as translated; every deviation from OSAP stated):
            / closeadj at the business month-end 13 months back - 1.
   That is the compound of the six monthly returns of months t-12..t-7 (the
   code's calendar lags 7..12), read as ONE endpoint ratio of the
-  total-return price SEP.closeadj (splits and dividends). The five most
-  recent months t-6..t are excluded, so month t's return is not used. Both
+  total-return price SEP.closeadj (splits and dividends). The seven most
+  recent monthly returns (months t-6..t) are excluded, so month t's return is not used. Both
   endpoints via ctx.at_month_end("SEP", ["closeadj"], m): the last trade on
   or before the business month-end, 7-day tolerance (the harness history-gate
   rule). closeadj must be > 0 at both ends, else NaN. The SignalDoc wording
@@ -79,7 +79,7 @@ FACTOR = FactorDef(
         ("calendar-month lag merge", "ctx.at_month_end(..., m), 7-day tolerance",
          "business month-end; same rule as the history gate"),
         ("SignalDoc 'months t-12 to t-6'", "lags 7..12 as in the code",
-         "the five most recent months t-6..t are skipped"),
+         "the seven most recent monthly returns (t-6..t) are skipped"),
         ("Stock Weight VW (paper)", "harness equal-weighted deciles", "harness owns weighting"),
         ("coverage start", "first valid signal 1999-01-29", "t-13 = 1997-12-31 is the first SEP row; 1998-12 empty"),
     ),

@@ -45,6 +45,9 @@ THE MASS-POINT QUESTION (answer it here BEFORE running preflight):
   regression's own listwise deletion.
 
 DEVIATIONS FROM OSAP:
+  - ME = SEP.close x SF1.sharesbas without SF1.sharefactor (as EP and CompEquIss):
+    for the few multi-class names whose sharefactor is not 1 (e.g. BRK-type, 8.75
+    in 1999 falling to 1.6) ME and hence BM_60 and dBM are mis-scaled.
   - ceq -> SF1.equity (ART): preferred stock is not removed (Sharadar has no
     preferred field; book_equity_preferred_terms ruling), approx. ART equity
     is a level (ART == ARQ on the same reportperiod): no smear, no dimension
