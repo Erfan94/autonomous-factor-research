@@ -727,9 +727,9 @@ compustat_to_sf1:
     verified_note: "Measured 2026-09-30 on THIS snapshot (DATA_SHA 198b281de1a0, recorded_on 2026-09-30; SF1 ART/ARQ/ARY rows 688,566/681,836/186,720; SEP 45,385,374 rows 1997-12-31..2026-09-29); supersedes any 'THIS snapshot' wording in `note`, which is from earlier pulls. Same SF1.netinccmn column as `ib` and the exact Compustat ibcom concept (income before extraordinary items available for common, after preferred dividends); see `ib` for every null / zero / dimension / coverage / units number and the netinc-vs-netinccmn gap (12.0% of ART rows, gap == prefdivis 97.1%). Status verified: for THIS key the mapping is definitional, the discontinued-operations inclusion in netinccmn (netincdis nonzero on 11.7% of ART rows) is the only residual deviation."
     probed_on_prior_snapshot: '2026-09-25'
   ibq:
-    sf1: netinccmn
-    status: mapped
-    note: 'ARQ dimension is a genuine single-quarter flow, NOT a TTM/smeared slice: ART == exact rolling-4-quarter
+    sf1: netinc + netincdis
+    status: approx
+    note: 'REMAPPED 2026-09-30 (was netinccmn), as compustat.ib: quarterly ib = netinc + netincdis at ARQ (known_trap sf1_netincdis_sign_inverted); netinccmn is ibcomq. The measurements below describe the netinccmn column. ARQ dimension is a genuine single-quarter flow, NOT a TTM/smeared slice: ART == exact rolling-4-quarter
       sum of ARQ netinccmn on AAPL and XOM, 8/8 quarters each 2024-2026 (checked on this snapshot). Null/zero/median
       pattern otherwise matches ib (see that entry) since it is the same underlying column at a different dimension.'
     verified_on: ""

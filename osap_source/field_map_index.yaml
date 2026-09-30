@@ -86,7 +86,7 @@ fields:
   - {key: "compustat.gwo", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}
   - {key: "compustat.ib", sharadar: "netinc + netincdis", status: "approx", verified_on: "2026-09-30", note: "REMAPPED 2026-09-30 (was netinccmn): Compustat ib is income before extraordinary items and discontinued operat"}
   - {key: "compustat.ibcom", sharadar: "netinccmn", status: "mapped", verified_on: "2026-09-30", note: "Same underlying SF1.netinccmn column as ib (Compustat ibcom vs ib is a naming variant, not annual/quarterly); "}
-  - {key: "compustat.ibq", sharadar: "netinccmn", status: "mapped", verified_on: "", note: "ARQ dimension is a genuine single-quarter flow, NOT a TTM/smeared slice: ART == exact rolling-4-quarter sum of"}
+  - {key: "compustat.ibq", sharadar: "netinc + netincdis", status: "approx", verified_on: "", note: "REMAPPED 2026-09-30 (was netinccmn), as compustat.ib: quarterly ib = netinc + netincdis at ARQ (known_trap sf1"}
   - {key: "compustat.intan", sharadar: "intangibles", status: "mapped", verified_on: "2026-09-30", note: "ART level, raw USD. Never null (0.04%); exact-zero 32.5% (matches OSAP zero-fill of intan). intangibles <= ass"}
   - {key: "compustat.intanq", sharadar: "intangibles", status: "mapped", verified_on: "", note: "Quarterly form of intan; see intan for the full verification (null/coverage/quantile checks on THIS snapshot, "}
   - {key: "compustat.invt", sharadar: "inventory", status: "mapped", verified_on: "2026-09-30", note: "ART level, raw USD. Never null (0.04%); exact-zero 46.3% (42% in 1999-2003, 53% in 2021-26) \u2014 the Sharadar 0 m"}

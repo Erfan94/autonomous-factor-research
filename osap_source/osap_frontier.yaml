@@ -445,3 +445,43 @@ excluded:
     class: data_unavailable
     spec: osap_source/cache/b4e911e6/fgr5yrLag/spec.md
     date: "2026-09-30"
+  betaVIX:
+    reason: "needs daily VIX (or VXO) changes; ^VIX exists only under Sharadar table SFP, which is mapped but not held (adding it moves DATA_SHA, stop-and-ask 3); no held table carries a volatility index; OSAP inner-joins the VIX series (no zero-fill)"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/betaVIX/spec.md
+    date: "2026-09-30"
+  dCPVolSpread:
+    reason: "needs OptionMetrics call and put implied volatility; no held Sharadar table carries option data; OSAP leaves NaN (no zero-fill)"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/dCPVolSpread/spec.md
+    date: "2026-09-30"
+  hire:
+    reason: "employee counts (Compustat emp) are in no held Sharadar table; OSAP sets hire = 0 where emp is missing, so without emp the signal is the constant 0 for every firm (the missing-item rule's constant case)"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/hire/spec.md
+    date: "2026-09-30"
+  iomom_cust:
+    reason: "needs BEA Make input-output tables and Compustat NAICS to map firms to BEA industries; neither is in the snapshot; OSAP has no fallback and does not zero-fill"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/iomom_cust/spec.md
+    date: "2026-09-30"
+  iomom_supp:
+    reason: "needs BEA Use input-output tables and Compustat NAICS; neither is in the snapshot; OSAP has no fallback and does not zero-fill"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/iomom_supp/spec.md
+    date: "2026-09-30"
+  realestate:
+    reason: "needs Compustat fatb and fatl (buildings and land at cost) and ppegt, with a ppenb/ppenls fallback; none is in SF1 and OSAP zero-fills none (a missing term drops the row); a ppnenet/assets proxy would be a different signal"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/realestate/spec.md
+    date: "2026-09-30"
+  retConglomerate:
+    reason: "needs Compustat business-segment data (segment SICs and sales) and the CCM link; no held Sharadar table carries segments; OSAP inner-merges (no fill)"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/retConglomerate/spec.md
+    date: "2026-09-30"
+  sfe:
+    reason: "needs the IBES median next-year EPS forecast and analyst count; no analyst data in Sharadar; OSAP inner-merges (no fill)"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/sfe/spec.md
+    date: "2026-09-30"
