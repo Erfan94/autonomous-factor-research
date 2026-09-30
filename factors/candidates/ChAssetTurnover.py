@@ -69,6 +69,10 @@ DEVIATIONS FROM OSAP:
     negative.
   - lo: liabilitiesnc - debtnc (liabilitiesnc contains long-term debt, >=
     debtnc on 99.8% of rows); residual is non-current deferred taxes.
+  - lo on unclassified balance sheets: on ~1.3% of the unclassified-balance-sheet
+    rows debtnc is populated while liabilitiesnc is null, so lo = 0 - debtnc =
+    -debtnc and NOA is inflated by the long-term debt (OSAP's lo would be 0 or
+    the classified residual). Kept, not corrected in code.
   - ppent: ppnenet; Sharadar fills 0 for not-reported. A never-reported name
     is dropped by OSAP and kept here. ASC 842 (FY2019+) may move ROU assets
     into ppnenet: a level break in 2019-2021, caveat only.
@@ -142,7 +146,7 @@ FACTOR = FactorDef(
             "SF1.revenue"),
     osap_acronym="ChAssetTurnover",
     source="Soliman 2008 (The Accounting Review)",
-    lookback_months=42,             # latest filing (<=15m old) + 2 fiscal years back + 45d period tolerance
+    lookback_months=44,             # latest filing (<=15m old) + 2 fiscal years back + 45d period tolerance + ~4m report-period-to-filing lag (honest figure ~43.5, rounded up)
     # No history_months: no SEP price window is read; year-ago levels come from
     # fundamentals_yoy (report-period aligned).
     notes="d( revenue / avg NOA ), NOA = rect+invt+ppe+intan-ap-lo, aco and lco dropped; ART, yoy by reportperiod",

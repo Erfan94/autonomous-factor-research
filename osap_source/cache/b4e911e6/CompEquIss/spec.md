@@ -43,7 +43,9 @@ Sharadar form (both routes are valid; pick one and log it):
 - Route A (preferred start date): `ME_t = SEP.close_t * SF1.sharesbas(ARQ, as of t)`,
   `ME_{t-60}` likewise via `ctx.at_month_end('SEP', ['close'], 60)` and
   `fundamentals_at_month_ends(['sharesbas'], [60], dimension='ARQ')`. Reaches back
-  to SEP 1997-12-31.
+  to SEP 1997-12-31, but `sharesbas` at the t-60 end needs an SF1 filing known
+  by then: the earliest SF1 datekey is the 1997Q4 filing (early 1998), so the lag
+  end is usable only from ~1998-02/03 (checker to confirm the earliest datekey).
 - Route B: `DAILY.marketcap` at the signal month-end and `at_month_end('DAILY',
   ['marketcap'], 60)`. DAILY starts 1998-12-01, so the first 60-month lag is 1998-12.
 - BH: `closeadj_t / closeadj_{t-60} - 1` from `ctx.monthly_closeadj(60)` (total return).
@@ -85,9 +87,9 @@ Cat.Economic external financing; sample 1968-2003.
   years after an IPO.
 
 ## 8. History needed
-60 months of price and market cap. Route A: SEP from 1997-12-31, so the first
-signal month is 2002-12 (decision months 1999-01..2002-11, 47 of 276, empty; ~229
-signal months). Route B: first month 2003-12 (59 empty, ~217 months). Stage 1
+60 months of price and market cap. Route A: first usable t-60 is the first month with an SF1 filing
+in hand (~1998-02/03; SEP alone starts 1997-12-31), so the first signal month is
+~2003-02/03 (decision months 1999-01..~2003-01, ~49-50 of 276, empty; ~226 signal months). Route B: first month 2003-12 (59 empty, ~217 months). Stage 1
 coverage bar (40%) and the LS-months floor must be read against that.
 
 ## 9. OSAP metadata

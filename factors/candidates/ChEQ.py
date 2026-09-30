@@ -78,7 +78,7 @@ FACTOR = FactorDef(
     inputs=("SF1.equity",),
     osap_acronym="ChEQ",
     source="Lockwood and Prombutr 2010 (Journal of Financial Research)",
-    lookback_months=27,             # latest filing up to 15 months old + year-ago period 12 months earlier
+    lookback_months=31,             # latest filing up to 15 months old + year-ago period 12 months earlier + ~4m report-period-to-filing lag
     notes="equity / year-ago equity (both > 0), report-period aligned; sign -1",
     field_mappings=(
         ("compustat.ceq", "SF1.equity (ART)",

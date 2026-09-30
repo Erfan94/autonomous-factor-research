@@ -36,11 +36,20 @@ THE MASS-POINT QUESTION (answer it here BEFORE running preflight):
   Tie handling: null (restrict the sample). ChInv is set to NaN wherever
   inventory is 0 or null in BOTH periods; blend_ranks renormalises. It is
   kept wherever inventory is nonzero in at least one period (including zero in
-  one period and nonzero in the other, and null in one period against 0 in
-  the other, treated as 0 as OSAP zero-fills invt). Coordinator decision:
+  one period and nonzero in the other). A null inventory on an existing filing
+  is zero-filled first (as OSAP zero-fills invt), and only then is the both-zero
+  case set to NaN, so null-against-null and null-against-0 are removed while
+  null-against-positive is kept as a change from/to 0. Coordinator decision:
   the signal is conceptually undefined for a firm with no inventory, so the
   tied block is removed rather than ranked as a flat middle.
   No noise or secondary key is used to break ties.
+  Measured spurious-tail share (scored names whose inventory is null at exactly
+  one of the two dates and > 0 at the other, so the zero-fill yields a +/-
+  inventory/avg-assets that is an artefact of a vendor null): 0.00% / 0.00% /
+  0.00% of scored names at signals 1999-12 / 2008-12 / 2020-12 (0 of 1488 /
+  1162 / 1124). Sharadar stores 0, not null, for an absent inventory item (at
+  most one null per date on the harness universe), so the OSAP zero-fill is
+  effectively inert here.
 
 DEVIATIONS FROM OSAP:
   - OSAP keeps the inventory-free firms at ChInv = 0; here they are NaN (the
@@ -95,7 +104,7 @@ FACTOR = FactorDef(
     inputs=("SF1.inventory", "SF1.assets"),
     osap_acronym="ChInv",
     source="Thomas and Zhang 2002 (Review of Accounting Studies)",
-    lookback_months=27,             # latest filing up to 15 months old + year-ago period 12 months earlier
+    lookback_months=31,             # latest filing up to 15 months old + year-ago period 12 months earlier + ~4m report-period-to-filing lag
     notes="(inventory - year-ago inventory) / average assets; NaN where inventory is 0/null in both periods; sign -1",
     field_mappings=(
         ("compustat.invt", "SF1.inventory (ART)",

@@ -110,7 +110,7 @@ FACTOR = FactorDef(
     inputs=("SF1.capex", "TICKERS.siccode"),
     osap_acronym="ChInvIA",
     source="Abarbanell and Bushee 1998 (The Accounting Review)",
-    lookback_months=39,             # 24m (two prior fiscal years) + 15m max filing age
+    lookback_months=43,             # 24m (two prior fiscal years) + 15m max filing age + ~4m report-period-to-filing lag
     # No history_months: no SEP price window is read.
     dimension="ARY",                # ART capex is 46% null in 1998 and a TTM sum; annual item wanted
     notes="annual capex growth vs mean of two prior years (one-year fallback), minus market-wide SIC2 mean",

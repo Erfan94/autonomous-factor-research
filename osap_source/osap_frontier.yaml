@@ -70,3 +70,43 @@ excluded:
     class: data_unavailable
     spec: osap_source/cache/b4e911e6/ChNAnalyst/spec.md
     date: "2026-09-30"
+  ChangeInRecommendation:
+    reason: "IBES analyst recommendation code (ireccd); no Sharadar recommendations/estimates table; no zero-fill; no proxy"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/ChangeInRecommendation/spec.md
+    date: "2026-09-30"
+  CitationsRD:
+    reason: "numerator is NBER patent citations (ncitscale), not published by Sharadar; OSAP's fillna(0) fills gaps in that panel, so dropping it makes the signal a constant; the panel ends 2006"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/CitationsRD/spec.md
+    date: "2026-09-30"
+  ConsRecomm:
+    reason: "mean IBES recommendation code (ireccd); no Sharadar recommendations table; no zero-fill or optional term"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/ConsRecomm/spec.md
+    date: "2026-09-30"
+  ConvDebt:
+    reason: "needs convertible debt (dc from dcvt/dcpstk) and cshrc; neither in any held table; OSAP zero-fills dc but not cshrc; dropping both leaves a constant 0"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/ConvDebt/spec.md
+    date: "2026-09-30"
+  CredRatDG:
+    reason: "needs S&P credrat / Capital IQ downgrade history; Sharadar has no ratings column or EVENTS proxy; OSAP's fillna(0) fills no-downgrade months, not an input term, so dropping ratings leaves a constant 0"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/CredRatDG/spec.md
+    date: "2026-09-30"
+  CustomerMomentum:
+    reason: "needs Compustat Segment customer names and the CCM link; the customer link is the signal; not in Sharadar"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/CustomerMomentum/spec.md
+    date: "2026-09-30"
+  DebtIssuance:
+    reason: "needs gross long-term debt issuance (dltis); SF1 has only net ncfdebt (a different event: net borrower incl. commercial paper); dltis not in OSAP zero_fill_vars"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/DebtIssuance/spec.md
+    date: "2026-09-30"
+  DelBreadth:
+    reason: "constructible from 13F (SF3 investor-level or SF3A shrholders) but 13F starts 2013-06-30: 97 decision months with a 45-day point-in-time lag (2013-12..2021-12), below rebalance.min_months 120, so Stage 1 is inconclusive by construction; would also need a new 13F MonthContext accessor and field_map keys"
+    class: data_start
+    spec: osap_source/cache/b4e911e6/DelBreadth/spec.md
+    date: "2026-09-30"

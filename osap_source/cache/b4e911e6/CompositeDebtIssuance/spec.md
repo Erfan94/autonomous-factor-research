@@ -62,9 +62,10 @@ years earlier, `log(debt / debt_lag)` with both `debt > 0` (`ctx.fundamentals_yo
   dimension=ARY (fewer, annual refreshes); the default ART is recommended.
 
 ## 5. Filters
-predictor.py: none. SignalDoc Filter blank, Quantile Filter blank. OSAP
-effectively drops rows with debt = 0 at either end (log of 0 is -inf, 0/0 NaN) and
-rows with null at/prcc_c/ni. Translator: require `debt > 0` and `debt_lag > 0`.
+predictor.py: none. SignalDoc Filter blank, Quantile Filter blank. In OSAP
+`np.log(tempBD/l60)` gives +inf when the base is 0 and -inf when the current debt is
+0 (only 0/0 is NaN); how `save_predictor` treats inf was not verified from the cache.
+Upstream also drops rows with null at/prcc_c/ni. Translator: require `debt > 0` and `debt_lag > 0`.
 No financials exclusion in OSAP (keep them; flag the bank-debt deviation).
 
 ## 6. Predicted sign (SignalDoc)
@@ -107,6 +108,6 @@ Source `Signals/pyCode/Predictors/CompositeDebtIssuance.py` (in tree.txt).
 | dltt + dlc | SF1.debt (ART), `> 0` at both ends | lease-inclusive from FY2019 (ASC 842 break, 5-year confound through 2023); banks' repo/borrowings included |
 | 5-year lag | `fundamentals_yoy(['debt'], years=5)` | aligned by report period, not calendar month 60 |
 | timing | ART filing at datekey | more current than OSAP's datadate+6m annual |
-| zero debt | excluded (debt = 0 -> NaN) | OSAP: log(0) = -inf/NaN |
+| zero debt | excluded (debt = 0 -> NaN) | OSAP: +/-inf (handling unverified) |
 | universe / ranks | harness, within sector | OSAP EW decile sort, no size screen |
 Fields all in `field_map_index.yaml`; checker needs only `dltt_plus_dlc` (already verified 2026-09-30).
