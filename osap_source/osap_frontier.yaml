@@ -270,3 +270,18 @@ excluded:
     class: data_start
     spec: osap_source/cache/b4e911e6/MomSeason16YrPlus/spec.md
     date: "2026-10-01"
+  MomVol:
+    reason: "categorical label 1..10 scored only in the top volume tercile: coverage 26.5-33.0% of the universe (ceiling 33.3%), under 40% in all 265 scorable months; modal share 11.0-21.4%, >= 10% in 265 of 265 months, qcut < 10 bins in 264. Measured by osap-fetcher on the harness universe"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/MomVol/spec.md
+    date: "2026-09-30"
+  NetDebtPrice:
+    reason: "numerator (dltt + dlc + pstk + dvpa - tstkp) - che needs preferred stock pstk: no SF1 field, and neither OSAP's zero_fill_vars nor NetDebtPrice's predictor fills it (unlike DelFINL/DelNetFin, whose predictors fillna(0) pstk themselves), so infeasible under the missing-item rule; book_equity_preferred_terms covers book equity only. Also, with pstk omitted, coverage is under 40% in 128 of 276 months"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/NetDebtPrice/spec.md
+    date: "2026-09-30"
+  NumEarnIncrease:
+    reason: "integer count 0..8 of consecutive quarterly earnings increases: 9 distinct values, modal value 0 at 34.9-84.6% of scored names (median 52.1%), >= 10% cliff in all 276 months; probes 84.3% / 37.5% / 44.4% with qcut 2 / 5 / 6 bins; nulling the zeros leaves value 1 at a median 15.0%. Measured by osap-fetcher on the harness universe, all 276 months"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/NumEarnIncrease/spec.md
+    date: "2026-09-30"
