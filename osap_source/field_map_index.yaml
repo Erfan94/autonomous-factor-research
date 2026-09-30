@@ -13,7 +13,7 @@ fields:
   - {key: "compustat.apq", sharadar: "payables", status: "mapped", verified_on: "", note: "Quarterly form of ap; see ap for the full verification (null/coverage/quantile checks on THIS snapshot, same u"}
   - {key: "compustat.at", sharadar: "assets", status: "mapped", verified_on: "2026-09-30", note: "ART level, raw USD. Null 0.05% every dimension; exact-zero 0.01% of non-null (data-error rows, not a mass poin"}
   - {key: "compustat.atq", sharadar: "assets", status: "mapped", verified_on: "", note: "Quarterly form of at; see at for the full verification (null/ART==ARQ/coverage identical dimension-for-dimensi"}
-  - {key: "compustat.capx", sharadar: "capex", status: "mapped", verified_on: "", note: "SIGN: Sharadar capex is a cash OUTFLOW -- negative on 90.6%, exactly 0 on 5.3%, positive on 4.1% of 596k non-n"}
+  - {key: "compustat.capx", sharadar: "capex", status: "mapped", verified_on: "2026-09-30", note: "SIGN: Sharadar capex is a cash OUTFLOW -- negative on 90.6%, exactly 0 on 5.3%, positive on 4.1% of 596k non-n"}
   - {key: "compustat.capxy", sharadar: "capex", status: "approx", verified_on: "", note: "capex (YTD)"}
   - {key: "compustat.ceq", sharadar: "equity", status: "approx", verified_on: "2026-09-30", note: "equity (no pref split). Level, not flow: ART equity == ARQ equity on the same reportperiod (confirmed AAPL las"}
   - {key: "compustat.ceqq", sharadar: "equity", status: "mapped", verified_on: "", note: "Quarterly form of ceq; see ceq for the full null/ART==ARQ-match/coverage/quantile verification on THIS snapsho"}
@@ -87,7 +87,7 @@ fields:
   - {key: "compustat.ib", sharadar: "netinccmn", status: "mapped", verified_on: "2026-09-30", note: "Net income to common, USD (2025 ART median 2.7M vs revenue median 396M; |ni|/rev median 0.148). ART is a true "}
   - {key: "compustat.ibcom", sharadar: "netinccmn", status: "mapped", verified_on: "2026-09-30", note: "Same underlying SF1.netinccmn column as ib (Compustat ibcom vs ib is a naming variant, not annual/quarterly); "}
   - {key: "compustat.ibq", sharadar: "netinccmn", status: "mapped", verified_on: "", note: "ARQ dimension is a genuine single-quarter flow, NOT a TTM/smeared slice: ART == exact rolling-4-quarter sum of"}
-  - {key: "compustat.intan", sharadar: "intangibles", status: "mapped", verified_on: "", note: "ART level, raw USD. Never null (0.04%); exact-zero 32.5% (matches OSAP zero-fill of intan). intangibles <= ass"}
+  - {key: "compustat.intan", sharadar: "intangibles", status: "mapped", verified_on: "2026-09-30", note: "ART level, raw USD. Never null (0.04%); exact-zero 32.5% (matches OSAP zero-fill of intan). intangibles <= ass"}
   - {key: "compustat.intanq", sharadar: "intangibles", status: "mapped", verified_on: "", note: "Quarterly form of intan; see intan for the full verification (null/coverage/quantile checks on THIS snapshot, "}
   - {key: "compustat.invt", sharadar: "inventory", status: "mapped", verified_on: "2026-09-30", note: "ART level, raw USD. Never null (0.04%); exact-zero 46.3% (42% in 1999-2003, 53% in 2021-26) \u2014 the Sharadar 0 m"}
   - {key: "compustat.invtq", sharadar: "inventory", status: "mapped", verified_on: "", note: "Quarterly form of invt; see invt for the full verification (null/coverage/quantile checks on THIS snapshot, sa"}
@@ -99,7 +99,7 @@ fields:
   - {key: "compustat.lcoq", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}
   - {key: "compustat.lct", sharadar: "liabilitiesc", status: "mapped", verified_on: "2026-09-30", note: "ART/ARQ level, raw USD (AAPL ART==ARQ exact on last 4 quarters). Null ~20% every dimension (same unclassified-"}
   - {key: "compustat.lctq", sharadar: "liabilitiesc", status: "mapped", verified_on: "", note: "Quarterly form of lct; see lct for the full verification (null/sector/coverage identical dimension-for-dimensi"}
-  - {key: "compustat.lo", sharadar: "liabilitiesnc - debtnc", status: "approx", verified_on: "", note: "NOT liabilitiesnc as-is: Sharadar liabilitiesnc CONTAINS long-term debt (liabilitiesnc >= debtnc on 99.81% of "}
+  - {key: "compustat.lo", sharadar: "liabilitiesnc - debtnc", status: "approx", verified_on: "2026-09-30", note: "NOT liabilitiesnc as-is: Sharadar liabilitiesnc CONTAINS long-term debt (liabilitiesnc >= debtnc on 99.81% of "}
   - {key: "compustat.loq", sharadar: "liabilitiesnc", status: "approx", verified_on: "", note: "liabilitiesnc (approx); ART null 20.16%, exact-zero 5.58% of non-null (see lo/lt entries for the raw liabiliti"}
   - {key: "compustat.lt", sharadar: "liabilities", status: "mapped", verified_on: "2026-09-30", note: "ART level, raw USD. null 0.04%, zero 0.04%, neg 0.01% (316 rows, data errors e.g. AEM 2003). liabilities >= li"}
   - {key: "compustat.ltq", sharadar: "liabilities", status: "mapped", verified_on: "", note: ""}
@@ -124,7 +124,7 @@ fields:
   - {key: "compustat.ppegt", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}
   - {key: "compustat.ppenb", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}
   - {key: "compustat.ppenls", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}
-  - {key: "compustat.ppent", sharadar: "ppnenet", status: "mapped", verified_on: "", note: "ART level (ART == ARQ on every checked row), raw USD. Never null (0.04%); Sharadar fills 0 for none reported \u2014"}
+  - {key: "compustat.ppent", sharadar: "ppnenet", status: "mapped", verified_on: "2026-09-30", note: "ART level (ART == ARQ on every checked row), raw USD. Never null (0.04%); Sharadar fills 0 for none reported \u2014"}
   - {key: "compustat.ppentq", sharadar: "ppnenet", status: "mapped", verified_on: "", note: "Quarterly form of ppent; see ppent for the full verification (null/coverage/quantile checks on THIS snapshot, "}
   - {key: "compustat.prcc_c", sharadar: "price / SEP close", status: "approx", verified_on: "", note: "SF1.price (ART) null 4.08% pooled (ARQ 4.14%, ARY 5.27%); by ART reportperiod year: 1999 5.96%, 2008 2.54%, 20"}
   - {key: "compustat.prcc_f", sharadar: "price / SEP close", status: "approx", verified_on: "", note: "Same SF1.price field as prcc_c (see prcc_c for the full null/zero/cross-check/as-of-date/ split-basis measurem"}
@@ -195,4 +195,4 @@ fields:
   - {key: "crsp.siccd", sharadar: "TICKERS.siccode (current)", status: "approx", verified_on: "", note: "Same field and same current-vs-point-in-time deviation as compustat.sich (see that entry): 12.3% of SEP-scope "}
   - {key: "crsp.firstpricedate", sharadar: "TICKERS.firstpricedate", status: "mapped", verified_on: "", note: "New use (FirmAge age-clock start), permaticker-level, one row per ID via ticker_meta(). Sharadar left-censors "}
   - {key: "crsp.divamt", sharadar: "ACTIONS.value where action=='dividend'", status: "approx", verified_on: "", note: "New field (not previously mapped): ACTIONS action=='dividend' rows give per-share cash dividend amount in `val"}
-known_traps: 20   # read field_map.yaml `known_traps` before touching prices, shares, marketcap, dimensions
+known_traps: 21   # read field_map.yaml `known_traps` before touching prices, shares, marketcap, dimensions

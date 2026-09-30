@@ -60,3 +60,13 @@ excluded:
     class: data_unavailable
     spec: osap_source/cache/b4e911e6/CPVolSpread/spec.md
     date: "2026-09-30"
+  ChForecastAccrual:
+    reason: "sign of the monthly change in IBES consensus EPS (meanest, fpi 1); no Sharadar estimates table; not zero-filled (NaN without it); the accruals gate also needs txp (unavailable)"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/ChForecastAccrual/spec.md
+    date: "2026-09-30"
+  ChNAnalyst:
+    reason: "change in IBES analyst count (numest, fpi 1); no Sharadar estimates table; NaN when numest or its lag is missing (no zero-fill)"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/ChNAnalyst/spec.md
+    date: "2026-09-30"
