@@ -57,6 +57,9 @@ THE MASS-POINT QUESTION (answer it here BEFORE running preflight):
   not zero-fill ib).
 
 DEVIATIONS FROM OSAP:
+  - Dimensions: only the flow numerator is read at ARY (OSAP's annual item, gated
+    fxusd == 1 on its own filing); ME's share count and currency gate come from ART,
+    as in IntanBM, so all four Intan residuals share one ME (alpha_review batch13).
   - SIGNALDOC DISCREPANCY: the SignalDoc definition says (net income (ni) + dp);
     the OSAP CODE uses (ib + dp). The code is the authority; ib is translated.
   - ib -> SF1.netinc + SF1.netincdis (ARY): income after non-controlling interest,
@@ -117,11 +120,17 @@ def _compute(ctx):
     fd = fd.assign(num=(fd["netinc"] + fd["netincdis"]) + fd["depamor"].fillna(0.0))
 
     close, adj = _wide(px, "close"), _wide(px, "closeadj")
-    num, sh, fx = _wide(fd, "num"), _wide(fd, "sharesbas"), _wide(fd, "fxusd")
+    # ME share count and currency at ART (quarterly, as IntanBM); only the flow is ARY
+    fa = ctx.fundamentals_at_month_ends(["sharesbas", "fxusd"], [0, 60], scope="market")
+    if fa.empty:
+        return pd.Series(np.nan, index=ctx.ids)
+    num, fy = _wide(fd, "num"), _wide(fd, "fxusd")
+    sh, fx = _wide(fa, "sharesbas"), _wide(fa, "fxusd")
 
     x = {}
     for k in (0, 60):
         c, s, n, f = _at(close, k), _at(sh, k), _at(num, k), _at(fx, k)
+        n = n.where(_at(fy, k) == 1.0)       # the ARY flow in USD too
         me = (c * s).where((c > 0) & (s > 0) & (f == 1.0))
         x[k] = n / me                      # level; NaN where ME or the flow is missing
 
