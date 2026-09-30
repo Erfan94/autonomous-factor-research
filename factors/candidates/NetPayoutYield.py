@@ -10,8 +10,8 @@ Spec: osap_source/cache/b4e911e6/NetPayoutYield/spec.md
 
 CONSTRUCTION (as translated; every deviation from OSAP stated):
   predictor.py: (dvc + prstkc - sstk) / mve_permco lagged 6 months.
-  ART (trailing four quarters) latest filing known at t-6, via ctx.fundamentals(["ncfcommon",
-  "ncfdiv","fxusd","equity"], lag_months=6):
+  ART (trailing four quarters) latest filing known at the BME(t-6) month-end, via ctx.fundamentals_at_month_ends(["ncfcommon",
+  "ncfdiv","fxusd","equity","sharesbas"], [6]); a flow can be up to ~21 months old at t:
       num = -(ncfdiv.clip(upper=0) + ncfcommon.fillna(0)),  NaN where ncfdiv is null
   Sign conventions (verified against osap_source/field_map.yaml, sstk and dv/dvc entries):
     ncfdiv = cash dividends paid, OUTFLOW-NEGATIVE, so dvc == -ncfdiv (a positive ncfdiv,
@@ -68,7 +68,7 @@ DEVIATIONS FROM OSAP:
     the month-end.
   - Timing: OSAP takes annual flows at datadate + 6 months, held 12 months, with ME at t-6
     (the fiscal year-end month). Here the flows (and equity, fxusd) are the latest ART
-    filing known at t-6 (ctx.fundamentals(..., lag_months=6), refreshed quarterly), so
+    filing known at the BME(t-6) month-end (one fundamentals_at_month_ends call with sharesbas, refreshed quarterly), so
     the t-6 price is at or after the end of the flow window, as in OSAP and as EP does
     (alpha_review batch08 medium on EP's unlagged timing). The flow is a TTM LEVEL
     over a price level: no year-over-year difference, nothing to smear, no dimension
@@ -86,8 +86,12 @@ from harness.factor_def import FactorDef
 
 
 def _compute(ctx):
-    # flows, equity and currency as known at t-6, so the t-6 price follows the flow window (as EP)
-    f = ctx.fundamentals(["ncfcommon", "ncfdiv", "fxusd", "equity"], lag_months=6).reindex(ctx.ids)
+    # flows, equity, currency and shares as known at the BME(t-6) month-end, one call, so the
+    # t-6 price follows the flow window (as EP); a flow can be up to ~21 months old at t
+    fa = ctx.fundamentals_at_month_ends(["ncfcommon", "ncfdiv", "fxusd", "equity", "sharesbas"], [6])
+    if fa.empty:
+        return pd.Series(np.nan, index=ctx.ids)
+    f = fa[fa["months_back"] == 6].drop_duplicates("ID", keep="last").set_index("ID").reindex(ctx.ids)
 
     ncfdiv = f["ncfdiv"].astype(float)
     # dvc + prstkc - sstk = -(ncfdiv<=0 part + ncfcommon); ncfcommon zero-filled, ncfdiv not
@@ -96,11 +100,7 @@ def _compute(ctx):
 
     # market equity six months earlier, built as EP builds it
     p6 = ctx.at_month_end("SEP", ["close"], 6)
-    sh = ctx.fundamentals_at_month_ends(["sharesbas"], [6])
-    if sh.empty:
-        return pd.Series(np.nan, index=ctx.ids)
-    sh6 = (sh.pivot_table(index="ID", columns="months_back", values="sharesbas", aggfunc="last")
-           .get(6, pd.Series(dtype=float)).astype(float).reindex(ctx.ids))
+    sh6 = f["sharesbas"].astype(float)
     c6 = p6["close"].astype(float).reindex(ctx.ids)
     me6 = (c6 * sh6).where((c6 > 0) & (sh6 > 0))
 

@@ -83,11 +83,18 @@ def _compute(ctx):
     avg = (assets + assets_lag) / 2.0
     ratio = ncfdebt / avg.where(avg > 0)
     ratio = ratio.where(ratio.abs() <= 1.0)          # OSAP: |ratio| > 1 -> NaN
-    # tie rule: no debt at either year-end (exactly 0, not null) -> structural zero flow, removed
-    no_debt = (y["debt"].astype(float) == 0) & (y["debt_lag"].astype(float) == 0)
+    # tie rule: no debt at either year-end (exactly 0, not null) AND zero net flow -> structural
+    # zero, removed; a non-zero flow against vendor-0 debt keeps its value
+    no_debt = (y["debt"].astype(float) == 0) & (y["debt_lag"].astype(float) == 0) & (ncfdebt == 0)
     return ratio.where(~no_debt).replace([np.inf, -np.inf], np.nan)
 
 
+# ASC 842 break (alpha_review batch15-16 M1): SF1.debt includes operating-lease liabilities
+# from FY2019, so the share of the universe with debt == 0 falls from 9.1% (2018) to 2.9%
+# (2019) and the tie rule removes far fewer names from 2019; lessees without financial debt
+# and with ncfdebt == 0 return as exact zeros (mode 10.3% / 10.0% in 2020-03 / 2020-04,
+# 9.5% at the 2021-11 probe). SF1.debt is read without the debtc gate because it feeds only
+# the tie test, never the value (debt populated on 99.86% of unclassified rows).
 FACTOR = FactorDef(
     # family: LEAVE UNSET (assigned in Phase C).
     name="NetDebtFinance",

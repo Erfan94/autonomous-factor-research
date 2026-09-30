@@ -59,7 +59,8 @@ DEVIATIONS FROM OSAP:
     is followed. ncfdiv is predominantly common-only while dv is common + preferred
     (included for combined-line filers, excluded where preferred is a separate CF line;
     FNMA/FMCC = 0 against $6-17B/yr preferred dividends); NCI distributions are excluded.
-  - Taxes paid on net share settlement and option-exercise flows sit inside ncfcommon.
+  - Taxes paid on net share settlement are EXCLUDED from ncfcommon (field_map sstk,
+    AAPL FY2014); option-exercise proceeds sit inside it.
   - Timing: OSAP reads the fiscal year at datadate + 6 months, held 12 months; here the
     latest filed ART (0-3 months old, refreshed quarterly) with no 6-month annual lag, and
     the year-ago assets by reportperiod (fundamentals_yoy, tolerance 45 days) rather than
