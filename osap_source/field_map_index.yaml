@@ -9,7 +9,7 @@ fields:
   - {key: "compustat.ajexq", sharadar: "sharefactor", status: "mapped", verified_on: "", note: ""}
   - {key: "compustat.am", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}
   - {key: "compustat.ao", sharadar: "assetsnc", status: "approx", verified_on: "", note: "assetsnc is TOTAL non-current assets, not Compustat other-assets: ao = assetsnc - ppnenet - intangibles - inve"}
-  - {key: "compustat.ap", sharadar: "payables", status: "mapped", verified_on: "", note: "ART level, raw USD. Never null (0.03%); exact-zero 11.5% (matches OSAP zero-fill of ap). payables <= assets 99"}
+  - {key: "compustat.ap", sharadar: "payables", status: "mapped", verified_on: "2026-09-30", note: "ART level, raw USD. Never null (0.03%); exact-zero 11.5% (matches OSAP zero-fill of ap). payables <= assets 99"}
   - {key: "compustat.apq", sharadar: "payables", status: "mapped", verified_on: "", note: "Quarterly form of ap; see ap for the full verification (null/coverage/quantile checks on THIS snapshot, same u"}
   - {key: "compustat.at", sharadar: "assets", status: "mapped", verified_on: "2026-09-30", note: "ART level, raw USD. Null 0.05% every dimension; exact-zero 0.01% of non-null (data-error rows, not a mass poin"}
   - {key: "compustat.atq", sharadar: "assets", status: "mapped", verified_on: "", note: "Quarterly form of at; see at for the full verification (null/ART==ARQ/coverage identical dimension-for-dimensi"}
@@ -21,7 +21,7 @@ fields:
   - {key: "compustat.che", sharadar: "cashneq + investmentsc.fillna(0)", status: "approx", verified_on: "2026-09-30", note: "APPROX (was mapped): che = cashneq + investmentsc.fillna(0). SF1.cashneq is cash & equivalents ONLY; Compustat"}
   - {key: "compustat.cheq", sharadar: "cashneq + investmentsc.fillna(0)", status: "approx", verified_on: "", note: "APPROX (was mapped): quarterly form of che = cashneq + investmentsc.fillna(0) on ARQ; see che for the XBRL che"}
   - {key: "compustat.cik", sharadar: "TICKERS.secfilings/cik", status: "mapped", verified_on: "", note: ""}
-  - {key: "compustat.cogs", sharadar: "cor", status: "approx", verified_on: "", note: "APPROX (was mapped): SF1.cor is the AS-REPORTED cost-of-revenue line and INCLUDES D&A where the filer puts D&A"}
+  - {key: "compustat.cogs", sharadar: "cor", status: "approx", verified_on: "2026-09-30", note: "APPROX (was mapped): SF1.cor is the AS-REPORTED cost-of-revenue line and INCLUDES D&A where the filer puts D&A"}
   - {key: "compustat.cogsq", sharadar: "cor", status: "approx", verified_on: "", note: "APPROX: quarterly form of cogs (same SF1.cor column, ARQ). The D&A-inside-cor caveat applies identically; see "}
   - {key: "compustat.conm", sharadar: "name", status: "mapped", verified_on: "", note: ""}
   - {key: "compustat.csho", sharadar: "sharesbas", status: "mapped", verified_on: "", note: "SF1.sharesbas (ART), re-verified 2026-09-25 on THIS snapshot: null 0.07% ART/ARQ, 0.12% ARY (688,440/681,711/1"}
@@ -47,9 +47,9 @@ fields:
   - {key: "compustat.dm", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}
   - {key: "compustat.dp", sharadar: "depamor", status: "mapped", verified_on: "2026-09-30", note: "ART = TTM sum of 4 ARQ (exact on AAPL last 6 quarters, e.g. 2025Q4 ARQ sum 11.832B == ART 11.832B). USD flow, "}
   - {key: "compustat.dpq", sharadar: "depamor", status: "mapped", verified_on: "", note: "Quarterly form of dp; see dp for the full verification (null/coverage identical dimension-for-dimension; note "}
-  - {key: "compustat.drc", sharadar: "deferredrev", status: "approx", verified_on: "", note: "deferredrev is TOTAL deferred revenue (current + non-current, = drc + drlt), not the current line: MSFT FY2024"}
+  - {key: "compustat.drc", sharadar: "deferredrev", status: "approx", verified_on: "2026-09-30", note: "deferredrev is TOTAL deferred revenue (current + non-current, = drc + drlt), not the current line: MSFT FY2024"}
   - {key: "compustat.drcq", sharadar: "deferredrev", status: "mapped", verified_on: "", note: "Quarterly form of drc; see drc for the full verification (null/coverage/quantile checks on THIS snapshot, same"}
-  - {key: "compustat.drlt", sharadar: "deferredrev", status: "approx", verified_on: "", note: "Same field as drc -- deferredrev already includes the non-current part (MSFT FY2024 check under drc), so drc +"}
+  - {key: "compustat.drlt", sharadar: "deferredrev", status: "approx", verified_on: "2026-09-30", note: "Same field as drc -- deferredrev already includes the non-current part (MSFT FY2024 check under drc), so drc +"}
   - {key: "compustat.drltq", sharadar: "deferredrev", status: "mapped", verified_on: "", note: "Quarterly form of drlt; see drlt for the full verification (null/coverage/quantile checks on THIS snapshot, sa"}
   - {key: "compustat.dv", sharadar: "ncfdiv", status: "approx", verified_on: "", note: "Compustat dv = total cash dividends on the CF statement (common + preferred). ncfdiv is predominantly COMMON-o"}
   - {key: "compustat.dvc", sharadar: "ncfdiv", status: "approx", verified_on: "", note: "Compustat dvc = common dividends (declared). ncfdiv is CLOSER than the prior note said (predominantly common-o"}
@@ -84,12 +84,12 @@ fields:
   - {key: "compustat.gdwlip", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}
   - {key: "compustat.gdwlq", sharadar: "intangibles", status: "approx", verified_on: "", note: "intangibles (incl.)"}
   - {key: "compustat.gwo", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}
-  - {key: "compustat.ib", sharadar: "netinccmn", status: "mapped", verified_on: "", note: "Net income to common, USD (2025 ART median 2.7M vs revenue median 396M; |ni|/rev median 0.148). ART is a true "}
-  - {key: "compustat.ibcom", sharadar: "netinccmn", status: "mapped", verified_on: "", note: "Same underlying SF1.netinccmn column as ib (Compustat ibcom vs ib is a naming variant, not annual/quarterly); "}
+  - {key: "compustat.ib", sharadar: "netinccmn", status: "mapped", verified_on: "2026-09-30", note: "Net income to common, USD (2025 ART median 2.7M vs revenue median 396M; |ni|/rev median 0.148). ART is a true "}
+  - {key: "compustat.ibcom", sharadar: "netinccmn", status: "mapped", verified_on: "2026-09-30", note: "Same underlying SF1.netinccmn column as ib (Compustat ibcom vs ib is a naming variant, not annual/quarterly); "}
   - {key: "compustat.ibq", sharadar: "netinccmn", status: "mapped", verified_on: "", note: "ARQ dimension is a genuine single-quarter flow, NOT a TTM/smeared slice: ART == exact rolling-4-quarter sum of"}
   - {key: "compustat.intan", sharadar: "intangibles", status: "mapped", verified_on: "", note: "ART level, raw USD. Never null (0.04%); exact-zero 32.5% (matches OSAP zero-fill of intan). intangibles <= ass"}
   - {key: "compustat.intanq", sharadar: "intangibles", status: "mapped", verified_on: "", note: "Quarterly form of intan; see intan for the full verification (null/coverage/quantile checks on THIS snapshot, "}
-  - {key: "compustat.invt", sharadar: "inventory", status: "mapped", verified_on: "", note: "ART level, raw USD. Never null (0.04%); exact-zero 46.3% (42% in 1999-2003, 53% in 2021-26) \u2014 the Sharadar 0 m"}
+  - {key: "compustat.invt", sharadar: "inventory", status: "mapped", verified_on: "2026-09-30", note: "ART level, raw USD. Never null (0.04%); exact-zero 46.3% (42% in 1999-2003, 53% in 2021-26) \u2014 the Sharadar 0 m"}
   - {key: "compustat.invtq", sharadar: "inventory", status: "mapped", verified_on: "", note: "Quarterly form of invt; see invt for the full verification (null/coverage/quantile checks on THIS snapshot, sa"}
   - {key: "compustat.ivao", sharadar: "investmentsnc", status: "approx", verified_on: "", note: "ART level, raw USD (ART == ARQ 100% on 544k rows; 2024-12-31 median $52M among >0, 3.4% of assets, never > ass"}
   - {key: "compustat.ivaoq", sharadar: "investmentsnc", status: "approx", verified_on: "", note: "Same field as ivao (level; ART == ARQ 100% on the same reportperiod, null pattern identical). See ivao for sco"}
@@ -109,7 +109,7 @@ fields:
   - {key: "compustat.msa", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}
   - {key: "compustat.naics", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}
   - {key: "compustat.naicsh", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}
-  - {key: "compustat.ni", sharadar: "netinc", status: "mapped", verified_on: "", note: "Net income to PARENT, after NCI and before preferred dividends (DESCRIPTIONS: ConsolInc - NetIncNCI; before Pr"}
+  - {key: "compustat.ni", sharadar: "netinc", status: "mapped", verified_on: "2026-09-30", note: "Net income to PARENT, after NCI and before preferred dividends (DESCRIPTIONS: ConsolInc - NetIncNCI; before Pr"}
   - {key: "compustat.niq", sharadar: "netinc", status: "mapped", verified_on: "", note: "Quarterly form of ni (same SF1.netinc column, ARQ); see ni for the full verification on THIS snapshot - the AR"}
   - {key: "compustat.nopi", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}
   - {key: "compustat.oancf", sharadar: "ncfo", status: "mapped", verified_on: "", note: "VERIFIED 2026-09-25 on DATA_SHA 52402f7d1f9c (read-only, SF1.parquet 3,217,351 rows; ncfo double). TTM flow, r"}
@@ -139,18 +139,18 @@ fields:
   - {key: "compustat.rdq", sharadar: "datekey", status: "approx", verified_on: "2026-09-30", note: "datekey (filing date), NOT the earnings-announcement date OSAP's rdq means -- it is the SEC filing datekey, wh"}
   - {key: "compustat.rdq_alt", sharadar: "EVENTS.eventcodes contains code '22' (Sharadar's 2-digit EVENTCODES entry for 8-K Item 2.02, titled \"Results of Operations and Financial Condition\" per DESCRIPTIONS table=='EVENTCODES' indicator '22'; eventcodes stores Sharadar's own pipe-delimited 2-digit codes, NOT the literal SEC item number string \"2.02\")", status: "approx", verified_on: "2026-09-30", note: "A closer earnings-announcement proxy than SF1.datekey. Measured on THIS snapshot: earliest EVENTS row carrying"}
   - {key: "compustat.re", sharadar: "retearn", status: "mapped", verified_on: "", note: ""}
-  - {key: "compustat.rect", sharadar: "receivables", status: "mapped", verified_on: "", note: "ART level, raw USD. Never null (0.04%); exact-zero 18.0% (matches OSAP zero-fill of rect); neg 0.04%. receivab"}
+  - {key: "compustat.rect", sharadar: "receivables", status: "mapped", verified_on: "2026-09-30", note: "ART level, raw USD. Never null (0.04%); exact-zero 18.0% (matches OSAP zero-fill of rect); neg 0.04%. receivab"}
   - {key: "compustat.recta", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}
   - {key: "compustat.rectq", sharadar: "receivables", status: "mapped", verified_on: "", note: "Quarterly form of rect; see rect for the full verification (null/coverage/quantile checks on THIS snapshot, sa"}
   - {key: "compustat.req", sharadar: "retearn", status: "mapped", verified_on: "", note: ""}
-  - {key: "compustat.revt", sharadar: "revenue", status: "mapped", verified_on: "", note: "ART = TTM sum of 4 ARQ (100% on 8 large tickers 2015-25); USD. Null 3-7%/yr 1999-2025 (37% in 1994-98 warm-up)"}
+  - {key: "compustat.revt", sharadar: "revenue", status: "mapped", verified_on: "2026-09-30", note: "ART = TTM sum of 4 ARQ (100% on 8 large tickers 2015-25); USD. Null 3-7%/yr 1999-2025 (37% in 1994-98 warm-up)"}
   - {key: "compustat.revtq", sharadar: "revenue", status: "mapped", verified_on: "", note: "Quarterly form of revt; see revt for the full verification (null/coverage/quantile checks on THIS snapshot, sa"}
-  - {key: "compustat.sale", sharadar: "revenue", status: "mapped", verified_on: "", note: "same column as revt; see that entry"}
+  - {key: "compustat.sale", sharadar: "revenue", status: "mapped", verified_on: "2026-09-30", note: "same column as revt; see that entry"}
   - {key: "compustat.saleq", sharadar: "revenue", status: "mapped", verified_on: "", note: "Quarterly form of sale; see sale for the full verification (null/coverage/quantile checks on THIS snapshot, sa"}
   - {key: "compustat.scstkc", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}
   - {key: "compustat.seq", sharadar: "equity", status: "mapped", verified_on: "2026-09-30", note: "Same SF1.equity column as ceq/ceqq (a single unsplit book-equity concept -- Sharadar does not separate with/wi"}
   - {key: "compustat.seqq", sharadar: "equity", status: "mapped", verified_on: "", note: "Quarterly form of seq; see ceq for the full verification."}
-  - {key: "compustat.sic", sharadar: "TICKERS.siccode", status: "mapped", verified_on: "", note: "DOUBLE, integral, range 100-9995; 68 of 20,829 non-null SEP-scope values are 3-digit (all hundreds-multiples, "}
+  - {key: "compustat.sic", sharadar: "TICKERS.siccode", status: "mapped", verified_on: "2026-09-30", note: "DOUBLE, integral, range 100-9995; 68 of 20,829 non-null SEP-scope values are 3-digit (all hundreds-multiples, "}
   - {key: "compustat.sich", sharadar: "TICKERS.siccode", status: "approx", verified_on: "", note: "TICKERS.siccode is Sharadar's CURRENT classification, not Compustat's point-in-time sich: AAPL/NTGR/LAB/INHD s"}
   - {key: "compustat.spi", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}
   - {key: "compustat.sstk", sharadar: "ncfcommon", status: "approx", verified_on: "", note: "ncfcommon = NET COMMON-equity cash flow (issuance incl. option exercise, minus repurchase); sstk and prstkc co"}
@@ -176,15 +176,15 @@ fields:
   - {key: "compustat.xint", sharadar: "intexp", status: "mapped", verified_on: "", note: ""}
   - {key: "compustat.xintq", sharadar: "intexp", status: "mapped", verified_on: "", note: ""}
   - {key: "compustat.xpp", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}
-  - {key: "compustat.xrd", sharadar: "rnd", status: "mapped", verified_on: "", note: "Separate from sgna (see xsga): sgna==rnd on only 0.003% of rnd>0 rows (232,191 ART rows, rnd>0), confirming no"}
+  - {key: "compustat.xrd", sharadar: "rnd", status: "mapped", verified_on: "2026-09-30", note: "Separate from sgna (see xsga): sgna==rnd on only 0.003% of rnd>0 rows (232,191 ART rows, rnd>0), confirming no"}
   - {key: "compustat.xrdq", sharadar: "rnd", status: "mapped", verified_on: "", note: "Quarterly form of xrd; see xrd for the full verification (null/zero/coverage/units checks on THIS snapshot, sa"}
-  - {key: "compustat.xsga", sharadar: "sgna", status: "approx", verified_on: "", note: "APPROX (was mapped): SF1.sgna is the AS-REPORTED SG&A line; it EXCLUDES R&D and INCLUDES D&A where the filer r"}
+  - {key: "compustat.xsga", sharadar: "sgna", status: "approx", verified_on: "2026-09-30", note: "APPROX (was mapped): SF1.sgna is the AS-REPORTED SG&A line; it EXCLUDES R&D and INCLUDES D&A where the filer r"}
   - {key: "compustat.xsgaq", sharadar: "sgna", status: "approx", verified_on: "", note: "APPROX: quarterly form of xsga (same SF1.sgna column, ARQ). sgna excludes R&D and includes D&A where the filer"}
-  - {key: "crsp.prc", sharadar: "SEP.closeunadj (level) / SEP.closeadj (returns) / SEP.close (OHLC-consistent)", status: "mapped", verified_on: "", note: "SEP.close is split-adjusted on the SAME basis as SEP.high/low (0 of 45.3M rows violate low<=close<=high; high/"}
-  - {key: "crsp.askhi", sharadar: "SEP.high", status: "mapped", verified_on: "", note: "Daily high, USD, split-adjusted on the same basis as SEP.close (see prc). 0.00% null in every year 1997-2026; "}
-  - {key: "crsp.bidlo", sharadar: "SEP.low", status: "mapped", verified_on: "", note: "Daily low, USD, split-adjusted on the same basis as SEP.close and SEP.high (see prc/askhi). 0.00% null in ever"}
+  - {key: "crsp.prc", sharadar: "SEP.closeunadj (level) / SEP.closeadj (returns) / SEP.close (OHLC-consistent)", status: "mapped", verified_on: "2026-09-30", note: "SEP.close is split-adjusted on the SAME basis as SEP.high/low (0 of 45.3M rows violate low<=close<=high; high/"}
+  - {key: "crsp.askhi", sharadar: "SEP.high", status: "mapped", verified_on: "2026-09-30", note: "Daily high, USD, split-adjusted on the same basis as SEP.close (see prc). 0.00% null in every year 1997-2026; "}
+  - {key: "crsp.bidlo", sharadar: "SEP.low", status: "mapped", verified_on: "2026-09-30", note: "Daily low, USD, split-adjusted on the same basis as SEP.close and SEP.high (see prc/askhi). 0.00% null in ever"}
   - {key: "crsp.ret", sharadar: "closeadj ratio month-end to month-end (monthly consumers) / day-over-day (daily-return consumers)", status: "mapped", verified_on: "2026-09-30", note: "Total return (splits+dividends) confirmed: 379 div ex-dates, 6,779 splits; closeadj 3-dp grid quantises back-a"}
-  - {key: "crsp.vol", sharadar: "SEP.volume", status: "mapped", verified_on: "", note: "Daily share volume (shares, not thousands; median 305k on 2025-06-30). 0.00% null every year. volume==0 share:"}
+  - {key: "crsp.vol", sharadar: "SEP.volume", status: "mapped", verified_on: "2026-09-30", note: "Daily share volume (shares, not thousands; median 305k on 2025-06-30). 0.00% null every year. volume==0 share:"}
   - {key: "crsp.shrout", sharadar: "DAILY.marketcap*1e6 / SEP.close, or SF1.sharesbas (ARQ); both on TODAY's split basis", status: "approx", verified_on: "", note: "Verified 2026-09-26 on THIS snapshot (ShareIss fetcher, build_universe at 2000-12/2005-06/2012-11/2022-11): DA"}
   - {key: "crsp.me", sharadar: "DAILY.marketcap", status: "mapped", verified_on: "2026-09-30", note: "DAILY.marketcap, double, in MILLIONS of USD (see marketcap_units known_trap): AAPL 2026-09-21 value 4,947,135."}
   - {key: "crsp.mve_permco", sharadar: "DAILY.marketcap on the Primary-Class ticker (already company-level; no class sum needed or possible)", status: "approx", verified_on: "2026-09-30", note: "COMPANY-LEVEL ALREADY: DAILY.marketcap = primary close x SF1.sharesbas (10-K cover total, all classes) x share"}
@@ -195,4 +195,4 @@ fields:
   - {key: "crsp.siccd", sharadar: "TICKERS.siccode (current)", status: "approx", verified_on: "", note: "Same field and same current-vs-point-in-time deviation as compustat.sich (see that entry): 12.3% of SEP-scope "}
   - {key: "crsp.firstpricedate", sharadar: "TICKERS.firstpricedate", status: "mapped", verified_on: "", note: "New use (FirmAge age-clock start), permaticker-level, one row per ID via ticker_meta(). Sharadar left-censors "}
   - {key: "crsp.divamt", sharadar: "ACTIONS.value where action=='dividend'", status: "approx", verified_on: "", note: "New field (not previously mapped): ACTIONS action=='dividend' rows give per-share cash dividend amount in `val"}
-known_traps: 19   # read field_map.yaml `known_traps` before touching prices, shares, marketcap, dimensions
+known_traps: 20   # read field_map.yaml `known_traps` before touching prices, shares, marketcap, dimensions
