@@ -485,3 +485,23 @@ excluded:
     class: data_unavailable
     spec: osap_source/cache/b4e911e6/sfe/spec.md
     date: "2026-09-30"
+  sinAlgo:
+    reason: "needs Compustat segments and historical NAICS (neither in Sharadar; OSAP does not zero-fill them); a SIC-only build is a binary flag scored only in a small comparison group: 3.9-6.2% coverage, modal share 83.9-90.0%, 2 qcut bins. Measured by osap-fetcher, all 276 months"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/sinAlgo/spec.md
+    date: "2026-09-30"
+  skew1:
+    reason: "built from OptionMetrics option-level implied volatility; no held Sharadar table carries option data; OSAP does not zero-fill it"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/skew1/spec.md
+    date: "2026-09-30"
+  std_turn:
+    reason: "OSAP nulls std_turn for market-cap quintiles 4-5 of all listed stocks; the harness universe sits almost entirely above the 60th percentile, so coverage after OSAP's null is 2.5-11.3% (54-262 names, at most 26 per decile) at all probes; dropping the null would change what OSAP emits, not adopted (as RDcap). Measured by osap-fetcher, 13 probe months"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/std_turn/spec.md
+    date: "2026-09-30"
+  tang:
+    reason: "the pinned code uses gross PP&E (ppegt), not in SF1 and dropped by OSAP when missing (ppnenet is a substitution, not adopted); and the manufacturers-only sample (SIC 2000-3999) is 35.1-38.5% of the universe before any value, under the 40% bar"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/tang/spec.md
+    date: "2026-09-30"
