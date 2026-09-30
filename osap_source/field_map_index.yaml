@@ -84,7 +84,7 @@ fields:
   - {key: "compustat.gdwlip", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}
   - {key: "compustat.gdwlq", sharadar: "intangibles", status: "approx", verified_on: "", note: "intangibles (incl.)"}
   - {key: "compustat.gwo", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}
-  - {key: "compustat.ib", sharadar: "netinccmn", status: "mapped", verified_on: "2026-09-30", note: "Net income to common, USD (2025 ART median 2.7M vs revenue median 396M; |ni|/rev median 0.148). ART is a true "}
+  - {key: "compustat.ib", sharadar: "netinc + netincdis", status: "approx", verified_on: "2026-09-30", note: "REMAPPED 2026-09-30 (was netinccmn): Compustat ib is income before extraordinary items and discontinued operat"}
   - {key: "compustat.ibcom", sharadar: "netinccmn", status: "mapped", verified_on: "2026-09-30", note: "Same underlying SF1.netinccmn column as ib (Compustat ibcom vs ib is a naming variant, not annual/quarterly); "}
   - {key: "compustat.ibq", sharadar: "netinccmn", status: "mapped", verified_on: "", note: "ARQ dimension is a genuine single-quarter flow, NOT a TTM/smeared slice: ART == exact rolling-4-quarter sum of"}
   - {key: "compustat.intan", sharadar: "intangibles", status: "mapped", verified_on: "2026-09-30", note: "ART level, raw USD. Never null (0.04%); exact-zero 32.5% (matches OSAP zero-fill of intan). intangibles <= ass"}
@@ -115,9 +115,9 @@ fields:
   - {key: "compustat.oancf", sharadar: "ncfo", status: "mapped", verified_on: "", note: "VERIFIED 2026-09-25 on DATA_SHA 52402f7d1f9c (read-only, SF1.parquet 3,217,351 rows; ncfo double). TTM flow, r"}
   - {key: "compustat.oancfy", sharadar: "ncfo", status: "approx", verified_on: "", note: "ncfo (YTD)"}
   - {key: "compustat.ob", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}
-  - {key: "compustat.oiadp", sharadar: "opinc", status: "mapped", verified_on: "", note: "Top-down operating income = GP - OpEx = revenue-cor-opex (100% exact on 589k ART rows 1999-2025), before intex"}
+  - {key: "compustat.oiadp", sharadar: "opinc", status: "mapped", verified_on: "2026-09-30", note: "Top-down operating income = GP - OpEx = revenue-cor-opex (100% exact on 589k ART rows 1999-2025), before intex"}
   - {key: "compustat.oiadpq", sharadar: "opinc", status: "mapped", verified_on: "", note: "Top-down operating income = GP - OpEx = revenue-cor-opex (100% exact on 589k ART rows 1999-2025), before intex"}
-  - {key: "compustat.oibdp", sharadar: "opinc + depamor", status: "approx", verified_on: "", note: "REMAPPED 2026-09-25 (was sf1: ebitda with an empty note, contradicting oiadp's note that opinc+depamor -- not "}
+  - {key: "compustat.oibdp", sharadar: "opinc + depamor", status: "approx", verified_on: "2026-09-30", note: "REMAPPED 2026-09-25 (was sf1: ebitda with an empty note, contradicting oiadp's note that opinc+depamor -- not "}
   - {key: "compustat.oibdpq", sharadar: "opinc + depamor", status: "approx", verified_on: "", note: "REMAPPED 2026-09-25 (was sf1: ebitda with an empty note, contradicting oiadp's note that opinc+depamor -- not "}
   - {key: "compustat.pi", sharadar: "ebt", status: "mapped", verified_on: "", note: ""}
   - {key: "compustat.piq", sharadar: "ebt", status: "mapped", verified_on: "", note: ""}

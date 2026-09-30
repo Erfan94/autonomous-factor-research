@@ -103,6 +103,7 @@ below. Never edit or delete a line; correct with `finding_corrected`.
 | `error` | `factor`, `step`, `message` |
 | `verification_completed` | `subject`, `detail` — an owner-requested audit of a step against its instruction |
 | `rule_conflict_found` | `subject`, `stop_and_ask` (6), `detail`, `resolved_by`, `decision` — a rule contradicting itself, and how the owner resolved it |
+| `decision` | `id`, `decision` — a judgment call the rules leave to the runner (a translation choice, a tie-break between two readings of a spec), taken without a stop-and-ask |
 
 `python3 scripts/records.py check` refuses an unknown event type.
 
