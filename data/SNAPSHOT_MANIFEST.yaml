@@ -1,6 +1,399 @@
-# No snapshot recorded yet. `python3 harness/snapshot.py download` then
-# `manifest` (data/README.md) replace this file; DATA_SHA reads "nodata"
-# until then and run_test.py refuses to run.
 schema_version: 1
-status: EMPTY
-tables: {}
+status: FROZEN
+recorded_on: '2026-09-30T16:39:10Z'
+source: Sharadar direct API bulk export (api.sharadar.com/v1.0, years=full), Bundle
+  / Full History
+note: 'DATA_SHA is derived from the per-table sha256 values below. Re-running `snapshot.py
+  manifest` after a refresh MOVES it and is a re-baseline: log it in research/CHANGELOG.md
+  and re-run the baseline.'
+tables:
+  ACTIONS:
+    file: ACTIONS.parquet
+    rows: 711947
+    sha256: a8738a046750f8a90c5208dc124e7c446b88345e86d6444fb957ab916658d3f2
+    columns:
+    - date
+    - action
+    - ticker
+    - name
+    - value
+    - contraticker
+    - contraname
+    bytes: 6215010
+    min_date: '1997-12-31'
+    max_date: '2026-10-01'
+  DAILY:
+    file: DAILY.parquet
+    rows: 39848528
+    sha256: e4d957c74e9f686dad17fdd0aecf9d7d3ee09717a9573b850c291c2491aae835
+    columns:
+    - ticker
+    - date
+    - lastupdated
+    - ev
+    - evebit
+    - evebitda
+    - marketcap
+    - pb
+    - pe
+    - ps
+    bytes: 887773999
+    min_date: '1998-12-01'
+    max_date: '2026-09-29'
+  DESCRIPTIONS:
+    file: DESCRIPTIONS.parquet
+    rows: 386
+    sha256: a180dc7f2fc3047d296ecbf47a1b46c2614b1126890890ba9e4a776cff0c2813
+    columns:
+    - table
+    - indicator
+    - isfilter
+    - isprimarykey
+    - title
+    - description
+    - unittype
+    bytes: 36816
+  EVENTS:
+    file: EVENTS.parquet
+    rows: 2532599
+    sha256: 6722b70b5bf7cf1f303466bf4fdcd0a200b05dd9e97adbe46dae6760030f5b19
+    columns:
+    - ticker
+    - date
+    - eventcodes
+    bytes: 7673540
+    min_date: '1993-11-08'
+    max_date: '2026-09-29'
+  METRICS:
+    file: METRICS.parquet
+    rows: 30936
+    sha256: 64d2fe5a9bba5c98a15d96d3dbcfe4f74a697bb159001bd3ef95fd9418c511ec
+    columns:
+    - ticker
+    - date
+    - lastupdated
+    - beta1y
+    - beta5y
+    - dividendyieldforward
+    - dividendyieldtrailing
+    - high52w
+    - high5y
+    - low52w
+    - low5y
+    - ma200d
+    - ma200w
+    - ma50d
+    - ma50w
+    - price
+    - return1y
+    - return5y
+    - returnytd
+    - volume
+    - volumeavg1m
+    - volumeavg3m
+    bytes: 2087581
+    min_date: '1997-12-31'
+    max_date: '2026-09-29'
+  SEP:
+    file: SEP.parquet
+    rows: 45385374
+    sha256: 4b586ae769ea33a534c57816c8cc19f9649b92cc55e617ea72682ff3cd1c350f
+    columns:
+    - ticker
+    - date
+    - open
+    - high
+    - low
+    - close
+    - volume
+    - closeadj
+    - closeunadj
+    - lastupdated
+    bytes: 1556844903
+    min_date: '1997-12-31'
+    max_date: '2026-09-29'
+  SF1:
+    file: SF1.parquet
+    rows: 3217929
+    sha256: c8d538fda6ac7eae39a925535f79245e03aa1022783aa99fb501652bc26298ec
+    columns:
+    - ticker
+    - dimension
+    - calendardate
+    - date
+    - reportperiod
+    - fiscalperiod
+    - lastupdated
+    - accoci
+    - assets
+    - assetsavg
+    - assetsc
+    - assetsnc
+    - assetturnover
+    - bvps
+    - capex
+    - cashneq
+    - cashnequsd
+    - cor
+    - consolinc
+    - currentratio
+    - de
+    - debt
+    - debtc
+    - debtnc
+    - debtusd
+    - deferredrev
+    - depamor
+    - deposits
+    - divyield
+    - dps
+    - ebit
+    - ebitda
+    - ebitdamargin
+    - ebitdausd
+    - ebitusd
+    - ebt
+    - eps
+    - epsdil
+    - epsusd
+    - equity
+    - equityavg
+    - equityusd
+    - ev
+    - evebit
+    - evebitda
+    - fcf
+    - fcfps
+    - fxusd
+    - gp
+    - grossmargin
+    - intangibles
+    - intexp
+    - invcap
+    - invcapavg
+    - inventory
+    - investments
+    - investmentsc
+    - investmentsnc
+    - liabilities
+    - liabilitiesc
+    - liabilitiesnc
+    - marketcap
+    - ncf
+    - ncfbus
+    - ncfcommon
+    - ncfdebt
+    - ncfdiv
+    - ncff
+    - ncfi
+    - ncfinv
+    - ncfo
+    - ncfx
+    - netinc
+    - netinccmn
+    - netinccmnusd
+    - netincdis
+    - netincnci
+    - netmargin
+    - opex
+    - opinc
+    - payables
+    - payoutratio
+    - pb
+    - pe
+    - pe1
+    - ppnenet
+    - prefdivis
+    - price
+    - ps
+    - ps1
+    - receivables
+    - retearn
+    - revenue
+    - revenueusd
+    - rnd
+    - roa
+    - roe
+    - roic
+    - ros
+    - sbcomp
+    - sgna
+    - sharefactor
+    - sharesbas
+    - shareswa
+    - shareswadil
+    - sps
+    - tangibles
+    - taxassets
+    - taxexp
+    - taxliabilities
+    - tbvps
+    - workingcapital
+    bytes: 869179315
+    min_date: '1990-06-06'
+    max_date: '2026-09-29'
+  SF2:
+    file: SF2.parquet
+    rows: 11561052
+    sha256: 0d7a27be433478e918543bda516dbb1b4ecdf559f9fa7495104dce5c56077a6d
+    columns:
+    - ticker
+    - date
+    - formtype
+    - ownername
+    - officertitle
+    - isdirector
+    - isofficer
+    - istenpercentowner
+    - transactiondate
+    - securityadcode
+    - transactioncode
+    - sharesownedbeforetransaction
+    - transactionshares
+    - sharesownedfollowingtransaction
+    - transactionpricepershare
+    - transactionvalue
+    - securitytitle
+    - directorindirect
+    - natureofownership
+    - dateexercisable
+    - priceexercisable
+    - expirationdate
+    - rownum
+    bytes: 308767492
+    min_date: '2008-01-02'
+    max_date: '2026-09-29'
+  SF3:
+    file: SF3.parquet
+    rows: 81210476
+    sha256: 5f91da4fbc0a8edb207415e57dace7cef86a8e3f41df8aeb875c0d0c3ab92ab8
+    columns:
+    - ticker
+    - investorid
+    - securitytype
+    - date
+    - value
+    - units
+    bytes: 491312414
+    min_date: '2013-06-30'
+    max_date: '2026-06-30'
+  SF3A:
+    file: SF3A.parquet
+    rows: 670115
+    sha256: bd1f0902c819438adc79783585dcf4351695fba6e87012349df98881d9f51a98
+    columns:
+    - date
+    - ticker
+    - name
+    - shrholders
+    - cllholders
+    - putholders
+    - wntholders
+    - dbtholders
+    - prfholders
+    - fndholders
+    - undholders
+    - shrunits
+    - cllunits
+    - putunits
+    - wntunits
+    - dbtunits
+    - prfunits
+    - fndunits
+    - undunits
+    - shrvalue
+    - cllvalue
+    - putvalue
+    - wntvalue
+    - dbtvalue
+    - prfvalue
+    - fndvalue
+    - undvalue
+    - totalvalue
+    - percentoftotal
+    bytes: 16197946
+  SF3B:
+    file: SF3B.parquet
+    rows: 306512
+    sha256: d1a03c1302c7483cbf0f681830e53429433e96236467efb03661c7d3839086c3
+    columns:
+    - date
+    - investorid
+    - investorname
+    - shrholdings
+    - cllholdings
+    - putholdings
+    - wntholdings
+    - dbtholdings
+    - prfholdings
+    - fndholdings
+    - undholdings
+    - shrunits
+    - cllunits
+    - putunits
+    - wntunits
+    - dbtunits
+    - prfunits
+    - fndunits
+    - undunits
+    - shrvalue
+    - cllvalue
+    - putvalue
+    - wntvalue
+    - dbtvalue
+    - prfvalue
+    - fndvalue
+    - undvalue
+    - totalvalue
+    - percentoftotal
+    bytes: 10408343
+  SP500:
+    file: SP500.parquet
+    rows: 59682
+    sha256: d83e285d06698cde9408a0bb39e5fc88dda70edf417dff61054a3c2f7ce5a430
+    columns:
+    - date
+    - action
+    - ticker
+    - name
+    - contraticker
+    - contraname
+    - note
+    bytes: 181308
+    min_date: '1957-03-04'
+    max_date: '2026-09-29'
+  TICKERS:
+    file: TICKERS.parquet
+    rows: 74285
+    sha256: 8855fd955092b399631665bc1e38649f72ced96e08e3a5e4812b2f90166272cd
+    columns:
+    - table
+    - permaticker
+    - ticker
+    - name
+    - exchange
+    - isdelisted
+    - category
+    - cusips
+    - siccode
+    - sicsector
+    - sicindustry
+    - figi
+    - famaindustry
+    - sector
+    - industry
+    - scalemarketcap
+    - scalerevenue
+    - relatedtickers
+    - currency
+    - location
+    - lastupdated
+    - firstadded
+    - firstpricedate
+    - lastpricedate
+    - firstquarter
+    - lastquarter
+    - secfilings
+    - companysite
+    bytes: 4398722
+data_sha: 198b281de1a0

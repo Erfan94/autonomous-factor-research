@@ -47,6 +47,7 @@ KNOWN_EVENTS = {
     "repository_pushed", "repository_committed", "alpha_review", "error", "flip_hypothesis_qualified",
     "frontier_classified",
     "preflight_passed",
+    "verification_completed", "rule_conflict_found",
 }
 
 

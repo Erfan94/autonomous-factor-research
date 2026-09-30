@@ -101,6 +101,8 @@ below. Never edit or delete a line; correct with `finding_corrected`.
 | `preflight_passed` | `factor`, `batch`, the probe coverage/mode shares (optional; a pass is also implied by `factor_translated` with no `preflight_failed`) |
 | `preflight_remeasured` | `harness_sha`, `n_factors`, `hard_failures`, `rows` (factor → probe → cover/mode/distinct/qcut), `note` — a whole-pool dry run after a harness change; supersedes earlier probe readings |
 | `error` | `factor`, `step`, `message` |
+| `verification_completed` | `subject`, `detail` — an owner-requested audit of a step against its instruction |
+| `rule_conflict_found` | `subject`, `stop_and_ask` (6), `detail`, `resolved_by`, `decision` — a rule contradicting itself, and how the owner resolved it |
 
 `python3 scripts/records.py check` refuses an unknown event type.
 

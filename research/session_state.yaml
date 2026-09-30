@@ -1,12 +1,12 @@
 # The CURRENT state of the loop — replace, never append. History: session_history.md.
-updated: "2026-09-30T00:00:00Z"
-step: bootstrap_awaiting_snapshot   # skeleton built, D11 applied, tests green; key file in place (probe OK); snapshot not yet pulled
+updated: "2026-09-30T16:45:00Z"
+step: bootstrap_v0_baseline_stage2   # snapshot recorded (DATA_SHA 198b281de1a0), live OK; v0 --baseline --stage 2 next
 phase: bootstrap
-composite: {version: v0, legs: 5, families: 5, sha: null, legs_list: [Size, Value, Profitability, Investment, Momentum]}
+composite: {version: v0, legs: 5, families: 5, sha: f9d9d9d95731, legs_list: [Size, Value, Profitability, Investment, Momentum]}
 versions: {}
-stamps: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: nodata}
+stamps: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0}
 counters: {osap: 212, inventoried: 0, infeasible: 0, translated: 0, preflight_failed: 0, screened: 0, passed: 0, families: 5, ratcheted: 0, accepted: 0, rejected: 0, inconclusive: 0}
 holdout: unspent
 open:
-  - "snapshot download|verify|manifest|live (key file in place, probe OK 2026-09-30) -> v0 --baseline --stage 2 and --stage 3 -> evaluate -> manifest block -> tag v0-baseline (local)"
-next: "Snapshot download, then the v0 baseline"
+  - "v0 --baseline --stage 2 -> evaluate -> --baseline --stage 3 -> evaluate -> manifest block -> tag v0-baseline (local)"
+next: "Run the v0 baseline, Stage 2"
