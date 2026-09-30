@@ -148,6 +148,11 @@ def phase_gate(rows):
             e = json.loads(line)
         except ValueError:
             continue
+        # A `--baseline --stage 2` measures the composite, not a candidate: it
+        # is not the ratchet starting (run 001 measured v0 before Phase A).
+        if str(e.get("factors", "")).lower() == "baseline" or \
+                "baseline" in str(e.get("label", "")).lower():
+            continue
         if e.get("event") == "run_started" and str(e.get("stage")) == "2":
             stage2_started = True
             break
@@ -206,6 +211,15 @@ def osap_frontier(rows):
     fpath = ROOT / "osap_source" / "osap_frontier.yaml"
     if fpath.exists():
         excl = (yaml.safe_load(fpath.read_text()) or {}).get("excluded", {}) or {}
+    # A registry row accounts for its osap_acronym, not its file name: the leg
+    # row Investment.yaml is OSAP's AssetGrowth, and must not hide OSAP's own
+    # `Investment` predictor (Titman-Wei-Xie). A row without one counts by name.
+    row_acr = set()
+    for _n in rows:
+        _p = REG / f"{_n}.yaml"
+        _r = (yaml.safe_load(_p.read_text()) or {}) if _p.exists() else {}
+        row_acr.add(str(_r.get("osap_acronym") or _n))
+    rows = row_acr
     known = set(rows) | legs | files | set(excl)
     open_names = sorted(acr - known)
     print(f"OSAP predictors: {len(acr)}; accounted {len(acr & known)} "
