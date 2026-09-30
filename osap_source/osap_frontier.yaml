@@ -260,3 +260,13 @@ excluded:
     class: preflight_failed
     spec: osap_source/cache/b4e911e6/MomRev/spec.md
     date: "2026-10-01"
+  MomSeason11YrPlus:
+    reason: "data start: 5 same-month returns at lags 131..179 need the close at BME(t-180); first full-window signal 2012-12-31, so only 108 of 276 decision months can score, under rebalance.min_months 120 (decision momentum_partial_windows; OSAP-literal partial windows would give 156)"
+    class: data_start
+    spec: osap_source/cache/b4e911e6/MomSeason11YrPlus/spec.md
+    date: "2026-10-01"
+  MomSeason16YrPlus:
+    reason: "data start: 5 same-month returns at lags 191..239 need the close at BME(t-240); first full-window signal 2017-12-29, so only 48 of 276 decision months can score (96 even with OSAP-literal partial windows), under rebalance.min_months 120"
+    class: data_start
+    spec: osap_source/cache/b4e911e6/MomSeason16YrPlus/spec.md
+    date: "2026-10-01"
