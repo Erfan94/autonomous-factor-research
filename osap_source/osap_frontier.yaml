@@ -210,3 +210,8 @@ excluded:
     class: data_unavailable
     spec: osap_source/cache/b4e911e6/GrAdExp/spec.md
     date: "2026-09-30"
+  IO_ShortInterest:
+    reason: "short interest is in no held Sharadar table (13 checked), and OSAP uses it as the sample filter (top 1% of shortint/shrout), so without it every row is null, not neutral (the fillna(0) on tempshortratio/instown_perc does not rescue a filter); 13F institutional ownership (SF3/SF3A) starts 2013-06 (at most 102 of 276 months); the top-1% sample would also be ~20 names, ~2 per decile against the 30-per-decile bar"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/IO_ShortInterest/spec.md
+    date: "2026-09-30"

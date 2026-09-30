@@ -1513,7 +1513,7 @@ crsp_to_sharadar:
       on every row; volume==0 is the only no-trade flag. Re-confirmed on a prior snapshot: AAPL 4-for-1
       split 2020-08-31, close continuous 124.808 (08-28) -> 129.040 (08-31) while closeunadj jumps
       499.23 -> 129.04; closeadj (120.965 -> 125.067) differs from close by the dividend adjustment
-      only, confirming close = split-adjusted-not-dividend-adjusted per High52''s construction. Re-verified
+      only, confirming close = split-adjusted-not-dividend-adjusted (CORRECTED 2026-09-30: the pinned High52 predictor uses raw prc, i.e. closeunadj, not close; see High52 spec). Re-verified
       2026-09-25 on THIS snapshot: closeadj first date 1997-12-31 (matches SEP min_date), null share 0.00%
       of 45,366,356 rows (close and closeunadj also 0.00% null). Dividend-adjustment proof: AAPL
       closeadj/close ratio is flat at 0.96921 on 2020-11-04 and 2020-11-05, then steps to 0.97089 on
