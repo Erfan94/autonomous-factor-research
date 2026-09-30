@@ -350,3 +350,13 @@ excluded:
     class: preflight_failed
     spec: osap_source/cache/b4e911e6/RDcap/spec.md
     date: "2026-09-30"
+  ProbInformedTrading:
+    reason: "PIN parameters (a, u, es, eb) come from a third-party file estimated on intraday buy/sell trade counts; no held Sharadar table carries trade counts or quotes; OSAP drops unmatched rows (no zero-fill)"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/ProbInformedTrading/spec.md
+    date: "2026-09-30"
+  RD:
+    reason: "coverage: OSAP does not zero-fill xrd and scores only R&D reporters; SF1.rnd is vendor-zero for non-reporters, so rnd == 0 is NaN (faithful reading): pooled coverage 31.9% of the universe, >= 40% in only 4 of 276 months (0 of 276 with OSAP's 6-month lag); keeping zeros instead puts 56.6-70.7% of scored names at 0 (qcut 3-6 bins every month). Same ground as the Frontier row. Measured by osap-fetcher on the harness universe, all 276 months"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/RD/spec.md
+    date: "2026-09-30"
