@@ -175,3 +175,38 @@ excluded:
     class: preflight_failed
     spec: osap_source/cache/b4e911e6/EarnSupBig/spec.md
     date: "2026-09-30"
+  FR:
+    reason: "needs Compustat pension items (pbnaa, pplao, pplau, pbnvv, pbpro, pbpru; COMP.ACO_PNFNDA); SF1 has no pension field; OSAP inner-merges (no zero-fill), so infeasible under the missing-item rule"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/FR/spec.md
+    date: "2026-09-30"
+  FirmAge:
+    reason: "age = months since first trade is censored at the snapshot start (SEP and TICKERS.firstpricedate begin 1997-12; OSAP censors at 1926 and nulls censored firms), so only post-1997 listers score: 5.4% of the universe at 1998-12 rising to 61.6% at 2021-11, pooled 34.7% over 276 months, 170 of 276 months under the 40% bar; the first probe also breaches the 10% mass-point cliff (14.5% at 6 months, 11 distinct values). Measured by osap-fetcher on the harness universe, all 276 decision months"
+    class: data_start
+    spec: osap_source/cache/b4e911e6/FirmAge/spec.md
+    date: "2026-09-30"
+  FirmAgeMom:
+    reason: "defined only in the youngest age quintile (OSAP), so coverage cannot exceed ~20%: 18.3-20.0% of the universe in the 205 months where the quintile is identifiable (from 2004-11, age censored at the 1997-12 snapshot start), 0 names in 71 months; pooled 13.7% over 276 months, never reaching the 40% Stage 1 bar. Measured by osap-fetcher on the harness universe"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/FirmAgeMom/spec.md
+    date: "2026-09-30"
+  ForecastDispersion:
+    reason: "signal is IBES stdev / |meanest| (FY1 forecast dispersion); no analyst data in Sharadar; OSAP does not zero-fill it"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/ForecastDispersion/spec.md
+    date: "2026-09-30"
+  Frontier:
+    reason: "coverage: OSAP does not zero-fill xrd, so rnd non-reporters and rnd == 0 (67% of non-null rnd in the universe) drop out; with the faithful gates (rnd != 0, sale, at, equity > 0, debtc/debtnc non-null, capex, opinc+depamor, ppnenet) pooled coverage is 30.1% over 276 months, 14.5-38.5% per month, 0 of 276 months at or above the 40% bar; xad (unavailable) is zero-filled by OSAP itself so it is not the obstacle. Measured by osap-fetcher on the harness universe"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/Frontier/spec.md
+    date: "2026-09-30"
+  Governance:
+    reason: "G-index (Gompers-Ishii-Metrick, Yale spreadsheet) is in no Sharadar table; OSAP drops rows without G (no default); OSAP's own series also ends 2007-01 (at most 97 decision months)"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/Governance/spec.md
+    date: "2026-09-30"
+  GrAdExp:
+    reason: "advertising expense xad is the signal itself; no Sharadar field; OSAP reads raw xad (not zero-filled) and nulls xad < 0.1, so no zero-fill rescue"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/GrAdExp/spec.md
+    date: "2026-09-30"
