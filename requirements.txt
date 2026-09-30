@@ -1,0 +1,12 @@
+# Everything runs locally. There is no remote execution environment and no
+# second pandas version to stay compatible with, so the modern aliases ("ME",
+# "YE") are used throughout.
+pandas>=2.2
+numpy>=1.24
+scipy>=1.10          # spearmanr, used by harness/analytics.py
+pyarrow>=11.0        # parquet snapshot + cached panels
+pyyaml>=6.0          # config, manifest, registry
+pytest>=8.0
+# Optional — only harness/snapshot.py `download` needs it. `verify` and the
+# backtests read parquet files and never touch the network.
+# nasdaq-data-link>=1.0

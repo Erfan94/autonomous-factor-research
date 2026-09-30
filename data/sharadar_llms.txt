@@ -1,0 +1,130 @@
+<!-- Verbatim copy of https://sharadar.com/llms.txt fetched 2026-09-14. Re-fetch the URL for anything time-sensitive (plans, prices); this copy is here so agents in this repo have the API contract offline. -->
+# Sharadar
+
+> Nearly 30 years of reference-grade US public company data - fundamentals, EOD stock and fund prices, corporate actions, securities master, institutional holdings, and insider transactions. Point-in-time and survivorship-bias-free. Delivered via REST API or bulk CSV zip download.
+
+Sharadar (https://sharadar.com) is a direct data service for quants, analysts, and builders. Tables are known by descriptive names (`fundamentals`, `stocks`, ...) and by well-known legacy codes (`SF1`, `SEP`, ...) that people search for. Both work in the API and docs. Full product documentation lives under `/docs`.
+
+## Getting started
+
+This is the direct Sharadar API: `https://api.sharadar.com/v1.0`. It is not Nasdaq Data Link. Do not call `data.nasdaq.com` or use the `nasdaqdatalink` / `quandl` libraries with a sharadar.com key.
+
+You need an API key from https://sharadar.com/account after sign-in. If there is no key, or a request returns 401, send the user to https://sharadar.com/subscribe (guest checkout is allowed). Do not invent access.
+
+Pass the key as `api_key` or `apiKey` on the query string, or as header `x-api-key`. Do not ask the user to paste the key into chat or hardcode it.
+
+The documented `test-api-key` only returns the free sample universe (roughly DJIA names such as AAPL). A 403 `Exceeds free tier` means that request is running as free-tier, not as a paid key.
+
+For an entire table, use bulk: add `years=5`, `years=10`, or `years=full` to `GET /data/{table}`. The API responds 302 to a zip. `tickers` and `descriptions` only publish a full snapshot; `years=5` and `years=10` still download that file. Do not page a full table with `limit` and `skip` / `offset`. Use `ticker`, `from`, `to`, and `fields` for slices. Delisted tickers are in the same tables (for example `ticker=TWO` on `/data/stocks`). Dates are calendar dates (`YYYY-MM-DD`); fundamentals also has `calendardate` vs `date`.
+
+## Docs
+
+- [Introduction](https://sharadar.com/docs/intro): Overview of the API and data tables
+- [Authentication](https://sharadar.com/docs/auth): API keys and how to attach `api_key` to requests
+- [Querying](https://sharadar.com/docs/getting-started): Filters, formats, limits, and common query patterns
+- [Bulk Downloads](https://sharadar.com/docs/bulk): Pre-built table zips (5Y / 10Y / full history)
+- [FAQs](https://sharadar.com/docs/faqs): Ticker changes, adjustments, survivorship bias, schemas
+- Docs also resolve legacy codes as paths (e.g. [/docs/SF1](https://sharadar.com/docs/SF1) -> fundamentals)
+
+## Data tables
+
+Each table has a modern name and, where applicable, a legacy code (same data either way). Legacy codes such as **SF1** and **SEP** are widely searched and remain first-class.
+
+- [Indicator Descriptions (`descriptions`)](https://sharadar.com/docs/descriptions): Field-level data dictionary
+- [Fundamentals / SF1 (`fundamentals`, `SF1`)](https://sharadar.com/docs/fundamentals): Company financial statements and fundamentals - also [/docs/SF1](https://sharadar.com/docs/SF1)
+- [Stock Prices / SEP (`stocks`, `SEP`)](https://sharadar.com/docs/stocks): EOD OHLCV for US equities (unadjusted, split-adjusted, and fully adjusted) - also [/docs/SEP](https://sharadar.com/docs/SEP)
+- [Fund Prices / SFP (`funds`, `SFP`)](https://sharadar.com/docs/funds): EOD prices for funds - also [/docs/SFP](https://sharadar.com/docs/SFP)
+- [Daily Fundamentals (`daily`)](https://sharadar.com/docs/daily): Daily fundamental snapshots
+- [Price Metrics (`metrics`)](https://sharadar.com/docs/metrics): Price-based metrics
+- [Tickers and Metadata (`tickers`)](https://sharadar.com/docs/tickers): Securities master and metadata (`permaticker` is Sharadar's stable id)
+- [Corporate Actions (`actions`)](https://sharadar.com/docs/actions): Splits, dividends, ticker changes, etc.
+- [Material Events (`events`)](https://sharadar.com/docs/events): Material corporate events
+- [S&P 500 Constituents (`sp500`)](https://sharadar.com/docs/sp500): Historical S&P 500 membership
+- [Insiders / SF2 (`insiders`, `SF2`)](https://sharadar.com/docs/insiders): Insider transactions - also [/docs/SF2](https://sharadar.com/docs/SF2)
+- [Institutional Holdings / SF3 (`holdings`, `SF3`)](https://sharadar.com/docs/holdings): 13F-style institutional holdings detail - also [/docs/SF3](https://sharadar.com/docs/SF3)
+- [Holdings by Ticker / SF3A (`holdings_ticker`, `SF3A`)](https://sharadar.com/docs/holdings-ticker): Institutional summary by security - also [/docs/SF3A](https://sharadar.com/docs/SF3A)
+- [Holdings by Investor / SF3B (`holdings_investor`, `SF3B`)](https://sharadar.com/docs/holdings-investor): Institutional summary by investor - also [/docs/SF3B](https://sharadar.com/docs/SF3B)
+
+## API
+
+- Base URL: `https://api.sharadar.com/v1.0`
+- Data query: `GET /data/{table}?api_key=...` - `{table}` may be the modern name or legacy code (e.g. `fundamentals` or `SF1`, `stocks` or `SEP`)
+- Example (modern): `https://api.sharadar.com/v1.0/data/fundamentals?api_key=test-api-key&ticker=AAPL`
+- Example (legacy alias): `https://api.sharadar.com/v1.0/data/SF1?api_key=test-api-key&ticker=AAPL`
+- Common query params: `api_key`, `ticker`, `from`, `to`, `fields`, `limit` (default 10000), `offset`/`skip`, `sort`, `format` (`json`/`csv`)
+- Bulk zip (subscription-gated): same data route with `years=5|10|full` -> HTTP 302 to a pre-signed download
+- Public table schemas (no API key): `GET /schema/{table}?format=postgres|sqlite|mysql`
+- Schema index: `GET /schema`
+- Free exploration: use the documented test key for AAPL samples, or sign up for a free API key
+
+## Plans and prices (Personal Use)
+
+Source of truth: https://sharadar.com/subscribe (guest checkout allowed). Currency USD. License: https://sharadar.com/terms
+
+The interactive subscribe table requires clicking a plan to reveal history-tier prices. Do not assume the "from" price is full history. The $29/month Bundle is 5 Years, not Full History. Full History Bundle is $69/month ($499/year). Bulk downloads (`years=5|10|full`) match the purchased history.
+
+| Plan | History | Monthly | Annual |
+| --- | --- | --- | --- |
+| Fundamentals | 5 Years | $19 | $199 |
+| Fundamentals | 10 Years | $29 | $299 |
+| Fundamentals | Full History | $39 | $399 |
+| Prices | 5 Years | $9 | $99 |
+| Prices | 10 Years | $19 | $199 |
+| Prices | Full History | $39 | $299 |
+| Investors | 5 Years | $19 | $99 |
+| Investors | 10 Years | $29 | $199 |
+| Investors | Full History | $39 | $299 |
+| Bundle | 5 Years | $29 | $299 |
+| Bundle | 10 Years | $49 | $399 |
+| Bundle | Full History | $69 | $499 |
+
+Tables by plan:
+
+- Fundamentals: descriptions, tickers, fundamentals, daily, actions, events, sp500
+- Prices: descriptions, tickers, actions, sp500, stocks, funds, metrics
+- Investors: descriptions, tickers, insiders, holdings, holdings_ticker, holdings_investor
+- Bundle: every table above
+
+| Table | Fundamentals | Prices | Investors | Bundle |
+| --- | --- | --- | --- | --- |
+| descriptions | yes | yes | yes | yes |
+| tickers | yes | yes | yes | yes |
+| fundamentals | yes | no | no | yes |
+| daily | yes | no | no | yes |
+| actions | yes | yes | no | yes |
+| events | yes | no | no | yes |
+| sp500 | yes | yes | no | yes |
+| stocks | no | yes | no | yes |
+| funds | no | yes | no | yes |
+| metrics | no | yes | no | yes |
+| insiders | no | no | yes | yes |
+| holdings | no | no | yes | yes |
+| holdings_ticker | no | no | yes | yes |
+| holdings_investor | no | no | yes | yes |
+
+## Product
+
+- [Home](https://sharadar.com/): Product overview
+- [Subscribe](https://sharadar.com/subscribe): Plans and checkout (guest checkout supported)
+- [Fundamentals product](https://sharadar.com/fundamentals): Fundamentals offering
+- [Prices product](https://sharadar.com/prices): Stock and fund price offering
+- [Investors product](https://sharadar.com/investors): Holdings and insiders offering
+- [Bundle](https://sharadar.com/bundle): Combined data bundle
+- [Sample data](https://sharadar.com/sample): Free / sample access
+- [Bulk UI](https://sharadar.com/bulk): In-browser bulk downloads for subscribers
+- [About](https://sharadar.com/about): Company background
+- [Blog](https://sharadar.com/blog): Product and market posts
+- [Terms](https://sharadar.com/terms): Terms of use
+- [Privacy](https://sharadar.com/privacy): Privacy policy
+
+## Optional
+
+- Legacy table codes still work in the API and docs: `SF1` = fundamentals, `SEP` = stocks, `SFP` = funds, `SF2` = insiders, `SF3` = holdings, `SF3A` = holdings_ticker, `SF3B` = holdings_investor.
+- Price tables include unadjusted, split-adjusted, and split/dividend/spinoff-adjusted series. See the price-adjustments blog post and FAQs.
+- Coverage is survivorship-bias-free, including delisted securities.
+- Sitemap: https://sharadar.com/sitemap.xml
+
+## Blog (selected)
+
+- [Sharadar Launches Direct](https://sharadar.com/blog/posts/sharadar-launches-direct): Direct service launch overview
+- [Stock Prices, Fund Prices and Adjustments](https://sharadar.com/blog/posts/sharadar-stock-prices-fund-prices-and-adjustments): How price adjustment fields work

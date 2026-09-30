@@ -1,0 +1,9 @@
+# MODEL_MANIFEST — one block per composite version, appended in order, never
+# edited. Each block: legs and their families, the four stamps, the accepting
+# rung's two Stage 2 bars (and the dIC, β and ex-regime diagnostics), the
+# version's own `--baseline --stage 2` statistics (GROSS, hedged, with the raw
+# series and β beside), the Stage 3 construction table and three lines of
+# character. Format: research/RECORDS.md.
+schema_version: 5
+holdout: {status: unspent}   # written once, ever, at the spend (docs/DECISIONS.md D8)
+versions: []

@@ -1,0 +1,11 @@
+# DERIVED — rebuilt by `python3 scripts/records.py index` from research/registry/*.yaml.
+# One line per factor; the full row is research/registry/<name>.yaml. Never edit by hand.
+search_accounting:
+  n_candidates_suggested: 0
+  n_stage1_tested: 0
+  n_stage1_passed: 0
+  n_stage2_tested: 0
+  n_accepted: 0
+  n_inconclusive: 0
+  by_status: {}
+factors:

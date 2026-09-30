@@ -1,0 +1,78 @@
+# =============================================================================
+# RUNTIME / INFRASTRUCTURE settings. Deliberately NOT part of CONFIG_SHA.
+# =============================================================================
+# config/test_config.yaml holds every parameter that can change a NUMBER.
+# This file holds settings that change only WHERE bytes live and how fast a
+# run goes. If you find yourself wanting to put a threshold, a date, or a
+# universe screen here, it belongs in test_config.yaml instead.
+#
+# The one thing in here that CAN change a number is which snapshot is loaded —
+# and that is why the snapshot is not identified by this file but by
+# data/SNAPSHOT_MANIFEST.yaml, whose hash is DATA_SHA, stamped on every result.
+# Pointing `data.root` at a different directory does not move DATA_SHA;
+# the manifest's per-file sha256 values do, and a run whose files do not match
+# the manifest refuses to start.
+# =============================================================================
+
+schema_version: 1
+
+data:
+  # THIS project's own pull from the Sharadar API (harness/snapshot.py download);
+  # the manifest carries its per-table sha256 and DATA_SHA is derived from
+  # that, so pointing here at other bytes refuses to run.
+  root: "data/sharadar"
+  manifest: "data/SNAPSHOT_MANIFEST.yaml"    # tracked; DATA_SHA derives from it
+  format: "parquet"
+
+  # ---------------------------------------------------------------------------
+  # THE DIRECT SHARADAR API — NOT Nasdaq Data Link.
+  # https://sharadar.com/llms.txt (agent page; copy in data/sharadar_llms.txt)
+  # Key: https://sharadar.com/account. Sent as the `x-api-key` header, read
+  # from the environment or from a gitignored .env at the project root. Never
+  # from a tracked file, never on a query string that could land in a log.
+  # Bulk: GET {api_base}/data/{table}?years=full -> HTTP 302 to a zip of CSV.
+  # ---------------------------------------------------------------------------
+  api_base: "https://api.sharadar.com/v1.0"
+  api_key_env: "SHARADAR_API_KEY"
+  env_file: ".env"
+  bulk_history: "full"                       # 5 | 10 | full — must match the plan
+  # Internal (legacy) table name -> API table name. Both work on the data route;
+  # the schema route and the `tickers.table` column use the modern names.
+  api_tables:
+    SEP: "stocks"
+    SF1: "fundamentals"
+    DAILY: "daily"
+    TICKERS: "tickers"
+    ACTIONS: "actions"
+    EVENTS: "events"
+    SF2: "insiders"
+    SF3: "holdings"
+    SP500: "sp500"
+    METRICS: "metrics"
+    # The four tables the first snapshot never pulled. Wired 2026-09-22 after a
+    # live schema diff showed the snapshot was column-complete on the ten it had
+    # and blind to these. SF3A is the one with factor value: institutional
+    # breadth (shrholders and friends), the source for DelBreadth and the IO_*
+    # family — 13F-derived, so it starts 2013-06 like SF3.
+    SF3A: "holdings_ticker"
+    SF3B: "holdings_investor"
+    DESCRIPTIONS: "descriptions"
+    FUNDS: "funds"
+  # Tables the harness requires. The rest are optional; a factor that needs one
+  # declares it in FactorDef.inputs and preflight checks the manifest lists it.
+  required_tables: ["SEP", "SF1", "DAILY", "TICKERS", "ACTIONS"]
+  optional_tables: ["EVENTS", "SF2", "SF3", "SP500", "METRICS", "SF3A", "SF3B", "DESCRIPTIONS"]
+  # FUNDS is deliberately NOT optional_tables: the universe is US common stock,
+  # so fund prices cannot enter a factor. It stays mapped so `verify --live`
+  # can still report it rather than pretending the table does not exist.
+
+cache:
+  # Derived panels (monthly prices, ADV, market cap) are rebuilt from the
+  # snapshot when absent and keyed on DATA_SHA + the universe parameters, so a
+  # stale cache cannot be served to a different snapshot or a different screen.
+  dir: "data/cache"
+  enabled: true
+
+results:
+  dir: "research/results"    # every run writes its full report + result blocks here
+  tee_stdout: true

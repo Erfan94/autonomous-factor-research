@@ -1,0 +1,6 @@
+# No snapshot recorded yet. `python3 harness/snapshot.py download` then
+# `manifest` (data/README.md) replace this file; DATA_SHA reads "nodata"
+# until then and run_test.py refuses to run.
+schema_version: 1
+status: EMPTY
+tables: {}

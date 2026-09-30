@@ -1,0 +1,14 @@
+# <type>: <what changed, in one line>
+#
+# <what it means for the model — the stats that moved, or "number-neutral">
+#
+# HARNESS_SHA   <12 hex>  (moved from <old> | unmoved)
+# CONFIG_SHA    <12 hex>  (moved from <old> | unmoved)
+# COMPOSITE_SHA <12 hex>  (moved from <old> | unmoved)
+# DATA_SHA      <12 hex>  (moved from <old> | unmoved)
+# pytest        <N> passed
+# holdout       unspent | SPENT <date>
+#
+# type: ratchet | screen | harness | config | data | probe | docs | chore
+# `python3 scripts/stamp_block.py` prints the stamp lines for the current tree
+# and, given the last commit, marks each one moved/unmoved.

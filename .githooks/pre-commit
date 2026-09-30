@@ -1,0 +1,50 @@
+#!/bin/sh
+# Institutional-grade guardrails, enforced by the bytes rather than by memory.
+#   1. Nothing under data/sharadar or data/cache may be staged (licensed, multi-GB).
+#   2. Nothing that looks like a credential may be staged.
+#   3. A change to harness/, factors/, or config/ must pass the test suite.
+#   4. A generated results file may not be hand-edited after it was first committed.
+set -e
+cd "$(git rev-parse --show-toplevel)"
+staged=$(git diff --cached --name-only --diff-filter=ACMR)
+
+if echo "$staged" | grep -Ev '/\.gitkeep$' | grep -Eq '^data/(sharadar|cache)/' ; then
+  echo "pre-commit: refusing to commit snapshot or cache bytes under data/. Only the manifest is tracked." >&2
+  exit 1
+fi
+if echo "$staged" | grep -Eq '(^|/)\.env$|\.pem$|\.key$' ; then
+  echo "pre-commit: refusing to commit a credential-looking file." >&2
+  exit 1
+fi
+if git diff --cached -U0 | grep -Eiq '(SHARADAR_API_KEY|NASDAQ_DATA_LINK_API_KEY) *= *[A-Za-z0-9_-]{10,}' ; then
+  echo "pre-commit: an API key value appears in the staged diff." >&2
+  exit 1
+fi
+if echo "$staged" | grep -Eq '^(harness|factors|config)/' ; then
+  echo "pre-commit: harness/factors/config changed — running pytest tests/ ..." >&2
+  python3 -m pytest tests/ -q -p no:cacheprovider >/dev/null 2>&1 || {
+    echo "pre-commit: tests FAIL. Fix them or commit with --no-verify and say why in the message." >&2
+    exit 1
+  }
+fi
+# An ADDED results file must already hold a complete result block. A partial
+# sweep (`git add -A` while a run is still writing) is never intentional:
+# it burns the one completing write the rule below allows.
+for f in $(git diff --cached --name-only --diff-filter=A | grep -E '^research/results/.*\.txt$' || true); do
+  if ! grep -q -- '--- END RESULT BLOCK ---' "$f" 2>/dev/null; then
+    echo "pre-commit: an INCOMPLETE results file was added: $f" >&2
+    echo "            The run is still writing. Stage the run's files by name once it finishes." >&2
+    exit 1
+  fi
+done
+# A results file is LOGGED once its committed version holds a complete result
+# block; a partial in-progress write that was swept into a commit may be
+# completed once, never edited after.
+for f in $(git diff --cached --name-only --diff-filter=M | grep -E '^research/results/.*\.txt$' || true); do
+  if git show "HEAD:$f" 2>/dev/null | grep -q -- '--- END RESULT BLOCK ---'; then
+    echo "pre-commit: a LOGGED results file was modified: $f" >&2
+    echo "            Results are immutable once logged. Write a new run instead." >&2
+    exit 1
+  fi
+done
+exit 0

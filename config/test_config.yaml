@@ -1,0 +1,249 @@
+# =============================================================================
+# SINGLE SOURCE OF TRUTH for every test parameter in this project.
+# =============================================================================
+# Nothing here may be overridden inside a factor file. harness/run_test.py
+# reads this file at the start of every run and stamps its hash — CONFIG_SHA —
+# into every result block. factor-evaluator refuses to log a result whose
+# CONFIG_SHA doesn't match the current one. Editing this file mid-search is a
+# deliberate re-baseline: stop-and-ask 2 in CLAUDE.md, `ask` in settings.
+#
+# Pre-registered on 2026-09-30, before any candidate was screened. The
+# selection rules are the predecessor's, unchanged (research/LESSONS.md 1-26):
+# select on INFORMATION with significance tests, never on the Sharpe or the
+# after-cost return of one construction. Costs appear nowhere in this file.
+# What is new (LESSONS 27-29, docs/DECISIONS.md D3-D5): ranks are formed
+# within sector before the family blend; the long-short is hedged to the
+# market with an ex-ante trailing beta; every block carries the long-short's
+# beta and a date-free regime diagnostic. None of the three is a bar.
+# =============================================================================
+
+schema_version: 5
+
+# -----------------------------------------------------------------------------
+# UNIVERSE — US point-in-time, rebuilt from the snapshot at every signal date.
+# RELATIVE screens, applied month by month, so the cut moves with the market
+# and 1999 is screened the same way as 2026:
+#   * price >= $1 (the penny-stock rule; a nominal floor that barely moves)
+#   * market cap >= the 20th percentile of NYSE-listed names that month
+#     (the Fama-French microcap breakpoint, as in most OSAP papers)
+#   * dollar volume >= the 20th percentile of the names that survive the cap cut
+# Tiers are ADV percentiles WITHIN the screened universe (diagnostics only).
+# The universe is deliberately NOT restricted to large caps (LESSONS 29).
+# -----------------------------------------------------------------------------
+universe:
+  kind: "sharadar_us_common"
+  region: "US"
+  exchanges: ["NYSE", "NASDAQ", "NYSEMKT"]        # TICKERS.exchange; ETF venues and OTC excluded
+  categories:                                     # TICKERS.category
+    - "Domestic Common Stock"
+    - "Domestic Common Stock Primary Class"
+    # Secondary Class excluded so a dual-class company appears once. ADR,
+    # Canadian, preferred, ETF, CEF, unit: excluded.
+  min_price_usd: 1.0                              # SEP.closeunadj (split-invariant level)
+  size_breakpoint:                                # Fama-French style microcap cut
+    exchange: "NYSE"                              # breakpoint measured on this exchange's names
+    pctl: 20.0                                    # ENTER at or above this percentile of their cap
+    exit_pctl: 15.0                               # a current member LEAVES only below this percentile
+    min_names: 100                                # fewer NYSE names that month -> use the whole cross-section
+  adv_min_pctl: 20.0                              # ENTER: drop the bottom 20% by ADV among cap-screened names
+  adv_exit_pctl: 15.0                             # a current member LEAVES only below the 15th ADV percentile
+  membership_hysteresis: true                     # entry/exit band on the relative cuts; the chain starts cold
+                                                  # at the first panel month, so membership is a function of
+                                                  # (config, data, month) only. Removes boundary churn.
+  # Bulk DAILY.marketcap is in MILLIONS of USD; SF1 monetary fields are raw USD.
+  daily_marketcap_scale: 1000000
+  adv_lookback_days: 20                           # trading days; ADV = median(close*volume)
+  adv_min_days: 10                                # fewer -> ADV null -> excluded
+  max_price_staleness_days: 7                     # no trade within 7 days at the signal -> out
+  liquidity_tier_pctl:                            # ADV percentile floors within the universe
+    MEGA: 80.0
+    MID: 50.0
+    SMALL: 0.0
+  sector_field: "sector"                          # TICKERS.sector — CURRENT classification (D3 states the look-ahead)
+  industry_field: "industry"
+
+# -----------------------------------------------------------------------------
+# DATES — FIXED absolute decision window and a FIXED out-of-sample block.
+# The out-of-sample block is spent once, at the end, on the finished composite
+# (stop-and-ask 1). Never on a candidate. Both ends are dates, not "rolling".
+# 276 decision months; a 57-month block. The block's last month closes after
+# the search's snapshot was pulled, so the spend follows the refresh protocol
+# in docs/DECISIONS.md D8 (a refreshed snapshot moves DATA_SHA: stop-and-ask 3).
+# -----------------------------------------------------------------------------
+dates:
+  eval_start: "1999-01-01"
+  eval_end: "2021-12-31"
+  out_of_sample_start: "2022-01-01"
+  out_of_sample_end: "2026-09-30"
+
+# -----------------------------------------------------------------------------
+# REBALANCE — signal at the prior business month-end, held one month.
+# -----------------------------------------------------------------------------
+rebalance:
+  frequency: "BMS"
+  signal_lag: "BMonthEnd(1)"
+  n_deciles: 10
+  min_months: 120                # fewer usable months -> inconclusive, not rejected
+  winsorize_pctl: [0.01, 0.99]   # cross-sectional, per month, BEFORE the within-sector rank
+  decile_weighting: "equal"
+  min_obs_rank: 10
+  min_obs_ic: 10
+  min_obs_bucket_ic: 30
+  min_obs_bucket_ls: 50
+
+# -----------------------------------------------------------------------------
+# RANKING — every signal is percentile-ranked WITHIN ITS SECTOR (the universe
+# frame's `sector`, TICKERS.sector) each month, then the family blend averages
+# those ranks (D3). A sector-month with fewer than `min_names_per_group`
+# scored names falls back to the whole cross-section's rank for those names,
+# so a thin sector never gets a ten-name decile of its own. Applies to Stage 1,
+# Stage 2 (including the residual-IC projection), the baseline and Stage 3.
+# -----------------------------------------------------------------------------
+ranking:
+  within_group: true
+  group_field: "sector"
+  min_names_per_group: 10
+  thin_group_fallback: "cross_section"
+
+# -----------------------------------------------------------------------------
+# MARKET HEDGE — the headline long-short of every composite and every standalone
+# screen is D10-D1 minus beta_t times the market, where the market is the
+# universe's own cap-weighted holding-month return (never an index) and
+# beta_t is estimated on months t-36 .. t-1 ONLY (ex ante). Fewer than
+# `beta_min_months` of history -> beta = 0 (unhedged), never a two-month
+# estimate. The raw series and the beta are printed and recorded beside it on
+# every block (D4). Gross: no cost is charged on the hedge or anywhere else.
+# -----------------------------------------------------------------------------
+market_hedge:
+  enabled: true
+  proxy: "universe_cap_weighted"
+  beta_window_months: 36
+  beta_min_months: 12
+
+# -----------------------------------------------------------------------------
+# DIAGNOSTICS — printed on every block and every Stage 2 rung, NEVER bars (D5).
+# Date-free by construction, so no year learned on one window is written into
+# the rule that reads another:
+#   ex_regime_top_years          Sharpe after removing the k calendar years
+#                                with the highest long-short return
+#   market_state_lookback_months bear / bull split on the sign of the market's
+#                                trailing return ending at t-1
+# -----------------------------------------------------------------------------
+diagnostics:
+  ex_regime_top_years: 3
+  market_state_lookback_months: 12
+
+# -----------------------------------------------------------------------------
+# POINT-IN-TIME FUNDAMENTALS — SF1 rows indexed by filing date (datekey/date);
+# the value at a signal date is the latest filing on or before it.
+# -----------------------------------------------------------------------------
+point_in_time:
+  sf1_dimension: "ART"
+  max_fundamental_age_months: 15
+
+# -----------------------------------------------------------------------------
+# RETURNS — closeadj ratio (splits and dividends) = total return. Delistings:
+# Shumway convention keyed on Sharadar ACTIONS reasons (no dlret in Sharadar).
+# -----------------------------------------------------------------------------
+returns:
+  price_field: "closeadj"
+  delisting:
+    convention: "shumway_by_reason"
+    performance_return: -0.30
+    other_return: 0.0
+    reason_window_days: 45
+    non_performance_actions:
+      - "acquisitionby"
+      - "acquisitioncash"
+      - "acquisitionstock"
+      - "acquisitionelectcash"
+      - "acquisitionelectstock"
+      - "mergerto"
+      - "spacmerger"
+      - "voluntarydelisting"
+    performance_actions:
+      - "bankruptcyliquidation"
+      - "regulatorydelisting"
+
+# -----------------------------------------------------------------------------
+# STATISTICS
+# -----------------------------------------------------------------------------
+statistics:
+  newey_west_lags: 3             # every t-stat on a monthly series
+
+# -----------------------------------------------------------------------------
+# ACCEPTANCE. Signals are selected on INFORMATION, with significance tests.
+# No bar anywhere charges a transaction cost; implementability is a
+# construction question and is reported (gross turnover) but never decides.
+#
+# Stage 1 (standalone screen): is the signal informative, stable across the
+# sample, monotone enough that its tails earn a positive gross spread, and
+# measured on enough of the universe? The spread is the hedged D10-D1.
+#
+# Stage 2 (marginal, the ratchet): does the signal carry information no
+# combination of the existing legs carries (residual IC, construction-free),
+# AND does the family blend's hedged long-short return not fall significantly
+# (guard, bound negative on purpose)? The paired composite-dIC, the spanning
+# alpha, R2, Sharpe and MaxDD deltas, the beta and the ex-regime Sharpe are
+# DIAGNOSTICS printed on every rung; none is a bar.
+#
+# Rationale for the levels: with ~150 testable candidates a one-sided t of 2.0
+# expects ~3-4 false positives under the null; the standalone bar is set
+# higher (2.5), the marginal bar at 2.0 conditional on the standalone pass.
+# Harvey-Liu-Zhu argue t >= 3 for a NEW anomaly; these are published
+# predictors, and the 2022-01..2026-09 block is the out-of-sample check on
+# the finished composite. The levels are the predecessor's: tightening them,
+# stability screens and family caps all sat within noise in its walk-forward
+# (LESSONS 28), so no pre-registration is spent on them.
+# -----------------------------------------------------------------------------
+acceptance_thresholds:
+
+  stage1_standalone:
+    min_ic_mean: 0.010
+    min_ic_tstat_nw: 2.50            # Newey-West t of the monthly rank IC
+    min_ic_half_mean: 0.0            # mean IC > 0 in BOTH halves of the window
+    min_ls_ann_return_pct: 0.0       # hedged D10-D1 GROSS annual return must be positive
+    min_coverage_pct: 40.0
+    min_avg_names_per_decile: 30
+
+  stage2_marginal:
+    min_resid_ic_tstat_nw: 2.00      # residual IC after projecting on the base legs; STRICTLY GREATER THAN
+    min_paired_delta_ls_tstat: -2.00 # guard: the family blend's hedged gross LS return must not fall significantly
+    # The paired composite-dIC is a DIAGNOSTIC, not a bar: one leg added to a
+    # many-family blend moves its IC by less than a paired test can resolve
+    # on 276 months, so a dIC bar rejects on power rather than information.
+search:
+  composite_construction: "family_blend"   # 1/F across families, 1/n within; two-level, renormalised
+  families_max: 9                          # fewer than ten families, assigned after Stage 1, before Stage 2
+  stage1_batch_size: 12                    # candidates per Stage 1 run (one frame build per batch)
+  stage1_order: "alphabetical_acronym"     # Stage 1 batches are formed in this order, never by any number
+  stage2_order: "descending_stage1_ic_tstat_nw"  # over ALL Stage 1 passers, declared before any Stage 2 number
+  stage2_ladder_max_rungs: 5
+
+# -----------------------------------------------------------------------------
+# CONSTRUCTION — Stage 3, on the accepted composite only. Never a gate.
+# Reported GROSS and hedged (the same hedge as the search construction), with
+# the raw series and beta beside each variant; turnover is printed so a
+# reader can price it.
+# -----------------------------------------------------------------------------
+construction:
+  variants: ["equal_rank_decile", "tier_neutral", "icir_weighted", "buffered", "vol_targeted"]
+  icir_lookback_months: 36
+  icir_min_months: 12
+  buffer_pct: 20                   # stay in the long book while in the top 20%
+  vol_target_pct: 10
+  vol_lookback_months: 12
+  max_leverage: 3.0
+
+# -----------------------------------------------------------------------------
+# OSAP SOURCE — pinned to an immutable commit SHA.
+# -----------------------------------------------------------------------------
+osap_source:
+  repo: "https://github.com/OpenSourceAP/CrossSection"
+  tag: "v2.0.0"
+  ref: "b4e911e69678a7424f318617a61d813f54183123"
+  predictors_path: "Signals/pyCode/Predictors"
+  placebos_path: "Signals/pyCode/Placebos"
+  signal_doc_path: "SignalDoc.csv"
+  master_table_path: "Signals/pyCode/SignalMasterTable.py"
+  fidelity: "best_equivalent_logged"

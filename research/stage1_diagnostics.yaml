@@ -1,0 +1,7 @@
+# Stage 1 diagnostics owed — read by factor-evaluator on EVERY Phase B batch.
+# Diagnostics and caveats, NEVER bars: a factor passes or fails on the bars in
+# config/test_config.yaml; these lines decide what its registry row must say.
+# Each entry: the factors it covers, what to report, why (the event that logged it).
+# Consolidated at the Phase A close from events.jsonl process_findings.
+schema_version: 1
+diagnostics: []

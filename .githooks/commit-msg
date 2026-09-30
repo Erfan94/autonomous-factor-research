@@ -1,0 +1,15 @@
+#!/bin/sh
+# Every commit message carries the four stamps and a type prefix. See .gitmessage.
+msg="$1"
+first=$(grep -v '^#' "$msg" | sed -n '1p')
+if ! echo "$first" | grep -Eq '^(ratchet|screen|construct|harness|config|data|probe|docs|chore|Merge|Revert)' ; then
+  echo "commit-msg: first line must start with a type: ratchet|screen|construct|harness|config|data|probe|docs|chore" >&2
+  exit 1
+fi
+for s in HARNESS_SHA CONFIG_SHA COMPOSITE_SHA DATA_SHA; do
+  grep -Eq "^$s +[0-9a-f]{12}|^$s +nodata" "$msg" || {
+    echo "commit-msg: missing $s line. Run: python3 scripts/stamp_block.py" >&2
+    exit 1
+  }
+done
+exit 0

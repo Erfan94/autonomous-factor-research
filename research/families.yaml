@@ -1,0 +1,36 @@
+# Family assignments — Phase C. Written ONCE per Stage 1 passer, after its
+# screen and before ANY Stage 2 number exists, by economic definition (the
+# OSAP SignalDoc Cat.Economic label is the reference; the predictor's own
+# construction decides when the label is "other"). Fewer than ten families
+# in total (config search.families_max). Never changed after assignment:
+# a wrong family is a logged limitation, not an edit.
+#
+# The five seed families are fixed by v0: size, value, profitability,
+# investment, momentum. A passer joins one of them or opens a new one.
+#
+# families:
+#   value:
+#     definition: "price relative to a fundamental anchor"
+#     members: [Value]                 # seeds first, passers appended in assignment order
+#   <new_family>:
+#     definition: "..."
+#     members: [...]
+# assignments:
+#   - {factor: <Name>, family: <family>, cat_economic: "<SignalDoc label>", assigned: "YYYY-MM-DD", event_ts: "..."}
+families:
+  size:
+    definition: "market capitalisation (small = attractive)"
+    members: [Size]
+  value:
+    definition: "price relative to a fundamental anchor"
+    members: [Value]
+  profitability:
+    definition: "earning power relative to capital"
+    members: [Profitability]
+  investment:
+    definition: "growth of the asset base or of investment"
+    members: [Investment]
+  momentum:
+    definition: "continuation of past returns"
+    members: [Momentum]
+assignments: []

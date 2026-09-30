@@ -1,0 +1,47 @@
+# =============================================================================
+# .gitignore — what is DELIBERATELY tracked matters more than what is ignored.
+# =============================================================================
+#
+# TRACKED ON PURPOSE, do not add these:
+#
+#   research/results/       the printed report + result blocks of every run, as
+#                           the harness wrote them. A logged number must be
+#                           traceable to the bytes that produced it.
+#   osap_source/cache/      the OSAP specs and predictor source at the pinned
+#                           `osap_source.ref`, so a factor's input survives the
+#                           upstream repo's history.
+#   data/SNAPSHOT_MANIFEST.yaml
+#                           per-table sha256, row counts and date ranges of the
+#                           frozen Sharadar snapshot. DATA_SHA is derived from
+#                           it. The manifest is the provenance; the bytes are not.
+#
+# NEVER TRACKED:
+#
+#   data/sharadar/          the Sharadar snapshot itself (licensed, multi-GB).
+#   data/cache/             derived panels, rebuilt from the snapshot on demand.
+# =============================================================================
+
+data/sharadar/*
+!data/sharadar/.gitkeep
+data/cache/*
+!data/cache/.gitkeep
+
+# Python build artefacts
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Editor / OS noise
+.DS_Store
+.ipynb_checkpoints/
+*.swp
+
+# Secrets — never commit. The Sharadar API key lives in .env / the environment.
+.env
+*.pem
+*.key
+
+# transient
+data/download.log
+.claude/worktrees/

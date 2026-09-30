@@ -1,0 +1,13 @@
+# The CURRENT state of the loop — replace, never append. History: session_history.md.
+updated: "2026-09-30T00:00:00Z"
+step: bootstrap_awaiting_api_key   # skeleton built, tests green, config pre-registered; snapshot not yet pulled
+phase: bootstrap
+composite: {version: v0, legs: 5, families: 5, sha: null, legs_list: [Size, Value, Profitability, Investment, Momentum]}
+versions: {}
+stamps: {harness_sha: null, config_sha: null, composite_sha: null, data_sha: nodata}
+counters: {osap: 212, inventoried: 0, infeasible: 0, translated: 0, preflight_failed: 0, screened: 0, passed: 0, families: 5, ratcheted: 0, accepted: 0, rejected: 0, inconclusive: 0}
+holdout: unspent
+open:
+  - "API key file: the owner copies it into the project root (data/README.md first-time setup); the bootstrap session may not read the predecessor's"
+  - "then: snapshot probe|download|verify|manifest|live -> v0 --baseline --stage 2 and --stage 3 -> evaluate -> manifest block -> tag v0-baseline (local)"
+next: "Owner drops the key file in; then the snapshot download and the v0 baseline"
