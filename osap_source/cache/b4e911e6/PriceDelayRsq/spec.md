@@ -69,3 +69,6 @@ null the score when the window opens before the market series (signals 1999-07 .
 Deviations: (a) `rf` omitted (absorbed by the intercept when near-constant); (b) harness VW market (no dlret, gap returns, >+100% days) for FF `mktrf`; (c) `closeadj` ratio on the market calendar for CRSP `ret` (no dlret; no return across a missing row); (d) no forward-fill across a failed window; (e) truncated 1999 window nulled (257 vs 269 scorable months);
 (f) "last obs in June" becomes "a finite return in June"; (g) harness universe replaces the all-stock daily CRSP sample and the NYSE-breakpoint decile sort. Fields not in the map: none besides the `market_daily` accessor and omitted `rf`. Sibling outputs PriceDelaySlope and PriceDelayTstat share the regressions; each is its own acronym.
 Recommendation: translate (approx) and preflight; declare `lookback_months=24` and the `history_months` choice in the docstring.
+
+## Addendum 2026-09-30 — history gate
+The translation declares history_months=13 (hard rule for return-window factors; alpha_review batch18 critical on PriceDelayRsq), not no_history_gate_because as section 8 above suggests: names without a trade 13 months before the signal are NaN where OSAP would score them on >= 26 days.

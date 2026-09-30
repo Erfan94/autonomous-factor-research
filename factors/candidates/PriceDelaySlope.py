@@ -39,8 +39,8 @@ THE MASS-POINT QUESTION (answer it here BEFORE running preflight):
   variance, so it is dropped by the var(r) > 0 rule (NaN), not assigned a mode.
   Otherwise a continuous ratio with no natural mode.
   What share of the universe does nothing? Spec measurement on the 257
-  full-window months: modal value share 0.04-0.12% of scored names (every scored
-  value distinct; 1,688-2,588 scored names), ten qcut bins every month; coverage
+  full-window months: modal value share 0.04-0.12% of scored names (at most a
+  stray two-name tie; 1,688-2,588 scored names), ten qcut bins every month; coverage
   91.7-99.9% (median 98.3%).
   Tie handling: null. Zero-variance windows are NaN and blend_ranks renormalises;
   average rank for the rest; no noise or secondary key.

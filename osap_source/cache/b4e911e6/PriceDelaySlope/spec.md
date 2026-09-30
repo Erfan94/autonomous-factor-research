@@ -55,3 +55,6 @@ score = (1*b[L1] + 2*b[L2] + 3*b[L3] + 4*b[L4]) / (b[m] + b[L1] + b[L2] + b[L3] 
 null windows opening before 1998-12-02 (signals up to 2000-06); ascending=True; inputs SEP.closeadj, DAILY.marketcap
 ```
 Deviations: (a) rf omitted; (b) harness VW market for `mktrf`; (c) closeadj ratio on the market calendar for CRSP `ret`; (d) no forward-fill across a failed window; (e) truncated early windows nulled; (f) "last obs in June" = "a finite return in June y"; (g) harness universe and within-sector ranks replace all-stock CRSP and NYSE-breakpoint sort; (h) no trim/winsor (none in the code). Fields not in the map: only the `market_daily` accessor and omitted `rf`. Recommendation: translate (approx) and preflight; share regression code with PriceDelayRsq/PriceDelayTstat only at source level (one FactorDef per acronym).
+
+## Addendum 2026-09-30 — history gate
+The translation declares history_months=13 (hard rule for return-window factors; alpha_review batch18 critical on PriceDelayRsq), not no_history_gate_because as section 8 above suggests: names without a trade 13 months before the signal are NaN where OSAP would score them on >= 26 days.
