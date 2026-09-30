@@ -430,3 +430,18 @@ excluded:
     class: data_unavailable
     spec: osap_source/cache/b4e911e6/ShortInterest/spec.md
     date: "2026-09-30"
+  dVolCall:
+    reason: "needs OptionMetrics 30-day 50-delta call implied volatility; no held Sharadar table carries option data (SF3A call holdings are 13F positions); OSAP does not zero-fill it"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/dVolCall/spec.md
+    date: "2026-09-30"
+  dVolPut:
+    reason: "needs OptionMetrics 30-day 50-delta put implied volatility; not in Sharadar; OSAP does not zero-fill it"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/dVolPut/spec.md
+    date: "2026-09-30"
+  fgr5yrLag:
+    reason: "needs the IBES long-term growth forecast (meanest, fpi 0); no analyst data in Sharadar; OSAP requires it non-missing"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/fgr5yrLag/spec.md
+    date: "2026-09-30"
