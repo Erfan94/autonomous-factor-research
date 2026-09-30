@@ -240,3 +240,8 @@ excluded:
     class: data_unavailable
     spec: osap_source/cache/b4e911e6/Mom6mJunk/spec.md
     date: "2026-10-01"
+  MS:
+    reason: "six-valued score (MS in 1..6): 6 distinct values in every measured month, modal share 20.8-52.9% (mean 25.0%), >= 10% cliff in all 269 measured months, qcut cannot give 10 bins; and coverage by construction (lowest book-to-market quintile, >= 3 firms per SIC2): mean 25.3% of the universe, under 40% in every month. xad is zero-filled by OSAP itself (so not infeasible on data). Measured by osap-fetcher on the harness universe, 269 of 276 months"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/MS/spec.md
+    date: "2026-10-01"
