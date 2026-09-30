@@ -1,13 +1,13 @@
 # The CURRENT state of the loop — replace, never append. History: session_history.md.
-updated: "2026-09-30T20:30:00Z"
-step: phase_A_batch05_06_review   # 27 candidates translated+preflighted; batch05-06 alpha-review next; batch07 specs in progress
+updated: "2026-09-30T21:40:00Z"
+step: phase_A_batch11   # fetch batches 01-10 classified; 40 candidates translated+preflighted; batch 11 specs in progress
 phase: phase_A_inventory
 composite: {version: v0, legs: 5, families: 5, sha: f9d9d9d95731, legs_list: [Size, Value, Profitability, Investment, Momentum]}
 versions: {v0: "f9d9d9d95731 v0-baseline"}
 stamps: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0}
-counters: {osap: 212, inventoried: 52, infeasible: 21, translated: 27, preflight_failed: 0, screened: 0, passed: 0, families: 5, ratcheted: 0, accepted: 0, rejected: 0, inconclusive: 0}
+counters: {osap: 212, inventoried: 84, infeasible: 41, translated: 40, preflight_failed: 2, screened: 0, passed: 0, families: 5, ratcheted: 0, accepted: 0, rejected: 0, inconclusive: 0}
 holdout: unspent
 v0_baseline: {runs: "001,002", ic: 0.0145, ic_t_nw: 2.62, ls_sharpe_hedged: 0.600, ann_ret_hedged: 7.32, maxdd_hedged: -45.56, beta_fw: -0.140, turnover_d10: 28.0}
 open:
   - "Phase A naming: OSAP Investment (Titman-Wei-Xie) translates to factors/candidates/InvestmentTWX.py, osap_acronym=Investment (leg row Investment.yaml is AssetGrowth)"
-next: "alpha-review batch05-06; batch07 fields+translate; fetch batch08"
+next: "batch 11 specs (GrLTNOA..IO_ShortInterest) -> classify, translate, preflight; alpha-review GP with batch 11"
