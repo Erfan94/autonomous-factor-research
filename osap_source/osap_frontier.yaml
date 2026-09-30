@@ -285,3 +285,13 @@ excluded:
     class: preflight_failed
     spec: osap_source/cache/b4e911e6/NumEarnIncrease/spec.md
     date: "2026-09-30"
+  OScore:
+    reason: "OSAP's published predictor is a binary flag (1 = top O-Score decile, 0 = deciles 1-7, deciles 8-9 dropped): 2 distinct values, 87.3-87.5% of scored names at 0 in every month, qcut 2 bins; coverage 37.8% pooled, under 40% in 179 of 276 months. The continuous O-Score is a different signal (the published test is non-monotonic) and is not substituted, as for EarnSupBig. Measured by osap-fetcher on the harness universe, all 276 months"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/OScore/spec.md
+    date: "2026-09-30"
+  OptionVolume1:
+    reason: "numerator is OptionMetrics option volume (optvolume); no held Sharadar table carries option volume (SF3A/SF3B put/call are quarterly 13F holdings from 2013-06); OSAP does not zero-fill it"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/OptionVolume1/spec.md
+    date: "2026-09-30"
