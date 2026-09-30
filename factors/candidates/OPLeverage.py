@@ -61,7 +61,6 @@ DEVIATIONS FROM OSAP:
   - OSAP's EW quintile portfolios are the harness's, not reproduced.
 """
 
-import pandas as pd
 
 from harness.factor_def import FactorDef
 

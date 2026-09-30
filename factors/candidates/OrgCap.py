@@ -107,6 +107,7 @@ from harness.industry import ff17
 _DECAY = 0.85        # OSAP a = 0.85 (15% annual depreciation)
 _INIT = 4.0          # OSAP init = 4 * first-year xsga
 _N_ARY = 40          # ARY rows read per firm; the snapshot maximum is 34 (nothing cut)
+_FIRST_FY = 1997     # declared first fiscal year of the recursion (SF1 starts FY1997)
 
 
 def _orgcap_raw(mc):
@@ -116,13 +117,22 @@ def _orgcap_raw(mc):
     if h.empty:
         return pd.Series(dtype=float)
     h = h.sort_values(["ID", "reportperiod"], kind="mergesort")
+    # fiscal year-end = reportperiod - 7 days, so 52/53-week December filers whose year
+    # ends Jan 1-3 count as December (as Compustat dates them) and Nov-30 filers ending
+    # Dec 1-3 do not (alpha_review batch17 major 1)
+    fy = h["reportperiod"] - pd.Timedelta(days=7)
+    h = h.assign(fy_month=fy.dt.month, fy_year=fy.dt.year)
 
     # the current record (latest ARY row known) must be a December year end
     latest = h[h["q_back"] == 0].set_index("ID")
-    dec_ids = latest.index[latest["reportperiod"].dt.month == 12]
+    dec_ids = latest.index[latest["fy_month"] == 12]
 
-    d = h[(h["reportperiod"].dt.month == 12) & h["ID"].isin(dec_ids)].copy()
-    d["year"] = d["reportperiod"].dt.year
+    # December years from the declared first fiscal year (FY1997) only: stray earlier rows
+    # would read as a gap at the snapshot start (major 2); one row per fiscal year (minor 3)
+    d = h[(h["fy_month"] == 12) & (h["fy_year"] >= _FIRST_FY) & h["ID"].isin(dec_ids)].copy()
+    sort_cols = ["ID", "fy_year"] + (["datekey"] if "datekey" in d.columns else [])
+    d = d.sort_values(sort_cols, kind="mergesort").drop_duplicates(["ID", "fy_year"], keep="last")
+    d["year"] = d["fy_year"]
     d["dy"] = d.groupby("ID")["year"].diff()
     d["bad"] = d["dy"].notna() & (d["dy"] != 1)          # not consecutive December years
     gap = d.groupby("ID")["bad"].any()
@@ -153,7 +163,8 @@ def _compute(ctx):
         raw = raw.clip(lower=lo, upper=hi)
 
     # FF17 industry on current siccode (declared); stats over all classified names
-    sic = ctx.ticker_meta(["siccode"], scope="market")["siccode"].reindex(raw.index)
+    sic = pd.to_numeric(ctx.ticker_meta(["siccode"], scope="market")["siccode"],
+                        errors="coerce").reindex(raw.index)
     ind = ff17(sic.reset_index(drop=True)).set_axis(raw.index)
     ok = ind.notna() & sic.notna() & (sic != 9999) & raw.notna()
     g = raw[ok].groupby(ind[ok])

@@ -56,6 +56,8 @@ OVERLAP WITH THE COMPOSITE'S PROFITABILITY LEG (facts only):
   this signal is profitability, the v0 leg's category.
 
 DEVIATIONS FROM OSAP:
+  - A missing SIC is NaN here; OSAP keeps missing-SIC names (a NaN comparison passes its
+    financials filter). Measured null share 0.0%.
   - cogs -> cor, xsga -> sgna (+ rnd, cancelled) (approx): cor and sgna are as
     reported and EMBED D&A for some filers where Compustat cogs / xsga exclude it, so
     the numerator is lower by the embedded amount (field_map xsga note: >= 90%

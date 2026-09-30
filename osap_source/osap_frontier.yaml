@@ -315,3 +315,18 @@ excluded:
     class: data_unavailable
     spec: osap_source/cache/b4e911e6/PredictedFE/spec.md
     date: "2026-09-30"
+  PS:
+    reason: "Piotroski F-score, an integer 0..9 scored in OSAP's top book-to-market quintile: 6-9 distinct values, modal share 20.0-40.7% (median 26.8%) >= 10% in all 276 months; coverage 1.4-6.1% of the universe (never >= 40%); even with no book-to-market restriction (a different signal, not substituted) the modal share is 23.2-31.7% in every month. Measured by osap-fetcher on the harness universe, all 276 months"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/PS/spec.md
+    date: "2026-09-30"
+  PatentsRD:
+    reason: "numerator npat comes from a patent panel Sharadar does not publish; the predictor's fillna(0) fills gaps inside that panel, so without it npat is 0 for every firm and the signal is constant (as CitationsRD)"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/PatentsRD/spec.md
+    date: "2026-09-30"
+  PayoutYield:
+    reason: "numerator needs preferred redemption value pstkrv (no SF1 field, not zero-filled by OSAP or the predictor) and gross repurchases prstkc (Sharadar has only net ncfcommon; gross buybacks of the ~46% net issuers are unobservable); the net-flow NetPayoutYield formula is a different signal and is not substituted"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/PayoutYield/spec.md
+    date: "2026-09-30"
