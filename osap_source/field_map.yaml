@@ -135,7 +135,9 @@ compustat_to_sf1:
       (US common stock, ART, 134,065 rows): 71.5% Financial Services, 19.8% Real Estate, 8.7% other --
       unclassified balance sheets are financials/REITs, not a random gap. Coverage among US-common ART
       rows: 1999 78.9%, 2008 78.4%, 2020 78.1%."
-    verified_on: ""
+    verified_on: "2026-09-30"
+    verified_status: verified-with-deviation
+    verified_note: "Measured 2026-09-30 on THIS snapshot (DATA_SHA 198b281de1a0, recorded_on 2026-09-30; SF1 ART/ARQ/ARY rows 688,566/681,836/186,720); supersedes any 'THIS snapshot' wording in `note`, which is from earlier pulls. Universe = harness build_universe + MonthContext.fundamentals (PIT, ART). assetsc null 20.06% ART / 20.14% ARQ / 19.16% ARY, exact-zero 0.02% of non-null (no mass point); ART==ARQ same-period within $1 on 99.94% of 520,904. Universe ART coverage 80.1% (1998-12-31), 83.0% (1999-12-31), 81.5% (2008), 81.1% (2020), 80.9% (2021): the ~19-20% null block is the unclassified balance sheets (financials/REITs), a structural gap, never zero-fill. 2021-12-31 universe p10/p50/p90 = $0.24B/$0.95B/$7.3B raw USD. ART is a level (ART==ARQ), no dimension choice. Translation: act-based terms are null for ~19% of names; the year-ago level (lag_months=12) is ~38% covered at 1998-12 and ~71% from 1999-03 (SF1 starts 1998)."
     probed_on_prior_snapshot: '2026-09-25'
   actq:
     sf1: assetsc
@@ -188,7 +190,9 @@ compustat_to_sf1:
       688,440/681,711/186,672 rows; exact-zero 0.01% of non-null unchanged; ART==ARQ same-period exact on
       99.10% of 739,890 rows with both present; datekey<reportperiod on 12 of 688,440 ART rows (0.0017%),
       not disqualifying. Coverage among US-common ART rows: 1999 99.93%, 2008 99.96%, 2020 99.99%."
-    verified_on: ""
+    verified_on: "2026-09-30"
+    verified_status: verified
+    verified_note: "Measured 2026-09-30 on THIS snapshot (DATA_SHA 198b281de1a0, recorded_on 2026-09-30; SF1 ART/ARQ/ARY rows 688,566/681,836/186,720); supersedes any 'THIS snapshot' wording in `note`, which is from earlier pulls. Universe = harness build_universe + MonthContext.fundamentals (PIT, ART). assets null 0.05% every dimension, exact-zero 0.01% of non-null (universe at<=0: 0 rows at 1998/1999/2008/2020/2021 probes). ART==ARQ same-period within $1 on 99.94% of 654,369 (level, no TTM smear). Universe ART coverage 98.8% (1998-12-31), 97.5% (1999-12-31), 99.8% (2008), 100.0% (2020), 100.0% (2021); year-ago level via lag_months=12 is 47.9% at 1998-12, 89.2% at 1999-03, ~90% thereafter in 1999. 2021-12-31 universe p10/p50/p90 = $0.51B/$3.64B/$37.7B raw USD. PIT: 12 of 688,566 ART rows have datekey < reportperiod (1996-2016 and SPCB 2022; reportperiod-label defects); checked each against the universe: 0 fall in a universe signal month 1998-12..2021-12 (SHIP 2016-12 is the only in-gap signal month and SHIP is not a member), so none reaches a bar; ART datekey-reportperiod lag p1/p50/p99 = 23/44/181 days. fxusd != 1: 3.37% of ALL ART rows, 7.1% (datekey>=2020), 7.65% (>=2024), 7.6% (>=2025-10) of recent ART rows (foreign filers, outside the universe), but 0.00-0.06% of universe members at every semiannual probe 1998-12..2021-12 (0 of 1,865 at the latest month); fxusd null 0% of ART rows. assets has no *usd variant and is in reporting currency, so AM = assets/mkt_cap_usd mixes currencies for fxusd != 1: gate .where(fxusd == 1) per sf1_reporting_currency (affects <=0.06% of names). Note: a first cut that counted fxusd NaN (no filing) as != 1 read 1.2% at 1998-12; fxusd is never null on an existing ART row."
     probed_on_prior_snapshot: '2026-09-25'
   atq:
     sf1: assets
@@ -220,7 +224,9 @@ compustat_to_sf1:
     sf1: equity
     status: approx
     note: "equity (no pref split). Level, not flow: ART equity == ARQ equity on the same reportperiod (confirmed AAPL last 4 quarters, exact). Null 0.04-0.05% every dimension, exact-zero 0.01% of non-null (data-error rows, not a mass point); 2024 ART median $282M, p10 -$4.7M (negative book equity is real). parent equity incl. preferred, so the ceq-presence filter is immaterial. Re-verified 2026-09-25 on THIS snapshot (DATA_SHA 52402f7d1f9c): null 0.05% ART / 0.04% ARQ / 0.04% ARY of 688,440/681,711/186,672 rows; exact-zero 0.01% of non-null unchanged; ART==ARQ same-reportperiod match 99.02% of 740,186 pairs (pooled, all five level fields measured together). US-common ART coverage 1999 99.92%, 2008 99.99%, 2020 99.99%. 2024 US-common ART quantiles p10/median/p90 = -$4.40M/$289.3M/$5.288B."
-    verified_on: ""
+    verified_on: "2026-09-30"
+    verified_status: verified-with-deviation
+    verified_note: "Measured 2026-09-30 on THIS snapshot (DATA_SHA 198b281de1a0, recorded_on 2026-09-30; SF1 ART/ARQ/ARY rows 688,566/681,836/186,720); supersedes any 'THIS snapshot' wording in `note`, which is from earlier pulls. Universe = harness build_universe + MonthContext.fundamentals (PIT, ART). SF1.equity null 0.05% ART / 0.04% ARQ / 0.04% ARY, exact-zero 0.01% of non-null (data errors, no mass point); level: ART==ARQ same-period within $1 on 98.92% of 740,031 pairs, AAPL 2023-09-30 identical in ART/ARQ/ARY (62.146B). Universe ART coverage 98.7% (1998-12-31), 97.6% (1999-12-31), 99.8% (2008), 100.0% (2020, 2021); exact-zero 0.0% at every probe. Units raw USD (2021-12-31 universe p10/p50/p90 = $0.15B/$1.20B/$10.4B). DEVIATIONS: equity is parent equity INCLUDING preferred (Compustat ceq excludes it; preferred not separable here, inherited not re-measured); reporting currency with no usd-fallback for this use: fxusd != 1 on 3.36% of all ART rows but 0.00% (1999) / 0.056% (2008) / 0.043% (2021) of universe members, so a ratio with mkt_cap_usd should gate fxusd == 1 (or use equityusd). Translation: ceq == seq == equity; the BMdec 'ceq + pstk' branch is dead code."
     probed_on_prior_snapshot: '2026-09-25'
   ceqq:
     sf1: equity
@@ -236,7 +242,9 @@ compustat_to_sf1:
     sf1: cashneq + investmentsc.fillna(0)
     status: approx
     note: "APPROX (was mapped): che = cashneq + investmentsc.fillna(0). SF1.cashneq is cash & equivalents ONLY; Compustat che = cash AND short-term investments, which SF1 holds in investmentsc. Checked 2026-09-26 on THIS snapshot (DATA_SHA 52402f7d1f9c) against SEC XBRL 10-K facts (data.sec.gov companyfacts), ARY $M: cashneq == CashAndCashEquivalentsAtCarryingValue exactly on AAPL/MSFT/GOOGL/CSCO/ORCL/AMGN/QCOM/META/NVDA FY2019/21/23; investmentsc == the current securities line (MarketableSecuritiesCurrent / ShortTermInvestments / AFS-debt-current) exactly on AAPL, MSFT, GOOGL, ORCL, AMGN, QCOM, META, NVDA; cashneq + investmentsc == the filer's tagged CashCashEquivalentsAndShortTermInvestments exactly (MSFT FY2023 34,704 + 76,558 = 111,262; GOOGL 2023 24,048 + 86,868 = 110,916; AAPL FY2023 29,965 + 31,590 = 61,555). INTC 2019 investmentsc 8,929 = trading assets 7,847 + AFS 1,082 and FY2021 23,586 = AFS-current 2,103 + trading 21,483 (trading securities are inside, as in Compustat ivst). SCOPE OVERSHOOT: investmentsc also carries CURRENT FINANCING / LOAN RECEIVABLES (DESCRIPTIONS: investments includes loans receivable), which Compustat puts in receivables, not che: CSCO FY2023 19,375 = STI 16,023 + NotesAndLoansReceivableNetCurrent 3,352 (FY2021 15,343 + 4,380; FY2019 21,663 + 5,095); F 2023 61,734 = marketable 15,309 + loans 46,425; HPE FY2023 3,543 and HOG 2023 2,114 = receivables only; IBM 2023 6,475 = AFS 373 + ~6.1B implied financing receivables (no current-receivable tag found); GM 2023 46,689 = AFS 7,613 + ~39.1B implied GM Financial receivables. Not uniform: CAT investmentsc 0 (finance receivables elsewhere), DE unclassified (null). So the sum OVERSTATES che for vendor-financing / captive-finance names. cashneq also includes restricted cash for some filers (IBM 13,089 vs CCE 13,068; HOG 1,638 vs 1,534). Universe (harness build_universe, PIT ART via MonthContext.fundamentals, probes 1999-12-31 / 2008-12-31 / 2020-12-31 / 2022-11-30; universe n 2,674 / 1,794 / 2,077 / 2,140): NON-FINANCIALS (TICKERS.sector not Financial Services / Real Estate; n 2,220 / 1,444 / 1,665 / 1,702): investmentsc null 2.1-2.4%, > 0 on 40.2 / 36.8 / 34.5 / 37.0% of names; among holders the median investmentsc/(cashneq+investmentsc) = 0.440 / 0.254 / 0.343 / 0.428 (p90 0.70-0.85) and median missing/assets 0.113 / 0.031 / 0.108 / 0.102; pooled dollars 37 / 26 / 34 / 35% of the sum sit in investmentsc. Spearman(cashneq/assets, (cashneq+investmentsc.fillna(0))/assets) = 0.920 / 0.957 / 0.912 / 0.923, and 49.1 / 36.8 / 50.6 / 49.6% of names change DECILE -- cashneq alone is a materially different signal. FINANCIAL SERVICES (n 273 / 242 / 258 / 282): investmentsc null 85-87% (unclassified); rho 0.998 / 0.979 / 0.968 / 0.974, decile moves 5.1 / 12.8 / 15.9 / 11.7% (the classified 13-15% move 53-74% among themselves). REAL ESTATE (n 104-154): null 85-87%, rho 0.990-1.000, decile moves 0-8.7%. NULL BLOCK: investmentsc null (with a filing) on 14.5 / 18.2 / 18.8 / 19.3% of the universe, 86-92% financials/REITs; there fillna(0) gives che = cashneq, which UNDERSTATES che by short-term securities that SF1 does not break out (they sit in SF1.investments with loans: Financial Services unclassified median investments/assets 0.78-0.84 vs cashneq/assets 0.03-0.06), so neither zero-fill nor adding investments recovers che for banks/insurers; not measurable here. 'cashneq + investmentsc where present, else cashneq' is NUMERICALLY IDENTICAL to fillna(0); the fill is a declaration, not a different number. Zero-fill manufactures no mass point: exact-zero share of the sum/assets <= that of cashneq/assets at every probe (non-financials 0.95 vs 0.99%, 0.28 vs 0.28%, 0.18 vs 0.18%, 0.24 vs 0.29%); the 64.7% vendor exact-zeros in investmentsc are correct zeros for che (no STI line -> che = cash). Alternative 'null when investmentsc null' drops ~85% of financials/REITs (Compustat che is populated for them) and is rejected. FILES that read cashneq as che were remapped 2026-09-26 (Accruals, BPEBM, Cash, CashProd, ChNWC, DelCOA, EBM, EntMult, NOA; dNoa translated on the new mapping) -- in DelCOA/NOA-type constructions (assetsc - che) cashneq alone leaves STI in operating current assets; for Accruals/ChNWC (change in che) STI switches between cash and securities move the signal. Unchanged checks from 2026-09-25 (cashneq): null 0.04% ART / 0.03% ARQ / 0.03% ARY; exact-zero 0.83 / 0.83 / 0.75% of non-null; level, ART==ARQ same-period 99.55% of 739,994; US-common ART coverage 1999 99.95%, 2008 99.99%, 2020 99.99%. investmentsc facts (level, PIT, 20% null block): see ivst. Known trap cashneq_excludes_short_term_investments."
-    verified_on: ""
+    verified_on: "2026-09-30"
+    verified_status: verified-with-deviation
+    verified_note: "Measured 2026-09-30 on THIS snapshot (DATA_SHA 198b281de1a0, recorded_on 2026-09-30; SF1 ART/ARQ/ARY rows 688,566/681,836/186,720); supersedes any 'THIS snapshot' wording in `note`, which is from earlier pulls. Universe = harness build_universe + MonthContext.fundamentals (PIT, ART). cashneq null 0.04% ART, exact-zero 0.83% (ARQ 0.83%, ARY 0.75%); investmentsc null 20.06% ART / 20.14% ARQ / 19.16% ARY (same unclassified block as assetsc), exact-zero 64.70% of non-null ART (correct zeros for che, no STI line); che = cashneq + investmentsc.fillna(0) is therefore null only where cashneq is null: universe coverage 98.8% (1998-12-31), 97.5% (1999), 99.8% (2008), 100.0% (2020, 2021); exact-zero share of che 1.06% / 0.88% / 0.34% / 0.24% / 0.17% of non-null, so no mass point. Levels, ART==ARQ within $1 on 99.96% (cashneq) / 99.98% (investmentsc). Units raw USD (2021-12-31 universe cashneq p10/p50/p90 = $51M/$330M/$2.66B; investmentsc 0/0/$435M). Spot check FY2023 ARY $M: AAPL 29,965 + 31,590 = 61,555, MSFT 34,704 + 76,558 = 111,262, GOOGL 24,048 + 86,868 = 110,916 (equal the inherited SEC XBRL totals). NOT re-measured here (inherited from 2026-09-26, earlier pull): the financing-receivables overshoot (CSCO/F/GM/IBM/HPE/HOG) and the financials/REITs understatement; both stay as deviations. Translation unchanged: cashneq + investmentsc.fillna(0), approx."
     probed_on_prior_snapshot: '2026-09-26'
   cheq:
     sf1: cashneq + investmentsc.fillna(0)
@@ -321,7 +329,9 @@ compustat_to_sf1:
       of cap) or field / fxusd for the non-variant fields. SF1.price and SF1.marketcap are already USD (MANU
       GBP filer: SF1 marketcap $3.53B vs DAILY $3.32B, not scaled by 0.749). PIT: 12 ART rows date <
       reportperiod (not disqualifying). Status approx: Compustat curcd is a code; fxusd is a rate.'
-    verified_on: ""
+    verified_on: "2026-09-30"
+    verified_status: verified-with-deviation
+    verified_note: "Measured 2026-09-30 on THIS snapshot (DATA_SHA 198b281de1a0, recorded_on 2026-09-30; SF1 ART/ARQ/ARY rows 688,566/681,836/186,720); supersedes any 'THIS snapshot' wording in `note`, which is from earlier pulls. Universe = harness build_universe + MonthContext.fundamentals (PIT, ART). SF1.fxusd (rate; units per 1 USD: USD = field / fxusd) null 0.000% ART, != 1 on 3.36% of all ART rows; universe members != 1: 0.000% (1999-12-31), 0.056% (2008-12-31), 0.043% (2021-12-31). Status approx stays: Compustat curcd is a code, fxusd a rate. Translation: SF1 items in reporting currency (equity, debt, cashneq, investmentsc) divided by USD market cap mix currencies on <= 0.06% of names: gate fxusd == 1 or divide by fxusd."
     probed_on_prior_snapshot: '2026-09-25'
   cusip:
     sf1: TICKERS.cusips
@@ -342,8 +352,10 @@ compustat_to_sf1:
   dc:
     sf1: null
     status: unavailable
-    note: 'Deferred charges. No SF1 field. OSAP ZERO-FILLS dc (upstream_CompustatAnnual.py zero_fill_vars at b4e911e6: nopi, dvt, ob, dm, dc, aco, ap, intan, ao, lco, lo, rect, invt, drc, spi, gdwl, che, dp, act, lct, tstkp, dvpa, scstkc, sstk, mib, ivao, prstkc, prstkcc, txditc, ivst), so a predictor that only adds dc (NOA: OL = at - dltt - mib - dc - ceq) may use 0 - identical to OSAP''s missing-case treatment; that predictor is approx. Of the fields checked alongside: mib, dvt, sstk, prstkc are zero-filled by OSAP; dv, dvc, dltt, dltis, dltr, dlcch are not (NetDebtFinance fills dlcch itself).'
-    verified_on: ""
+    note: 'Convertible debt (NOT deferred charges; corrected 2026-09-30: OSAP builds dc from dcvt/dcpstk, upstream_CompustatAnnual.py mask_dc1..3). No SF1 field. OSAP ZERO-FILLS dc (upstream_CompustatAnnual.py zero_fill_vars at b4e911e6: nopi, dvt, ob, dm, dc, aco, ap, intan, ao, lco, lo, rect, invt, drc, spi, gdwl, che, dp, act, lct, tstkp, dvpa, scstkc, sstk, mib, ivao, prstkc, prstkcc, txditc, ivst), so a predictor that only adds dc (NOA: OL = at - dltt - mib - dc - ceq) may use 0 - identical to OSAP''s missing-case treatment; that predictor is approx. Of the fields checked alongside: mib, dvt, sstk, prstkc are zero-filled by OSAP; dv, dvc, dltt, dltis, dltr, dlcch are not (NetDebtFinance fills dlcch itself).'
+    verified_on: "2026-09-30"
+    verified_status: verified
+    verified_note: "Measured 2026-09-30 on THIS snapshot (DATA_SHA 198b281de1a0, recorded_on 2026-09-30; SF1 ART/ARQ/ARY rows 688,566/681,836/186,720); supersedes any 'THIS snapshot' wording in `note`, which is from earlier pulls. Universe = harness build_universe + MonthContext.fundamentals (PIT, ART). ABSENCE CONFIRMED on THIS snapshot: SF1 has no convertible-debt column (SF1 debt items are debt, debtc, debtnc only; the DESCRIPTIONS table has no 'convertible' match, only prefdivis for preferred); gloss corrected 2026-09-30: dc is CONVERTIBLE DEBT in OSAP (built from dcvt / dcpstk - pstk, upstream_CompustatAnnual.py mask_dc1..3), NOT deferred charges. dc is in OSAP zero_fill_vars, so dc = 0 for every firm is OSAP's missing-case value; it differs from OSAP only for convertible issuers (size not measurable here). dcvt and dcpstk are likewise absent."
     probed_on_prior_snapshot: '2026-09-25'
   dcpstk:
     sf1: null
@@ -365,7 +377,9 @@ compustat_to_sf1:
       exact on 99.45% of 595,486 rows with both present. Sector of the null block (US common stock, ART,
       134,088 rows): 71.4% Financial Services, 19.7% Real Estate -- same unclassified-balance-sheet firms
       as assetsc/liabilitiesc. Coverage among US-common ART rows: 1999 78.6%, 2008 78.3%, 2020 79.7%."
-    verified_on: ""
+    verified_on: "2026-09-30"
+    verified_status: verified-with-deviation
+    verified_note: "Measured 2026-09-30 on THIS snapshot (DATA_SHA 198b281de1a0, recorded_on 2026-09-30; SF1 ART/ARQ/ARY rows 688,566/681,836/186,720); supersedes any 'THIS snapshot' wording in `note`, which is from earlier pulls. Universe = harness build_universe + MonthContext.fundamentals (PIT, ART). debtc null 20.10% ART / 20.17% ARQ / 19.32% ARY, same unclassified block as assetsc; exact-zero 26.95% of non-null ART (ARQ 26.99%, ARY 26.73%); in the universe exact-zero is 24.0% (1998-12-31), 24.5% (1999), 27.5% (2008), 17.0% (2020), 17.7% (2021) of non-null: a real, moving mass point at 0 (firms with no short-term debt), not a fill artefact. ART==ARQ within $1 on 99.95% of 520,642. Universe coverage 79.7% / 82.6% / 81.5% / 81.2% / 80.9% at 1998-12 / 1999-12 / 2008 / 2020 / 2021. 2021-12-31 universe p10/p50/p90 = $0/$22M/$716M raw USD. Translation: a level or change of dlc inside a sum (Accruals) is safe; any dlc-only ratio needs a base > 0 guard; never zero-fill nulls."
     probed_on_prior_snapshot: '2026-09-25'
   dlcch:
     sf1: null
@@ -395,7 +409,9 @@ compustat_to_sf1:
     sf1: 'debtnc'
     status: approx
     note: 'ASC 842 DEVIATION - status mapped -> approx 2026-09-25: debtnc INCLUDES non-current OPERATING-lease liabilities from the filer''s ASC 842 adoption (FY2019 calendar filers, FY2020 Sept-FYE filers, FY2018 for early adopters) plus capital/finance leases throughout; Compustat dltt excludes operating leases. Measured on THIS snapshot (DATA_SHA 52402f7d1f9c, recorded_on 2026-09-25), ARY $M vs 10-K lines (recalled, not fetched): WMT FY2020 64,192 = LTD 43,714 + op lease 16,171 + finance lease 4,307 (FY2019 50,203 = 43,520 + capital lease 6,683); TGT FY2019 13,613 = 11,338 + op lease 2,275; SBUX FY2019 11,167 = LTD only, FY2020 22,321 = LTD 14,660 + op lease 7,662; DAL 2019 14,167 = 8,873 + 5,294, and DAL''s step lands in FY2018 (6,592 -> 14,054; early adopter, restated). Steps without a decomposed check: MCD 2018 -> 2019 31,075 -> 46,876; KR FY2018 -> FY2019 12,072 -> 18,616. Universe (US-common ARY): debtnc == 0 on 27.0/28.3/28.9% FY2016-18, then 16.7% FY2019, 14.3% FY2020; 56.4% of the 932 FY2018 zeros are > 0 in FY2019 vs 18.7% of 905 in the FY2017 -> FY2018 control; median debtnc/assets 0.157 (FY2018) -> 0.178 (FY2019). Consequences: a debtnc LEVEL (NOA, leverage) rises for lessees from adoption; a 12-month CHANGE carries a one-off lessee spike in FY2019-20 filings; lo = liabilitiesnc - debtnc loses the same lease liability (it migrates into debtnc). Consistent with SF1.debt (DESCRIPTIONS: includes operating lease obligations; debt == debtc + debtnc 99.99%). US-common ART non-null 1999 78.5%, 2008 78.2%, 2020 79.7%. EARLIER NOTE: ART level, raw USD (AAPL ART==ARQ exact on last 4 quarters). Null 20.1% ART, exact-zero 13.0-28.7% by year (genuine no-LTD firms plus vendor 0); guard on debtnc>0 or use a base ratio. 2024-12-31 US-common ART p10/median/p90 = $0 / $73.7M / $4.678B; ART==ARQ same-period 99.96% of 520,556 rows; liabilitiesnc >= debtnc on 99.76% of 549,529; US-common null 1999/2008/2020 21.5%/21.7%/20.1% (unclassified-balance-sheet financials/REITs).'
-    verified_on: ""
+    verified_on: "2026-09-30"
+    verified_status: verified-with-deviation
+    verified_note: "Measured 2026-09-30 on THIS snapshot (DATA_SHA 198b281de1a0, recorded_on 2026-09-30; SF1 ART/ARQ/ARY rows 688,566/681,836/186,720); supersedes any 'THIS snapshot' wording in `note`, which is from earlier pulls. Universe = harness build_universe + MonthContext.fundamentals (PIT, ART). SF1.debtnc null 20.15% ART / 20.22% ARQ / 19.37% ARY (same unclassified-balance-sheet block as debtc, financials/REITs); exact-zero 23.97% of non-null ART (ARQ 23.96%, ARY 24.00%); universe exact-zero 17.4% (1998-12-31) / 19.9% (1999-12-31) / 16.5% (2008) / 5.7% (2020) / 5.6% (2021) and universe coverage 79.5% / 82.4% / 81.4% / 81.3% / 80.9%. 2021-12-31 universe p10/p50/p90 = $6M/$787M/$9.29B raw USD. ASC 842 break re-measured on the universe: debtnc exact-zero 12.7% (2018-12-31) -> 3.9% (2019-12-31) -> 5.7% (2020): lease liabilities enter debtnc from FY2019 (inherited decomposition vs 10-Ks not re-measured). Level, ART==ARQ (see dltt_plus_dlc). Translation: do not use debtnc alone for BPEBM; use debt (dltt_plus_dlc)."
     probed_on_prior_snapshot: '2026-09-25'
   dltt_plus_dlc:
     sf1: debt
@@ -420,7 +436,9 @@ compustat_to_sf1:
       lease effect). Null 0.03% ART/ARQ/ARY of 688,440/681,711/186,672 rows; ART==ARQ same-reportperiod
       match 99.51% of 740,186 pairs. US-common ART coverage 1999 99.96%, 2008 99.99%, 2020 99.99%. 2024
       US-common ART quantiles p10/median/p90 = $0.36M/$164.7M/$5.692B.'
-    verified_on: ""
+    verified_on: "2026-09-30"
+    verified_status: verified-with-deviation
+    verified_note: "Measured 2026-09-30 on THIS snapshot (DATA_SHA 198b281de1a0, recorded_on 2026-09-30; SF1 ART/ARQ/ARY rows 688,566/681,836/186,720); supersedes any 'THIS snapshot' wording in `note`, which is from earlier pulls. Universe = harness build_universe + MonthContext.fundamentals (PIT, ART). SF1.debt null 0.03% ART / 0.03% ARQ / 0.03% ARY (vs 20% for debtc/debtnc: populated for the unclassified block); exact-zero 14.66% ART (ARQ 14.65%, ARY 14.91%) of non-null, universe 11.1% (1998-12-31) / 12.8% (1999-12-31) / 11.6% (2008) / 4.2% (2020) / 4.4% (2021); universe coverage 98.8% / 97.5% / 99.8% / 100.0% / 100.0%. Level: ART==ARQ same-period within $1 on 99.46% of 740,164 pairs; AAPL 2023-09-30 ART/ARQ/ARY identical, debt 111.088B = debtc 15.807B + debtnc 95.281B; debt == debtc + debtnc within 0.1% on 99.99% of 457,376 rows with nonzero debt and both parts. 2021-12-31 universe p10/p50/p90 = $0.018B/$1.07B/$10.8B raw USD. ASC 842 BREAK CONFIRMED on the universe (ART at Dec signal): exact-zero 9.1% (2018) -> 2.9% (2019) -> 4.2% (2020) -> 4.4% (2021); median debt/assets 0.291 (2018) -> 0.320 (2019) -> 0.320 (2020) -> 0.289 (2021); YoY change in debt / lagged assets p75 0.045 (2018) -> 0.115 (2019) -> 0.070 (2020) -> 0.056 (2021), p50 0.000 / 0.031 / 0.012 / 0.000. fxusd != 1 on 3.36% of all ART rows, <= 0.06% of universe members. Translation: debt = lease-inclusive total debt from FY2019 (Compustat dltt + dlc excludes operating leases), a level break in 2019-20 filings; a cross-sectionally ranked level is robust, a 12-month change is not; no zero-fill of the null 0.03%."
     probed_on_prior_snapshot: '2026-09-25'
   dlttq:
     sf1: 'debtnc'
@@ -448,7 +466,9 @@ compustat_to_sf1:
       Re-verified 2026-09-25 on THIS snapshot: null 9.64% ART / 5.64% ARQ / 1.16% ARY unchanged; AAPL
       FY2025Q4 sum-of-4-ARQ (2.661+2.830+3.127+3.214B) == ART 11.832B exact, TTM-sum/flow behaviour
       confirmed. Coverage among US-common ART rows: 1999 92.0%, 2008 96.4%, 2020 91.9%. 2026-09-26 (DATA_SHA 52402f7d1f9c) vs SEC XBRL 10-K DepreciationDepletionAndAmortization: SF1 ARY depamor ties to the $1M on INTC, MU, TXN, MCD, VZ, T, CMG, DRI, CMCSA, TGT (FY2022) but EXCEEDS it on COST after ASC 842: FY2019 1,492 == 1,492, FY2021 2,067 vs 1,781 (+286), FY2022 2,277 vs 1,900 (+377) -- consistent with Costco's cash-flow non-cash operating-lease add-back being folded into depamor (inferred, the lease line was not matched in XBRL). depamor may therefore include operating-lease ROU amortisation for some filers from 2019; not measured across the universe."
-    verified_on: ""
+    verified_on: "2026-09-30"
+    verified_status: verified-with-deviation
+    verified_note: "Measured 2026-09-30 on THIS snapshot (DATA_SHA 198b281de1a0, recorded_on 2026-09-30; SF1 ART/ARQ/ARY rows 688,566/681,836/186,720); supersedes any 'THIS snapshot' wording in `note`, which is from earlier pulls. Universe = harness build_universe + MonthContext.fundamentals (PIT, ART). depamor is a FLOW: ART = TTM sum of 4 ARQ (AAPL 2025-12-31 ARQ 2.661+2.830+3.127+3.214 = 11.832B == ART 11.832B); across all tickers with 4 consecutive ARQ quarters the 4-quarter sum matches ART within 1% on 99.6% of 513,854 (99.6% of 411,554 with |ART| > $1M). Null 9.64% ART / 5.64% ARQ / 1.16% ARY; exact-zero 3.79% ART / 6.78% ARQ / 4.83% ARY of non-null (universe 2.6% / 1.6% / 2.4% / 2.5% / 2.2% at 1998-12 / 1999-12 / 2008 / 2020 / 2021: small mass point, genuine no-D&A reporters, read as reported, not null). EARLY-1998 ART null FOLLOWS THE TTM-FLOW PATTERN: by calendardate quarter ART depamor null is 58.1 / 54.7 / 53.7% for 1998Q1/Q2/Q3 (revenue 57.0 / 53.3 / 45.5%), then 3.1% at 1998Q4 and 9.6 / 9.3% at 1999Q1 / Q2 (revenue 3.8 / 8.5 / 8.0%); ARQ depamor null is only 2.0 / 3.0 / 2.9% for 1998Q1-Q3 (ARQ 1997Q4 51.9%). Cause: ART needs 4 quarters of history and SF1 starts 1998. Universe PIT coverage of ART depamor: 52.0% (1998-12-31), 53.1% (1999-01), 58.6% (1999-02), 93.2% (1999-03), 96.7% (1999-04), 89-92% (1999-05..09), 98.7% (2008-12-31), 94.1% (2020-12-31), 92.3% (2021-12-31); overall ART null 9.6% is the flow, not a balance-sheet gap. Units raw USD (2021-12-31 universe p10/p50/p90 = $4.7M/$96.7M/$972M). Translation: a current-TTM dp is ~52-59% covered at signal months 1999-01..02 and from 1999-03 ~90%+; ART is the right dimension for the current flow (no ARQ needed) but never use ART depamor for a year-ago flow before 1999Q4. Inherited and NOT re-measured: COST ASC 842 lease amortisation inside depamor from 2019, MSFT FY2026 restated-quarter artefact (postdates the window)."
     probed_on_prior_snapshot: '2026-09-25'
   dpq:
     sf1: depamor
@@ -840,7 +860,9 @@ compustat_to_sf1:
       99.03% of 594,954 rows with both present. Sector of the null block (US common stock, ART, 134,429
       rows): 71.3% Financial Services, 19.7% Real Estate -- same unclassified-balance-sheet firms as
       assetsc/debtc. Coverage among US-common ART rows: 1999 78.5%, 2008 78.2%, 2020 79.7%."
-    verified_on: ""
+    verified_on: "2026-09-30"
+    verified_status: verified-with-deviation
+    verified_note: "Measured 2026-09-30 on THIS snapshot (DATA_SHA 198b281de1a0, recorded_on 2026-09-30; SF1 ART/ARQ/ARY rows 688,566/681,836/186,720); supersedes any 'THIS snapshot' wording in `note`, which is from earlier pulls. Universe = harness build_universe + MonthContext.fundamentals (PIT, ART). liabilitiesc null 20.16% ART / 20.24% ARQ / 19.39% ARY, exact-zero 0.03% of non-null (no mass point); ART==ARQ within $1 on 99.93% of 520,227. Universe coverage 79.5% (1998-12-31), 82.3% (1999-12-31), 81.4% (2008), 81.2% (2020), 80.9% (2021): unclassified-balance-sheet block (financials/REITs), structural, never zero-fill. 2021-12-31 universe p10/p50/p90 = $52M/$504M/$5.5B raw USD. Level; ART is fine. Translation: lct-based terms null for ~19% of names, same rows as act and dlc."
     probed_on_prior_snapshot: '2026-09-25'
   lctq:
     sf1: liabilitiesc
@@ -884,7 +906,9 @@ compustat_to_sf1:
       Re-verified 2026-09-25 on THIS snapshot (DATA_SHA 52402f7d1f9c) -- ART pooled null 0.05%, exact-zero
       0.04%, ART==ARQ same-reportperiod match 99.10% of 740,186 pairs; US-common ART coverage 1999 99.91%,
       2008 99.99%, 2020 99.99%; 2024 US-common ART quantiles p10/median/p90 = $6.44M/$497.1M/$12.87B.
-    verified_on: ""
+    verified_on: "2026-09-30"
+    verified_status: verified
+    verified_note: "Measured 2026-09-30 on THIS snapshot (DATA_SHA 198b281de1a0, recorded_on 2026-09-30; SF1 ART/ARQ/ARY rows 688,566/681,836/186,720); supersedes any 'THIS snapshot' wording in `note`, which is from earlier pulls. Universe = harness build_universe + MonthContext.fundamentals (PIT, ART). SF1.liabilities null 0.05% ART / 0.05% ARQ / 0.05% ARY, exact-zero 0.04% of non-null; ART==ARQ same-period within $1 on 98.99% of 739,982 pairs (level). Universe ART coverage 98.7% (1998-12-31), 97.5% (1999-12-31), 99.8% (2008), 100.0% (2020, 2021); exact-zero 0.0-0.1%. Raw reporting-currency USD (fxusd != 1 <= 0.06% of members). Used only as the BMdec fallback (at - lt when equity is null, 0.05%)."
     probed_on_prior_snapshot: '2026-09-25'
   ltq:
     sf1: liabilities
@@ -1146,7 +1170,9 @@ compustat_to_sf1:
       first-filed datekey is used for the lag below); datekey-reportperiod lag (first filing) median 44
       days (p10 32, p90 86). See rdq_alt (EVENTS eventcode 22) for a closer announcement-date proxy and
       its coverage/lead-time numbers."
-    verified_on: ""
+    verified_on: "2026-09-30"
+    verified_status: verified-with-deviation
+    verified_note: "Measured 2026-09-30 on THIS snapshot (DATA_SHA 198b281de1a0, recorded_on 2026-09-30; SF1 ART/ARQ/ARY rows 688,566/681,836/186,720); supersedes any 'THIS snapshot' wording in `note`, which is from earlier pulls. Universe = harness build_universe + MonthContext.fundamentals (PIT, ART). SF1 ARQ filing date (parquet column `date`, the harness's `datekey`), not the earnings release. First-filing datekey - reportperiod lag p10/p50/p90 = 32/44/86 days (ART p1/p99 23/180); 3.55% of ARQ (ticker, reportperiod) keys carry more than one datekey (amendments). PIT: datekey < reportperiod on 12 ART / 10 ARQ / 3 ARY rows (1996-1998, NGVT 2015-12, SHIP 2016-12, SPCB 2022-05; reportperiod-label defects): each was checked against the harness universe panel and 0 fall in a signal month 1998-12..2021-12, so none reaches a bar (not disqualifying here). Dates only, no value read, so no dimension/null issue; use the first-filed datekey per quarter. Translation: rdq fallback is 10-Q/10-K filing date, median 44 days after quarter end."
     probed_on_prior_snapshot: '2026-09-25'
   rdq_alt:
     sf1: "EVENTS.eventcodes contains code '22' (Sharadar's 2-digit EVENTCODES entry for 8-K Item 2.02,
@@ -1164,7 +1190,9 @@ compustat_to_sf1:
       (table min_date), covering the full 1999-2022 decision window. Status approx, not mapped: coverage
       is partial and the match is a ticker+date-window join, not a guaranteed same-event key between
       EVENTS and SF1."
-    verified_on: ""
+    verified_on: "2026-09-30"
+    verified_status: verified-with-deviation
+    verified_note: "Measured 2026-09-30 on THIS snapshot (DATA_SHA 198b281de1a0, recorded_on 2026-09-30; SF1 ART/ARQ/ARY rows 688,566/681,836/186,720); supersedes any 'THIS snapshot' wording in `note`, which is from earlier pulls. Universe = harness build_universe + MonthContext.fundamentals (PIT, ART). EVENTS (2,532,599 rows, 1993-11-08..2026-09-29, eventcodes null 0.00%): FIRST row with code '22' is 2004-08-23 (376,895 code-22 rows; 5,517 in 2004, ~16-20k per year after). Earliest code-22 date in [reportperiod, first datekey] per (ticker, ARQ reportperiod), match rate by reportperiod year over ALL ARQ keys: 1998-2003 0.0% (0 of ~22-29k per year), 2004 35.8%, 2005-2019 72.0-74.6% (2005 72.8, 2008 72.3, 2012 73.4, 2015 74.6, 2019 72.0), 2020 67.9%, 2021 64.5%, 2022 66.1%. Universe members (latest ARQ quarter known at the Dec signal has an anchor): 87.1% (2005), 89.4% (2008), 92.3% (2015), 92.0% (2020), 94.9% (2021); 0% through 2004-07. Lead of the 8-K before the SF1 datekey: median 13d (2005, p10/p90 0/40), 6d (2010, 0/28), 3d (2015, 0/24), 1d (2020, 0/26). Consequence: announcement-date coverage is exactly zero for signal months 1999-01..2004-07 (67 of 276 decision months); matched quarters skew to larger, more established filers (universe match 87-95% vs 72% of all ARQ keys). Status approx (ticker + date-window join, not an event key)."
     probed_on_prior_snapshot: '2026-09-25'
   re:
     sf1: retearn
@@ -1228,7 +1256,9 @@ compustat_to_sf1:
     sf1: equity
     status: mapped
     note: "Same SF1.equity column as ceq/ceqq (a single unsplit book-equity concept -- Sharadar does not separate with/without-preferred); see ceq for the full null/ART==ARQ-match/coverage/quantile verification, re-verified 2026-09-25 on THIS snapshot."
-    verified_on: ""
+    verified_on: "2026-09-30"
+    verified_status: verified
+    verified_note: "Measured 2026-09-30 on THIS snapshot (DATA_SHA 198b281de1a0, recorded_on 2026-09-30; SF1 ART/ARQ/ARY rows 688,566/681,836/186,720); supersedes any 'THIS snapshot' wording in `note`, which is from earlier pulls. Universe = harness build_universe + MonthContext.fundamentals (PIT, ART). Same SF1.equity column as ceq (see ceq for all numbers): null 0.05% ART, exact-zero 0.01%, ART==ARQ 98.92%, universe coverage 97.6-100%. Parent equity including preferred is the Compustat seq concept; no deviation for seq itself."
     probed_on_prior_snapshot: '2026-09-25'
   seqq:
     sf1: equity
@@ -1315,7 +1345,9 @@ compustat_to_sf1:
       quantiles (zero-inclusive) p10/median/p90 = $0/$0/$271.9M, nonzero subset
       (n=8,051 of 18,336) p10/median/p90 = $0.50M/$33.96M/$920.7M -- 43.9% of 2024
       US-common ART rows are nonzero, consistent with the pooled 51.4%/49.6% mass point."
-    verified_on: ""
+    verified_on: "2026-09-30"
+    verified_status: verified-with-deviation
+    verified_note: "Measured 2026-09-30 on THIS snapshot (DATA_SHA 198b281de1a0, recorded_on 2026-09-30; SF1 ART/ARQ/ARY rows 688,566/681,836/186,720); supersedes any 'THIS snapshot' wording in `note`, which is from earlier pulls. Universe = harness build_universe + MonthContext.fundamentals (PIT, ART). SF1.taxliabilities null 0.03% ART / 0.03% ARQ / 0.03% ARY; exact-zero 51.42% of non-null ART (ARQ 51.70%, ARY 49.10%) -- Sharadar zero-fills it, so the zero mixes genuine none with imputed. Universe exact-zero share 37.2% (1998-12-31) / 45.3% (1999-12-31) / 33.7% (2008) / 41.4% (2020) / 42.4% (2021); universe coverage 98.8% / 97.5% / 99.8% / 100% / 100%; negative 0-4 rows per probe. Nonzero median taxliabilities/liabilities 7.0% / 7.1% / 7.4% / 4.1% / 4.4% (scale falls after 2008). 2021-12-31 universe p10/p50/p90 = $0/$6.5M/$754M raw USD. Level: ART==ARQ within $1 on 99.54% of 740,154 pairs. DEVIATION: a generic tax-liability line, not deferred taxes and investment tax credit; OSAP also zero-fills txditc (zero_fill_vars and BMdec fillna(0)), so no second fill is introduced, but the two zero sets differ and the added term is small relative to book equity. Translation: txditc = taxliabilities.fillna(0), approx; the fillna(0) mirrors OSAP's zero-fill and is a no-op on all but the 0.03% null rows."
     probed_on_prior_snapshot: '2026-09-25'
   txditcq:
     sf1: taxliabilities
@@ -1520,7 +1552,9 @@ crsp_to_sharadar:
       caveat; harness applies the Shumway proxy). (3) volume==0 carried-price rows are not CRSP missing
       returns; a daily consumer wanting trade-only returns must filter on volume > 0 via the harness.
       Earlier 2026-09-22 numbers were on a prior snapshot and are superseded.'
-    verified_on: ""
+    verified_on: "2026-09-30"
+    verified_status: verified-with-deviation
+    verified_note: "Measured 2026-09-30 on THIS snapshot (DATA_SHA 198b281de1a0, recorded_on 2026-09-30; SF1 ART/ARQ/ARY rows 688,566/681,836/186,720); supersedes any 'THIS snapshot' wording in `note`, which is from earlier pulls. Universe = harness build_universe + MonthContext.fundamentals (PIT, ART). SEP 45,385,374 rows 1997-12-31..2026-09-29: closeadj / close / closeunadj null 0.0000%, <= 0 none, duplicate (ticker, date) 0. DAILY return = closeadj[t]/closeadj[t-1] - 1 on the ticker's previous row: null (first row only) 0.041% (1999) / 0.011% (2008) / 0.055% (2020); exact-zero 21.56% / 10.45% / 5.38% of non-null (overall 11.18%, 42.1% of zeros fall on volume == 0 days; volume == 0 is 7.53% / 5.69% / 1.58% of rows), so SEP carries no-trade days as zero returns, not gaps; p1/p50/p99 1999 -0.135/0/0.182, 2008 -0.179/0/0.200, 2020 -0.150/0/0.176; r > +100% on 362 / 378 / 458 rows, r <= -90% on 1 / 14 / 5. Extremes overall (r > 1 or <= -0.9) 7,944 rows: 5,290 at prior closeunadj < $1, 700 at >= $5. SPLIT SWEEP: ACTIONS 12,989 splits, 8,834 with ratio >= 1.5 or <= 0.67 have a SEP row on the date; closeunadj jumped by ~1/ratio on 8,410; closeadj ALSO jumped > 50% (missed split adjustment) on 2 (PTIX 2007-05-03 prior price $0.044, FSTW 2001-09-18 $0.70), 0 at prior closeunadj >= $5. Named splits: AAPL 2020-08-31 closeadj +3.39% vs closeunadj -74.15%; AAPL 2014-06-09 +1.60% vs -85.49%; NVDA 2024-06-10 +0.75% vs -89.93%; NVDA 2021-07-20 -0.89% vs -75.22%; TSLA 2022-08-25 -0.35% vs -66.78%. TOTAL RETURN: on 20 ex-dates each (2015-2019) r_closeadj - r_close == div/prev_close*(1+r_close): KO median abs err 9.5e-5, p99 1.75e-4; MSFT 5.7e-5 / 1.67e-4. closeadj sits on a 3-decimal grid on 99.9978% of rows (quantises back-adjusted prices < $0.50). No SEP gap > 7 calendar days between consecutive rows of a ticker. MONTHLY (closeadj ratio of adjacent business month-ends, universe members): non-null 99.6% (1998-12) / 100.0% (1999-01) / 99.0% (1999-12) / 99.9% (2000-12) / 100.0% (2008-12) / 99.3% (2020-12); exact-zero 0.66 / 0.80 / 0.72 / 1.00 / 0.06 / 0.05%; 1999-12 p1/p50/p99 -0.353/0.048/1.486 (73 names > +100%), 2008-12 -0.294/0.050/0.635, 2020-12 -0.218/0.059/0.744. HISTORY GATES (share of universe with a price near the month-end N months back, has_price_at): 20m / 24m / 36m / 60m = 83/81/0/0% (1999-12), 85/83/79/0% (2000-12), 97/96/93/85% (2008-12), 90/89/85/79% (2020-12); SEP starts 1997-12-31 so a 60-month window is not full before 2002-12. Daily window of 1900 calendar days: >= 500 SEP rows for 81.0% (1999-12) / 96.3% (2008-12) / 89.0% (2020-12) of members, >= 1000 rows for 0.0% / 89.1% / 81.5%. Market series (pidx.market(), prior-day cap-weighted all-stock; the BINDING start for daily-window betas, NOT SEP rows: the SEP-row counts above are not scorable coverage, pass min_days=500 to market_daily so 1999-01..~2000-10 are unscorable rather than thin): 1998-12-02..2026-09-29, mkt_ret null 0, p1/p50/p99 -0.0336/0.0007/0.0331, median n_names 6,670 (1999) / 4,941 (2008) / 4,231 (2020); rf is not in the snapshot. DEVIATIONS: no delisting return; no-trade zeros; closeadj 3-dp grid below $0.50; market return raw (no rf). Supersedes the 2026-09-25 (other-pull) figures in `note`."
     probed_on_prior_snapshot: '2026-09-25'
   vol:
     sharadar: SEP.volume
@@ -1558,7 +1592,9 @@ crsp_to_sharadar:
     sharadar: DAILY.marketcap
     status: mapped
     note: "DAILY.marketcap, double, in MILLIONS of USD (see marketcap_units known_trap): AAPL 2026-09-21 value 4,947,135.1 == $4.947T. Never null (0.00% of 39.8M rows), exact-zero 0.06% of non-null (illiquid/halted names), never negative. Coverage 1999/2008/2020 100.0%/100.0%/100.0% of DAILY rows. 2025-12-31 quantiles p10/p50/p90 = 14.76M/705.80M/21,492.02M (raw scale before the 1e6 multiply already applied once at panel build per config universe.daily_marketcap_scale). Used directly by EP/Leverage/NetPayoutYield/GP-adjacent candidates as the denominator; no unit or null surprise versus the documented trap. Re-verified 2026-09-25 on THIS snapshot: first date 1998-12-01 (matches DAILY min_date), null share 0.00% of 39,835,564 rows, units confirmed millions (2025-12-31 n=5,457, quantiles p10/median/p90 = 14.76M/704.5M/21,492.0M; AAPL 2026-09-24 = 4,902,476.9 == $4.90T). Multi-class firms: the value is company-wide on the Primary-Class ticker, not per class; see mve_permco."
-    verified_on: ""
+    verified_on: "2026-09-30"
+    verified_status: verified
+    verified_note: "Measured 2026-09-30 on THIS snapshot (DATA_SHA 198b281de1a0, recorded_on 2026-09-30; SF1 ART/ARQ/ARY rows 688,566/681,836/186,720); supersedes any 'THIS snapshot' wording in `note`, which is from earlier pulls. Universe = harness build_universe + MonthContext.fundamentals (PIT, ART). DAILY.marketcap (USD millions) null 0.0000% of 39,848,528 rows, exact-zero 0.063%, never negative, first date 1998-12-01 (no Dec-1997 ME); AAPL/market units millions: all-name quantiles p10/p50/p90 on the last trading day of 1999 12.9/151.6/3,227.9 (n 7,103), 2008 8.2/192.3/4,247.2, 2020 44.4/791.2/17,847.4. Universe mkt_cap_usd (panel, x1e6 raw USD) > 0 on 100.0% of members at 1998-12 / 1999-12 / 2008-12 / 2020-12 / 2021-12; p10/p50/p90 1999-12-31 $0.28B/$1.07B/$9.87B, 2021-12-31 $1.15B/$4.52B/$41.4B. BMdec / BPEBM use ctx.universe['mkt_cap_usd'] directly (company-level, see mve_permco)."
     probed_on_prior_snapshot: '2026-09-25'
   mve_permco:
     sharadar: DAILY.marketcap on the Primary-Class ticker (already company-level; no class sum needed or possible)
@@ -1589,7 +1625,9 @@ crsp_to_sharadar:
       one row per permno (both classes, same company signal); this universe keeps the Primary only. Both
       deviations are small level errors on <=2% of names in a ranked ratio (Leverage lt/me, EntMult (me+debt-cash)/
       oibdp): use mkt_cap_usd as-is, no summation, no harness change."
-    verified_on: ""
+    verified_on: "2026-09-30"
+    verified_status: verified-with-deviation
+    verified_note: "Measured 2026-09-30 on THIS snapshot (DATA_SHA 198b281de1a0, recorded_on 2026-09-30; SF1 ART/ARQ/ARY rows 688,566/681,836/186,720); supersedes any 'THIS snapshot' wording in `note`, which is from earlier pulls. Universe = harness build_universe + MonthContext.fundamentals (PIT, ART). DAILY.marketcap (USD millions) null 0.0000% of 39,848,528 rows, exact-zero 0.063%, never negative, first date 1998-12-01; universe mkt_cap_usd (x daily_marketcap_scale 1e6, raw USD) is > 0 on 100.0% of members at 1998-12 / 1999-12 / 2008 / 2020 / 2021, exact-zero 0.00%. Units: AAPL 2021-12-31 2,913,283.9 (= $2.91T), GOOGL 1,922,950.8 (= $1.92T, all classes); DAILY quantiles p10/p50/p90 in millions 1999-12-31 12.9/151.6/3,227.9 (n 7,103), 2008-12-31 8.2/192.3/4,247.2, 2020-12-31 44.4/791.2/17,847.4, 2025-12-31 14.7/704.5/21,492.0 (none null); universe 2021-12-31 mkt_cap_usd p10/p50/p90 = $1.15B/$4.52B/$41.4B. SF1.marketcap == DAILY.marketcap*1e6 on the filing date: ratio min/median/max 1.0000/1.0000/1.0000 (AAPL, GOOGL, 23 quarters each since 2021) and 0.9997/0.9999/1.0011 (BRK.B). Coverage of DAILY rows is 100% at 1999/2008/2020. AM median at 2021-12-31 (assets/mkt_cap_usd) = 0.686. Translation: use ctx.universe['mkt_cap_usd'] as-is; guard > 0 anyway. Secondary-class pricing and unlisted-class deviations inherited from 2026-09-25 (not re-measured)."
     probed_on_prior_snapshot: '2026-09-25'
   smt_row:
     sharadar: SEP.date -- listed at lag m = a trade in that business month (monthly panel), read as MonthContext.has_price_at(m, tolerance_days=31)
@@ -1599,7 +1637,9 @@ crsp_to_sharadar:
       has_price_at(m, 31) equals the harness's per-month listed set (_listed_at, the same set
       scope='market' uses) on universe IDs for all 36 lags at 1998-12-31/2010-12-31/2022-11-30
       (0 mismatches of 82,116/65,016/77,040 ID-lags). A listing flag, not a return window: no history gate."
-    verified_on: ""
+    verified_on: "2026-09-30"
+    verified_status: verified
+    verified_note: "Measured 2026-09-30 on THIS snapshot (DATA_SHA 198b281de1a0, recorded_on 2026-09-30; SF1 ART/ARQ/ARY rows 688,566/681,836/186,720); supersedes any 'THIS snapshot' wording in `note`, which is from earlier pulls. Universe = harness build_universe + MonthContext.fundamentals (PIT, ART). has_price_at(m, 31) equals the harness's listed set (_listed_at) on universe IDs for every lag m = 0..36 at 1998-12-31 / 2010-12-31 / 2021-12-31: 0 mismatches of 236,948 ID-lags. A listing flag, not a return window: no history gate."
     probed_on_prior_snapshot: '2026-09-25'
   shrcd:
     sharadar: TICKERS.category in Domestic Common Stock*

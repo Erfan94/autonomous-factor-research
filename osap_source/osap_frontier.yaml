@@ -1,0 +1,52 @@
+# Every OSAP predictor (SignalDoc Cat.Signal == Predictor, ref b4e911e6) that is
+# NOT tested, with the measured reason. records.py frontier reads `excluded`.
+# Rule for a missing Compustat item (field_map_index, osap-fetcher): infeasible
+# unless OSAP itself zero-fills it (zero_fill_vars in CompustatAnnual.py, or the
+# predictor's own fillna(0)); then the term is dropped and the row is `approx`.
+schema_version: 1
+excluded:
+  AOP:
+    reason: "requires IBES analyst forecasts (feps1, feps2, LTG); no Sharadar table carries estimates; the source drops firms without forecasts (no zero-fill)"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/AOP/spec.md
+    date: "2026-09-30"
+  AbnormalAccruals:
+    reason: "needs compustat.ppegt (gross PP&E) as a Jones-model regressor; SF1 has only ppnenet; OSAP does not zero-fill ppegt, so the rule makes it infeasible (net-for-gross substitution not adopted)"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/AbnormalAccruals/spec.md
+    date: "2026-09-30"
+  AccrualsBM:
+    reason: "needs compustat.txp (income taxes payable); no SF1 column (112 checked; taxliabilities is total tax liabilities); AccrualsBM uses raw txp and txp is not in OSAP zero_fill_vars, so the rule makes it infeasible"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/AccrualsBM/spec.md
+    date: "2026-09-30"
+  Activism1:
+    reason: "GIM governance index G (external spreadsheet, ends 2007-01, no Sharadar source) and 13F maxinstown_perc (SF3 from 2013-06-30): supports disjoint, zero scoreable months"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/Activism1/spec.md
+    date: "2026-09-30"
+  Activism2:
+    reason: "GIM governance index G (external, ends 2007-01, no Sharadar source) and 13F largest-holder share (SF3 from 2013-06-30): supports disjoint, zero scoreable months"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/Activism2/spec.md
+    date: "2026-09-30"
+  AdExp:
+    reason: "needs compustat.xad (advertising expense); no SF1 column among 112 (sgna/opex are aggregates); AdExp uses raw xad, not zero-filled, so no approx route"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/AdExp/spec.md
+    date: "2026-09-30"
+  AgeIPO:
+    reason: "needs FoundingYear and IPO dates from Ritter's external IPO-age file (PERMNO-keyed); no Sharadar field or crosswalk; not zero-filled. TICKERS.firstpricedate would measure listing recency, a different signal"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/AgeIPO/spec.md
+    date: "2026-09-30"
+  AnalystRevision:
+    reason: "only input is IBES consensus meanest (fpi 1); no Sharadar table carries estimates; not a Compustat item, no zero-fill"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/AnalystRevision/spec.md
+    date: "2026-09-30"
+  AnalystValue:
+    reason: "requires IBES analyst forecasts (feps1, feps2, LTG); no Sharadar table carries estimates; the source drops firms without forecasts (no zero-fill)"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/AnalystValue/spec.md
+    date: "2026-09-30"
