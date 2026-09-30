@@ -360,3 +360,18 @@ excluded:
     class: preflight_failed
     spec: osap_source/cache/b4e911e6/RD/spec.md
     date: "2026-09-30"
+  RIO_Volatility:
+    reason: "data start: defined by 13F institutional ownership (Sharadar SF3/SF3A from 2013-06-30): 96 scorable decision months with OSAP timing, 94 with a 45-day point-in-time lag, under rebalance.min_months 120 (as DelBreadth); OSAP's zero-fill of missing ownership before 2013 would make it a pure size sort, not accepted; also scored only in the top-volatility quintile (~19.7% coverage) as an ordinal 1..5"
+    class: data_start
+    spec: osap_source/cache/b4e911e6/RIO_Volatility/spec.md
+    date: "2026-09-30"
+  RIVolSpread:
+    reason: "needs at-the-money implied volatility (OptionMetrics); no held Sharadar table carries option data; OSAP keeps only rows with implied vol (no zero-fill)"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/RIVolSpread/spec.md
+    date: "2026-09-30"
+  Recomm_ShortInterest:
+    reason: "needs IBES analyst recommendations and Compustat short interest; neither in Sharadar; OSAP inner-joins both (no zero-fill); also a binary flag in two extreme cells"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/Recomm_ShortInterest/spec.md
+    date: "2026-09-30"
