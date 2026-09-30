@@ -110,3 +110,23 @@ excluded:
     class: data_start
     spec: osap_source/cache/b4e911e6/DelBreadth/spec.md
     date: "2026-09-30"
+  DelDRC:
+    reason: "coverage: 9.7% / 27.4% / 28.0% of the universe at the 1998-12 / 2010-06 / 2021-11 probes, under the 40% Stage 1 bar at every probe; structural, from OSAP's own filters kept unweakened (non-financial by SIC, equity > 0, revenue >= $5M, deferred revenue non-zero at one end at least); file kept at factors/preflight_failed/DelDRC.py"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/DelDRC/spec.md
+    date: "2026-09-30"
+  DelLTI:
+    reason: "mass point: change in long-term investments (investmentsnc) is exactly 0 for 50.7-59.9% of scored names (40-46% of the universe; OSAP's ivao zero-fill makes the same block), far above the 10% cliff; the standing tie rule (level 0 at both ends -> NaN) leaves 30.7-39.5% coverage, under the 40% Stage 1 bar"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/DelLTI/spec.md
+    date: "2026-09-30"
+  DivInit:
+    reason: "binary dividend-initiation flag: 98.7% of the universe is 0 (24.7 ones per month on average; 181 of 263 usable months have < 30 ones), so qcut gives 2 bins and the mode breaches the 10% cliff; a rare-event signal needs an event-study harness the pre-registered design does not have. Also: CRSP distcd filter not reproducible (ACTIONS 'dividend' rows would substitute)"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/DivInit/spec.md
+    date: "2026-09-30"
+  DivOmit:
+    reason: "binary dividend-omission flag: 99.6% of the universe is 0 (7.2 ones per month on average, 206 of 265 months < 10, 3 months with none); mode breaches the 10% cliff, qcut collapses; same distcd caveat as DivInit"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/DivOmit/spec.md
+    date: "2026-09-30"
