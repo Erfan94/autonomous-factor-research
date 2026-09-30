@@ -1,7 +1,7 @@
 # The CURRENT state of the loop — replace, never append. History: session_history.md.
-updated: "2026-09-30T23:06:55Z"
-step: phase_A_close   # UNACCOUNTED 0: 106 candidates preflight-passed, 101 frontier rows; final alpha-review running; then inventory_classified + advisor at the A->B boundary
-phase: phase_A_inventory
+updated: "2026-09-30T23:13:02Z"
+step: phase_B_start   # inventory_classified logged (Phase A closed); final alpha-review clear_to_screen; advisor at A->B, then Stage 1 batch 1
+phase: phase_B_stage1
 composite: {version: v0, legs: 5, families: 5, sha: f9d9d9d95731, legs_list: [Size, Value, Profitability, Investment, Momentum]}
 versions: {v0: "f9d9d9d95731 v0-baseline"}
 stamps: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0}
@@ -10,4 +10,4 @@ holdout: unspent
 v0_baseline: {runs: "001,002", ic: 0.0145, ic_t_nw: 2.62, ls_sharpe_hedged: 0.600, ann_ret_hedged: 7.32, maxdd_hedged: -45.56, beta_fw: -0.140, turnover_d10: 28.0}
 open:
   - "Phase B: Stage 1 in batches of 12 in alphabetical acronym order over the 106 candidates (9 batches); time the first batch"
-next: "final alpha-review (TotalAccruals, TrendFactor, VarCF, zerotrade x3) -> inventory_classified -> advisor at A->B -> Phase B batch 1"
+next: "advisor at A->B -> Stage 1 batch 1 (first 12 candidates alphabetical) -> factor-evaluator; zerotrade1M row carries the off-horizon caveat"
