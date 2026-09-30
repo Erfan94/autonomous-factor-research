@@ -66,10 +66,10 @@ fields:
   - {key: "compustat.ebitda", sharadar: "opinc + depamor", status: "approx", verified_on: "", note: "REMAPPED 2026-09-25 (was sf1: ebitda). Compustat ebitda is Compustat's own EBITDA = oibdp (top-down operating "}
   - {key: "compustat.emp", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}
   - {key: "compustat.epsfx", sharadar: "epsdil", status: "mapped", verified_on: "", note: "New mapping (not previously in this table): epsdil = netinccmn/shareswadil after sharefactor (DESCRIPTIONS), t"}
-  - {key: "compustat.epspi", sharadar: "eps", status: "mapped", verified_on: "", note: ""}
-  - {key: "compustat.epspiq", sharadar: "eps", status: "mapped", verified_on: "", note: "See epspxq -- same eps field, dimension=ARQ is a per-quarter level (verified via AAPL rolling-4Q-sum == ART), "}
-  - {key: "compustat.epspx", sharadar: "eps", status: "mapped", verified_on: "", note: "eps = netinccmn/shareswa after sharefactor (DESCRIPTIONS; ADR-ratio/share-class multiplicand only, NOT a split"}
-  - {key: "compustat.epspxq", sharadar: "eps", status: "mapped", verified_on: "", note: "eps at dimension=ARQ is a genuine per-quarter LEVEL, not a TTM sum: AAPL rolling-4-quarter sum of ARQ eps matc"}
+  - {key: "compustat.epspi", sharadar: "eps", status: "mapped", verified_on: "2026-09-30", note: "verified-with-deviation. Same SF1.eps field as epspx: see that entry for every measurement (ARY fiscal-year le"}
+  - {key: "compustat.epspiq", sharadar: "eps", status: "mapped", verified_on: "2026-09-30", note: "verified-with-deviation. Same SF1.eps field as epspxq: see that entry for every measurement (ARQ single-quarte"}
+  - {key: "compustat.epspx", sharadar: "eps", status: "mapped", verified_on: "2026-09-30", note: "verified-with-deviation. eps at dimension=ARY: ARY is the fiscal-year level (equals ART at the FY-end reportpe"}
+  - {key: "compustat.epspxq", sharadar: "eps", status: "mapped", verified_on: "2026-09-30", note: "verified-with-deviation. eps at dimension=ARQ: ARQ is a single-quarter LEVEL, not TTM: AAPL 2022-12-31..2023-0"}
   - {key: "compustat.fatb", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}
   - {key: "compustat.fatl", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}
   - {key: "compustat.ffo", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}

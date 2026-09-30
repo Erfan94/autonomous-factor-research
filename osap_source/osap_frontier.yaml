@@ -145,3 +145,33 @@ excluded:
     class: data_unavailable
     spec: osap_source/cache/b4e911e6/DownRecomm/spec.md
     date: "2026-09-30"
+  ExchSwitch:
+    reason: "binary exchange-switch flag: buildable from ACTIONS exchangeto/exchangefrom (TICKERS.exchange is current-only), but it fires on 0.50% of universe name-months (upper bound; 2,701 of 542,282); median 7 flagged names per month, < 30 in 267 of 276 months; the zero block is 98.5-99.96% of each cross-section, qcut 2 bins; measured by osap-fetcher over all 276 decision months"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/ExchSwitch/spec.md
+    date: "2026-09-30"
+  ExclExp:
+    reason: "signal is int0a - epspiq; int0a is the IBES unadjusted actual EPS, not in Sharadar and not zero-filled by OSAP (missing -> row dropped); epspiq alone is a different signal"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/ExclExp/spec.md
+    date: "2026-09-30"
+  FEPS:
+    reason: "signal is IBES meanest (mean unadjusted FY1 EPS forecast); no analyst forecasts in Sharadar; not zero-filled by OSAP"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/FEPS/spec.md
+    date: "2026-09-30"
+  EarningsForecastDisparity:
+    reason: "every input is IBES (meanest FY1, long-term growth fgr5yr, fy0a); no analyst data in Sharadar; not zero-filled by OSAP"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/EarningsForecastDisparity/spec.md
+    date: "2026-09-30"
+  EarningsStreak:
+    reason: "inputs actual, meanest, price, anndats_act, statpers from IBES_EPS_Adj (analyst surprise streak); not in Sharadar; not zero-filled by OSAP; an SF1 eps-change streak would be a different signal"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/EarningsStreak/spec.md
+    date: "2026-09-30"
+  EarnSupBig:
+    reason: "mass point by construction: every non-big firm in an FF48 industry-month receives the same value (the big firms' mean surprise), so each cross-section holds <= 48 distinct values; the modal share is 12.8% / 9.1% / 15.1% at the 1998-12 / 2010-06 / 2021-11 probes and > 10% in 14 of 23 yearly probe months (1999-06..2021-06, max 17.5%, qcut 9 bins in 3); no tie handling exists without replacing the signal; file kept at factors/preflight_failed/EarnSupBig.py"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/EarnSupBig/spec.md
+    date: "2026-09-30"
