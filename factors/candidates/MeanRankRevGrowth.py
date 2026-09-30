@@ -57,6 +57,11 @@ THE MASS-POINT QUESTION (answer it here BEFORE running preflight):
   renormalises); the harness average rank covers exact ties.
 
 DEVIATIONS FROM OSAP:
+  - Each growth pair is required to span one fiscal year by reportperiod (+-45 days,
+    the project's yoy convention); under the 15-month staleness limit a firm that
+    stopped filing could otherwise return the same filing at both lags (g = 0) or a
+    9/15-month span (alpha_review batch14 major).
+  - The rank pool at lag s needs readings at both s and s+12 (OSAP: an m_aCompustat row).
   - revt (annual, available datadate + 6 months, stepping once a year) -> ART TTM
     revenue refreshed every quarter; growth is a true year-over-year change
     between two non-overlapping trailing-four-quarter sums. ARY is the closer
@@ -90,6 +95,8 @@ def _compute(ctx):
         return nan
     rev = f.pivot_table(index="ID", columns="months_back", values="revenue", aggfunc="last").astype(float)
     rev = rev.where(rev > 0)                 # revenue <= 0 or missing -> growth NaN
+    rp = f.assign(rp=pd.to_datetime(f["reportperiod"])).pivot_table(
+        index="ID", columns="months_back", values="rp", aggfunc="last")
 
     score = pd.Series(0.0, index=ctx.ids)
     for w, s in zip(_WEIGHTS, _LAGS[:-1]):
@@ -97,6 +104,10 @@ def _compute(ctx):
             return nan                       # a lag with no reading at all: no name has all five
         with np.errstate(divide="ignore", invalid="ignore"):
             g = np.log(rev[s]) - np.log(rev[s + 12])
+        # the two readings must be one fiscal year apart (the yoy convention, +-45 days);
+        # a stale repeat of the same filing or a 9/15-month span is NaN
+        gap = (rp[s] - rp[s + 12]).dt.days
+        g = g.where((gap - 365).abs() <= 45)
         g = g.replace([np.inf, -np.inf], np.nan).dropna()
         # raw ordinal rank among that month's market-scope names, 1 = highest growth
         r = g.rank(ascending=False, method="first")

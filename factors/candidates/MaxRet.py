@@ -40,6 +40,8 @@ THE MASS-POINT QUESTION (answer it here BEFORE running preflight):
   average rank covers the few exact ties.
 
 DEVIATIONS FROM OSAP:
+  - history_months=1 nulls names listing mid-month, which OSAP would score on the
+    days they traded.
   - crsp.ret (daily CRSP) -> SEP closeadj ratio (total return incl. dividends, no
     delisting return). closeadj is on a 3-decimal grid, so a back-adjusted price
     below $0.50 prints coarse returns; the price floor is on the unadjusted price,

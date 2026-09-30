@@ -45,7 +45,8 @@ DEVIATIONS FROM OSAP:
     trade).
   - A missing close at either endpoint is NaN; OSAP zero-fills a NaN ret
     inside an existing row and NaNs a missing calendar row. Interior months
-    are not read, so a missing interior close does not matter here.
+    are not read, so a missing interior close does not matter here, whereas
+    OSAP's compounded lags give NaN when an interior calendar month is missing.
   - Calendar business month-ends with a 7-day tolerance, not OSAP's row-based
     lags.
   - OSAP's paper portfolio period is 3 months; the harness holds one month.
