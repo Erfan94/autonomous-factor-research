@@ -1,0 +1,34 @@
+name: Accruals
+osap_acronym: Accruals
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b1
+declaration_order: 2
+date_tested: "2026-09-30"
+run: "003"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Sloan 1996 (AR); SignalDoc sign -1, Cat.Economic accruals"
+orientation: "low accruals = attractive (ascending=False)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/Accruals/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.118765, qcut_min_bins: 10, coverage_min_pct: 36.913634}
+stage1:   # from the run 003 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.00481, ic_tstat_nw: 1.835333, ic_half1_mean: 0.007505, ic_half2_mean: 0.002115, icir: 0.120357,
+   ls_sharpe: 0.329155, ls_ann_return_pct: 2.487965, ls_tstat_nw: 1.493073, ls_maxdd_pct: -26.468238, ls_raw_ann_return_pct: 2.920345,
+   ls_raw_sharpe: 0.402161, ls_raw_maxdd_pct: -25.588719, turnover_d10_pct: 19.134985, turnover_d1_pct: 19.515652, coverage_pct: 76.66454,
+   avg_names_per_decile: 150.62971, n_months: 276, ls_n_months: 276, ic_decay_h1: -5.2e-05, ic_decay_h6: -0.001948,
+   ic_decay_h12: 0.002425, tier_MEGA_ic_mean: 0.0046, tier_MID_ic_mean: 0.0015, tier_SMALL_ic_mean: 0.0066, ls_beta_mean: 0.010504,
+   ls_beta_fullwindow: 0.036537, ls_sharpe_ex_top_years: 0.106908, ls_top_years: "1999,2002,2005", ls_top_years_share_pct: 71.97081, ls_sharpe_bear: 0.580838,
+   ls_sharpe_bull: 0.074652, decile_avg_ret_pct: "0.814,0.941,1.056,0.994,1.126,1.033,1.054,1.197,1.215,1.057", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw]
+stage2_failed: []
+character: >
+  Weak everywhere: IC 0.0048 (NW t 1.84), halves 0.0075 then 0.0021, annual IC within +-0.03. Deciles are humped rather than monotone: D1 (high accruals) is the worst at 0.814 %/mo, D9 the best at 1.215 and D10 falls back to 1.057, so the raw spread (2.92%/yr, Sharpe 0.402) is mostly the D1 short. SMALL IC 0.0066, MID 0.0015, MEGA 0.0046. IC at lag 1 is -0.0001 and at lag 12 0.0024: no persistent signal. Turnover 19.1% / 19.5%. Beta near zero (0.04 full window), so the hedge barely moves it (2.49%/yr, Sharpe 0.329). Ex-top-years Sharpe 0.107 (1999, 2002, 2005 carry 72% of the summed LS); bear 0.581 / bull 0.075.
+caveats:
+  - "the working-capital accruals are built from ART year-over-year level changes, the analogue of the annual difference (translation docstring)"
+  - "72% of the summed LS return sits in the three best years; the ex-top-years Sharpe is 0.107"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (1.84 < 2.5); ic_mean also fails (0.0048 < 0.010). Every other bar passes (coverage 76.7%, 150.6 names per decile, 276 LS months). Not inconclusive. No prior Stage 1 rows exist; v0 carries no accruals leg.

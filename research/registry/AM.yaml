@@ -1,0 +1,35 @@
+name: AM
+osap_acronym: AM
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b1
+declaration_order: 1
+date_tested: "2026-09-30"
+run: "003"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Fama and French 1992 (JF); SignalDoc sign +1, Cat.Economic valuation"
+orientation: "high total assets / market equity = attractive"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/AM/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.056022, qcut_min_bins: 10, coverage_min_pct: 98.772468}
+stage1:   # from the run 003 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.00978, ic_tstat_nw: 1.25809, ic_half1_mean: 0.016786, ic_half2_mean: 0.002775, icir: 0.084214,
+   ls_sharpe: -0.148775, ls_ann_return_pct: -3.167645, ls_tstat_nw: -0.686562, ls_maxdd_pct: -80.138283, ls_raw_ann_return_pct: 4.71807,
+   ls_raw_sharpe: 0.216041, ls_raw_maxdd_pct: -57.812805, turnover_d10_pct: 12.503697, turnover_d1_pct: 13.356006, coverage_pct: 99.59486,
+   avg_names_per_decile: 195.682971, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.006905, ic_decay_h6: 0.005269,
+   ic_decay_h12: 0.006796, tier_MEGA_ic_mean: 0.004, tier_MID_ic_mean: 0.0076, tier_SMALL_ic_mean: 0.0124, ls_beta_mean: 0.251123,
+   ls_beta_fullwindow: 0.338784, ls_sharpe_ex_top_years: -0.449403, ls_top_years: "2003,2009,2021", ls_top_years_share_pct: -147.5021, ls_sharpe_bear: 0.267407,
+   ls_sharpe_bull: -0.236211, decile_avg_ret_pct: "0.818,0.783,0.903,0.843,0.946,0.916,0.984,1.068,1.189,1.211", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw]
+stage2_failed: []
+character: >
+  Deciles rise almost monotonically (D1 0.818 to D10 1.211 %/mo) and the raw D10-D1 earns 4.72%/yr (Sharpe 0.216), but the rank IC is weak (0.0098, NW t 1.26) and nearly vanishes in the second half (0.0168 then 0.0028); annual IC swings from -0.071 (2007) to +0.079 (2021). SMALL carries the most (IC 0.0124) and MEGA the least (0.0040). IC at lags 1-12 is flat around 0.006-0.007; turnover 12.5% / 13.4% a month. Raw beta 0.34 (ex ante 0.25): the hedged series loses 7.9 pp/yr to 3.17%/yr (Sharpe -0.149, MaxDD -80.1%), more than 0.25 times a normal market premium, so the ex-ante beta's timing costs return. Ex-top-years Sharpe -0.449 (2003, 2009, 2021); bear 0.267 / bull -0.236.
+caveats:
+  - "ic_mean misses 0.010 by 0.0002, but NW t 1.26 is far from 2.5; not a near miss on significance"
+  - "hedged minus raw return -7.9 pp/yr at beta 0.25: the ex-ante hedge's timing, not the mean beta, drives most of the gap"
+  - "a value-family relative of v0 Value (book-to-market); its overlap would only be measured at Stage 2, which it does not reach"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (1.26 < 2.5); ic_mean also fails (0.0098 < 0.010). Halves, raw spread, coverage (99.6%), names (195.7) and LS months (276) pass. Not inconclusive: the sample is full. Reads against v0: the blend's own IC is 0.0145 / t 2.62 with a second half of 0.0016, and this assets-based value signal shows the same fading second half.

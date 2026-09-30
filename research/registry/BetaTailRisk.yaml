@@ -1,0 +1,34 @@
+name: BetaTailRisk
+osap_acronym: BetaTailRisk
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b1
+declaration_order: 9
+date_tested: "2026-09-30"
+run: "003"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Kelly and Jiang 2014 (RFS); SignalDoc sign +1, Cat.Economic risk"
+orientation: "high Kelly-Jiang tail-risk beta = attractive"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/BetaTailRisk/spec.md}
+dimension_override: null
+history_gate_months: 72
+preflight: {masspoint_max_pct: 0.068353, qcut_min_bins: 0, coverage_min_pct: 0.0}
+stage1:   # from the run 003 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: -0.000576, ic_tstat_nw: -0.064822, ic_half1_mean: -0.000393, ic_half2_mean: -0.00076, icir: -0.004383,
+   ls_sharpe: -0.765835, ls_ann_return_pct: -8.79022, ls_tstat_nw: -3.304781, ls_maxdd_pct: -82.545032, ls_raw_ann_return_pct: 1.091964,
+   ls_raw_sharpe: 0.068985, ls_raw_maxdd_pct: -45.906821, turnover_d10_pct: 8.931415, turnover_d1_pct: 9.132346, coverage_pct: 60.169063,
+   avg_names_per_decile: 151.058333, n_months: 216, ls_n_months: 216, ic_decay_h1: -0.001366, ic_decay_h6: -0.001416,
+   ic_decay_h12: -0.00372, tier_MEGA_ic_mean: -0.0034, tier_MID_ic_mean: -0.005, tier_SMALL_ic_mean: 0.0048, ls_beta_mean: 0.785179,
+   ls_beta_fullwindow: 0.778209, ls_sharpe_ex_top_years: -1.236265, ls_top_years: "2005,2009,2020", ls_top_years_share_pct: -18.841073, ls_sharpe_bear: 0.154554,
+   ls_sharpe_bull: -1.010644, decile_avg_ret_pct: "0.973,0.980,0.948,0.906,1.014,1.038,1.121,1.058,1.081,1.064", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  No signal: IC -0.0006 (NW t -0.06), halves -0.0004 / -0.0008. SMALL is slightly positive (0.0048), MEGA and MID negative. Deciles drift up weakly (0.906-1.121 %/mo); raw spread 1.09%/yr (Sharpe 0.069) at beta 0.78, so the raw spread is mostly market exposure. Hedged -8.79%/yr, Sharpe -0.766, MaxDD -82.5%. Turnover 8.9% / 9.1%.
+caveats:
+  - "history gate 72 months; 216 of 276 months (from 2004)"
+  - "raw LS beta 0.78: the positive raw spread is market exposure, not tail-risk pricing"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (-0.06 < 2.5); ic_mean and ic_half_min also fail. Raw spread (1.09%/yr), coverage (60.2%), names (151.1), months (216 vs floor 194) pass. Not inconclusive.

@@ -1,0 +1,36 @@
+name: BidAskSpread
+osap_acronym: BidAskSpread
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b1
+declaration_order: 10
+date_tested: "2026-09-30"
+run: "003"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Amihud and Mendelson 1986 (JFE); SignalDoc sign +1, Cat.Economic liquidity"
+orientation: "wide Corwin-Schultz spread = attractive"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/BidAskSpread/spec.md}
+dimension_override: null
+history_gate_months: 3
+preflight: {masspoint_max_pct: 0.056022, qcut_min_bins: 10, coverage_min_pct: 98.226644}
+stage1:   # from the run 003 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: -0.020478, ic_tstat_nw: -2.770458, ic_half1_mean: -0.019478, ic_half2_mean: -0.021478, icir: -0.165508,
+   ls_sharpe: -0.481515, ls_ann_return_pct: -8.627418, ls_tstat_nw: -2.206191, ls_maxdd_pct: -94.679818, ls_raw_ann_return_pct: -0.936354,
+   ls_raw_sharpe: -0.04052, ls_raw_maxdd_pct: -80.469158, turnover_d10_pct: 59.976392, turnover_d1_pct: 65.972867, coverage_pct: 99.127207,
+   avg_names_per_decile: 194.76413, n_months: 276, ls_n_months: 276, ic_decay_h1: -0.018915, ic_decay_h6: -0.013712,
+   ic_decay_h12: -0.013588, tier_MEGA_ic_mean: -0.0179, tier_MID_ic_mean: -0.0195, tier_SMALL_ic_mean: -0.0214, ls_beta_mean: 0.937135,
+   ls_beta_fullwindow: 0.969789, ls_sharpe_ex_top_years: -0.88865, ls_top_years: "1999,2009,2020", ls_top_years_share_pct: -46.52952, ls_sharpe_bear: 0.25442,
+   ls_sharpe_bull: -0.957317, decile_avg_ret_pct: "0.968,1.018,0.982,0.988,0.977,0.967,0.942,0.975,0.944,0.890", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min, ls_raw_ann_return_pct]
+stage2_failed: []
+character: >
+  Consistently wrong-signed in the OSAP direction: IC -0.0205 (NW t -2.77), negative in both halves (-0.0195 / -0.0215) and in every tier (MEGA -0.0179, MID -0.0195, SMALL -0.0214); IC at lags 1-12 stays at -0.019 to -0.014. Deciles fall from D2 1.018 to D10 0.890 %/mo; raw spread -0.94%/yr (Sharpe -0.041) at beta 0.97, so wide-spread names carry about a unit of market beta and still earn less. Hedged -8.63%/yr, Sharpe -0.482, MaxDD -94.7%. Turnover 60.0% / 66.0%, the highest in the batch.
+caveats:
+  - "FLIP QUALIFIES: |NW t| 2.77 >= 2.74; the flipped hypothesis (BidAskSpreadFlip, narrow spread long) is a second hypothesis and must carry this caveat"
+  - "flipped reading, sign-derived from run 003 and not a screen: IC +0.0205, halves +0.0195 / +0.0215, raw spread about +0.94%/yr (arithmetic; not an exact negation under compounding)"
+  - "a flipped LS would carry beta about -0.97: its raw Sharpe is about 0.04, and the hedged number would come from the hedge"
+  - "docs/CONSTRUCTION.md (bootstrap) already names f_bidaskspreadflip as the construction layer's spread source"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (-2.77 < 2.5); ic_mean (-0.0205), ic_half_min (-0.0215) and the raw spread (-0.94%/yr) also fail. Coverage (99.1%), names (194.8), months (276) pass. Not inconclusive. The only member whose negative t reaches the 2.74 flip bar; the flipped screen is a separate hypothesis for the coordinator to declare.

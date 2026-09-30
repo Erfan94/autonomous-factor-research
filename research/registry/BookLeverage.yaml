@@ -1,0 +1,34 @@
+name: BookLeverage
+osap_acronym: BookLeverage
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b1
+declaration_order: 11
+date_tested: "2026-09-30"
+run: "003"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Fama and French 1992 (JF); SignalDoc sign -1, Cat.Economic leverage"
+orientation: "low book leverage = attractive (ascending=False)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/BookLeverage/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.055991, qcut_min_bins: 10, coverage_min_pct: 98.684787}
+stage1:   # from the run 003 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: -0.009584, ic_tstat_nw: -2.587439, ic_half1_mean: -0.007189, ic_half2_mean: -0.011978, icir: -0.168306,
+   ls_sharpe: -0.129636, ls_ann_return_pct: -1.287064, ls_tstat_nw: -0.647632, ls_maxdd_pct: -53.194809, ls_raw_ann_return_pct: -3.627764,
+   ls_raw_sharpe: -0.348005, ls_raw_maxdd_pct: -72.860284, turnover_d10_pct: 11.032872, turnover_d1_pct: 9.658736, coverage_pct: 99.615145,
+   avg_names_per_decile: 195.722826, n_months: 276, ls_n_months: 276, ic_decay_h1: -0.00946, ic_decay_h6: -0.007386,
+   ic_decay_h12: -0.006868, tier_MEGA_ic_mean: -0.0125, tier_MID_ic_mean: -0.0074, tier_SMALL_ic_mean: -0.0102, ls_beta_mean: 0.014544,
+   ls_beta_fullwindow: -0.038342, ls_sharpe_ex_top_years: -0.398178, ls_top_years: "1999,2002,2008", ls_top_years_share_pct: -152.007219, ls_sharpe_bear: 0.122203,
+   ls_sharpe_bull: -0.398599, decile_avg_ret_pct: "1.108,1.046,1.059,0.956,0.971,1.039,0.941,0.910,0.828,0.805", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min, ls_raw_ann_return_pct]
+stage2_failed: []
+character: >
+  Wrong-signed in the OSAP direction (low leverage long): IC -0.0096 (NW t -2.59), negative in both halves (-0.0072 / -0.0120) and every tier (MEGA -0.0125, MID -0.0074, SMALL -0.0102). Deciles fall almost monotonically from D1 1.108 to D10 0.805 %/mo; raw spread -3.63%/yr (Sharpe -0.348). High book leverage outperformed on this snapshot. Beta near zero (-0.04); hedged -1.29%/yr, Sharpe -0.130. IC at lags 1-12 is -0.010 to -0.007; turnover 11.0% / 9.7%.
+caveats:
+  - "|NW t| 2.59 < 2.74: the flipped (high-leverage long) reading does not qualify as a second hypothesis"
+  - "a monotone, wrong-signed decile shape: close to the flip bar but below it"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (-2.59 < 2.5); ic_mean (-0.0096), ic_half_min (-0.0120) and the raw spread (-3.63%/yr) also fail. Coverage (99.6%), names (195.7), months (276) pass. Not inconclusive. No flip: |t| 2.59 is under 2.74.

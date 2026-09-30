@@ -1,0 +1,35 @@
+name: BMdec
+osap_acronym: BMdec
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b1
+declaration_order: 4
+date_tested: "2026-09-30"
+run: "003"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Fama and French 1992 (JF); SignalDoc sign +1, Cat.Economic valuation"
+orientation: "high book / December market equity = attractive"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/BMdec/spec.md}
+dimension_override: ARY
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.057274, qcut_min_bins: 0, coverage_min_pct: 0.0}
+stage1:   # from the run 003 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.004509, ic_tstat_nw: 0.817304, ic_half1_mean: 0.01177, ic_half2_mean: -0.002752, icir: 0.057989,
+   ls_sharpe: 0.053899, ls_ann_return_pct: 0.607034, ls_tstat_nw: 0.218793, ls_maxdd_pct: -63.962136, ls_raw_ann_return_pct: 3.684946,
+   ls_raw_sharpe: 0.310776, ls_raw_maxdd_pct: -46.561397, turnover_d10_pct: 8.860541, turnover_d1_pct: 6.847385, coverage_pct: 92.110194,
+   avg_names_per_decile: 184.998889, n_months: 270, ls_n_months: 270, ic_decay_h1: 0.003868, ic_decay_h6: 0.004065,
+   ic_decay_h12: 0.005158, tier_MEGA_ic_mean: -0.0018, tier_MID_ic_mean: 0.0026, tier_SMALL_ic_mean: 0.0061, ls_beta_mean: -0.046971,
+   ls_beta_fullwindow: -0.031769, ls_sharpe_ex_top_years: -0.423303, ls_top_years: "2000,2003,2021", ls_top_years_share_pct: 694.426898, ls_sharpe_bear: 0.089065,
+   ls_sharpe_bull: 0.075994, decile_avg_ret_pct: "0.842,0.857,0.847,0.862,0.922,0.965,1.012,1.088,1.037,1.149", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  Measured under dimension ARY (fiscal-year book over the December market value). Deciles rise smoothly (D1 0.842 to D10 1.149 %/mo) and the raw spread earns 3.68%/yr (Sharpe 0.311), but the rank IC is 0.0045 (NW t 0.82) and turns negative in the second half (0.0118 then -0.0028). MEGA IC -0.0018, SMALL 0.0061. IC at lags 1-12 flat at 0.004-0.005; turnover 8.9% / 6.8%. Beta near zero (-0.03 full window, -0.05 ex ante), yet the hedged series loses 3.1 pp/yr (0.61%/yr, Sharpe 0.054, MaxDD -64.0%), so the hedge's month-to-month beta timing costs return. Ex-top-years Sharpe -0.423 (2000, 2003, 2021).
+caveats:
+  - "dimension override ARY (not the project default ART)"
+  - "hedged return 3.1 pp below raw at a mean beta near zero: the ex-ante hedge's timing, not its level"
+  - "a value-family relative of v0 Value; the second-half IC is negative"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (0.82 < 2.5); ic_mean (0.0045) and ic_half_min (-0.0028) also fail. Raw spread, coverage (92.1%), names (185.0) and months (270) pass. Not inconclusive. Same shape as AM in this batch: the value premium fades after 2010 on this snapshot.

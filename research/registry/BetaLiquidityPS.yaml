@@ -1,0 +1,33 @@
+name: BetaLiquidityPS
+osap_acronym: BetaLiquidityPS
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b1
+declaration_order: 8
+date_tested: "2026-09-30"
+run: "003"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Pastor and Stambaugh 2003 (JPE); SignalDoc sign +1, Cat.Economic liquidity"
+orientation: "high Pastor-Stambaugh liquidity beta = attractive"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/BetaLiquidityPS/spec.md}
+dimension_override: null
+history_gate_months: 36
+preflight: {masspoint_max_pct: 0.059737, qcut_min_bins: 0, coverage_min_pct: 0.0}
+stage1:   # from the run 003 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: -0.000842, ic_tstat_nw: -0.268821, ic_half1_mean: 0.00125, ic_half2_mean: -0.002916, icir: -0.0183,
+   ls_sharpe: -0.17279, ls_ann_return_pct: -1.298715, ls_tstat_nw: -0.689779, ls_maxdd_pct: -49.10555, ls_raw_ann_return_pct: -0.56695,
+   ls_raw_sharpe: -0.076249, ls_raw_maxdd_pct: -47.237791, turnover_d10_pct: 13.876809, turnover_d1_pct: 13.8169, coverage_pct: 67.153252,
+   avg_names_per_decile: 169.376744, n_months: 215, ls_n_months: 215, ic_decay_h1: -0.000724, ic_decay_h6: -0.000243,
+   ic_decay_h12: -0.001048, tier_MEGA_ic_mean: -0.0019, tier_MID_ic_mean: -0.0067, tier_SMALL_ic_mean: 0.0031, ls_beta_mean: 0.006016,
+   ls_beta_fullwindow: 0.108979, ls_sharpe_ex_top_years: -0.620562, ls_top_years: "2006,2007,2020", ls_top_years_share_pct: -184.515618, ls_sharpe_bear: -0.537073,
+   ls_sharpe_bull: -0.050987, decile_avg_ret_pct: "1.095,0.939,1.017,1.038,1.076,0.972,0.972,0.994,0.946,1.048", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min, ls_raw_ann_return_pct]
+stage2_failed: []
+character: >
+  No signal: IC -0.0008 (NW t -0.27), halves 0.0013 / -0.0029, annual IC within +-0.04. Deciles flat and noisy (0.939-1.095 %/mo, D1 the highest); raw spread -0.57%/yr (Sharpe -0.076). Beta 0.11; hedged -1.30%/yr. IC at every lag within +-0.001. Turnover 13.9% / 13.8%.
+caveats:
+  - "history gate 36 months; 215 of 276 months (from 2004)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (-0.27 < 2.5); ic_mean, ic_half_min and the raw spread (-0.57%/yr) also fail. Coverage (67.2%), names (169.4), months (215 vs floor 193) pass. Not inconclusive.

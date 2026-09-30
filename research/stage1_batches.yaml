@@ -12,4 +12,6 @@ batches:
   6: [MeanRankRevGrowth, Mom12mOffSeason, Mom6m, MomOffSeason, MomOffSeason06YrPlus, MomSeason, MomSeason06YrPlus, MomSeasonShort, NOA, NetDebtFinance, NetEquityFinance, NetPayoutYield]
   7: [OPLeverage, OperProfRD, OrgCap, PctAcc, PctTotAcc, Price, PriceDelayRsq, PriceDelaySlope, PriceDelayTstat, RealizedVol, ResidualMomentum, ReturnSkew]
   8: [ReturnSkew3F, RevenueSurprise, RoE, SP, STreversal, ShareIss1Y, ShareIss5Y, TotalAccruals, TrendFactor, VarCF, VolMkt, VolSD]
-  9: [VolumeTrend, XFIN, cfp, dNoa, grcapx, grcapx3y, roaq, zerotrade12M, zerotrade1M, zerotrade6M]
+  9: [VolumeTrend, XFIN, cfp, dNoa, grcapx, grcapx3y, roaq, zerotrade12M, zerotrade1M, zerotrade6M, BidAskSpreadFlip]
+amendments:
+  - {ts: "2026-09-30T23:56:54Z", batch: 9, added: BidAskSpreadFlip, reason: "flip_hypothesis_qualified by run 003 (BidAskSpread NW t -2.77); appended to the last batch, which had 10 of 12 slots"}

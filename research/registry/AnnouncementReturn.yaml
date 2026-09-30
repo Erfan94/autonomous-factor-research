@@ -1,0 +1,35 @@
+name: AnnouncementReturn
+osap_acronym: AnnouncementReturn
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b1
+declaration_order: 3
+date_tested: "2026-09-30"
+run: "003"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Chan, Jegadeesh and Lakonishok 1996 (JF); SignalDoc sign +1, Cat.Economic earnings event"
+orientation: "high earnings-announcement return = attractive"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/AnnouncementReturn/spec.md}
+dimension_override: null
+history_gate_months: 1
+preflight: {masspoint_max_pct: 0.060096, qcut_min_bins: 0, coverage_min_pct: 0.0}
+stage1:   # from the run 003 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.009169, ic_tstat_nw: 2.276391, ic_half1_mean: 0.010214, ic_half2_mean: 0.008124, icir: 0.166492,
+   ls_sharpe: 0.642795, ls_ann_return_pct: 5.189877, ls_tstat_nw: 2.584721, ls_maxdd_pct: -21.998528, ls_raw_ann_return_pct: 2.512766,
+   ls_raw_sharpe: 0.29605, ls_raw_maxdd_pct: -25.318259, turnover_d10_pct: 36.273447, turnover_d1_pct: 36.19091, coverage_pct: 66.530514,
+   avg_names_per_decile: 173.453365, n_months: 208, ls_n_months: 208, ic_decay_h1: 0.003525, ic_decay_h6: 0.007423,
+   ic_decay_h12: 0.001167, tier_MEGA_ic_mean: 0.0068, tier_MID_ic_mean: 0.0129, tier_SMALL_ic_mean: 0.0067, ls_beta_mean: -0.178592,
+   ls_beta_fullwindow: -0.207356, ls_sharpe_ex_top_years: 0.342466, ls_top_years: "2007,2013,2017", ls_top_years_share_pct: 53.771341, ls_sharpe_bear: -0.988398,
+   ls_sharpe_bull: 1.129547, decile_avg_ret_pct: "1.077,1.022,1.016,1.077,1.012,1.132,1.114,1.006,1.096,1.287", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw]
+stage2_failed: []
+character: >
+  Scorable from 2004 only on this snapshot (208 months; zero coverage at the 1998-12 probe). IC 0.0092 (NW t 2.28), stable across halves (0.0102 / 0.0081). The deciles are flat from D1 to D9 (1.006-1.132 %/mo) and D10 jumps to 1.287, so the raw spread (2.51%/yr, Sharpe 0.296) is a D10 tail. MID carries it (IC 0.0129) over MEGA and SMALL (0.0068 / 0.0067). IC peaks at lag 3 (0.0090) and fades to 0.0012 by lag 12: a drift that lasts about a quarter. Turnover 36.3% / 36.2%, the highest in the batch. Beta -0.21 (full window), so the hedge adds return: hedged 5.19%/yr, Sharpe 0.643. Bear -0.988 / bull 1.130; ex-top-years Sharpe 0.343.
+caveats:
+  - "208-month window (2004-2021); the LS-month floor scales to 187 and is met"
+  - "hedged Sharpe 0.643 against raw 0.296 comes from a negative beta, not from the signal"
+  - "the tier table's ALL row counts 207 LS months against the block's 208 (bucket minimum of 50 names in the first month): diagnostic only"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (2.28 < 2.5); ic_mean also fails (0.0092 < 0.010). The closest miss in the batch, but on a 208-month sample. Halves, raw spread, coverage (66.5%), names (173.5) and months pass. Not inconclusive: 208 months clear both the 120-month minimum and the 187 floor.

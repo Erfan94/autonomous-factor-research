@@ -1,0 +1,38 @@
+name: CBOperProf
+osap_acronym: CBOperProf
+status: stage2_pending
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b1
+declaration_order: 12
+date_tested: "2026-09-30"
+run: "003"
+stage2_run: null
+stage1_decision: PASS
+decided_by: "all bars"
+source: "Ball et al. 2016 (JFE); SignalDoc sign +1, Cat.Economic profitability"
+orientation: "high cash-based operating profitability = attractive"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/CBOperProf/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.116414, qcut_min_bins: 10, coverage_min_pct: 37.658922}
+stage1:   # from the run 003 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.020856, ic_tstat_nw: 3.735701, ic_half1_mean: 0.028976, ic_half2_mean: 0.012737, icir: 0.259663,
+   ls_sharpe: 0.901125, ls_ann_return_pct: 11.235602, ls_tstat_nw: 3.809961, ls_maxdd_pct: -37.219465, ls_raw_ann_return_pct: 7.23582,
+   ls_raw_sharpe: 0.478702, ls_raw_maxdd_pct: -55.454488, turnover_d10_pct: 10.038388, turnover_d1_pct: 15.577788, coverage_pct: 73.422315,
+   avg_names_per_decile: 144.25942, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.017447, ic_decay_h6: 0.015261,
+   ic_decay_h12: 0.01465, tier_MEGA_ic_mean: 0.0252, tier_MID_ic_mean: 0.0203, tier_SMALL_ic_mean: 0.021, ls_beta_mean: -0.480863,
+   ls_beta_fullwindow: -0.565208, ls_sharpe_ex_top_years: 0.638079, ls_top_years: "2000,2002,2021", ls_top_years_share_pct: 54.133406, ls_sharpe_bear: 0.614391,
+   ls_sharpe_bull: 0.999406, decile_avg_ret_pct: "0.545,0.896,0.919,0.974,0.973,1.124,1.273,1.202,1.231,1.148", delisting_adjusted_pct: 0.436673}
+stage1_failed: []
+stage2_failed: []
+character: >
+  The spread is a short-leg effect: D1 earns 0.545 %/mo against 0.896-1.273 for D2-D10, the top is flat (D6-D10 at 1.124-1.273) and D10 (1.148) sits below D7 (1.273), so it identifies cash-unprofitable firms to avoid rather than grading the winners. Raw spread 7.24%/yr (Sharpe 0.479, MaxDD -55.5%). IC 0.0209 (NW t 3.74) is uniform across tiers (MEGA 0.0252, MID 0.0203, SMALL 0.0210): not a small-cap effect. Halves 0.0290 then 0.0127; the second half leans on 2021 (+0.094). IC decays slowly (lag 1 0.0174, lag 12 0.0147); turnover 10.0% / 15.6%. Beta -0.57 (ex ante -0.48): the hedge adds 4.0 pp/yr, to 11.24%/yr and Sharpe 0.901 (MaxDD -37.2%). The three best years (2000 at +92.5%, 2002, 2021) carry 54% of the summed LS; ex-top-years Sharpe 0.638; bear 0.614 / bull 0.999. Performance delistings are 21 rows in the whole universe (0.00%), merger delistings 0.43%.
+caveats:
+  - "hedged Sharpe 0.901 is nearly double the raw 0.479: at beta -0.57 the hedge adds the market premium; the factor's own strength is the raw series"
+  - "Financials and Real Estate are nearly absent (coverage 3.4% / 1.8%) by OSAP's SIC 6000-6999 exclusion, read from TODAY's SIC (disclosed look-ahead, as in D3)"
+  - "early coverage is thin (37.7% at the 1998-12 probe; 27-month lookback against the 1997-12 panel start); the block carries no coverage-by-year table, so 1999-2000 coverage cannot be confirmed, and 2000 is the largest LS year (+92.5%)"
+  - "second-half IC 0.0127 is about half the first half's 0.0290, and the 2021 IC (+0.094) carries much of it: the 2011-2020 annual ICs average about 0.006"
+  - "approx translation: xpp and xacc terms dropped (OSAP zero-fills them); cor embeds D&A for about 36% of rows (spec)"
+  - "delisting_adjusted_pct 0.44% is the universe-wide forward-return mix, identical on all 12 blocks, not this factor's short leg"
+decision: >
+  Passes every Stage 1 bar: IC 0.0209 >= 0.010, NW t 3.74 >= 2.5, both halves positive (min 0.0127), raw spread 7.24%/yr > 0, coverage 73.4% >= 40, 144.3 names per decile, 276 LS months. Status stage2_pending; family to be assigned in Phase C. Standalone it is stronger than the v0 blend (0.0145 / t 2.62). As a profitability measure it will be projected on v0 Profitability (OSAP OperProf) at Stage 2, where overlap is the question; the residual bar, not this screen, decides.

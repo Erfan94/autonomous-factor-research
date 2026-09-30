@@ -132,7 +132,7 @@ legs (each with its `family`), `families` (the family table string), `constructi
 β / ex-regime rows), `baseline` (the version's own `--baseline --stage 2` block: IC, NW t,
 hedged Sharpe, ann ret, vol, MaxDD, hit, turnover, coverage, tiers — all GROSS — plus
 `ls_raw_sharpe`, `ls_beta_mean`, `ls_beta_fullwindow`, `ls_sharpe_ex_top_years`,
-`ls_top_years`, `ls_sharpe_bear`, `ls_sharpe_bull`), `construction` (the Stage 3 table: per
+`ls_top_years`, `ls_sharpe_bear`, `ls_sharpe_bull`) (`ls_top_years_share_pct` is the top-3 years' share of the SUMMED LS return: meaningless when that sum is near zero or negative — values outside 0–100 are read as undefined, never as concentration), `construction` (the Stage 3 table: per
 variant hedged Sharpe, LS t, ann ret, vol, MaxDD, worst 12m, turnover, raw Sharpe, β),
 three lines of `character`. Never edit a past block.
 

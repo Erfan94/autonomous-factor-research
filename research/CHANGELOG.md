@@ -18,3 +18,10 @@
 - Caveats: 79% of summed LS return in 2000/2001/2003 (ex-top-years Sharpe 0.16); Profitability/Investment coverage 56%/48% at 1998-12; the hedge cost 0.12 Sharpe on a negative-beta LS.
 - Run 002 (Stage 3, never a gate): icir_weighted 0.643 hedged but raw 0.441 at beta -0.45; tier_neutral 0.639; buffered 0.555 at half the turnover; vol_targeted 0.306.
 - Five baseline registry rows; two records.py defects found (phase gate, frontier filename match), being fixed by the coordinator (scripts/, outside HARNESS_SHA).
+
+## 2026-09-30 — Stage 1 batch 1 (run 003): CBOperProf passes, 11 rejected, 0 inconclusive
+- PASS CBOperProf: IC 0.0209, NW t 3.74, halves 0.0290 / 0.0127, raw LS 7.24%/yr (Sharpe 0.48), coverage 73.4%. The spread is in D1 (the short leg), tiers are uniform, beta is -0.57, so the hedge lifts the Sharpe to 0.90. The top 3 years hold 54% of the summed LS; ex-top-years Sharpe 0.64. Financials/Real Estate are excluded by today's SIC. Status stage2_pending; family owed in Phase C.
+- Rejected on ic_tstat_nw (every one also fails ic_mean): AM 1.26, Accruals 1.84, AnnouncementReturn 2.28 (208 m), BMdec 0.82, BPEBM -2.06, Beta -0.97, BetaFP -1.28, BetaLiquidityPS -0.27, BetaTailRisk -0.06, BidAskSpread -2.77, BookLeverage -2.59.
+- Flip: BidAskSpread |t| 2.77 >= 2.74 qualifies BidAskSpreadFlip as a second hypothesis (flipped LS beta about -0.97, raw Sharpe about 0.04). BookLeverage (2.59) and BPEBM (2.06) do not qualify.
+- Provenance verified on 12 blocks with 0 validation warnings. process_finding: docs/CONSTRUCTION.md already names f_bidaskspreadflip as the construction-layer spread source (bootstrap).
+- Hedge reading: for AM and BMdec, hedged return is 7.9 and 3.1 pp below raw at mean beta 0.25 and -0.05. That gap comes from ex-ante beta timing and matters for the hedged Stage 2 guard.

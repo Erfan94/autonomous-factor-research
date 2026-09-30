@@ -1,0 +1,34 @@
+name: BPEBM
+osap_acronym: BPEBM
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b1
+declaration_order: 5
+date_tested: "2026-09-30"
+run: "003"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Penman, Richardson and Tuna 2007 (JAR); SignalDoc sign -1, Cat.Economic leverage"
+orientation: "low leverage component of BM (BP - EBM) = attractive (ascending=False)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/BPEBM/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.177305, qcut_min_bins: 10, coverage_min_pct: 74.177992}
+stage1:   # from the run 003 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: -0.009189, ic_tstat_nw: -2.057215, ic_half1_mean: -0.007163, ic_half2_mean: -0.011214, icir: -0.130335,
+   ls_sharpe: -0.036227, ls_ann_return_pct: -0.380801, ls_tstat_nw: -0.155787, ls_maxdd_pct: -55.640573, ls_raw_ann_return_pct: 0.38748,
+   ls_raw_sharpe: 0.034278, ls_raw_maxdd_pct: -48.078015, turnover_d10_pct: 20.012694, turnover_d1_pct: 17.673824, coverage_pct: 75.627625,
+   avg_names_per_decile: 148.592391, n_months: 276, ls_n_months: 276, ic_decay_h1: -0.009095, ic_decay_h6: -0.007878,
+   ic_decay_h12: -0.005798, tier_MEGA_ic_mean: 0.001, tier_MID_ic_mean: -0.0058, tier_SMALL_ic_mean: -0.0145, ls_beta_mean: 0.244163,
+   ls_beta_fullwindow: 0.225396, ls_sharpe_ex_top_years: -0.448256, ls_top_years: "1999,2001,2020", ls_top_years_share_pct: -912.962386, ls_sharpe_bear: 0.58935,
+   ls_sharpe_bull: -0.500342, decile_avg_ret_pct: "0.993,0.967,0.968,0.926,0.899,1.079,0.930,1.087,0.876,1.026", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  The OSAP orientation (low BP-EBM long) is wrong-signed on this snapshot: IC -0.0092 (NW t -2.06), negative in both halves (-0.0072 / -0.0112). Deciles are flat and noisy (0.876-1.087 %/mo, no shape); raw spread 0.39%/yr (Sharpe 0.034). The negative IC sits in SMALL (-0.0145) and MID (-0.0058); MEGA is +0.0010. IC at lag 1-12 stays negative (-0.009 to -0.006). Beta 0.23; hedged -0.38%/yr (Sharpe -0.036). Turnover 20.0% / 17.7%.
+caveats:
+  - "negative NW t -2.06 is below the 2.74 flip bar: no flipped hypothesis qualifies"
+  - "the IC and the decile spread disagree in sign (IC negative, raw spread slightly positive): no usable signal either way"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (-2.06 < 2.5); ic_mean (-0.0092) and ic_half_min (-0.0112) also fail. The raw spread passes at 0.39%/yr. Not inconclusive (coverage 75.6%, 148.6 names, 276 months). |t| 2.06 < 2.74, so no flip is screened.

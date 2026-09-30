@@ -96,7 +96,7 @@ def build_index():
     for r in rows:
         lines.append(f"  - {{name: {r['name']}, status: {r['status']}, batch: {r['batch']}, "
                      f"ic: {f(r['ic'])}, ic_t: {f(r['ic_t'], 2)}, sharpe: {f(r['sharpe'], 3)}, "
-                     f"ret: {f(r['ret'], 2)}, cov: {f(r['cov'], 1)}, resid_t: {f(r['resid_t'], 2)}, "
+                     f"ret: {f(r['ret'], 2)}, raw_ret: {f(r['raw_ret'], 2)}, cov: {f(r['cov'], 1)}, resid_t: {f(r['resid_t'], 2)}, "
                      f"dic_t: {f(r['dic_t'], 2)}, dls_t: {f(r['dls_t'], 2)}, span_t: {f(r['span_t'], 2)}, d_sharpe: {f(r['d_sharpe'], 3)}, "
                      f"beta: {f(r['beta'], 2)}, sh_exreg: {f(r['sh_exreg'], 3)}, "
                      f"family: {json.dumps(r['family'])}, decided_by: {json.dumps(r['decided_by'])}, run: {json.dumps(r['run'])}}}")

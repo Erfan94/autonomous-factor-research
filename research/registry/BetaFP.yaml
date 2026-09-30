@@ -1,0 +1,34 @@
+name: BetaFP
+osap_acronym: BetaFP
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b1
+declaration_order: 7
+date_tested: "2026-09-30"
+run: "003"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Frazzini and Pedersen 2014 (JFE); SignalDoc sign +1, Cat.Economic other"
+orientation: "high Frazzini-Pedersen beta = attractive"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/BetaFP/spec.md}
+dimension_override: null
+history_gate_months: 24
+preflight: {masspoint_max_pct: 0.057571, qcut_min_bins: 0, coverage_min_pct: 0.0}
+stage1:   # from the run 003 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: -0.012302, ic_tstat_nw: -1.27602, ic_half1_mean: -0.014355, ic_half2_mean: -0.010265, icir: -0.07784,
+   ls_sharpe: -0.65537, ls_ann_return_pct: -11.483847, ls_tstat_nw: -3.167625, ls_maxdd_pct: -94.836832, ls_raw_ann_return_pct: 1.129141,
+   ls_raw_sharpe: 0.046806, ls_raw_maxdd_pct: -73.099773, turnover_d10_pct: 12.393832, turnover_d1_pct: 12.333771, coverage_pct: 83.108973,
+   avg_names_per_decile: 178.136364, n_months: 253, ls_n_months: 253, ic_decay_h1: -0.011879, ic_decay_h6: -0.011092,
+   ic_decay_h12: -0.011538, tier_MEGA_ic_mean: -0.014, tier_MID_ic_mean: -0.0144, tier_SMALL_ic_mean: -0.008, ls_beta_mean: 1.161,
+   ls_beta_fullwindow: 1.220128, ls_sharpe_ex_top_years: -1.030481, ls_top_years: "2009,2016,2020", ls_top_years_share_pct: -21.056663, ls_sharpe_bear: -0.021882,
+   ls_sharpe_bull: -1.233413, decile_avg_ret_pct: "0.948,1.047,1.049,1.046,1.058,1.092,1.018,1.039,0.967,1.042", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  Same reading as Beta: IC -0.0123 (NW t -1.28), negative in both halves (-0.0144 / -0.0103) and in every tier (MEGA -0.0140, MID -0.0144, SMALL -0.0080). Deciles flat (0.948-1.092 %/mo); raw spread 1.13%/yr (Sharpe 0.047) at beta 1.22. Hedged -11.48%/yr, Sharpe -0.655, MaxDD -94.8%. Bear -0.022 / bull -1.233. Turnover 12.4% / 12.3%.
+caveats:
+  - "history gate 24 months; 253 of 276 months scorable"
+  - "raw LS beta 1.22; the betting-against-beta direction is the flip, and its |t| 1.28 is far below 2.74"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (-1.28 < 2.5); ic_mean (-0.0123) and ic_half_min (-0.0144) also fail. Raw spread, coverage (83.1%), names (178.1), months (253 vs floor 227) pass. Not inconclusive. No flip (|t| < 2.74).
