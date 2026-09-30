@@ -56,6 +56,8 @@ THE MASS-POINT QUESTION (answer it here BEFORE running preflight):
   the harness average rank covers the few exact ties.
 
 DEVIATIONS FROM OSAP:
+  - Sharadar positive capex (a sign-inverted outflow) is NaN at every date read
+    (capex_sign_ruling; OSAP's gross capx is never negative).
   - Mean weights: equal weight over three fiscal-year ratios, not OSAP's
     (n_cur, 12, 12, 12 - n_cur)/36 month weights over four annual vintages.
   - Timing: ARY filing at datekey (known from filing) not datadate + 6 months;
@@ -94,6 +96,8 @@ def _compute(ctx):
     cap2 = -y2["capex_lag"].reindex(idx).astype(float)
     rev2 = y2["revenue_lag"].reindex(idx).astype(float)
 
+    # Sharadar positive capex is a sign-inverted outflow: capx < 0 -> NaN at every date (capex_sign_ruling)
+    cap0, cap1, cap2 = (c.where(c >= 0) for c in (cap0, cap1, cap2))
     x0 = cap0 / rev0.where(rev0 > 0)
     x1 = cap1 / rev1.where(rev1 > 0)
     x2 = cap2 / rev2.where(rev2 > 0)

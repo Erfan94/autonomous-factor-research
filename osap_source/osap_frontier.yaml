@@ -505,3 +505,8 @@ excluded:
     class: data_unavailable
     spec: osap_source/cache/b4e911e6/tang/spec.md
     date: "2026-09-30"
+  UpRecomm:
+    reason: "needs IBES analyst recommendations (ireccd); no analyst data in Sharadar; also a binary upgrade flag"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/UpRecomm/spec.md
+    date: "2026-09-30"

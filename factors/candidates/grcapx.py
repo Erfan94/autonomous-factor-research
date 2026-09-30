@@ -33,6 +33,8 @@ THE MASS-POINT QUESTION (answer it here BEFORE running preflight):
     average-rank treatment (far below the 10% bar).
 
 DEVIATIONS FROM OSAP:
+  - Sharadar positive capex (a sign-inverted outflow) is NaN at every date read
+    (capex_sign_ruling; OSAP's gross capx is never negative).
   - capx: -SF1.capex at ARY, not ART. ART capex is a TTM sum, null on 46% of
     firms in 1998 (ARY 0.5%); a two-year-apart difference of ART flows agrees
     with ARY at fiscal year-end, but ARY matches OSAP's annual item and does
@@ -66,7 +68,9 @@ def _grcapx(ctx, years):
     """Growth of annual capex over capex `years` fiscal years earlier, null
     where the base is not positive. `ctx` is a MonthContext."""
     y = ctx.fundamentals_yoy(["capex"], years=years, dimension="ARY")
+    # Sharadar positive capex is a sign-inverted outflow: capx < 0 -> NaN at every date (capex_sign_ruling)
     capx = -y["capex"].astype(float)
+    capx = capx.where(capx >= 0)
     base = -y["capex_lag"].astype(float)
     return (capx - base) / base.where(base > 0)
 

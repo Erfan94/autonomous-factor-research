@@ -95,8 +95,9 @@ def _compute(ctx):
     che = f("cashneq") + f("investmentsc").fillna(0.0)
     che_lag = f("cashneq_lag") + f("investmentsc_lag").fillna(0.0)
 
-    noa = _noa_level(f("debt"), f("assets"), f("liabilities"), che)
-    noa_lag = _noa_level(f("debt_lag"), f("assets_lag"), f("liabilities_lag"), che_lag)
+    # OSAP zero-fills dltt/dlc itself; a missing balance sheet still gives NaN through assets
+    noa = _noa_level(f("debt").fillna(0.0), f("assets"), f("liabilities"), che)
+    noa_lag = _noa_level(f("debt_lag").fillna(0.0), f("assets_lag"), f("liabilities_lag"), che_lag)
 
     assets_lag = f("assets_lag")
     dnoa = (noa - noa_lag) / assets_lag.where(assets_lag > 0)

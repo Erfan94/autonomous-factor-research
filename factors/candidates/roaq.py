@@ -106,7 +106,7 @@ FACTOR = FactorDef(
     inputs=("SF1.netinc", "SF1.netincdis", "SF1.assets"),
     osap_acronym="roaq",
     source="Balakrishnan, Bartov and Faurel 2010 (Journal of Accounting and Economics)",
-    lookback_months=8,              # 110-day gate + period-end-to-filing gap, plus the prior quarter's row
+    lookback_months=10,             # 110-day gate + period-end-to-filing gap, plus the prior quarter's row
     notes="(netinc + netincdis) ARQ latest quarter / previous-quarter assets by reportperiod (2..4 month gap); OVERRIDE: latest ARQ filing <= 110 days old (in place of max_fundamental_age_months 15), as EarningsSurprise; assets_1 > 0",
     field_mappings=(
         ("compustat.ibq", "SF1.netinc + SF1.netincdis (dimension ARQ)",

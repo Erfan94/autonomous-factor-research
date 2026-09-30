@@ -41,6 +41,8 @@ THE MASS-POINT QUESTION (answer it here BEFORE running preflight):
     bar).
 
 DEVIATIONS FROM OSAP:
+  - Sharadar positive capex (a sign-inverted outflow) is NaN at every date read
+    (capex_sign_ruling; OSAP's gross capx is never negative).
   - capx: -SF1.capex at ARY, not ART. ART capex is a TTM sum, null on 46% of
     firms in 1998 (ARY 0.5%); year-over-year windows one to three years apart
     do not overlap, but ARY matches OSAP's annual item and does not refresh
@@ -84,7 +86,9 @@ def _lagged_capx(ctx):
     out = pd.DataFrame(index=ctx.ids, columns=["capx", "l1", "l2", "l3"], dtype=float)
     if h.empty:
         return out
+    # Sharadar positive capex is a sign-inverted outflow: capx < 0 -> NaN at every date (capex_sign_ruling)
     h = h.assign(capex=-h["capex"].astype(float))
+    h = h.assign(capex=h["capex"].where(h["capex"] >= 0))
     cur = h[h["q_back"] == 0].set_index("ID")
     out["capx"] = cur["capex"].reindex(out.index)
     past = h[h["q_back"] > 0]
@@ -116,7 +120,7 @@ FACTOR = FactorDef(
     inputs=("SF1.capex",),
     osap_acronym="grcapx3y",
     source="Anderson and Garcia-Feijoo 2006 (Journal of Finance)",
-    lookback_months=58,             # 36m (three fiscal years) + 15m max filing age + ~4m report-period-to-filing lag, rounded up
+    lookback_months=55,             # 36m (three fiscal years) + 15m max filing age + ~4m report-period-to-filing lag
     # No history_months: no SEP price window is read.
     dimension="ARY",                # ART capex is a TTM sum, 46% null in 1998; annual item wanted
     notes="current annual capex over the mean of the prior three fiscal years (level ratio, 1.0 = flat), base > 0 only, all three lags required, no ppent fallback",

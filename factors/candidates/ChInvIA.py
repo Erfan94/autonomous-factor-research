@@ -39,6 +39,8 @@ THE MASS-POINT QUESTION (answer it here BEFORE running preflight):
     harness's average-rank tie treatment (well under the 10% mass-point bar).
 
 DEVIATIONS FROM OSAP:
+  - Sharadar positive capex (a sign-inverted outflow) is NaN at every date read
+    (capex_sign_ruling; OSAP's gross capx is never negative).
   - capx: -SF1.capex, ARY not ART. ART capex is null 46% of firms in 1998 (ARY
     0.5%) and is a TTM sum that equals ARY only at fiscal year-end; ARY matches
     OSAP's annual item and its two prior fiscal years.
@@ -86,6 +88,8 @@ def _pchcapx(c):
     l12 = -y1["capex_lag"].astype(float)
     l24 = -y2["capex_lag"].reindex(y1.index).astype(float)
 
+    # Sharadar positive capex is a sign-inverted outflow: capx < 0 -> NaN at every date (capex_sign_ruling)
+    capx, l12, l24 = (c.where(c >= 0) for c in (capx, l12, l24))
     avg = 0.5 * (l12 + l24)
     two = (capx - avg) / avg.where(avg > 0)
     one = (capx - l12) / l12.where(l12 > 0)
