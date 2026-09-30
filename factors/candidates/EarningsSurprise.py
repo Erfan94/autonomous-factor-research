@@ -140,8 +140,8 @@ FACTOR = FactorDef(
     inputs=("SF1.eps",),
     osap_acronym="EarningsSurprise",
     source="Foster, Olsen and Shevlin 1984 (The Accounting Review)",
-    lookback_months=64,             # 20 quarters back from the latest filing + the 110-day gate
-    notes="(dEPS_q - drift) / std of the previous 8 surprises; SF1.eps ARQ by reportperiod; skipna partial windows as OSAP",
+    lookback_months=67,             # 20 quarters back from the latest period end + the 110-day gate + period-end-to-filing gap
+    notes="(dEPS_q - drift) / std of the previous 8 surprises; SF1.eps ARQ by reportperiod; skipna partial windows as OSAP; OVERRIDE: latest ARQ filing <= 110 days old (in place of max_fundamental_age_months 15), OSAP 3-month validity",
     field_mappings=(
         ("compustat.epspxq", "SF1.eps (dimension ARQ)",
          "reported basic EPS incl. discontinued operations (netinccmn-based), not excluding extraordinary items; split-restated to today's basis on every row (scale cancels in ES/SD); ARQ single-quarter level, never ART"),

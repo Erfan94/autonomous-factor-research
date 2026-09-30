@@ -49,8 +49,9 @@ GUARDS:
     Nothing is zero-filled except OSAP's own growth.fillna(0).
 
 THE MASS-POINT QUESTION (answer it here BEFORE running preflight):
-  What raw value does a do-nothing firm produce? There is no default value: the score is
-  a continuous nonlinear function of RoE_0, g_0 and ceq/ME. A firm with no new filing
+  What raw value does a do-nothing firm produce? One default value: ceq == 0 makes BV and
+  CD 0, so the score is exactly 10 + 1.12/0.12 = 19.33 whatever else (as in OSAP; preflight
+  mode <= 0.1%). Otherwise the score is a continuous nonlinear function of RoE_0, g_0 and ceq/ME. A firm with no new filing
   repeats its inputs (ME is the period-end ME, fixed per filing), so its value is
   constant between filings: a cross-MONTH staleness, not a cross-sectional tie.
   What share of the universe does nothing? Not a tie block: the spec measured a modal
@@ -75,8 +76,9 @@ DEVIATIONS FROM OSAP:
   - The price read sits at the filing's own reportperiod (0-16 months back, a level read,
     not a return window), so no fixed history_months applies; a name with no period-end
     price within 10 days gets NaN.
-  - Extra history: growth is NaN (then 0, OSAP's rule) when the year-ago revenue filing is
-    missing; the spec measured 40-50% of scored names in 1999-H2 on this.
+  - Extra history: growth is NaN (then 0, OSAP's rule) when the year-ago row exists but its
+    TTM revenue is null (the 1998 ART warm-up); a missing year-ago filing makes equity_lag
+    NaN and the score NaN. The spec measured 40-50% of scored names in 1999-H2 on this.
   - SignalDoc Filter is empty; OSAP's annual-pipeline drops (missing at/prcc_c/ni,
     curcd != USD) are represented by the NaN rules and the fxusd gate above.
 """
@@ -165,7 +167,7 @@ FACTOR = FactorDef(
             "SF1.fxusd", "SEP.close"),
     osap_acronym="EquityDuration",
     source="Dechow, Sloan and Soliman 2004 (Review of Accounting Studies)",
-    lookback_months=27,             # latest filing up to 15 months old + the year-ago filing 12 months earlier
+    lookback_months=30,             # latest filing up to 15 months old + ~3m period-end-to-filing + the year-ago period 12 months earlier
     no_history_gate_because=("price read is the close at the latest filing's own reportperiod "
                              "(a level at a variable 0-16 month lag, with its own 10-day tolerance "
                              "inside the factor), not a return window; a missing period-end price "

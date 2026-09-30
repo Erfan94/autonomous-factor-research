@@ -54,6 +54,11 @@ THE MASS-POINT QUESTION (answer it here BEFORE running preflight):
   absorbs.
 
 DEVIATIONS FROM OSAP:
+  - che: OSAP zero-fills che; here a null cashneq makes the score NaN (stricter;
+    investmentsc is filled with 0 inside the debtc-gated block only).
+  - oibdp for financials: the vendor records depamor as exactly 0 on ~8% of
+    financial rows (field_map compustat.oibdp), so there oibdp = opinc.
+  - EV <= 0 names (0-3 a month per the review; OSAP's cheapest) are NaN here.
   - dc (convertible debt): no SF1 field; OSAP zero-fills it, so 0 here for every
     firm. EV is understated for convertible issuers.
   - dltt + dlc -> SF1.debt (debtc + debtnc). INCLUDES operating-lease liabilities
