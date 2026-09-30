@@ -342,7 +342,7 @@ def _layer_blocks(audit):
     res, meta = CL.run_layer(audit, METAS, CFG, LCFG, SHA, log=lambda *a: None)
     blocks = []
     for row, aum, st in res:
-        f = {"stage": "E", "factor": "LAYER_v13", "variant": f"{row}@{CL.aum_tag(aum)}",
+        f = {"stage": "E", "factor": "LAYER_v0", "variant": f"{row}@{CL.aum_tag(aum)}",
              "composite_sha": SHA, "layer_sha": "012345678901", "harness_sha": "h" * 12,
              "config_sha": "c" * 12, "data_sha": "d" * 12, "eval_start": CFG["dates"]["eval_start"],
              "eval_end": CFG["dates"]["eval_end"]}
