@@ -110,7 +110,7 @@ FACTOR = FactorDef(
     compute=_compute,
     ascending=False,                # SignalDoc Sign = -1: high volume / market cap predicts low returns
     weight=1.0,
-    inputs=("SEP.close", "SEP.volume"),
+    inputs=("SEP.close", "SEP.volume", "DAILY.marketcap"),
     osap_acronym="VolMkt",
     source="Haugen and Baker 1996 (Journal of Financial Economics)",
     history_months=9,               # price at the month t-9 end = 10 months of history (min-10 floor)

@@ -4,7 +4,7 @@ ending 5 months before the signal.
 
 OSAP: ShareIss5Y, Daniel and Titman 2006, Journal of Finance (Acronym2 ShareIs1;
 Cat.Economic external financing). Predicted sign: - (high issuance earns lower returns;
-long the lowest-issuance decile D1).
+the lowest-issuance end is the long leg, harness D10).
 Spec: osap_source/cache/b4e911e6/ShareIss5Y/spec.md
 
 CONSTRUCTION (as translated; every deviation from OSAP stated):
@@ -12,8 +12,8 @@ CONSTRUCTION (as translated; every deviation from OSAP stated):
         months before the signal    (ctx.fundamentals_at_month_ends lag 5)
   s65 = SF1.sharesbas (ARQ) at the business month-end 65 months before the signal (lag 65)
   score = s5 / s65.where(s65 > 0) - 1        (== (s5 - s65) / s65, as OSAP)
-  Raw ratio, no winsorising. ascending=False: HIGH issuance is unattractive (D1 is
-  the long leg), matching SignalDoc Sign = -1.
+  Raw ratio, no winsorising. ascending=False: HIGH issuance is unattractive (the
+  low-issuance end is the long leg, harness D10), matching SignalDoc Sign = -1.
   The OSAP CODE is temp = shrout * cfacshr and (temp[t-5] - temp[t-65]) / temp[t-65]; the
   SignalDoc text says "shrout/cfacshr". The code is followed. Sharadar restates sharesbas
   to today's split basis on every historical row, so the ratio of two readings on the
@@ -22,7 +22,7 @@ CONSTRUCTION (as translated; every deviation from OSAP stated):
   closeunadj and the two ends never mix routes (no DAILY.marketcap / SEP.close ratio).
   Both readings are in the past (t-5, t-65); each sees only the filings public at its own
   month-end. The 5-month gap is OSAP's own skip (Daniel-Titman "t-5..t"), reproduced.
-  Same idiom as the ShareIss1Y leg (ratio of two fundamentals_at_month_ends readings,
+  Same idiom as the ShareIss1Y candidate (ratio of two fundamentals_at_month_ends readings,
   denominator guarded, non-finite to NaN), with lags 5 and 65.
   dimension="ARQ": ARQ is the quarterly as-reported series and reaches back further than
   ART for a level read 65 months earlier; sharesbas is a level, not a flow, so ART vs
@@ -47,10 +47,13 @@ THE MASS-POINT QUESTION (answer it here BEFORE running preflight):
   The right tail is heavy (median over months p1 -0.34, p50 +0.05, p99 +4.5); the
   harness 1/99 winsorise handles it, nothing is clipped here. Preflight measures it again.
 
+HISTORY GATE: history_months=65, as OSAP's predictor merges the CRSP row at t-65 (the name
+  was listed then); a filing known at t-65 alone could predate the listing and put IPO
+  issuance into the 5-year change. First scorable signal ~2003-05 (223 of 276 months).
 DATA-START FACT (declared, not a rule): SF1 ARQ is thin before ~1998, so the t-65 end
   is unknown for most names until the snapshot has 65 months behind it. Coverage of the
   harness universe is >= 40% only from 2002-07; 43 early decision months (1999-01 ..
-  2002-06) sit below the coverage bar and are a small, survivor-biased sample; 233 of 276
+  2002-06) sit below the coverage bar (a small sample of names with SF1 history before 1998); 233 of 276
   months are above it and 270 have >= 10 scored names (first 1999-06). The first probe
   month (1998-12) scores 0 names and the 80-month lookback reaches before the panel
   start; both are data limits and preflight warnings, not factor defects.
@@ -98,8 +101,7 @@ FACTOR = FactorDef(
     source="Daniel and Titman 2006 (Journal of Finance)",
     dimension="ARQ",                # quarterly series reaches back furthest for the t-65 reading
     lookback_months=80,             # 65-month window end + latest filing up to 15 months old
-    no_history_gate_because=("reads share counts only, no price; a name without a filing "
-                             "known at t-65 is NaN by construction"),
+    history_months=65,              # OSAP merges the CRSP row at exactly t-65: listed then (alpha_review batch21-23)
     notes="sharesbas(t-5)/sharesbas(t-65) - 1, ARQ as-of-filing; split-restated counts; sign -1; coverage >= 40% only from 2002-07",
     field_mappings=(
         ("crsp.shrout * cfacshr", "SF1.sharesbas (ARQ) at business month-ends t-5 and t-65",

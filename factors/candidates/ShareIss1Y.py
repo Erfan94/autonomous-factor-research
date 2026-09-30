@@ -4,7 +4,7 @@ months before the signal, skipping the most recent six months.
 
 OSAP: ShareIss1Y, Pontiff and Woodgate 2008, Journal of Finance ("Share issuance and
 cross-sectional returns", Table 3A ISSUE; Acronym2 ShareIs5). Predicted sign: -
-(high issuance earns lower returns; long the lowest-issuance decile D1).
+(high issuance earns lower returns; the lowest-issuance end is the long leg, harness D10).
 Spec: osap_source/cache/b4e911e6/ShareIss1Y/spec.md
 
 CONSTRUCTION (as translated; every deviation from OSAP stated):
