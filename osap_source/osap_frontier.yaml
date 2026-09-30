@@ -330,3 +330,23 @@ excluded:
     class: data_unavailable
     spec: osap_source/cache/b4e911e6/PayoutYield/spec.md
     date: "2026-09-30"
+  RDAbility:
+    reason: "coverage by construction: scored only in the top tercile of R&D/sales with R&D > 0 (6.9% of the universe) and after 8 fiscal-year rows with >= 6 valid pairs; mean coverage 3.0% (max 5.5%), 0 of 276 months >= 40% and 0 with >= 300 scored names. Measured by osap-fetcher on the harness universe, all 276 months"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/RDAbility/spec.md
+    date: "2026-09-30"
+  RDIPO:
+    reason: "binary flag (recent IPO with zero R&D): modal zero share 92.5-98.4% in every month, qcut 1 bin; also approx IPO dates (TICKERS.firstpricedate floored at 1997-12-31, marks spin-offs/SPACs; as IndIPO). Measured by osap-fetcher, all 276 months"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/RDIPO/spec.md
+    date: "2026-09-30"
+  RDS:
+    reason: "OSAP zero-fills recta, msa and pension terms but then sets RDS NaN wherever recta and msa were originally missing (both_missing_mask); SF1 carries neither, so OSAP's own code nulls every row; forcing the dirty-surplus term to 0 would be a different signal"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/RDS/spec.md
+    date: "2026-09-30"
+  RDcap:
+    reason: "OSAP keeps only the bottom market-cap tercile of all listed stocks, which contains 0 harness-universe names in all 276 months (coverage 0%); and without that cut the value is exactly 0 (xrd.fillna(0), zeros not nulled) for 63.2-74.0% of names, >= 10% cliff in every month, qcut 3-5 bins. Measured by osap-fetcher on the harness universe and market scope"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/RDcap/spec.md
+    date: "2026-09-30"
