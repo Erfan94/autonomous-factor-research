@@ -395,3 +395,23 @@ excluded:
     class: data_unavailable
     spec: osap_source/cache/b4e911e6/RIO_Disp/spec.md
     date: "2026-09-30"
+  SmileSlope:
+    reason: "needs OptionMetrics implied-volatility surface (30-day, delta 50 put minus call); no held Sharadar table carries option data; OSAP keeps only non-null rows (no zero-fill)"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/SmileSlope/spec.md
+    date: "2026-09-30"
+  Spinoff:
+    reason: "binary spin-off child flag (ACTIONS spunofffrom, 24-month window): 1.06% of the universe flagged on average (20.5 names a month; < 30 in 237 of 276 months), zero block 98.9%, 2 distinct values, cannot form ten deciles. Measured by osap-fetcher on the harness universe, all 276 months"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/Spinoff/spec.md
+    date: "2026-09-30"
+  SurpriseRD:
+    reason: "binary R&D-surprise flag: 2 distinct values, qcut 1 bin in >= 272 of 276 months under either reading; with rnd == 0 as missing (OSAP does not zero-fill xrd) coverage is 29.0% pooled, 0 of 276 months >= 40%, modal share 51.9-84.6%; keeping zeros gives modal share 83.4-95.1%. Measured by osap-fetcher, all 276 months"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/SurpriseRD/spec.md
+    date: "2026-09-30"
+  Tax:
+    reason: "needs Compustat txfo, txfed, txdi (no SF1 fields, not zero-filled by OSAP); the fallback txt - txdi is NaN without txdi, so every ib > 0 row is NaN and every ib <= 0 row is the single value 1.0 (coverage 9.0-39.5%, 100% mass point); a taxexp-only numerator would be a different signal"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/Tax/spec.md
+    date: "2026-09-30"

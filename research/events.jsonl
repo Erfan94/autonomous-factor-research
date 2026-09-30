@@ -531,3 +531,15 @@
 {"ts": "2026-09-30T22:11:34Z", "event": "factor_infeasible", "factor": "RIO_Disp", "reason": "IBES dispersion not in Sharadar; 13F only from 2013-06", "class": "data_unavailable"}
 {"ts": "2026-09-30T22:11:34Z", "event": "factor_infeasible", "factor": "RIO_MB", "reason": "13F from 2013-06: 94 scorable months < min_months 120", "class": "data_start"}
 {"ts": "2026-09-30T22:11:34Z", "event": "factor_infeasible", "factor": "RIO_Turnover", "reason": "13F from 2013-06: 94 scorable months < min_months 120", "class": "data_start"}
+{"ts": "2026-09-30T22:22:47Z", "event": "spec_written", "factor": "RoE", "spec_path": "osap_source/cache/b4e911e6/RoE/spec.md", "availability": "approx"}
+{"ts": "2026-09-30T22:22:47Z", "event": "spec_written", "factor": "SP", "spec_path": "osap_source/cache/b4e911e6/SP/spec.md", "availability": "approx"}
+{"ts": "2026-09-30T22:22:47Z", "event": "spec_written", "factor": "STreversal", "spec_path": "osap_source/cache/b4e911e6/STreversal/spec.md", "availability": "feasible"}
+{"ts": "2026-09-30T22:22:47Z", "event": "spec_written", "factor": "ShareIss1Y", "spec_path": "osap_source/cache/b4e911e6/ShareIss1Y/spec.md", "availability": "approx"}
+{"ts": "2026-09-30T22:23:46Z", "event": "spec_written", "factor": "SmileSlope", "spec_path": "osap_source/cache/b4e911e6/SmileSlope/spec.md", "availability": "data_unavailable"}
+{"ts": "2026-09-30T22:23:46Z", "event": "spec_written", "factor": "Spinoff", "spec_path": "osap_source/cache/b4e911e6/Spinoff/spec.md", "availability": "preflight_failed"}
+{"ts": "2026-09-30T22:23:46Z", "event": "spec_written", "factor": "SurpriseRD", "spec_path": "osap_source/cache/b4e911e6/SurpriseRD/spec.md", "availability": "preflight_failed"}
+{"ts": "2026-09-30T22:23:46Z", "event": "spec_written", "factor": "Tax", "spec_path": "osap_source/cache/b4e911e6/Tax/spec.md", "availability": "data_unavailable"}
+{"ts": "2026-09-30T22:23:46Z", "event": "factor_infeasible", "factor": "SmileSlope", "reason": "option implied volatility not in Sharadar", "class": "data_unavailable"}
+{"ts": "2026-09-30T22:23:46Z", "event": "preflight_failed", "factor": "Spinoff", "batch": "fetch22", "failures": ["binary flag, zero block 98.9%, < 30 ones in 237 of 276 months"], "note": "measured by osap-fetcher; frontier row class preflight_failed"}
+{"ts": "2026-09-30T22:23:46Z", "event": "preflight_failed", "factor": "SurpriseRD", "batch": "fetch22", "failures": ["binary flag, qcut 1 bin", "coverage 29.0% pooled (rnd reporters)"], "note": "measured by osap-fetcher; frontier row class preflight_failed"}
+{"ts": "2026-09-30T22:23:46Z", "event": "factor_infeasible", "factor": "Tax", "reason": "txfo/txfed/txdi not in SF1, not zero-filled; signal collapses to NaN or a constant", "class": "data_unavailable"}
