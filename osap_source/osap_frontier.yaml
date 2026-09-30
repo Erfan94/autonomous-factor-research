@@ -220,3 +220,13 @@ excluded:
     class: preflight_failed
     spec: osap_source/cache/b4e911e6/IndIPO/spec.md
     date: "2026-09-30"
+  IndMom:
+    reason: "mass point by construction: the 2-digit-SIC cap-weighted past return is assigned to every industry member, so each cross-section holds 63-68 distinct values on ~1,960 names; modal share 8.4-20.3% (mean 10.7%), >= 10% in 144 of 276 months and at 2 of 3 preflight probes (12.3% 1998-12, 14.5% 2021-11), qcut < 10 bins in 33 months; within sector 65% of names tie with >= 10% of their peers (Utilities 98% one value). Measured by osap-fetcher on the harness universe, all 276 months"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/IndMom/spec.md
+    date: "2026-09-30"
+  IndRetBig:
+    reason: "mass point and coverage by construction: the big firms' FF48 mean return is assigned to the non-big members and the big firms are NaN; coverage 20.4-36.9% (mean 28.9%), under 40% in every month; modal share 10.2-26.1%, >= 10% in all 276 months, qcut < 10 bins in 126; a universe-scope big/small cut still breaches the cliff at 2 of 3 probes. Measured by osap-fetcher on the harness universe, all 276 months"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/IndRetBig/spec.md
+    date: "2026-09-30"
