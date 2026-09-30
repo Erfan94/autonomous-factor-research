@@ -310,3 +310,8 @@ excluded:
     class: data_unavailable
     spec: osap_source/cache/b4e911e6/OrderBacklogChg/spec.md
     date: "2026-09-30"
+  PredictedFE:
+    reason: "needs IBES forecasts (feps1, feps2, long-term growth) and AOP (itself built from IBES) as regressors; no analyst data in Sharadar; the source screen drops firms without them (no zero-fill); same script and reason as the AOP and AnalystValue rows"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/PredictedFE/spec.md
+    date: "2026-09-30"
