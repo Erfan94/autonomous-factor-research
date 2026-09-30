@@ -230,3 +230,8 @@ excluded:
     class: preflight_failed
     spec: osap_source/cache/b4e911e6/IndRetBig/spec.md
     date: "2026-09-30"
+  InvestPPEInv:
+    reason: "needs gross PP&E (ppegt), which SF1 does not carry (only ppnenet) and OSAP does not zero-fill; substituting net PP&E is a different signal and is not adopted (as for AbnormalAccruals)"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/InvestPPEInv/spec.md
+    date: "2026-10-01"
