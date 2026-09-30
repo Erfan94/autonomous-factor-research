@@ -295,3 +295,18 @@ excluded:
     class: data_unavailable
     spec: osap_source/cache/b4e911e6/OptionVolume1/spec.md
     date: "2026-09-30"
+  OptionVolume2:
+    reason: "OptionMetrics option volume (optvolume) and its 6-month average; no held Sharadar table carries option data; OSAP does not zero-fill it"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/OptionVolume2/spec.md
+    date: "2026-09-30"
+  OrderBacklog:
+    reason: "order backlog (Compustat ob) has no SF1 field; OSAP zero-fills ob but its predictor then sets the signal NaN wherever ob == 0, so with ob absent the signal is undefined for every firm (the missing-item rule's constant/undefined case)"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/OrderBacklog/spec.md
+    date: "2026-09-30"
+  OrderBacklogChg:
+    reason: "needs non-zero order backlog (Compustat ob) at t and t-12; ob has no SF1 field and OSAP's zero-fill-then-null logic makes the signal undefined for every firm"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/OrderBacklogChg/spec.md
+    date: "2026-09-30"
