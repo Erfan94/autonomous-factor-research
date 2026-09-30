@@ -375,3 +375,23 @@ excluded:
     class: data_unavailable
     spec: osap_source/cache/b4e911e6/Recomm_ShortInterest/spec.md
     date: "2026-09-30"
+  REV6:
+    reason: "needs IBES mean-estimate revisions (meanest, statpers, fpedats); no analyst data in Sharadar; NaN if any of the 7 monthly changes is missing (no zero-fill)"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/REV6/spec.md
+    date: "2026-09-30"
+  RIO_MB:
+    reason: "data start: 13F institutional ownership (SF3A) from 2013-06-30 gives 94 scorable decision months with the 45-day filing lag (95 without), under rebalance.min_months 120; OSAP's zero-fill of missing ownership before 2013 makes lagged RIO a size proxy (Spearman with log cap -0.96 vs -0.38 on real 13F months), not accepted; also a 5-valued output (modal share ~27.5%) scored only in the top market-to-book quintile (~18% coverage)"
+    class: data_start
+    spec: osap_source/cache/b4e911e6/RIO_MB/spec.md
+    date: "2026-09-30"
+  RIO_Turnover:
+    reason: "data start: as RIO_MB, 94 scorable months with 13F data < 120; 5-valued output (modal share ~28.9%), ~19.6% coverage (top turnover quintile only)"
+    class: data_start
+    spec: osap_source/cache/b4e911e6/RIO_Turnover/spec.md
+    date: "2026-09-30"
+  RIO_Disp:
+    reason: "needs IBES forecast dispersion (stdev, not in Sharadar, no zero-fill) and 13F ownership from 2013-06 (94 scorable months < 120); 5-valued output"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/RIO_Disp/spec.md
+    date: "2026-09-30"

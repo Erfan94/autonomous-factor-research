@@ -523,3 +523,11 @@
 {"ts": "2026-09-30T22:06:55Z", "event": "factor_infeasible", "factor": "Recomm_ShortInterest", "reason": "IBES recommendations and short interest not in Sharadar", "class": "data_unavailable"}
 {"ts": "2026-09-30T22:07:19Z", "event": "factor_translated", "batch": "fetch20", "factor": "RealizedVol", "file": "factors/candidates/RealizedVol.py", "verdict": "feasible", "lookback_months": 2, "history_months": 1, "ascending": false, "dimension": null, "note": "std ddof=1 of signal-month daily closeadj returns on market calendar, >=15 obs, zero->NaN, rf omitted; follows OSAP code (total vol) not SignalDoc CAPM-residual wording; same daily panel as IdioVol3F, no ff3_daily"}
 {"ts": "2026-09-30T22:08:08Z", "event": "preflight_passed", "factor": "RealizedVol", "batch": "fetch20", "coverage_pct": {"1998-12": 99.6, "2010-06": 99.9, "2021-11": 99.6}, "mode_pct_max": 0.1, "qcut_bins": 10}
+{"ts": "2026-09-30T22:11:34Z", "event": "spec_written", "factor": "REV6", "spec_path": "osap_source/cache/b4e911e6/REV6/spec.md", "availability": "data_unavailable"}
+{"ts": "2026-09-30T22:11:34Z", "event": "spec_written", "factor": "RIO_Disp", "spec_path": "osap_source/cache/b4e911e6/RIO_Disp/spec.md", "availability": "data_unavailable"}
+{"ts": "2026-09-30T22:11:34Z", "event": "spec_written", "factor": "RIO_MB", "spec_path": "osap_source/cache/b4e911e6/RIO_MB/spec.md", "availability": "data_start"}
+{"ts": "2026-09-30T22:11:34Z", "event": "spec_written", "factor": "RIO_Turnover", "spec_path": "osap_source/cache/b4e911e6/RIO_Turnover/spec.md", "availability": "data_start"}
+{"ts": "2026-09-30T22:11:34Z", "event": "factor_infeasible", "factor": "REV6", "reason": "IBES estimate revisions not in Sharadar", "class": "data_unavailable"}
+{"ts": "2026-09-30T22:11:34Z", "event": "factor_infeasible", "factor": "RIO_Disp", "reason": "IBES dispersion not in Sharadar; 13F only from 2013-06", "class": "data_unavailable"}
+{"ts": "2026-09-30T22:11:34Z", "event": "factor_infeasible", "factor": "RIO_MB", "reason": "13F from 2013-06: 94 scorable months < min_months 120", "class": "data_start"}
+{"ts": "2026-09-30T22:11:34Z", "event": "factor_infeasible", "factor": "RIO_Turnover", "reason": "13F from 2013-06: 94 scorable months < min_months 120", "class": "data_start"}
