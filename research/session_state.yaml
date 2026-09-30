@@ -11,5 +11,4 @@ v0_baseline: {runs: "001,002", ic: 0.0145, ic_t_nw: 2.62, ls_sharpe_hedged: 0.60
 open:
   - "commit bootstrap records + tag v0-baseline (local)"
   - "Phase A naming: OSAP Investment (Titman-Wei-Xie) translates to factors/candidates/InvestmentTWX.py, osap_acronym=Investment (leg row Investment.yaml is AssetGrowth)"
-  - "check: only 21 performance delistings in 540k name-months (run 001); confirm delisting returns for names leaving between rebalances"
 next: "Commit and tag v0-baseline, then Phase A: records.py frontier, first fetch batch of eight"

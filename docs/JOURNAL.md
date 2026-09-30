@@ -21,3 +21,10 @@ and ids, not essays; the reasoning lives in DECISIONS.md and events.jsonl.
 - `verify` OK: config vocabularies match the bytes string-for-string (NYSE/NASDAQ/NYSEMKT; two Domestic Common categories; all 10 delisting actions; ART); TICKERS.table carries legacy codes SEP/SF1, both accepted by TICKERS_SCOPE; marketcap median $712m; SEP starts 1997-12-31, exactly the first momentum window.
 - `manifest`: DATA_SHA nodata -> 198b281de1a0. `live`: 14 tables checked, column-complete, full history.
 - `records.py check` DRIFTed on two unregistered bootstrap event types; registered them (scripts/, not harness). Check OK.
+
+## 2026-09-30 — v0 baseline (runs 001, 002) and records.py fixes
+- Run 001 `--baseline --stage 2`: 137 s wall (panel build 61 s, then cached). v0 IC 0.0145, NW t 2.62, halves 0.0275/0.0016; hedged LS Sharpe 0.60, 7.32%/yr, MaxDD −45.6%, β −0.14 fw; raw Sharpe 0.72; ex-top-3-years (2000, 2001, 2003) Sharpe 0.16.
+- Run 002 `--baseline --stage 3`: 60 s. icir_weighted 0.64 hedged (raw 0.44, β −0.45: the hedge adds market exposure to a net-short book); buffered halves turnover for −0.045 Sharpe; vol_targeted 0.31.
+- Cost: both runs far under the ORCHESTRATION estimates (25 min baseline) on a cached panel; Phase B planning should re-time the first 12-factor batch rather than assume an hour.
+- factor-evaluator: provenance verified on both; five baseline registry rows; v0 manifest block. It found two scripts/records.py defects (baseline stage-2 run opened the phase gate; leg row Investment.yaml masked OSAP's Investment predictor). Fixed; UNACCOUNTED 207. The OSAP Investment candidate will be named InvestmentTWX.
+- Measured two open items: 21 in-universe performance delistings is sound (unknown reasons default to performance); thin early Profitability/Investment coverage is Sharadar ART lacking TTM flows for calendardate 1998Q1–Q3, confined to signals 1998-12..1999-02 (finding_corrected supersedes the manifest's unmeasured explanation).

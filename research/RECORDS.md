@@ -74,7 +74,7 @@ below. Never edit or delete a line; correct with `finding_corrected`.
 | `batch_declared` | `batch`, `members` (= Stage 2 order), `harness_sha`, `composite_sha`, `data_sha` |
 | `batch_amended` | `batch`, `members_final`, `replaced` |
 | `preflight_failed` | `factor`, `batch`, `failures` |
-| `run_started` | `seq`, `label`, `stage`, `factors`, the four stamps |
+| `run_started` | `seq`, `label`, `stage`, `factors`, the four stamps. A `--baseline` run carries `factors: "baseline"` and a label containing `baseline`, so `records.py` phase_gate does not read it as the ratchet starting |
 | `run_completed` | `seq`, `result_path`, `n_blocks`, `runtime_seconds` |
 | `run_failed` | `seq`, `factors`, `failure_class` |
 | `provenance_verified` / `provenance_mismatch` | `seq`, the stamps (and `kind`, `expected_sha`, `got_sha`) |
