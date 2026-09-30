@@ -415,3 +415,18 @@ excluded:
     class: data_unavailable
     spec: osap_source/cache/b4e911e6/Tax/spec.md
     date: "2026-09-30"
+  ShareRepurchase:
+    reason: "binary repurchase flag (prstkc > 0): 2 distinct values, modal share 50.0-72.3% every month, qcut 1-2 bins; also approx data (gross prstkc not in Sharadar; net ncfcommon < 0 would stand in). Measured by osap-fetcher, all 276 months"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/ShareRepurchase/spec.md
+    date: "2026-09-30"
+  ShareVol:
+    reason: "OSAP's published signal is {0,1} at 5% and 10% share-turnover thresholds with the middle dropped: under the plain-percent reading 95.3% of names are 1, under the literal CRSP-units reading 99.85-100%, qcut 0-2 bins; its drop rule (no share change in 3 months) cannot survive filing-stepped sharesbas (leaves ~8% of the universe); a continuous turnover would be a different signal. Measured by osap-fetcher, all 276 months"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/ShareVol/spec.md
+    date: "2026-09-30"
+  ShortInterest:
+    reason: "short interest (shortint) is the signal itself and is in no held Sharadar table; OSAP inner-merges on the short-interest file (no zero-fill)"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/ShortInterest/spec.md
+    date: "2026-09-30"
