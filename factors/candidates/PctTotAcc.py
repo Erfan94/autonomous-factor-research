@@ -23,8 +23,9 @@ CONSTRUCTION (as translated; every deviation from OSAP stated):
       numerator   = ni - (prstkcc_minus_sstk + dvt + oancf + fincf + ivncf)
       denominator = abs(ni), NaN where ni == 0
       score       = numerator / denominator
-  The numerator is taken as coded in OSAP, which adds net repurchase and dividends
-  on top of fincf although fincf already contains them; it is replicated as coded.
+  The numerator is taken as coded in OSAP: net repurchases and dividends enter with
+  the opposite sign to their place inside fincf, so they net out of it (the algebra
+  reduces to ni - (ncfo + ncfi + ncff - ncfcommon - ncfdiv)); replicated as coded.
   The absolute value means a loss-making firm is not sign-flipped (by design of
   the OSAP ratio), so the "den > 0" guard is applied to abs(ni), not to ni.
   ART (TTM) is the right dimension: all six inputs are TTM flows of the same

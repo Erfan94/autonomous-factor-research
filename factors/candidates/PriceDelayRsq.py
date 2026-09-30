@@ -40,12 +40,13 @@ THE MASS-POINT QUESTION (answer it here BEFORE running preflight):
   Tie handling: null. Zero-variance windows are NaN and blend_ranks renormalises;
   average rank for the rest; no noise or secondary key.
 
-HISTORY: no fixed-lag price gate. OSAP's own observation gate is the in-compute
-  n >= 26 finite-return days with a June return; a fixed t-N price gate would
-  either over-gate (24 months demands a trade 24 months back) or under-gate (13),
-  so the factor declares no_history_gate_because and lookback_months=24 (a June
-  signal reaches back 24 months). Short-history names score on as few as 26 days
-  (OSAP's rule; 2.3% of scored names in the median month have fewer than 200).
+HISTORY: history_months=13 (the hard rule for return-window factors; alpha_review
+  batch18 critical). For a July signal t-13 is the window start, so a name must have
+  traded when its window opened; for a June signal t-13 falls one month before the
+  window end. The gate only removes names on top of OSAP's in-compute rule (n >= 26
+  finite-return days with a June return), so names without a trade 13 months back are
+  NaN where OSAP would score them (declared). lookback_months=24 (a June signal reads
+  the window ending the June before).
 
 DEVIATIONS FROM OSAP:
   - rf omitted (the snapshot holds no risk-free rate): OSAP regresses excess
@@ -160,12 +161,11 @@ FACTOR = FactorDef(
     osap_acronym="PriceDelayRsq",
     source="Hou and Moskowitz 2005 (Review of Financial Studies)",
     lookback_months=24,             # a June signal reads the window ending the June before
-    no_history_gate_because=(
-        "OSAP's own observation gate is applied in compute: n >= 26 finite-return "
-        "days and a return in June of the window; a fixed t-N month price gate "
-        "would over-gate (24) or under-gate (13) relative to it"),
+    history_months=13,              # a trade 13 months back (window start for July signals)
     notes="1 - R2(r~m)/R2(r~m+4 lags), daily closeadj return vs raw VW market, Jun-Jun window, n>=26; rf omitted; signals to 2000-06 NaN",
     field_mappings=(
+        ("history gate", "history_months=13",
+         "names without a trade 13 months back are NaN (OSAP would score them on >= 26 days)"),
         ("crsp.ret (daily)", "SEP.closeadj ratio to the previous MARKET-calendar day",
          "total return, no delisting return; no return across a missing row; 3-decimal closeadj grid"),
         ("ff.mktrf", "MonthContext.market_daily('vw') from SEP + DAILY.marketcap",
