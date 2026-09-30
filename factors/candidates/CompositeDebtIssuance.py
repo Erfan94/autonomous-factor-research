@@ -61,10 +61,10 @@ from harness.factor_def import FactorDef
 
 
 def _compute(ctx):
-    y = ctx.fundamentals_yoy(["debt"], years=5)
+    y = ctx.fundamentals_yoy(["debt", "debtc"], years=5)
     d = y["debt"].astype(float)
     d_lag = y["debt_lag"].astype(float)
-    ok = (d > 0) & (d_lag > 0)
+    ok = (d > 0) & (d_lag > 0) & y["debtc"].notna() & y["debtc_lag"].notna()   # debt gate ruling
     out = np.log(d.where(d > 0) / d_lag.where(d_lag > 0)).where(ok)
     return out.replace([np.inf, -np.inf], np.nan)
 
@@ -76,7 +76,7 @@ FACTOR = FactorDef(
     compute=_compute,
     ascending=False,                # SignalDoc Sign = -1: LOW debt growth is attractive
     weight=1.0,
-    inputs=("SF1.debt",),
+    inputs=("SF1.debt", "SF1.debtc"),
     osap_acronym="CompositeDebtIssuance",
     source="Lyandres, Sun and Zhang 2008 (Review of Financial Studies)",
     lookback_months=80,             # 60-month base + latest filing up to 15 months old + ~4m report-period-to-filing lag

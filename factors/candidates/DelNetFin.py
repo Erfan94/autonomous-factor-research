@@ -67,7 +67,7 @@ from harness.factor_def import FactorDef
 
 
 def _compute(ctx):
-    y = ctx.fundamentals_yoy(["investmentsc", "investmentsnc", "debt", "assets"])
+    y = ctx.fundamentals_yoy(["investmentsc", "investmentsnc", "debt", "debtc", "assets"])
 
     def nf(sfx):
         # No fill: any null leg propagates to NaN (null block = unclassified format).
@@ -80,6 +80,7 @@ def _compute(ctx):
     den = 0.5 * (at + at_lag)
     score = (nf("") - nf("_lag")) / den.where(den > 0)
     score = score.where(y["reportperiod"].notna() & y["reportperiod_lag"].notna())
+    score = score.where(y["debtc"].notna() & y["debtc_lag"].notna())   # debt gate ruling, explicit
     return score.replace([np.inf, -np.inf], np.nan)
 
 
@@ -90,7 +91,7 @@ FACTOR = FactorDef(
     compute=_compute,
     ascending=True,                 # SignalDoc Sign = +1: HIGH change in net financial assets is attractive
     weight=1.0,
-    inputs=("SF1.investmentsc", "SF1.investmentsnc", "SF1.debt", "SF1.assets"),
+    inputs=("SF1.investmentsc", "SF1.investmentsnc", "SF1.debt", "SF1.debtc", "SF1.assets"),
     osap_acronym="DelNetFin",
     source="Richardson, Sloan, Soliman & Tuna 2005 (Journal of Accounting and Economics)",
     lookback_months=31,             # latest filing up to 15 months old + year-ago period 12 months earlier + ~4m report-period-to-filing lag

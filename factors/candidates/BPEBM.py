@@ -73,7 +73,7 @@ from harness.factor_def import FactorDef
 
 
 def _compute(ctx):
-    f = ctx.fundamentals(["equity", "debt", "cashneq", "investmentsc", "fxusd"])
+    f = ctx.fundamentals(["equity", "debt", "debtc", "cashneq", "investmentsc", "fxusd"])
     ceq = f["equity"].astype(float)
     debt = f["debt"].astype(float)
     che = f["cashneq"].astype(float) + f["investmentsc"].astype(float).fillna(0.0)
@@ -88,7 +88,7 @@ def _compute(ctx):
 
     bp = ceq / m
     ebm = (ceq + t) / ev
-    out = (bp - ebm).where(usd)
+    out = (bp - ebm).where(usd & f["debtc"].notna())   # unclassified block NaN (debt gate ruling)
     return out.replace([np.inf, -np.inf], np.nan)
 
 
@@ -99,7 +99,7 @@ FACTOR = FactorDef(
     compute=_compute,
     ascending=False,                # SignalDoc Sign = -1: low BPEBM is attractive (the long leg)
     weight=1.0,
-    inputs=("SF1.equity", "SF1.debt", "SF1.cashneq", "SF1.investmentsc", "SF1.fxusd", "DAILY.marketcap"),
+    inputs=("SF1.equity", "SF1.debt", "SF1.debtc", "SF1.cashneq", "SF1.investmentsc", "SF1.fxusd", "DAILY.marketcap"),
     osap_acronym="BPEBM",
     source="Penman, Richardson and Tuna 2007 (Journal of Accounting Research)",
     lookback_months=15,             # latest filing within max_fundamental_age_months

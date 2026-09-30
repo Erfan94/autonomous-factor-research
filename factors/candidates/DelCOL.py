@@ -36,12 +36,12 @@ DEVIATIONS FROM OSAP:
     -(dlc - dlc_lag)/avgAT where Compustat reports dlc, or NaN where it does
     not: an artefact of the fill. Here a null liabilitiesc or debtc at either
     date -> NaN, so coverage is ~80% of the universe, not the full sample.
-  - ASC 842 lessee step: SF1 debtc can absorb the current operating-lease
-    liability from FY2019 filings, which Compustat dlc excludes while
-    Compustat lct includes it. liabilitiesc - debtc then drops that line, so
-    the year-over-year change carries a one-off lessee-wide step in the
-    2019-2020 filings (lessees' change is pushed negative). Declared, not
-    adjusted away.
+  - ASC 842 lessee step: from FY2019 filings the current operating-lease
+    liability sits in total current liabilities (liabilitiesc, as in
+    Compustat lct) and SF1 debtc absorbs it too (Compustat dlc does not).
+    liabilitiesc - debtc therefore nets the line out, so this construction
+    should carry no lease step, whereas OSAP's lct - dlc carries a one-off
+    positive lessee step in 2019-2020. The paired shift is not measured.
   - timing: latest ART filing (0-3 months old, at most
     max_fundamental_age_months = 15) against the same fiscal period one year
     earlier (rolling four-quarter change, refreshed quarterly), not OSAP's
@@ -80,12 +80,12 @@ FACTOR = FactorDef(
     osap_acronym="DelCOL",
     source="Richardson, Sloan, Soliman and Tuna 2005 (Journal of Accounting and Economics)",
     lookback_months=31,             # latest filing up to 15 months old + year-ago period 12 months earlier + ~4m report-period-to-filing lag
-    notes="((liabilitiesc - debtc) - year-ago) / average assets; NaN where liabilitiesc/debtc null (unclassified, ~20%); ASC 842 step 2019-20; sign -1",
+    notes="((liabilitiesc - debtc) - year-ago) / average assets; NaN where liabilitiesc/debtc null (unclassified, ~20%); ASC 842 line netted out (OSAP lct-dlc steps 2019-20); sign -1",
     field_mappings=(
         ("compustat.lct", "SF1.liabilitiesc (ART)",
          "null (unclassified balance sheets, ~20%, financials/REITs) stays NaN; OSAP zero-fills lct, which manufactures a -delta-dlc artefact, not reproduced"),
         ("compustat.dlc", "SF1.debtc (ART)",
-         "null stays NaN (no zero-fill); from FY2019 debtc can absorb current operating-lease liabilities (Compustat dlc does not, lct does): one-off lessee step in 2019-2020 changes, declared"),
+         "null stays NaN (no zero-fill); from FY2019 debtc can absorb current operating-lease liabilities as does liabilitiesc, so the line nets out here; OSAP lct - dlc steps up in 2019-2020, declared"),
         ("compustat.at", "SF1.assets (ART)",
          "average of latest and year-ago assets, guard > 0; null -> NaN; no fxusd gate (same-currency ratio)"),
         ("lct/dlc/at shift(12)", "*_lag via ctx.fundamentals_yoy",

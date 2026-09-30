@@ -101,6 +101,7 @@ FACTOR = FactorDef(
     compute=_compute,
     ascending=False,                # SignalDoc Sign = -1: LOW CompEquIss (net repurchasers) is attractive
     weight=1.0,
+    dimension="ARQ",                # sharesbas read at quarterly filing dates; recorded as dimension_overrides
     inputs=("SEP.close", "SEP.closeadj", "SF1.sharesbas"),
     osap_acronym="CompEquIss",
     source="Daniel and Titman 2006 (Journal of Finance)",

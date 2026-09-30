@@ -130,3 +130,18 @@ excluded:
     class: preflight_failed
     spec: osap_source/cache/b4e911e6/DivOmit/spec.md
     date: "2026-09-30"
+  DivSeason:
+    reason: "binary seasonal-dividend flag: 71.5-78.7% of scored names are 0 (scored = payers within 12 months, ~52% of the universe), so qcut gives 2 bins and the mode breaches the 10% cliff; measured on 46 of 276 decision months (every 6th) by osap-fetcher. Also approx data: CRSP distribution codes cd1-cd3 have no Sharadar field (ACTIONS 'dividend' rows substitute)"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/DivSeason/spec.md
+    date: "2026-09-30"
+  DivYieldST:
+    reason: "predicted-dividend-yield tercile code in {0,1,2,3}: 76.0-83.5% of scored names are 0, so qcut gives at most 4 bins and the mode breaches the 10% cliff; measured on 46 of 276 decision months by osap-fetcher. Same ACTIONS-for-CRSP-distcd substitution as DivSeason"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/DivYieldST/spec.md
+    date: "2026-09-30"
+  DownRecomm:
+    reason: "needs IBES recommendation history (downgrades); no Sharadar table carries analyst recommendations; not an OSAP zero-fill item; 0 of 276 months constructible"
+    class: data_unavailable
+    spec: osap_source/cache/b4e911e6/DownRecomm/spec.md
+    date: "2026-09-30"

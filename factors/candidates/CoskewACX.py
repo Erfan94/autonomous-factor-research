@@ -13,8 +13,11 @@ CONSTRUCTION (as translated; every deviation from OSAP stated):
   signal date (12 calendar months, the signal month included) and BME is the
   business month-end.
   r_d = ln(closeadj_d / closeadj_{d-1}) from ctx.daily("SEP", ["closeadj"]),
-        d-1 being the trading-calendar day before d (a name with no row on
-        either day has no return for d; nothing is chained across a gap).
+        d-1 being the market day before d: prices are reindexed onto the
+        market_daily calendar before the lag, so a stray SEP weekend/holiday
+        row of any one name never breaks the lag for the others (a name with
+        no row on either day has no return for d; nothing is chained across
+        a gap).
   m_d = ln(1 + mkt_d), mkt_d = ctx.market_daily(...) col "vw" (raw cap-weighted).
   Over the days where both are finite (n of them):
       r~ = r - mean(r);  m~ = m - mean(m)        (means over the SAME days)
@@ -51,7 +54,9 @@ DEVIATIONS FROM OSAP:
     instead of ~252). Coordinator decision: those truncated windows are NOT
     OSAP's construct (its window is always a full 12 months), so a signal whose
     window opens before the market series starts is NaN; the first scored
-    signal is 1999-12 (11 of 276 decision months null). A >= 230-day floor
+    signal is 1999-12 (11 of 276 decision months null): the 1999-11 window
+    opens after BME 1998-11-30 and misses 1998-12-01, so it is nulled too
+    (the check allows at most one business day of slack after BME(t-12)). A >= 230-day floor
     proposed in the spec was NOT adopted because OSAP has no such rule.
   - NYSE-only breakpoints / quintiles of the SignalDoc portfolio step are
     superseded by the harness universe and decile sort.
@@ -78,8 +83,9 @@ def _compute(ctx):
     # OSAP's window is always a full 12 months of market days. Our market series
     # starts 1998-12-02, so a window that opens before the series does is a
     # truncated window, not OSAP's construct: null it (signals 1999-01..1999-11).
-    if mkt.index.min() > lo + pd.Timedelta(days=7):
+    if mkt.index.min() > lo + pd.offsets.BDay(1):
         return pd.Series(np.nan, index=ctx.ids)
+    cal = mkt.index                                  # full market calendar, pre-cut
     mkt = mkt[(mkt.index > lo) & (mkt.index <= ctx.signal_asof)]
     mkt = mkt[np.isfinite(mkt.to_numpy()) & (mkt.to_numpy() > -1.0)]
     n_market = len(mkt)
@@ -91,8 +97,10 @@ def _compute(ctx):
         return pd.Series(np.nan, index=ctx.ids)
     px = d.pivot_table(index="date", columns="ID", values="closeadj", aggfunc="last").sort_index()
     px = px.where(px > 0)
+    px.index = pd.DatetimeIndex(px.index)
+    px = px.reindex(cal)                            # market calendar: stray SEP rows dropped
     with np.errstate(divide="ignore", invalid="ignore"):
-        lr = np.log(px / px.shift(1))               # previous trading-calendar row
+        lr = np.log(px / px.shift(1))               # previous market day
     lr = lr.replace([np.inf, -np.inf], np.nan)
     lr = lr.reindex(mkt.index)                      # window days that are market days
 
@@ -131,10 +139,10 @@ FACTOR = FactorDef(
         ("crsp.ret (daily)", "SEP.closeadj (ratio to the previous trading-calendar row)",
          "total return, no delisting return; no return across a missing row; 3-decimal closeadj grid"),
         ("ff.mktrf + ff.rf", "MonthContext.market_daily('vw') from SEP + DAILY.marketcap",
-         "harness raw VW all-stock series, not Ken French's; starts 1998-12-02 so 1999-01..1999-11 windows are short"),
+         "harness raw VW all-stock series, not Ken French's; starts 1998-12-02 so 1999-01..1999-11 windows would be short and are nulled"),
         ("ff.rf", "omitted (not in the snapshot)",
          "cancels exactly under the de-meaning when constant; only its daily variation is lost"),
         ("max_nobs - nobs <= 5", "n >= N_market_days_in_window - 5",
-         "OSAP's rule with N = market days; no absolute floor, so early-1999 windows are admitted on the short market window"),
+         "OSAP's rule with N = market days; no absolute floor; a window opening before the market series (signals 1999-01..1999-11) is NaN"),
     ),
 )

@@ -77,7 +77,7 @@ from harness.factor_def import FactorDef
 
 
 def _compute(ctx):
-    y = ctx.fundamentals_yoy(["assets", "assetsc", "investmentsnc", "liabilities", "debt"])
+    y = ctx.fundamentals_yoy(["assets", "assetsc", "investmentsnc", "liabilities", "debt", "debtc"])
     have_now = y["reportperiod"].notna()
     have_ago = y["reportperiod_lag"].notna()
 
@@ -99,9 +99,12 @@ def _compute(ctx):
              + y["debt_lag"].astype(float)) / assets_lag.where(assets_lag > 0)
 
     chg = r - r_lag
-    # classification mismatch: assetsc null at exactly one of the two dates
-    mismatch = y["assetsc"].isna() != y["assetsc_lag"].isna()
-    out = chg.where(have_now & have_ago & ~mismatch)
+    # classification mismatch: assetsc or investmentsnc null at exactly one of
+    # the two dates (a one-sided zero-fill would add a whole-level step)
+    mismatch = (y["assetsc"].isna() != y["assetsc_lag"].isna()) | \
+        (y["investmentsnc"].isna() != y["investmentsnc_lag"].isna())
+    # debt gate ruling: debtc null (unclassified block) -> NaN, as OSAP's dlc/dltt are not zero-filled
+    out = chg.where(have_now & have_ago & ~mismatch & y["debtc"].notna() & y["debtc_lag"].notna())
     return out.replace([np.inf, -np.inf], np.nan)
 
 
@@ -112,7 +115,7 @@ FACTOR = FactorDef(
     compute=_compute,
     ascending=False,                # SignalDoc Sign = -1: LOW growth in net noncurrent operating assets is attractive
     weight=1.0,
-    inputs=("SF1.assets", "SF1.assetsc", "SF1.investmentsnc", "SF1.liabilities", "SF1.debt"),
+    inputs=("SF1.assets", "SF1.assetsc", "SF1.investmentsnc", "SF1.liabilities", "SF1.debt", "SF1.debtc"),
     osap_acronym="ChNNCOA",
     source="Soliman 2008 (The Accounting Review)",
     lookback_months=31,             # latest filing up to 15 months old + year-ago period 12 months earlier + ~4m report-period-to-filing lag
@@ -122,7 +125,7 @@ FACTOR = FactorDef(
         ("compustat.act", "SF1.assetsc (ART)",
          "null (unclassified balance sheet, ~20%) -> 0 where the filing exists, both sides, as OSAP zero-fills act; null at exactly one date -> NaN (format artefact)"),
         ("compustat.ivao", "SF1.investmentsnc (ART)",
-         "APPROX: scope broader than ivao (equity-method investments, LT loans receivable); null -> 0 where filing exists (OSAP zero-fill; null coincides with assetsc null)"),
+         "APPROX: scope broader than ivao (equity-method investments, LT loans receivable); null -> 0 where filing exists (OSAP zero-fill); null at exactly one date -> NaN, as assetsc"),
         ("compustat.lt", "SF1.liabilities (ART)", "1:1, no fill"),
         ("compustat.dlc + compustat.dltt", "SF1.debt (ART)",
          "enters only as the sum; includes operating-lease liabilities from FY2019 (ASC 842): lessee step in 2019-2021 signal months, declared"),

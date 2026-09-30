@@ -8,7 +8,7 @@ Accounting and Economics (Table 8C). Predicted sign: - (SignalDoc Sign = -1).
 Spec: osap_source/cache/b4e911e6/DelFINL/spec.md
 
 CONSTRUCTION (as translated; every deviation from OSAP stated):
-  y = ctx.fundamentals_yoy(["debt", "assets"])
+  y = ctx.fundamentals_yoy(["debt", "debtc", "assets"])
       (ART default; the latest filing known at the signal and the same fiscal
       period one year earlier, aligned by reportperiod within 45 days)
   DelFINL = (debt - debt_lag) / ((assets + assets_lag) / 2)
@@ -28,7 +28,9 @@ THE MASS-POINT QUESTION (answer it here BEFORE running preflight):
   Tie handling: null (restrict the sample). Names with debt exactly 0 at both
   ends are NaN, because that zero change is structural, not information;
   blend_ranks renormalises. One-end-zero names (debt raised from nothing, or
-  fully repaid) are kept, they are real changes. Null debt is NaN, never
+  fully repaid) are kept; a zero may be a vendor fill rather than a true zero
+  (field_map dltt_plus_dlc), and after 2019 one-end-zero is mostly lease
+  adoption. Null debt is NaN, never
   zero-filled.
 
 DEVIATIONS FROM OSAP:
@@ -38,9 +40,10 @@ DEVIATIONS FROM OSAP:
     equity and is not separable.
   - dltt + dlc -> SF1.debt (= debtc + debtnc, field-mapped as a single field,
     not debtc.fillna(0) + debtnc.fillna(0), which would fabricate values on
-    unclassified balance sheets). debt is populated for them (0.03% null), so
-    financials are IN where OSAP's dltt/dlc may be sparse; for banks/insurers
-    it includes repo and short-term borrowings.
+    unclassified balance sheets). debt is populated for unclassified balance
+    sheets (0.03% null), but they are gated OUT: debtc null at either end ->
+    NaN (field_map unclassified_balance_sheet_block ruling), matching OSAP's
+    un-zero-filled dltt/dlc coverage.
   - ASC 842 lessee step: SF1 debt includes capital AND operating lease
     obligations from FY2019 filings; Compustat dltt/dlc excludes operating
     leases. The year-over-year change carries a one-off positive lessee-wide
@@ -65,13 +68,15 @@ from harness.factor_def import FactorDef
 
 
 def _compute(ctx):
-    y = ctx.fundamentals_yoy(["debt", "assets"])
+    y = ctx.fundamentals_yoy(["debt", "debtc", "assets"])
     debt = y["debt"].astype(float)
     debt_lag = y["debt_lag"].astype(float)
     avg_assets = (y["assets"].astype(float) + y["assets_lag"].astype(float)) / 2.0
     out = (debt - debt_lag) / avg_assets.where(avg_assets > 0)
     # standing tie rule: zero debt at both ends is a structural zero change
     out = out.where(~((debt == 0) & (debt_lag == 0)))
+    # debt gate ruling: unclassified balance sheets (debtc null) are NaN, as OSAP's dltt/dlc
+    out = out.where(y["debtc"].notna() & y["debtc_lag"].notna())
     return out.replace([np.inf, -np.inf], np.nan)
 
 
@@ -82,14 +87,14 @@ FACTOR = FactorDef(
     compute=_compute,
     ascending=False,                # SignalDoc Sign = -1: LOW growth in financial liabilities is attractive
     weight=1.0,
-    inputs=("SF1.debt", "SF1.assets"),
+    inputs=("SF1.debt", "SF1.debtc", "SF1.assets"),
     osap_acronym="DelFINL",
     source="Richardson, Sloan, Soliman and Tuna 2005 (Journal of Accounting and Economics)",
     lookback_months=31,             # latest filing up to 15 months old + year-ago period 12 months earlier + ~4m report-period-to-filing lag
     notes="(debt - year-ago debt) / average assets; pstk term dropped; NaN where debt is 0 at both ends; ASC 842 step 2019-20; sign -1",
     field_mappings=(
         ("compustat.dltt + compustat.dlc", "SF1.debt (ART)",
-         "debt includes capital and operating leases from FY2019 (ASC 842 lessee step in 2019-2020 changes, declared); includes repo/short-term borrowings for financials; null stays NaN"),
+         "debt includes capital and operating leases from FY2019 (ASC 842 lessee step in 2019-2020 changes, declared); debtc null at either end -> NaN (unclassified block gated out); null stays NaN"),
         ("compustat.pstk (fillna 0)", "dropped",
          "no SF1 field and OSAP fills it with 0; preferred changes are lost (approx)"),
         ("compustat.at", "SF1.assets (ART)",
