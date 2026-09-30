@@ -7,5 +7,10 @@ search_accounting:
   n_stage2_tested: 0
   n_accepted: 0
   n_inconclusive: 0
-  by_status: {}
+  by_status: {"baseline": 5}
 factors:
+  - {name: Investment, status: baseline, batch: BASELINE, ic: null, ic_t: null, sharpe: null, ret: null, cov: null, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: null, sh_exreg: null, family: "investment", decided_by: null, run: "001"}
+  - {name: Momentum, status: baseline, batch: BASELINE, ic: null, ic_t: null, sharpe: null, ret: null, cov: null, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: null, sh_exreg: null, family: "momentum", decided_by: null, run: "001"}
+  - {name: Profitability, status: baseline, batch: BASELINE, ic: null, ic_t: null, sharpe: null, ret: null, cov: null, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: null, sh_exreg: null, family: "profitability", decided_by: null, run: "001"}
+  - {name: Size, status: baseline, batch: BASELINE, ic: null, ic_t: null, sharpe: null, ret: null, cov: null, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: null, sh_exreg: null, family: "size", decided_by: null, run: "001"}
+  - {name: Value, status: baseline, batch: BASELINE, ic: null, ic_t: null, sharpe: null, ret: null, cov: null, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: null, sh_exreg: null, family: "value", decided_by: null, run: "001"}

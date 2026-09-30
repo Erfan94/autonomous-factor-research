@@ -6,4 +6,44 @@
 # character. Format: research/RECORDS.md.
 schema_version: 5
 holdout: {status: unspent}   # written once, ever, at the spend (docs/DECISIONS.md D8)
-versions: []
+versions:
+  - version: v0
+    date: "2026-09-30"
+    git_tag: v0-baseline                 # owed; created by the coordinator
+    legs:
+      - {name: Size, family: size, osap_acronym: Size, weight: 1.0}
+      - {name: Value, family: value, osap_acronym: BM, weight: 1.0}
+      - {name: Profitability, family: profitability, osap_acronym: OperProf, weight: 1.0}
+      - {name: Investment, family: investment, osap_acronym: AssetGrowth, weight: 1.0}
+      - {name: Momentum, family: momentum, osap_acronym: Mom12m, weight: 1.0}
+    families: "size:Size|value:Value|profitability:Profitability|investment:Investment|momentum:Momentum"
+    construction_rule: "two-level family blend (1/5 per family, equal within, renormalised) of within-sector percentile ranks (fallback cross-section if <10 names); D10-D1 equal-weight, hedged by ex-ante 36m beta to the universe cap-weighted return"
+    stamps: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8}
+    window: {eval_start: "1999-01-01", eval_end: "2021-12-31", include_holdout: false}
+    ratchet: null                        # seed composite; no accepting rung
+    baseline:                            # run 001, GROSS; LS figures hedged, raw and beta beside
+      run: "001"
+      ic: {ic_mean: 0.0145, ic_tstat_nw: 2.62, icir: 0.182, ic_half1_mean: 0.0275, ic_half2_mean: 0.0016}
+      ic_decay: {h1: 0.0096, h2: 0.0085, h3: 0.0103, h6: 0.0096, h12: 0.0115}
+      ls_hedged: {ls_sharpe: 0.600, ls_tstat_nw: 2.26, ls_ann_return_pct: 7.32, ls_ann_vol_pct: 12.20, ls_maxdd_pct: -45.56, ls_hit_rate_pct: 55.1}
+      breadth: {turnover_d10_pct: 28.0, turnover_d1_pct: 23.7, coverage_pct: 100.0, avg_names_per_decile: 196.5, n_months: 276}
+      decile_avg_ret_pct: "0.483,0.739,0.771,0.874,0.886,1.070,1.124,1.215,1.256,1.252"
+      ls_raw: {ls_raw_sharpe: 0.719, ls_raw_ann_return_pct: 9.23, ls_raw_maxdd_pct: -41.64}
+      beta: {ls_beta_mean: -0.085, ls_beta_fullwindow: -0.140, ls_hedged_months: 264}
+      ex_regime: {ls_sharpe_ex_top_years: 0.159, ls_top_years: "2000,2001,2003", ls_top_years_share_pct: 79.4}
+      bear_bull: {ls_sharpe_bear: 1.074, ls_sharpe_bull: 0.456, n_bear_months: 64, n_bull_months: 200}
+      tiers: {MEGA: {ic: 0.0154, raw_ls_sharpe: 0.319, n: 393}, MID: {ic: 0.0118, raw_ls_sharpe: 0.633, n: 589}, SMALL: {ic: 0.0155, raw_ls_sharpe: 0.755, n: 981}}
+      coverage: {leg_coverage_pct_full: 91.6, leg_coverage_worst: "f_prof 93.1%", delisting_adjusted_pct: 0.44}
+    construction:                        # run 002, Stage 3, GROSS, hedged; raw Sharpe and full-window beta beside; never a gate
+      run: "002"
+      columns: [sharpe, ls_t_nw, ann_ret_pct, vol_pct, maxdd_pct, worst_12m_pct, turnover_long_pct, turnover_short_pct, raw_sharpe, beta_fullwindow, sharpe_ex_top_years]
+      equal_rank_decile: [0.600, 2.26, 7.32, 12.20, -45.6, -33.1, 28.0, 23.7, 0.719, -0.14, 0.16]
+      tier_neutral:      [0.639, 2.43, 7.91, 12.37, -50.5, -36.5, 31.2, 28.2, 0.642, -0.23, 0.13]
+      icir_weighted:     [0.643, 2.96, 9.48, 14.73, -27.9, -27.9, 27.1, 26.8, 0.441, -0.45, 0.31]
+      buffered:          [0.555, 2.13, 6.32, 11.37, -43.4, -30.9, 15.2, 10.9, 0.670, -0.14, 0.14]
+      vol_targeted:      [0.306, 1.28, 3.69, 12.04, -50.7, -29.2, 28.0, 23.7, 0.476, -0.02, 0.08]
+      icir_weights_avg: "Size=0.043;Value=0.137;Profitability=0.451;Investment=0.141;Momentum=0.228"
+    character:
+      - "Information is thin and front-loaded: NW t 2.62, second-half IC 0.0016, negative IC 2017-2020; 2000/2001/2003 carry 79% of the summed LS return (ex-top-years Sharpe 0.16); bear 1.07 vs bull 0.46."
+      - "Early blend is thinner than 91.6% full-leg coverage says: Profitability 56.0% and Investment 47.8% at the 1998-12 probe, i.e. in the years that carry the return; decile spread is short-leg-led (D1-D2 0.26), economics small-cap (MEGA raw Sharpe 0.32)."
+      - "Hedge cost 0.12 Sharpe (raw 0.72 -> 0.60, 1.9 pp/yr) on a negative-beta LS (-0.14): the ex-ante beta is small and noisy; on icir_weighted (beta -0.45) the same hedge adds 0.20 Sharpe by adding back market exposure."

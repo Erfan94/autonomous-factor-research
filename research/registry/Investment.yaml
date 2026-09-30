@@ -1,0 +1,32 @@
+name: Investment
+osap_acronym: AssetGrowth
+status: baseline
+family: investment                 # seed family, set by construction in v0 (composite_families on run 001)
+batch: BASELINE
+declaration_order: 4
+date_tested: "2026-09-30"
+run: "001"                      # v0 --baseline --stage 2 (composite measurement, not a leg screen)
+stage2_run: null
+stage1_decision: null           # seed leg; no Stage 1 screen by design
+decided_by: null
+source: "Fama-French CMA; OSAP AssetGrowth"
+orientation: "low asset growth = attractive"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, spec: null}
+dimension_override: null
+history_gate_months: null
+preflight: null
+stage1_failed: []
+stage2_failed: []
+character: >
+  One of five equal-weight seed families (1/5 each) in the v0 within-sector family blend. The blend (run 001):
+  mean IC 0.0145, NW t 2.62, halves 0.0275 / 0.0016, hedged LS 7.32%/yr Sharpe 0.600 (raw 0.719), MaxDD -45.6%,
+  full-window beta -0.140; 79% of the summed LS return sits in 2000, 2001 and 2003 (ex-top-years Sharpe 0.159).
+caveats:
+  - "seed leg: pre-registered in v0 (CLAUDE.md), never screened at Stage 1; no standalone stats exist on this snapshot"
+  - "run 001 measured the family blend, not this leg; the v0 composite numbers live on the manifest v0 block"
+  - "early-window blend is thinner than 91.6% full-leg coverage suggests: Profitability 56.0% and Investment 47.8% at the 1998-12 probe, the years that carry 79% of the summed LS return"
+  - "lookback 27m reaches before the 1997-12-31 panel start; probe coverage 47.8% at 1998-12 (98.0% by 2010-06)"
+decision: >
+  Baseline leg, no bar applies. Held in the composite by pre-registration (CLAUDE.md, v0 = FF5 characteristics
+  plus momentum, one family each); every Stage 2 rung projects candidates on this leg's score. The composite's
+  numbers are recorded once on the v0 manifest block, written after run 002 (Stage 3).
