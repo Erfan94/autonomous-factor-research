@@ -215,3 +215,8 @@ excluded:
     class: data_unavailable
     spec: osap_source/cache/b4e911e6/IO_ShortInterest/spec.md
     date: "2026-09-30"
+  IndIPO:
+    reason: "binary recent-IPO flag: 89.9% of the universe is 0 on average (78.8-95.4%), 2 distinct values, qcut 1 bin at all three probes; the modal share exceeds the 10% cliff in all 276 months, so no tie handling can fill ten deciles. Also approx data: the Ritter IPO file is unavailable; TICKERS.firstpricedate (= ACTIONS listed) is floored at 1997-12-31 for 37.5% of IDs and also marks spin-offs, SPACs and uplistings. Measured by osap-fetcher on the harness universe, all 276 decision months"
+    class: preflight_failed
+    spec: osap_source/cache/b4e911e6/IndIPO/spec.md
+    date: "2026-09-30"
