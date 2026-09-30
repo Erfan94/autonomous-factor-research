@@ -12,8 +12,8 @@ CONSTRUCTION (as translated; every deviation from OSAP stated):
         before the signal   (ctx.fundamentals_at_month_ends lag 6)
   s18 = SF1.sharesbas at the business month-end 18 months before the signal (lag 18)
   score = s6 / s18.where(s18 > 0) - 1        (== (s6 - s18) / s18, as OSAP)
-  Raw ratio, no winsorising. ascending=False: HIGH issuance is unattractive (D1 is
-  the long leg), matching SignalDoc Sign = -1.
+  Raw ratio, no winsorising. ascending=False: HIGH issuance is unattractive (the
+  low-issuance end is the long leg, harness D10), matching SignalDoc Sign = -1.
   Follows the OSAP CODE (shrout * cfacshr), not the docstring wording (shrout /
   cfacshr). Sharadar restates sharesbas to today's split basis, so the ratio of two
   readings is split-neutral (checked in the spec on AAPL, NVDA, TSLA: no step across

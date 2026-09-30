@@ -1,12 +1,11 @@
 """
-IdioVol3F — idiosyncratic volatility: the standard deviation of a stock's
-daily residuals from a Fama-French three-factor regression over one calendar
-month; stocks with HIGH idiosyncratic risk are predicted to earn LOWER
-returns.
+ReturnSkew3F — idiosyncratic skewness: the skewness of a stock's daily
+residuals from a Fama-French three-factor regression over one calendar month;
+stocks with LOW idiosyncratic skewness are predicted to earn HIGHER returns.
 
-OSAP: IdioVol3F, Ang, Hodrick, Xing and Zhang 2006, Journal of Finance
-(Table 7B). Predicted sign: - (SignalDoc Sign = -1).
-Spec: osap_source/cache/b4e911e6/IdioVol3F/spec.md
+OSAP: ReturnSkew3F, Bali, Engle and Murray 2015 (book, Table 14.10).
+Predicted sign: - (SignalDoc Sign = -1).
+Spec: osap_source/cache/b4e911e6/ReturnSkew3F/spec.md
 
 CONSTRUCTION (as translated; every deviation from OSAP stated):
   Window: the market trading days of the signal's calendar month (the days
@@ -21,22 +20,25 @@ CONSTRUCTION (as translated; every deviation from OSAP stated):
           Sharadar-native Fama-French rebuild; only days where all three
           factors exist are served).
   Per name, over the days where the return is finite (n of them), OLS of r on
-  X (intercept and three slopes); IdioVol3F = sample standard deviation
-  (ddof = 1, the residual mean is 0 by the intercept) of the residuals. OSAP's
-  polars `.std()`, NOT sqrt(SSE / (n - 4)).
-  Observation rule = OSAP's: at least 15 valid daily observations in the
-  month, else NaN. Price-only: no filing date, no ART/ARQ choice.
+  X (intercept and three slopes), the residuals exactly as IdioVol3F computes
+  them; ReturnSkew3F = population (biased) skewness of the residuals, m3 /
+  m2^1.5 with m2 = mean(e^2), m3 = mean(e^3) (the residual mean is 0 by the
+  intercept), as OSAP's polars `.skew()` (bias = True). Raw value.
+  Observation rule = OSAP's: at least 15 valid complete days (return and all
+  three factors) in the month, else NaN. Price-only: no filing date, no
+  ART/ARQ choice.
 
 THE MASS-POINT QUESTION (answer it here BEFORE running preflight):
-  What raw value does a do-nothing firm produce? Exactly 0.0: a month in which
-  every daily return is exactly 0 has all residuals 0 (OLS of zeros on the
-  factors). Anything else is a continuous standard deviation.
-  What share of the universe does nothing? ~0%: a whole calendar month of
-  exactly flat closeadj does not occur under the price >= $1 and
-  dollar-volume screens; the spec measured a modal value share <= 0.12% on
-  this snapshot, inside which this block sits. Preflight decides.
-  Tie handling: null. A zero residual spread is an artefact of a stale price,
-  not a measured risk, so it is set NaN and blend_ranks renormalises.
+  What raw value does a do-nothing firm produce? NaN: a month in which every
+  daily return is exactly 0 has all residuals exactly 0, so m2 = 0 and the
+  skewness is 0/0; it is set NaN, not a value. Any residual spread <= 1e-12
+  is also nulled, because floating noise would otherwise manufacture a skew.
+  No other exact value: the skewness of 15-23 residuals is continuous.
+  What share of the universe does nothing? ~0%: the spec measured the largest
+  modal-value share at 0.115% (mean 0.066%) over the 269 scorable months,
+  distinct values >= 99.9% of scored names, and 10 qcut bins in every
+  scorable month. Preflight decides.
+  Tie handling: null. blend_ranks renormalises.
 
 DEVIATIONS FROM OSAP:
   - SEP no-trade days are rows with the price carried forward (field_map trap
@@ -45,8 +47,8 @@ DEVIATIONS FROM OSAP:
     bounds it), declared.
   - rf omitted (the snapshot holds no risk-free rate). Within one calendar
     month rf is effectively constant, so the regression intercept absorbs it
-    and the residual standard deviation is unchanged; the stock return and
-    the regressors are both RAW.
+    and the residuals are unchanged up to numerical noise; the stock return
+    and the regressors are both RAW.
   - mktrf / smb / hml: ctx.ff3_daily, the harness rebuild (NYSE-breakpoint
     2x3 sorts on SF1 book equity and DAILY.marketcap; CURRENT TICKERS
     exchange for the breakpoints; BE = equity + taxliabilities with no
@@ -57,9 +59,8 @@ DEVIATIONS FROM OSAP:
   - data start TRUNCATION: smb / hml exist only from the first trading day
     after the June-1999 formation, so every signal before 1999-07-30 (the
     first complete-factor month) is NaN for every name: a data-start fact of
-    the harness's factor build, not a defect. About 7 of the 276 decision
-    months.
-  - exactly-zero residual spread set NaN (OSAP would emit 0.0).
+    the harness's factor build, not a defect. 7 of the 276 decision months.
+  - exactly-zero (<= 1e-12) residual spread set NaN (OSAP's 0/0 is NaN too).
   - the 1997-12 SEP stub month is dropped through ctx.partial_months("SEP")
     (never reached: the first signal month is 1998-12).
 """
@@ -71,6 +72,7 @@ from harness.factor_def import FactorDef
 
 _MIN_OBS = 15               # OSAP: ret.count() >= 15 per permno-month (Bali-Hovakimian 2009)
 _CAL_DAYS = 45              # market calendar read: the month plus the prior close
+_SPREAD_FLOOR = 1e-12       # residual spread below this is floating noise, not a measured skew
 
 
 def _compute(ctx):
@@ -123,26 +125,31 @@ def _compute(ctx):
         Yp = Y[np.ix_(p, cols)]
         beta, *_ = np.linalg.lstsq(Xp, Yp, rcond=None)
         res = Yp - Xp @ beta
-        out[cols] = res.std(axis=0, ddof=1)           # OSAP: polars .std() of the residuals
+        e = res - res.mean(axis=0)
+        m2 = (e ** 2).mean(axis=0)
+        m3 = (e ** 3).mean(axis=0)
+        with np.errstate(divide="ignore", invalid="ignore"):
+            sk = m3 / m2 ** 1.5                       # OSAP: polars .skew() (bias=True) of the residuals
+        out[cols] = np.where(np.sqrt(m2) > _SPREAD_FLOOR, sk, np.nan)
 
-    out = np.where((n >= _MIN_OBS) & np.isfinite(out) & (out > 0), out, np.nan)
+    out = np.where((n >= _MIN_OBS) & np.isfinite(out), out, np.nan)
     return pd.Series(out, index=ret.columns).reindex(ctx.ids)
 
 
 FACTOR = FactorDef(
     # family: LEAVE UNSET (assigned in Phase C).
-    name="IdioVol3F",
-    col="f_ivol3f",
+    name="ReturnSkew3F",
+    col="f_retskew3f",
     compute=_compute,
-    ascending=False,                # SignalDoc Sign = -1: LOW idiosyncratic volatility is attractive
+    ascending=False,                # SignalDoc Sign = -1: LOW idiosyncratic skewness is attractive
     weight=1.0,
     inputs=("SEP.closeadj", "DAILY.marketcap", "SF1.equity", "SF1.assets",
             "SF1.liabilities", "SF1.taxliabilities"),
-    osap_acronym="IdioVol3F",
-    source="Ang, Hodrick, Xing and Zhang 2006 (Journal of Finance)",
+    osap_acronym="ReturnSkew3F",
+    source="Bali, Engle and Murray 2015 (Empirical Asset Pricing: The Cross Section of Stock Returns)",
     lookback_months=2,              # the calendar month read plus the prior close
     history_months=1,               # return-window signal: a price at t-1 month
-    notes="std (ddof=1) of daily FF3 residuals over the signal's calendar month, >= 15 obs; no rf; NaN before 1999-07",
+    notes="population skewness (bias=True) of daily FF3 residuals over the signal's calendar month, >= 15 obs; no rf; NaN before 1999-07",
     field_mappings=(
         ("crsp.ret (daily)", "SEP.closeadj (ratio to the previous market-calendar row)",
          "total return, no delisting return; no return across a missing row; 3-decimal closeadj grid"),
@@ -150,10 +157,10 @@ FACTOR = FactorDef(
          "Sharadar-native 2x3 sort (SF1 equity + taxliabilities, DAILY.marketcap, current-TICKERS exchange), "
          "no delisting returns, mkt RAW; not in the field_map index (harness accessor)"),
         ("ff.rf", "omitted (not in the snapshot)",
-         "constant within the month, absorbed by the intercept; residual std unchanged"),
+         "constant within the month, absorbed by the intercept; residuals unchanged"),
         ("ff.smb / ff.hml start", "first complete-factor month is 1999-07",
-         "signals before 1999-07-30 are NaN for every name (data-start truncation, ~7 of 276 months)"),
-        ("ret.count() >= 15; resid.std()", ">= 15 valid (return, mkt, smb, hml) days; ddof=1 of the residuals",
-         "OSAP's rule and estimator; exactly-zero spread set NaN"),
+         "signals before 1999-07-30 are NaN for every name (data-start truncation, 7 of 276 months)"),
+        ("ret.count() >= 15; resid.skew()", ">= 15 valid (return, mkt, smb, hml) days; population m3/m2^1.5 of the residuals",
+         "OSAP's rule and estimator; residual spread <= 1e-12 set NaN"),
     ),
 )

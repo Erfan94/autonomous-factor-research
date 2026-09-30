@@ -40,6 +40,14 @@ THE MASS-POINT QUESTION (answer it here BEFORE running preflight):
   branch on the measured snapshot).
 
 DEVIATIONS FROM OSAP:
+  - SEP no-trade days are rows with the price carried forward (field_map trap
+    sep_no_trade_days_are_rows): they give zero returns that count toward the 15
+    observations and damp the measure for thin names; not filtered (the ADV screen
+    bounds it), declared.
+  - The trading calendar is ctx.market_daily's (built from SEP + DAILY.marketcap), which
+    starts 1998-12-02, so the 1998-12 signal loses the 12-01 and 12-02 returns.
+  - history_months=1 drops a name whose first month is t, which OSAP would score on
+    >= 15 days.
   - SignalDoc's Detailed Definition says "residuals from CAPM regressions";
     the OSAP code (the authority) emits RealizedVol as the plain std of the
     daily excess return, the regression residuals feeding IdioVol3F instead.
@@ -104,7 +112,7 @@ FACTOR = FactorDef(
     compute=_compute,
     ascending=False,                # SignalDoc Sign = -1: LOW total volatility is attractive
     weight=1.0,
-    inputs=("SEP.closeadj",),
+    inputs=("SEP.closeadj", "DAILY.marketcap"),
     osap_acronym="RealizedVol",
     source="Ang, Hodrick, Xing and Zhang 2006 (Journal of Finance)",
     lookback_months=2,              # the calendar month read plus the prior close

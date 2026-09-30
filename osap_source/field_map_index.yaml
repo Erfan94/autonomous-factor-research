@@ -26,7 +26,7 @@ fields:
   - {key: "compustat.conm", sharadar: "name", status: "mapped", verified_on: "", note: ""}
   - {key: "compustat.csho", sharadar: "sharesbas", status: "mapped", verified_on: "2026-09-30", note: "SF1.sharesbas (ART), re-verified 2026-09-25 on THIS snapshot: null 0.07% ART/ARQ, 0.12% ARY (688,440/681,711/1"}
   - {key: "compustat.cshoq", sharadar: "sharesbas", status: "mapped", verified_on: "2026-09-30", note: ""}
-  - {key: "compustat.cshprq", sharadar: "shareswa", status: "mapped", verified_on: "", note: "SF1.shareswa, READ WITH dimension='ARQ' (FactorDef.dimension). Verified 2026-09-25 on THIS snapshot (DATA_SHA "}
+  - {key: "compustat.cshprq", sharadar: "shareswa", status: "mapped", verified_on: "2026-09-30", note: "SF1.shareswa, READ WITH dimension='ARQ' (FactorDef.dimension). Verified 2026-09-25 on THIS snapshot (DATA_SHA "}
   - {key: "compustat.cshrc", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}
   - {key: "compustat.curcd", sharadar: "fxusd (rate) / TICKERS.currency (code); USD variants cashnequsd, debtusd, ebitdausd, ebitusd, epsusd, equityusd, netinccmnusd, revenueusd", status: "approx", verified_on: "2026-09-30", note: "SF1.fxusd = reporting-currency units per 1 USD, so USD = field / fxusd (NOT field x fxusd). Measured on THIS s"}
   - {key: "compustat.cusip", sharadar: "TICKERS.cusips", status: "mapped", verified_on: "", note: ""}
@@ -144,7 +144,7 @@ fields:
   - {key: "compustat.rectq", sharadar: "receivables", status: "mapped", verified_on: "", note: "Quarterly form of rect; see rect for the full verification (null/coverage/quantile checks on THIS snapshot, sa"}
   - {key: "compustat.req", sharadar: "retearn", status: "mapped", verified_on: "", note: ""}
   - {key: "compustat.revt", sharadar: "revenue", status: "mapped", verified_on: "2026-09-30", note: "ART = TTM sum of 4 ARQ (100% on 8 large tickers 2015-25); USD. Null 3-7%/yr 1999-2025 (37% in 1994-98 warm-up)"}
-  - {key: "compustat.revtq", sharadar: "revenue", status: "mapped", verified_on: "", note: "Quarterly form of revt; see revt for the full verification (null/coverage/quantile checks on THIS snapshot, sa"}
+  - {key: "compustat.revtq", sharadar: "revenue", status: "mapped", verified_on: "2026-09-30", note: "Quarterly form of revt; see revt for the full verification (null/coverage/quantile checks on THIS snapshot, sa"}
   - {key: "compustat.sale", sharadar: "revenue", status: "mapped", verified_on: "2026-09-30", note: "same column as revt; see that entry"}
   - {key: "compustat.saleq", sharadar: "revenue", status: "mapped", verified_on: "", note: "Quarterly form of sale; see sale for the full verification (null/coverage/quantile checks on THIS snapshot, sa"}
   - {key: "compustat.scstkc", sharadar: "", status: "unavailable", verified_on: "", note: "no SF1 field; a predictor needing it is infeasible unless OSAP zero-fills it"}

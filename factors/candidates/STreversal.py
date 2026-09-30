@@ -13,7 +13,7 @@ CONSTRUCTION (as translated; every deviation from OSAP stated):
   score = p0 / p1.where(p1 > 0) - 1
   closeadj is split- and dividend-adjusted, so the ratio is a total return over the
   month ending at the signal date (known at the signal date). Raw, no winsorising.
-  ascending=False: a HIGH last-month return is unattractive (D1 is the long leg),
+  ascending=False: a HIGH last-month return is unattractive (the low-return end is the long leg, harness D10),
   matching SignalDoc Sign = -1.
   Relation to the v0 Momentum leg (factual): Momentum is closeadj(signal - 1m) /
   closeadj(signal - 12m) - 1 and skips the most recent month; this signal is exactly
