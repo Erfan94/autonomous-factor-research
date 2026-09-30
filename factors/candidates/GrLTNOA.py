@@ -69,6 +69,10 @@ THE MASS-POINT QUESTION (answer it here BEFORE running preflight):
   dates has no population.
 
 DEVIATIONS FROM OSAP:
+  - Algebra: ao = assetsnc - ppnenet - intangibles - investmentsnc, so ppnenet and
+    intangibles cancel inside ltnoa; they matter only through NaN propagation (a null
+    ppnenet nulls the row, as a null ppent would in OSAP's sum). The intan zero-fill and
+    the ppnenet caveats therefore do not move any value.
   - aco, lco: dropped (Route A), 0 for every firm. OSAP's zero is only the
     missing case; real values are ~3% / ~9% of assets (medians), so the level
     and the accrual both differ from the literal Compustat construction,
@@ -145,7 +149,7 @@ def _compute(ctx):
 
     g = d_ltnoa - accrual
     g = g.replace([np.inf, -np.inf], np.nan)
-    return g.where(g != 0)          # exact 0: no change and no depreciation, a placeholder
+    return g
 
 
 FACTOR = FactorDef(

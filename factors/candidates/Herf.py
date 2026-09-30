@@ -23,7 +23,8 @@ CONSTRUCTION (as translated; every deviation from OSAP stated):
   Grouping is on the integer TICKERS.siccode (SIC4), as the pinned code does (its sic3D
   variable is str(sic)[:4], the full four digits, despite the name); never a string slice
   of the float. Negative revenue is kept, as OSAP keeps it; an industry with a
-  non-positive total is skipped (the share would flip sign).
+  zero or non-finite total is skipped (as HerfBE; the share is squared, so a negative
+  total cannot flip its sign).
   Raw level, no log, no winsorising (harness ranks within sector).
   Early months are UNMASKED: lags before 1999-03 enter the mean although ART revenue is
   then populated for only 29-73% of listed names (industry sums over part of the firms
@@ -49,6 +50,9 @@ THE MASS-POINT QUESTION (answer it here BEFORE running preflight):
   0 at both ends -> NaN) does not apply to a level.
 
 DEVIATIONS FROM OSAP:
+  - OSAP quirk not reproduced: an SIC4-month whose firms have no (or only zero) sales gets
+    tempHerf = 0 in OSAP through pandas' empty sum, which lands on the long side; here that
+    lag is dropped from the firm's 36-month mean.
   - Industry code: TICKERS.siccode is today's classification, applied to all history; OSAP's
     sicCRSP is point-in-time (12.3% of tickers changed SIC since 1998). Look-ahead through
     reclassified firms.
@@ -90,8 +94,9 @@ def _temp_herf(ctx):
         return None
     key = [mk["months_back"].to_numpy(), mk["sic"].to_numpy()]
     tot = mk.groupby(key)["rev"].transform("sum")
-    mk = mk[tot > 0]                                    # a non-positive industry total flips the share
-    share2 = (mk["rev"] / tot[tot > 0]) ** 2
+    ok = (tot != 0) & np.isfinite(tot)                  # a zero total has no shares
+    mk = mk[ok]
+    share2 = (mk["rev"] / tot[ok]) ** 2
     return share2.groupby([mk["months_back"].to_numpy(), mk["sic"].to_numpy()]).sum()
 
 
@@ -128,7 +133,7 @@ FACTOR = FactorDef(
     inputs=("SF1.revenue", "SF1.fxusd", "TICKERS.siccode"),
     osap_acronym="Herf",
     source="Hou and Robinson 2006 (Journal of Finance)",
-    lookback_months=50,             # 36 month-ends, each filing up to 15 months stale
+    lookback_months=51,             # 36 month-ends, each filing up to 15 months stale (as HerfAsset/HerfBE)
     notes="36-month mean of the market-scope SIC4 sales Herfindahl (revenue/fxusd), min 12; 49xx NaN; early months unmasked",
     field_mappings=(
         ("compustat.sale", "SF1.revenue / SF1.fxusd (ART, market scope)",

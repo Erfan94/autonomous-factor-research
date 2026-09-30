@@ -50,6 +50,9 @@ THE MASS-POINT QUESTION (answer it here BEFORE running preflight):
   (assets are non-negative), so there is no sign-flip pathology.
 
 DEVIATIONS FROM OSAP:
+  - OSAP quirk not reproduced: an SIC4-month whose firms have no (or only zero) sales gets
+    tempHerf = 0 in OSAP through pandas' empty sum, which lands on the long side; here that
+    lag is dropped from the firm's 36-month mean.
   - Industry code: TICKERS.siccode is today's classification, applied to all history; OSAP's
     sicCRSP is point-in-time (12.3% of tickers changed SIC since 1998). It enters the
     signal VALUE (industry grouping and the 49xx exclusion): look-ahead through

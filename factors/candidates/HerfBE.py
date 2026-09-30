@@ -57,6 +57,9 @@ THE MASS-POINT QUESTION (answer it here BEFORE running preflight):
   Tie handling: none beyond the average rank the harness applies.
 
 DEVIATIONS FROM OSAP:
+  - OSAP quirk not reproduced: an SIC4-month whose firms have no (or only zero) sales gets
+    tempHerf = 0 in OSAP through pandas' empty sum, which lands on the long side; here that
+    lag is dropped from the firm's 36-month mean.
   - Book equity: OSAP tempBE = seq (fallback ceq + preferred, then at - lt) + txditc -
     preferred (pstk, else pstkrv, else pstkl). Sharadar has no preferred-stock line, so
     SF1.equity + SF1.taxliabilities.fillna(0) is used and PREFERRED IS NOT REMOVED (per the

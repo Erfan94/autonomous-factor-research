@@ -195,4 +195,4 @@ fields:
   - {key: "crsp.siccd", sharadar: "TICKERS.siccode (current)", status: "approx", verified_on: "", note: "Same field and same current-vs-point-in-time deviation as compustat.sich (see that entry): 12.3% of SEP-scope "}
   - {key: "crsp.firstpricedate", sharadar: "TICKERS.firstpricedate", status: "mapped", verified_on: "", note: "New use (FirmAge age-clock start), permaticker-level, one row per ID via ticker_meta(). Sharadar left-censors "}
   - {key: "crsp.divamt", sharadar: "ACTIONS.value where action=='dividend'", status: "approx", verified_on: "", note: "New field (not previously mapped): ACTIONS action=='dividend' rows give per-share cash dividend amount in `val"}
-known_traps: 21   # read field_map.yaml `known_traps` before touching prices, shares, marketcap, dimensions
+known_traps: 22   # read field_map.yaml `known_traps` before touching prices, shares, marketcap, dimensions

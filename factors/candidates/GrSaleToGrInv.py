@@ -60,8 +60,9 @@ DEVIATIONS FROM OSAP:
   - sale: revenue (ART TTM); invt: inventory (ART level), vendor 0 kept (the
     same as OSAP's zero-fill, see above); no unavailable input.
   - Base guard is strictly positive (OSAP: base != 0 -> NaN). A negative
-    revenue or inventory base (data error, well under 0.1% of rows) is NaN here
-    rather than a sign-flipped growth.
+    revenue or inventory base (data error, well under 0.1% of rows) makes that
+    form NaN rather than a sign-flipped growth; a NaN primary (two-year base)
+    then falls through to the one-year fallback, as any NaN primary does.
   - Timing: OSAP reads the fiscal year at datadate + 6 months, refreshed
     annually; here the latest filed ART level (refreshed quarterly) against the
     same periods one and two years earlier. The growth spans four quarters, not
