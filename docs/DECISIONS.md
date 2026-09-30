@@ -32,8 +32,12 @@ those strings are predictor acronyms), in `osap_source/field_map.yaml`
 notes that name predictors as *users* of a field (mapping knowledge; every
 one of its 109 `verified_on` dates was moved to `probed_on_prior_snapshot`),
 in `harness/data_layer.py` comments that record measurements made on the
-predecessor's DATA_SHA (kept as documented harness-design evidence), and in
-the format placeholders of `research/RECORDS.md`. `research/LESSONS.md`
+predecessor's DATA_SHA (kept as documented harness-design evidence), in the
+format placeholders of `research/RECORDS.md`, in this project's own
+`harness_changed` / `config_changed` events (which cite the predecessor's
+stamps as the `old_sha` they replaced), in one test fixture label, and in
+`.claude/agents/osap-fetcher.md`, where an acronym is an example of a
+predictor emitted by a differently named upstream script. `research/LESSONS.md`
 carries the predecessors' numbers and names no factor.
 `.claude/settings.json` denies reading or shelling into every sibling project.
 
