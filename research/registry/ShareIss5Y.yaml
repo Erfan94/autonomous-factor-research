@@ -1,6 +1,6 @@
 name: ShareIss5Y
 osap_acronym: ShareIss5Y
-status: stage2_pending
+status: accepted
 family: external_financing
 batch: stage1_b8
 declaration_order: 7
@@ -54,4 +54,4 @@ caveats:
   - "Stage 2: all-legs coverage 72.7% -> 47.6% = the 53-month history gate plus 62.6% pooled coverage (about 77% inside its own months)"
   - "Stage 2: hedged guard delta +2.47 vs raw +1.46 pp/yr as composite beta moves -0.12 -> -0.19; MaxDD 4.9 pts worse hedged, 5.8 raw"
 decision: >
-  Stage 1 (run 010): passes every bar (IC 0.0158, NW t 3.67, halves min 0.0152, raw spread 4.88%/yr, coverage 62.6%, 152.2 names per decile, 223 LS months >= 200). Stage 2 (run 012, rung 3, vs v0 + PctAcc, CBOperProf): PASS on both bars, residual IC 0.0120 with NW t 3.61 > 2.0 on 223 months (76% of its own 0.0158) and guard paired hedged dLS +2.47 pp/yr, t 2.83 on 276 (raw +1.46, approximate t 1.67 on the hedged paired SE). Opens external_financing as the sixth family at 1/6; the others go 1/5 -> 1/6. Diagnostics: dIC +0.0047 (t 3.03), spanning alpha 8.00%/yr (t 4.51, R2 0.02, corr 0.12), dSharpe +0.187, MaxDD 4.9 pts worse; WITH beta -0.192 vs -0.122 (ex ante -0.158 / -0.063), raw Sharpe 0.874 / 0.777, ex-top-years 0.465 / 0.249, half-2 IC 0.0095 / 0.0025. Status stays stage2_pending pending application (v3).
+  Stage 1 (run 010): passes every bar (IC 0.0158, NW t 3.67, halves min 0.0152, raw spread 4.88%/yr, coverage 62.6%, 152.2 names per decile, 223 LS months >= 200). Stage 2 (run 012, rung 3, vs v0 + PctAcc, CBOperProf): PASS on both bars, residual IC 0.0120 with NW t 3.61 > 2.0 on 223 months (76% of its own 0.0158) and guard paired hedged dLS +2.47 pp/yr, t 2.83 on 276 (raw +1.46, approximate t 1.67 on the hedged paired SE). Opens external_financing as the sixth family at 1/6; the others go 1/5 -> 1/6. Diagnostics: dIC +0.0047 (t 3.03), spanning alpha 8.00%/yr (t 4.51, R2 0.02, corr 0.12), dSharpe +0.187, MaxDD 4.9 pts worse; WITH beta -0.192 vs -0.122 (ex ante -0.158 / -0.063), raw Sharpe 0.874 / 0.777, ex-top-years 0.465 / 0.249, half-2 IC 0.0095 / 0.0025. Accepted as v3 (factors/accepted/ShareIss5Y.py, COMPOSITE_SHA 73ee92fe0723), the first new-family version (external_financing, 6 families); run 017 baseline reproduces the rung 3 WITH arm to six places; tag v3-add-ShareIss5Y owed.

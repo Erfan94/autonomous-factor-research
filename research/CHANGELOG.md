@@ -106,3 +106,10 @@
 - Run 015 reproduces the rung 2 WITH arm to six places: IC 0.016855 (NW t 3.02), hedged Sharpe 0.660554, 7.821336%/yr, MaxDD -37.07, beta -0.122, raw Sharpe 0.777, ex-top-years Sharpe 0.249; full-leg coverage 72.7% (Financials/Real Estate).
 - Run 016 (Stage 3, never a gate): equal_rank_decile 0.661; icir_weighted 0.813 hedged (raw 0.499, beta -0.47); tier_neutral 0.692; buffered 0.632 at turnover 15.0%; vol_targeted 0.378.
 - Records: manifest block v2 (the v1 git_tag line is left as it reads); provenance_verified (015, 016), construction_reported, composite_updated; CBOperProf row accepted; index n_accepted 2.
+
+## 2026-10-01 — v3 = v2 + ShareIss5Y (opens external_financing, 6 families): accepted and applied (runs 017, 018); tag v3-add-ShareIss5Y owed
+- Accepted from run 012 rung 3 (base v2) on both bars. Residual IC NW t 3.61 > 2.0, on 223 months, at 76% of its own IC. Guard paired hedged dLS t 2.83 >= -2.0 over 276 months; for the first 53 the family is absent and the blend renormalises to v2. Raw dLS +1.46 pp/yr agrees in sign with the hedged +2.47.
+- Applied: ShareIss5Y.py (ARQ, 65-month history gate) moved to factors/accepted/; COMPOSITE_VERSION v3; COMPOSITE_SHA 8b444636f0a1 -> 73ee92fe0723, the other stamps unchanged; pytest 434 passed. FAMILIES header shows 6 families, external_financing:ShareIss5Y; manifest families match.
+- Run 017 reproduces the rung 3 WITH arm to six places: IC 0.021532 (NW t 3.98), hedged Sharpe 0.847944, 10.287625%/yr, MaxDD -41.92, beta -0.192, raw Sharpe 0.874, ex-top-years Sharpe 0.465. Full-leg coverage 47.6%.
+- Run 018 (Stage 3, never a gate): equal_rank_decile 0.848; icir_weighted 0.948 hedged (raw 0.580, beta -0.47); tier_neutral 0.909; buffered 0.789 at turnover 13.9%; vol_targeted 0.655.
+- Records: manifest block v3; provenance_verified (017, 018), construction_reported, composite_updated; ShareIss5Y row accepted; index n_accepted 3.
