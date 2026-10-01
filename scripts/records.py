@@ -322,8 +322,18 @@ def live_check_fresh(max_age_days=14):
         return False
     absent = rec.get("mapped_but_absent") or []
     tail = f"; mapped but not held: {', '.join(absent)}" if absent else ""
-    print(f"  live API: {rec['tables_checked']} tables column-complete, checked {age}d ago"
-          f" against this DATA_SHA{tail}")
+    # `tables_checked` counts every MAPPED Sharadar table, held or not; the
+    # held ones are what was proved column-complete. External tables (kind:
+    # external in the manifest) are not Sharadar's and are never vouched for
+    # by its API: named apart, read off the manifest so an older record that
+    # predates them still parses.
+    held = rec.get("sharadar_tables_held", int(rec.get("tables_checked", 0)) - len(absent))
+    ext = sorted(t for t, e in ((provenance.load_manifest().get("tables") or {}).items())
+                 if (e or {}).get("kind") == "external")
+    ext_tail = (f"; external, not vouched by the API (sha256-checked on open): {', '.join(ext)}"
+                if ext else "")
+    print(f"  live API: {held} Sharadar tables column-complete, checked {age}d ago"
+          f" against this DATA_SHA{tail}{ext_tail}")
     return True
 
 

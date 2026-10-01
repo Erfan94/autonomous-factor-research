@@ -55,7 +55,8 @@ from harness.data_layer import (PanelIndex, build_rebalance_schedule,      # noq
                                 load_or_build_cs_spread, load_or_build_ff3,
                                 load_or_build_first_trade, load_or_build_market,
                                 load_or_build_panel, load_or_build_ps,
-                                load_or_build_tailex, load_or_build_trend, load_snapshot)
+                                load_or_build_tailex, load_or_build_trend, load_rf_monthly,
+                                load_snapshot)
 from harness import construction_layer as CL                                # noqa: E402
 from harness.portfolio import run_construction                              # noqa: E402
 from harness.preflight import probe_scalars, run_preflight                  # noqa: E402
@@ -201,14 +202,15 @@ def print_return_kinds(audit):
         print(f"    {k:<32s} {n:>10,d}  {100.0 * n / tot:6.2f}%")
 
 
-def full_report(title, fm, cm, audit, cfg, metas=None, oos_start=None):
+def full_report(title, fm, cm, audit, cfg, metas=None, oos_start=None, rf=None):
     ic_df = compute_ic(audit)
     if len(ic_df) == 0:
         print("  (no months with a computable IC)")
         return None, None
     stats = print_summary(title, fm, cm, ic_df, audit,
                           nw_lags=int(cfg["statistics"]["newey_west_lags"]),
-                          hedge=A.hedge_params(cfg), regime=A.regime_params(cfg), oos_start=oos_start)
+                          hedge=A.hedge_params(cfg), regime=A.regime_params(cfg), oos_start=oos_start,
+                          rf=rf)
     print("\n\n  Per-(region × liq_tier) diagnostics")
     print("=" * 72)
     buckets = compute_bucket_diagnostics(audit)
@@ -325,7 +327,7 @@ def _summary_record(name, stage, stats, buckets, rows, verdict, extra=None):
 # Drivers
 # =============================================================================
 
-def drive_stage1(frames, candidates, cfg, stamps, eval_start, eval_end, include_holdout, probes):
+def drive_stage1(frames, candidates, cfg, stamps, eval_start, eval_end, include_holdout, probes, rf=None):
     n_dec = int(cfg["rebalance"]["n_deciles"])
     thr = cfg["acceptance_thresholds"]["stage1_standalone"]
     blocks, summaries = [], []
@@ -342,7 +344,8 @@ def drive_stage1(frames, candidates, cfg, stamps, eval_start, eval_end, include_
             print(f"  {f.name}: no month produced deciles — no result block.")
             continue
         cov = 100.0 * audit[f.col].notna().mean()
-        stats, buckets = full_report(f"US UNIVERSE  —  {f.name} (standalone)", fm, cm, audit, cfg, [meta])
+        stats, buckets = full_report(f"US UNIVERSE  —  {f.name} (standalone)", fm, cm, audit, cfg, [meta],
+                                     rf=rf)
         if stats is None:
             continue
         values = dict(stats); values["coverage_pct"] = cov
@@ -427,7 +430,7 @@ def _print_paired_return_start(pf, rows):
 
 
 def drive_baseline(frames, legs, cfg, stamps, eval_start, eval_end, include_holdout, probes, C,
-                   return_start="close"):
+                   return_start="close", rf=None):
     n_dec = int(cfg["rebalance"]["n_deciles"])
     metas = [f.meta() for f in legs]
     _print_families(metas)
@@ -437,7 +440,8 @@ def drive_baseline(frames, legs, cfg, stamps, eval_start, eval_end, include_hold
         return [], []
     stats, buckets = full_report(f"US UNIVERSE  —  {len(metas)}-factor composite {C.COMPOSITE_VERSION}, "
                                  "family blend", fm, cm, audit, cfg, metas,
-                                 oos_start=(cfg["dates"]["out_of_sample_start"] if include_holdout else None))
+                                 oos_start=(cfg["dates"]["out_of_sample_start"] if include_holdout else None),
+                                 rf=rf)
     if stats is None:
         return [], []
     cov = 100.0 * audit["COMPOSITE_SCORE"].notna().mean()
@@ -461,7 +465,7 @@ def drive_baseline(frames, legs, cfg, stamps, eval_start, eval_end, include_hold
     return [emit_result_block(fields)], [_summary_record(fields["factor"], "baseline", values, buckets, [], "MEASURED")]
 
 
-def drive_stage3(frames, legs, cfg, stamps, eval_start, eval_end, include_holdout, C):
+def drive_stage3(frames, legs, cfg, stamps, eval_start, eval_end, include_holdout, C, rf=None):
     """Portfolio construction on the live composite. Reports, never decides."""
     n_dec = int(cfg["rebalance"]["n_deciles"])
     metas = [f.meta() for f in legs]
@@ -472,7 +476,7 @@ def drive_stage3(frames, legs, cfg, stamps, eval_start, eval_end, include_holdou
         return [], []
     print("\n\n" + "#" * 72 + f"\n#  STAGE 3 : construction of {C.COMPOSITE_VERSION} "
           f"({', '.join(m['name'] for m in metas)})\n" + "#" * 72)
-    results = run_construction(audit, metas, cfg)
+    results = run_construction(audit, metas, cfg, rf=rf)
     blocks, summaries = [], []
     for variant, st in results:
         if st.get("n_months", 0) < 2:
@@ -574,7 +578,8 @@ def drive_layer(frames, legs, cfg, stamps, eval_start, eval_end, include_holdout
     return blocks, summaries
 
 
-def drive_stage2(frames, legs, candidates, cfg, stamps, eval_start, eval_end, include_holdout, probes, C):
+def drive_stage2(frames, legs, candidates, cfg, stamps, eval_start, eval_end, include_holdout, probes, C,
+                 rf=None):
     """The batched sequential ratchet. Rung i faces the base PLUS every earlier
     rung that PASSED, in declaration order."""
     n_dec = int(cfg["rebalance"]["n_deciles"])
@@ -597,7 +602,7 @@ def drive_stage2(frames, legs, candidates, cfg, stamps, eval_start, eval_end, in
         return [], []
     print("\n\n" + "#" * 72 + "\n#  BASE ARM\n" + "#" * 72)
     cur_stats, _ = full_report(f"US UNIVERSE  —  {len(base_meta)}-factor composite, family blend",
-                               base_fm, base_cm, base_audit, cfg, base_meta)
+                               base_fm, base_cm, base_audit, cfg, base_meta, rf=rf)
     del base_fm, base_cm, base_audit
     cur_meta, accepted, blocks, summaries, ladder = list(base_meta), [], [], [], []
     members = ",".join(f.name for f in candidates)
@@ -618,7 +623,7 @@ def drive_stage2(frames, legs, candidates, cfg, stamps, eval_start, eval_end, in
             print(f"FATAL: rung {i + 1} ({f.name}) produced no data — the ladder stops here.")
             break
         stats, buckets = full_report(f"US UNIVERSE  —  {len(trial)}-factor composite (base + {f.name}), "
-                                     "family blend", fm, cm, audit, cfg, trial)
+                                     "family blend", fm, cm, audit, cfg, trial, rf=rf)
         if stats is None or cur_stats is None:
             print(f"FATAL: rung {i + 1} ({f.name}) produced no statistics — the ladder stops here.")
             break
@@ -676,6 +681,12 @@ def drive_stage2(frames, legs, candidates, cfg, stamps, eval_start, eval_end, in
               f"   (years without: {cur_stats['ls_top_years'] or '-'}; with: {stats['ls_top_years'] or '-'})")
         print(f"  {'Sharpe bear/bull':<18}{cur_stats['ls_sharpe_bear']:>6.2f}/{cur_stats['ls_sharpe_bull']:<5.2f}"
               f"{stats['ls_sharpe_bear']:>6.2f}/{stats['ls_sharpe_bull']:<5.2f}")
+        if "guard_excess_tstat_nw" in arm:
+            print(f"  {'Excess ann ret %':<18}{cur_stats['ls_excess_ann_return_pct']:>12.4f}"
+                  f"{stats['ls_excess_ann_return_pct']:>12.4f}"
+                  f"{stats['ls_excess_ann_return_pct'] - cur_stats['ls_excess_ann_return_pct']:>+12.4f}"
+                  f"{arm['guard_excess_tstat_nw']:>+10.2f}   (hedged + beta x rf; the guard BAR reads the "
+                  "hedged row above)")
         _print_bars(rows, "Stage 2 bars")
         print(f"\n  RUNG {i + 1} VERDICT: {'PASS' if ok else 'FAIL'} — "
               + (f"{f.name} JOINS the composite." if ok else f"{f.name} does NOT join; the base is unchanged."))
@@ -752,7 +763,10 @@ _KEY_STATS = ["ic_mean", "ic_tstat_nw", "icir", "ic_half1_mean", "ic_half2_mean"
               "cut_inwindow_ls_beta_mean",
               "cut_holdout_n_months", "cut_holdout_ic_mean", "cut_holdout_ic_tstat_nw", "cut_holdout_ls_sharpe",
               "cut_holdout_ls_ann_return_pct", "cut_holdout_ls_maxdd_pct", "cut_holdout_ls_raw_sharpe",
-              "cut_holdout_ls_beta_mean"]
+              "cut_holdout_ls_beta_mean",
+              "ls_excess_sharpe", "ls_excess_ann_return_pct", "ls_excess_maxdd_pct", "ls_excess_tstat_nw",
+              "ls_excess_sharpe_ex_top_years", "ls_excess_top_years", "ls_rf_credit_pp",
+              "guard_excess_mean", "guard_excess_tstat_nw"]
 
 
 def _f(v):
@@ -796,6 +810,11 @@ def write_summary(path, header, summaries):
                 lines.append(f"{pre[:-1]}: " + "  ".join(f"{k}={_f(st.get(pre + k))}" for k in
                              ("n_months", "ic_mean", "ic_tstat_nw", "ls_sharpe", "ls_ann_return_pct", "ls_maxdd_pct",
                               "ls_raw_sharpe", "ls_beta_mean")))
+                if pre + "ls_excess_sharpe" in st:
+                    lines.append(f"{pre[:-1]} excess: " + "  ".join(f"{k}={_f(st.get(pre + k))}" for k in
+                                 ("ls_excess_sharpe", "ls_excess_ann_return_pct", "ls_excess_maxdd_pct",
+                                  "ls_excess_tstat_nw", "ls_excess_sharpe_ex_top_years", "ls_excess_top_years",
+                                  "ls_rf_credit_pp")))
         dec = [k for k in st if k.startswith("ic_decay_h")]
         if dec:
             lines.append("ic decay: " + "  ".join(f"{k[9:]}={_f(st[k])}" for k in dec))
@@ -1101,6 +1120,12 @@ def run(args, C=None, cfg=None, runtime=None, stamps=None, snap=None, root=ROOT,
         print("\nSTAGE 0 : Snapshot, panel, preflight")
         print("=" * 72)
         snap = snap or load_snapshot(runtime, root=root)
+        # The excess-hedge diagnostic's rf: present only when the snapshot holds
+        # the external TB3MS table; otherwise every block is exactly as before.
+        rf = load_rf_monthly(snap)
+        if rf is not None:
+            print(f"    rf (TB3MS)      : {rf.index.min()} .. {rf.index.max()} — excess-hedge DIAGNOSTIC fields "
+                  "on (never a bar; the layer reports none)")
         panel = load_or_build_panel(snap, cfg, runtime, stamps["data_sha"], root=root)
         pidx = PanelIndex(panel, snap, cfg)
         pidx.set_market_loader(lambda: load_or_build_market(snap, cfg, runtime,
@@ -1143,16 +1168,16 @@ def run(args, C=None, cfg=None, runtime=None, stamps=None, snap=None, root=ROOT,
                                             layer_info, spread=spread)
         elif args.baseline and stage == 3:
             blocks, summaries = drive_stage3(frames, legs, cfg, stamps, eval_start, eval_end,
-                                             oos_flag, C)
+                                             oos_flag, C, rf=rf)
         elif args.baseline:
             blocks, summaries = drive_baseline(frames, legs, cfg, stamps, eval_start, eval_end,
-                                               oos_flag, probe_fields, C, return_start=return_start)
+                                               oos_flag, probe_fields, C, return_start=return_start, rf=rf)
         elif stage == 1:
             blocks, summaries = drive_stage1(frames, cands, cfg, stamps, eval_start, eval_end,
-                                             oos_flag, probe_fields)
+                                             oos_flag, probe_fields, rf=rf)
         else:
             blocks, summaries = drive_stage2(frames, legs, cands, cfg, stamps, eval_start, eval_end,
-                                             oos_flag, probe_fields, C)
+                                             oos_flag, probe_fields, C, rf=rf)
         print("\n" + "=" * 72)
         print(f"  DONE — total runtime: {int((time.time() - run_start) // 60)}m "
               f"{int((time.time() - run_start) % 60)}s   ({len(blocks)} result block(s))")

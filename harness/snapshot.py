@@ -7,6 +7,20 @@ The frozen Sharadar snapshot: download once, verify, record.
     python3 harness/snapshot.py verify              # schema, keys, vocabularies, units
     python3 harness/snapshot.py manifest            # write data/SNAPSHOT_MANIFEST.yaml
     python3 harness/snapshot.py status              # what is recorded, DATA_SHA
+    python3 harness/snapshot.py download --tables TB3MS [--fill-latest]   # the external rf table only, keyless
+
+EXTERNAL TABLES (data_layer.EXTERNAL_TABLES; today only FRED TB3MS, the
+risk-free series of the excess-hedge diagnostic) sit beside the Sharadar
+parquet in the same directory and the same manifest, so DATA_SHA covers them.
+They are fetched WITHOUT the Sharadar key from their own public source,
+recorded with `kind: external`, `source_url`, `fetched_at` and
+`filled_months`, and `live` marks them external rather than asking the
+Sharadar API to vouch for bytes it never published. They are deliberately
+not in config/runtime.yaml's required/optional_tables: those lists drive
+the Sharadar bulk endpoint and the key. A month FRED has not yet published
+is filled ONLY with `--fill-latest`, as the mean of the daily DTB3 values
+in that month (TB3MS is defined as that average), and the manifest names
+every filled month; nothing is forward-filled.
 
 THE DIRECT SHARADAR API, not Nasdaq Data Link (https://sharadar.com/llms.txt,
 copy in data/sharadar_llms.txt). Bulk download is
@@ -40,7 +54,8 @@ import pandas as pd
 import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from harness.data_layer import REQUIRED_COLUMNS, TICKERS_SCOPE, TICKERS_TABLE_COL, sha256_file  # noqa: E402
+from harness.data_layer import (EXTERNAL_COLUMNS, EXTERNAL_TABLES, REQUIRED_COLUMNS,  # noqa: E402
+                                TICKERS_SCOPE, TICKERS_TABLE_COL, sha256_file)
 from harness.provenance import ROOT, data_sha, load_config, load_runtime  # noqa: E402
 
 # Candidate date columns per table, first present wins. The direct API's bulk
@@ -48,6 +63,7 @@ from harness.provenance import ROOT, data_sha, load_config, load_runtime  # noqa
 DATE_COLS = {"SEP": ["date"], "DAILY": ["date"], "ACTIONS": ["date"], "SF1": ["date", "datekey"],
              "EVENTS": ["date"], "SF2": ["date", "filingdate"], "SF3": ["date", "calendardate"],
              "SP500": ["date"], "METRICS": ["date"]}
+DATE_COLS.update({t: ["date"] for t in EXTERNAL_TABLES})
 
 
 def _date_col(table, columns):
@@ -196,11 +212,214 @@ def materialise_from_api(dest, tables=None, echo=print):
         entries[t] = {"file": out.name, "rows": pf.metadata.num_rows,
                       "sha256": sha256_file(out), "columns": list(pf.schema.names),
                       "bytes": out.stat().st_size}
+    for t in EXTERNAL_TABLES:          # keyless, no fill: what the source publishes now
+        out = dest / f"{t}.parquet"
+        fetch_external(t, out, echo=echo)
+        entries[t] = external_manifest_entry(out, t)
     man = {"source": "LIVE Sharadar API fetch at run time (no cached bytes read)",
            "fetched_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
            "api_base": rt["data"]["api_base"], "tables": entries}
     (dest / "MANIFEST.yaml").write_text(_y.safe_dump(man, sort_keys=False))
     return dest, man
+
+
+# -----------------------------------------------------------------------------
+# External tables (not Sharadar): keyless fetch, frozen beside the Sharadar parquet
+# -----------------------------------------------------------------------------
+EXTERNAL_META_KEY = b"snapshot_external"
+FILL_MIN_DAYS = 10          # a filled month needs at least this many daily observations
+
+
+def _get_text(url, timeout=120):
+    """Plain keyless GET. Deliberately NOT `_request`: no x-api-key header,
+    nothing derived from the Sharadar key is ever attached to a third party.
+    `file://` URLs work too, which is how the tests stay off the network."""
+    with urllib.request.urlopen(urllib.request.Request(url), timeout=timeout) as r:
+        return r.read().decode("utf-8", "replace")
+
+
+def parse_fred_csv(text, name="series"):
+    """FRED's fredgraph.csv -> DataFrame[date, value]. Read POSITIONALLY: the
+    header has been `DATE,<ID>` and is `observation_date,<ID>` today. FRED
+    writes a missing value as '.' or an empty field; those parse to NaN."""
+    df = pd.read_csv(io.StringIO(text))
+    if df.shape[1] < 2 or df.empty:
+        raise RuntimeError(f"{name}: not a two-column FRED CSV (header {list(df.columns)[:3]})")
+    d = pd.to_datetime(df.iloc[:, 0], errors="coerce")
+    if d.isna().any():
+        raise RuntimeError(f"{name}: {int(d.isna().sum())} unparseable date(s) in the CSV")
+    v = pd.to_numeric(df.iloc[:, 1], errors="coerce").astype(float)
+    return pd.DataFrame({"date": d.astype("datetime64[ns]"), "value": v})
+
+
+def last_completed_month(now=None):
+    """The last calendar month that has fully ended, as Period('M')."""
+    now = pd.Timestamp(now) if now is not None else pd.Timestamp.now(tz="UTC").tz_localize(None)
+    return now.to_period("M") - 1
+
+
+def daily_month_mean(daily, month, min_days=FILL_MIN_DAYS):
+    """(mean, n_days) of the non-missing daily values inside calendar `month`."""
+    month = pd.Period(month, "M")
+    sub = daily.loc[daily["date"].dt.to_period("M") == month, "value"].dropna()
+    if len(sub) < min_days:
+        raise RuntimeError(f"fill of {month}: only {len(sub)} daily observation(s) (need {min_days}); "
+                           "refusing to fill")
+    return float(sub.mean()), int(len(sub))
+
+
+def build_external(name, fill_through=None, get=_get_text, now=None):
+    """(DataFrame[date, value], meta) for one EXTERNAL_TABLES entry, from the
+    live source. Monthly: dates must be month starts with no internal gap or
+    blank. `fill_through` (a month) appends every month after the source's
+    last observation up to it from the daily fill series — only months that
+    have ENDED (`now`), each recorded in meta['filled_months']; None fills
+    nothing, so a month the source has not published is simply absent."""
+    spec = EXTERNAL_TABLES[name]
+    df = parse_fred_csv(get(spec["source_url"]), name)
+    # trailing blanks are "not yet published"; an internal blank is a hole we refuse
+    last_ok = df["value"].last_valid_index()
+    if last_ok is None:
+        raise RuntimeError(f"{name}: the source holds no values")
+    df = df.loc[:last_ok]
+    if df["value"].isna().any():
+        raise RuntimeError(f"{name}: {int(df['value'].isna().sum())} blank value(s) inside the series")
+    if spec.get("frequency") == "monthly" and not (df["date"].dt.day == 1).all():
+        raise RuntimeError(f"{name}: monthly series with dates that are not month starts")
+    filled, fill_days = {}, {}
+    if fill_through is not None:
+        target = min(pd.Period(fill_through, "M"), last_completed_month(now))
+        last = df["date"].iloc[-1].to_period("M")
+        months = list(pd.period_range(last + 1, target, freq="M")) if target > last else []
+        if months:
+            daily = parse_fred_csv(get(spec["fill_url"]), spec["fill_series"])
+            add = []
+            for m in months:
+                val, n = daily_month_mean(daily, m)
+                add.append({"date": m.to_timestamp(), "value": val})
+                filled[str(m)] = spec["fill_method"]
+                fill_days[str(m)] = n
+            df = pd.concat([df, pd.DataFrame(add)], ignore_index=True)
+    df = df.reset_index(drop=True)
+    df["date"] = pd.to_datetime(df["date"]).astype("datetime64[ns]")
+    df["value"] = df["value"].astype(float)
+    meta = {"kind": spec["kind"], "source_url": spec["source_url"],
+            "fetched_at": (pd.Timestamp(now) if now is not None else pd.Timestamp.now(tz="UTC")
+                           ).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "units": spec.get("units", ""), "filled_months": filled}
+    if filled:
+        meta.update({"fill_url": spec["fill_url"], "fill_days": fill_days})
+    return df[EXTERNAL_COLUMNS], meta
+
+
+def write_external(df, meta, out):
+    """Parquet with the provenance in the file's own schema metadata, so the
+    sha256 (and so DATA_SHA) covers where the bytes came from and which
+    months were filled; `manifest` reads it back from the file."""
+    import pyarrow as pa
+    import pyarrow.parquet as pq
+    tbl = pa.Table.from_pandas(df, preserve_index=False)
+    md = dict(tbl.schema.metadata or {})
+    md[EXTERNAL_META_KEY] = json.dumps(meta, sort_keys=True).encode()
+    out = Path(out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    pq.write_table(tbl.replace_schema_metadata(md), out)
+    return len(df)
+
+
+def read_external_meta(path):
+    import pyarrow.parquet as pq
+    md = pq.ParquetFile(path).schema_arrow.metadata or {}
+    raw = md.get(EXTERNAL_META_KEY)
+    return json.loads(raw.decode()) if raw else {}
+
+
+def fetch_external(name, out, fill_through=None, echo=print, get=_get_text, now=None):
+    df, meta = build_external(name, fill_through=fill_through, get=get, now=now)
+    write_external(df, meta, out)
+    fs = EXTERNAL_TABLES[name]["fill_series"]
+    filled = [f"{m} ({meta['fill_days'][m]} days of {fs})" for m in meta["filled_months"]]
+    tail = f"; FILLED {', '.join(filled)}" if filled else ""
+    echo(f"  {name}: {len(df):,} rows {df['date'].min().date()} .. {df['date'].max().date()} "
+         f"from {meta['source_url']} (keyless){tail} -> {Path(out).name}")
+    latest = last_completed_month(now)
+    if df["date"].iloc[-1].to_period("M") < latest:
+        echo(f"  {name}: !! the source has not published {latest}; the table ends "
+             f"{df['date'].iloc[-1].to_period('M')}. Re-run with --fill-latest to fill it from "
+             f"{EXTERNAL_TABLES[name]['fill_series']} (recorded in the manifest), or wait.")
+    return meta
+
+
+def verify_external(root, name, cfg=None):
+    """(problems, notes) for one external table under `root`. An absent table
+    is a note (the excess-hedge diagnostic is then off), not a problem."""
+    import pyarrow.parquet as pq
+    spec = EXTERNAL_TABLES[name]
+    p = Path(root) / f"{name}.parquet"
+    problems, notes = [], []
+    if not p.exists():
+        notes.append(f"{name}: absent (external; the excess-hedge diagnostic is off)")
+        return problems, notes
+    cols = list(pq.ParquetFile(p).schema_arrow.names)
+    if cols != EXTERNAL_COLUMNS:
+        problems.append(f"{name}: columns {cols} != {EXTERNAL_COLUMNS}")
+        return problems, notes
+    df = pd.read_parquet(p)
+    d = pd.to_datetime(df["date"])
+    v = pd.to_numeric(df["value"], errors="coerce")
+    if v.isna().any():
+        problems.append(f"{name}: {int(v.isna().sum())} missing value(s)")
+    if not (d.dt.day == 1).all():
+        problems.append(f"{name}: dates that are not month starts")
+    per = d.dt.to_period("M")
+    if per.duplicated().any() or not per.is_monotonic_increasing:
+        problems.append(f"{name}: months duplicated or out of order")
+    elif len(per) and len(per) != (per.iloc[-1] - per.iloc[0]).n + 1:
+        problems.append(f"{name}: {(per.iloc[-1] - per.iloc[0]).n + 1 - len(per)} month(s) missing inside "
+                        f"{per.iloc[0]}..{per.iloc[-1]}")
+    if len(v.dropna()) and not v.dropna().between(-5.0, 30.0).all():
+        problems.append(f"{name}: values outside the plausible -5..30 percent range")
+    meta = read_external_meta(p)
+    if meta.get("source_url") != spec["source_url"] or not meta.get("fetched_at"):
+        problems.append(f"{name}: file metadata lacks the source_url / fetched_at it was frozen with")
+    filled = meta.get("filled_months") or {}
+    for m in filled:
+        if pd.Period(m, "M") not in set(per):
+            problems.append(f"{name}: filled month {m} is not in the table")
+    if cfg is not None and len(per):
+        dd = cfg.get("dates", {})
+        need_lo = pd.Period(pd.Timestamp(dd["eval_start"]), "M")
+        need_hi = pd.Period(pd.Timestamp(dd["eval_end"]), "M")
+        if per.iloc[0] > need_lo or per.iloc[-1] < need_hi:
+            problems.append(f"{name}: {per.iloc[0]}..{per.iloc[-1]} does not cover the decision window "
+                            f"{need_lo}..{need_hi}")
+        oos_end = str(dd.get("out_of_sample_end", ""))
+        if oos_end and oos_end.lower() != "rolling" and per.iloc[-1] < pd.Period(pd.Timestamp(oos_end), "M"):
+            notes.append(f"{name}: ends {per.iloc[-1]}, before the holdout end {oos_end[:7]} — the excess "
+                         "diagnostic will drop those months (fill with `download --tables "
+                         f"{name} --force --fill-latest` once the month has closed)")
+    notes.append(f"{name}: {len(df):,} rows, {per.iloc[0] if len(per) else '?'} .. "
+                 f"{per.iloc[-1] if len(per) else '?'} (external, {spec['source_url']}; fetched "
+                 f"{meta.get('fetched_at', '?')}; filled {filled or 'none'})")
+    return problems, notes
+
+
+def external_manifest_entry(p, name):
+    """The manifest row of an external table: the Sharadar row's fields, plus
+    kind / source_url / fetched_at / filled_months read from the file itself."""
+    import pyarrow.parquet as pq
+    pf = pq.ParquetFile(p)
+    meta = read_external_meta(p)
+    d = pd.to_datetime(pd.read_parquet(p, columns=["date"])["date"])
+    entry = {"file": Path(p).name, "rows": pf.metadata.num_rows, "sha256": sha256_file(p),
+             "columns": list(pf.schema.names), "bytes": Path(p).stat().st_size,
+             "min_date": str(d.min().date()), "max_date": str(d.max().date()),
+             "kind": "external", "source_url": meta.get("source_url", EXTERNAL_TABLES[name]["source_url"]),
+             "fetched_at": meta.get("fetched_at"), "filled_months": dict(meta.get("filled_months") or {})}
+    if meta.get("filled_months"):
+        entry["fill_url"] = meta.get("fill_url")
+        entry["fill_days"] = dict(meta.get("fill_days") or {})
+    return entry
 
 
 def _download_to_file(url, path, refresh_url, attempts=5, chunk=1 << 20):
@@ -249,9 +468,14 @@ def _download_to_file(url, path, refresh_url, attempts=5, chunk=1 << 20):
 def cmd_download(args):
     rt = load_runtime()
     root, _ = _paths(rt)
-    key = load_api_key(rt)
     root.mkdir(parents=True, exist_ok=True)
-    tables = args.tables or (rt["data"]["required_tables"] + rt["data"]["optional_tables"])
+    tables = args.tables or (rt["data"]["required_tables"] + rt["data"]["optional_tables"]
+                             + list(EXTERNAL_TABLES))
+    external = [t for t in tables if t in EXTERNAL_TABLES]
+    tables = [t for t in tables if t not in EXTERNAL_TABLES]
+    # The Sharadar key is loaded only when a Sharadar table is being fetched,
+    # so `--tables TB3MS` runs keyless.
+    key = load_api_key(rt) if tables else None
     failed = []
     for t in tables:
         out = root / f"{t}.parquet"
@@ -291,6 +515,17 @@ def cmd_download(args):
         zf.close()
         tmp.unlink(missing_ok=True)
         print(f"      {len(df):,} rows, {len(df.columns)} columns -> {out.name}")
+    fill_through = last_completed_month() if getattr(args, "fill_latest", False) else None
+    for t in external:
+        out = root / f"{t}.parquet"
+        if out.exists() and not args.force:
+            print(f"  {t}: {out.name} exists — skipping (use --force to refetch)")
+            continue
+        try:
+            fetch_external(t, out, fill_through=fill_through)
+        except Exception as e:
+            print(f"  {t}: external fetch FAILED — {type(e).__name__}: {e}")
+            failed.append(t)
     if failed:
         print(f"\n  FAILED: {failed}. Required tables must all be present before `verify`.")
         sys.exit(1)
@@ -405,6 +640,10 @@ def cmd_verify(args):
         problems.append(f"DAILY starts {dfirst.date()}, after the first signal {first_signal.date()} — "
                         "no market cap for the first universe.")
 
+    for t in EXTERNAL_TABLES:
+        xp, xn = verify_external(root, t, cfg)
+        problems += xp
+        notes += xn
     print("\n".join("  " + n for n in notes))
     if problems:
         print("\n".join("  !! " + p for p in problems))
@@ -414,36 +653,55 @@ def cmd_verify(args):
 
 
 # -----------------------------------------------------------------------------
-def cmd_manifest(args):
-    rt = load_runtime()
-    root, mpath = _paths(rt)
+def build_manifest(root, echo=print):
+    """The manifest dict for every parquet under `root` (pure of paths: the
+    caller decides where it is written). External tables get their extra
+    provenance fields (external_manifest_entry); Sharadar rows are unchanged."""
+    import pyarrow.parquet as pq
+    root = Path(root)
     tables = {}
     for p in sorted(root.glob("*.parquet")):
         t = p.stem
-        import pyarrow.parquet as pq
-        pf = pq.ParquetFile(p)
-        entry = {"file": p.name, "rows": pf.metadata.num_rows, "sha256": sha256_file(p),
-                 "columns": list(pf.schema.names), "bytes": p.stat().st_size}
-        dc = _date_col(t, entry["columns"])
-        if dc:
-            d = pd.to_datetime(pd.read_parquet(p, columns=[dc])[dc])
-            entry["min_date"] = str(d.min().date())
-            entry["max_date"] = str(d.max().date())
+        if t in EXTERNAL_TABLES:
+            entry = external_manifest_entry(p, t)
+        else:
+            pf = pq.ParquetFile(p)
+            entry = {"file": p.name, "rows": pf.metadata.num_rows, "sha256": sha256_file(p),
+                     "columns": list(pf.schema.names), "bytes": p.stat().st_size}
+            dc = _date_col(t, entry["columns"])
+            if dc:
+                d = pd.to_datetime(pd.read_parquet(p, columns=[dc])[dc])
+                entry["min_date"] = str(d.min().date())
+                entry["max_date"] = str(d.max().date())
         tables[t] = entry
-        print(f"  {t:<8} {entry['rows']:>12,} rows  sha256 {entry['sha256'][:12]}")
+        echo(f"  {t:<8} {entry['rows']:>12,} rows  sha256 {entry['sha256'][:12]}"
+             + ("  (external)" if entry.get("kind") == "external" else ""))
     if not tables:
-        sys.exit(f"no parquet files under {root}")
+        return None
+    ext = [t for t, e in tables.items() if e.get("kind") == "external"]
+    source = "Sharadar direct API bulk export (api.sharadar.com/v1.0, years=full), Bundle / Full History"
+    if ext:
+        source += "; external (kind: external, keyless public source): " + ", ".join(ext)
     m = {
         "schema_version": 1,
         "status": "FROZEN",
         "recorded_on": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "source": "Sharadar direct API bulk export (api.sharadar.com/v1.0, years=full), Bundle / Full History",
+        "source": source,
         "note": ("DATA_SHA is derived from the per-table sha256 values below. "
                  "Re-running `snapshot.py manifest` after a refresh MOVES it and is a "
                  "re-baseline: log it in research/CHANGELOG.md and re-run the baseline."),
         "tables": tables,
     }
     m["data_sha"] = data_sha(m)
+    return m
+
+
+def cmd_manifest(args):
+    rt = load_runtime()
+    root, mpath = _paths(rt)
+    m = build_manifest(root)
+    if m is None:
+        sys.exit(f"no parquet files under {root}")
     with open(mpath, "w") as f:
         yaml.safe_dump(m, f, sort_keys=False)
     print(f"\n  DATA_SHA {m['data_sha']}  ->  {mpath.relative_to(ROOT)}")
@@ -458,7 +716,11 @@ def cmd_status(args):
     print(f"  recorded  {m.get('recorded_on')}")
     print(f"  DATA_SHA  {data_sha(m)}")
     for t, e in (m.get("tables") or {}).items():
-        print(f"  {t:<8} {e.get('rows', 0):>12,} rows  {e.get('min_date', '?')} .. {e.get('max_date', '?')}")
+        tag = ""
+        if e.get("kind") == "external":
+            tag = (f"  external ({e.get('source_url')}; fetched {e.get('fetched_at')}; filled "
+                   f"{e.get('filled_months') or 'none'})")
+        print(f"  {t:<8} {e.get('rows', 0):>12,} rows  {e.get('min_date', '?')} .. {e.get('max_date', '?')}{tag}")
 
 
 
@@ -576,7 +838,26 @@ def _live_history(rt, key, api_name, p_file, n_sample=6):
     return "ok", f"{span} ({len(sample)} tickers probed)"
 
 
-def _write_live_record(rows, problems, absent):
+def external_report(root=None):
+    """What `live` says about each external table the snapshot holds: that it
+    is external, where it came from, and that the Sharadar API did NOT vouch
+    for it (it cannot: it never published it). No network call."""
+    if root is None:
+        root, _ = _paths(load_runtime())
+    out = {}
+    for t, spec in EXTERNAL_TABLES.items():
+        p = Path(root) / f"{t}.parquet"
+        if not p.exists():
+            continue
+        meta = read_external_meta(p)
+        out[t] = {"kind": "external", "vouched_by_api": False,
+                  "source_url": meta.get("source_url", spec["source_url"]),
+                  "fetched_at": meta.get("fetched_at"),
+                  "filled_months": dict(meta.get("filled_months") or {})}
+    return out
+
+
+def _write_live_record(rows, problems, absent, external=None):
     """Leave the proof on disk so staleness is detectable OFFLINE.
 
     `records.py check` runs every turn and must not hit the network, but
@@ -596,12 +877,14 @@ def _write_live_record(rows, problems, absent):
         "data_sha": provenance.data_sha(),
         "api_base": load_runtime()["data"]["api_base"],
         "tables_checked": len(rows),
+        "sharadar_tables_held": len(rows) - len(absent),
         "column_complete": not problems,
         "problems": problems,
         "mapped_but_absent": absent,
         "detail": {t: note for t, _a, _n, _sn, note, _h, _hd in rows},
         "history": {t: {"verdict": h, "detail": hd} for t, _a, _n, _sn, _note, h, hd in rows},
         "history_checked": not getattr(_ARGS, "schema_only", False),
+        "external_tables": external or {},
     }
     LIVE_RECORD.write_text(yaml.safe_dump(payload, sort_keys=False))
 
@@ -688,7 +971,11 @@ def cmd_live(args):
     if absent:
         print(f"\n  {len(absent)} mapped table(s) not in the snapshot: {', '.join(absent)}")
         print("  -> `snapshot.py download --tables " + " ".join(absent) + "` then `verify`, `manifest`")
-    _write_live_record(rows, problems, absent)
+    external = external_report()
+    for t, e in external.items():
+        print(f"  {t:<14}{'-':>5}{'-':>6}  {'external':<10} {'not vouched':<16} {e['source_url']} "
+              f"(fetched {e['fetched_at']}; filled {e['filled_months'] or 'none'})")
+    _write_live_record(rows, problems, absent, external)
     if problems:
         print("\n" + "\n".join("  !! " + x for x in problems))
         sys.exit(1)
@@ -696,6 +983,9 @@ def cmd_live(args):
         print("\n  columns verified against the live API; HISTORY NOT CHECKED (--schema-only)")
     else:
         print("\n  every mapped table the snapshot holds is column-complete AND carries the API's full history")
+    if external:
+        print(f"  external table(s) {', '.join(external)}: NOT Sharadar's, so not vouched for by its API "
+              "(sha256 still checked on every open)")
     print(f"  recorded in {LIVE_RECORD.relative_to(ROOT)} — `records.py check` DRIFTs when this goes stale")
 
 
@@ -704,6 +994,9 @@ def main():
     sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("probe")
     d = sub.add_parser("download"); d.add_argument("--tables", nargs="*"); d.add_argument("--force", action="store_true")
+    d.add_argument("--fill-latest", action="store_true",
+                   help="external tables: fill months the source has not yet published, up to the last "
+                        "completed month, from the daily fill series (recorded in the manifest)")
     sub.add_parser("verify"); sub.add_parser("manifest"); sub.add_parser("status")
     lv = sub.add_parser("live"); lv.add_argument("--schema-only", action="store_true")
     args = ap.parse_args()

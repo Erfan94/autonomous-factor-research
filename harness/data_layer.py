@@ -79,6 +79,50 @@ TICKERS_SCOPE = {"SEP": ("stocks", "SEP"), "SF1": ("fundamentals", "SF1")}
 PRICE_TABLES = ("SEP", "DAILY", "ACTIONS", "EVENTS")   # keyed like SEP
 FUND_TABLES = ("SF1",)
 
+# Tables the snapshot may hold that are NOT Sharadar's. They live beside the
+# Sharadar parquet (same directory, same manifest, same sha256-on-open, so
+# DATA_SHA covers them) but are fetched keyless from their own source by
+# `snapshot.py download`, carry `kind: external` in the manifest, and are
+# never vouched for by `snapshot.py live` (the Sharadar API cannot speak for
+# them). Deliberately NOT in config/runtime.yaml's required/optional_tables:
+# those lists drive the Sharadar bulk endpoint and the Sharadar key.
+# Columns as frozen: `date` (the first of the month, as FRED dates a monthly
+# observation) and `value` (float, the series in its published units).
+EXTERNAL_TABLES = {
+    "TB3MS": {
+        "kind": "external",
+        "source_url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=TB3MS",
+        "units": "percent per annum, discount basis, monthly average of the daily DTB3",
+        "frequency": "monthly",
+        # TB3MS is the monthly average of DTB3, so a month FRED has not yet
+        # published may be filled (only on request, and recorded per month in
+        # the manifest's `filled_months`) as the mean of DTB3's daily values.
+        "fill_series": "DTB3",
+        "fill_url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTB3",
+        "fill_method": "dtb3_daily_mean",
+    },
+}
+EXTERNAL_COLUMNS = ["date", "value"]
+RF_TABLE = "TB3MS"      # the risk-free series the excess-hedge diagnostic reads (analytics.excess_hedge)
+
+
+def load_rf_monthly(snap):
+    """The monthly risk-free return per CALENDAR MONTH, or None when the
+    snapshot holds no rf table (every excess-hedge field is then absent).
+
+    Series indexed by pandas Period('M'): TB3MS(month)/100/12, the
+    convention documented once in analytics.excess_hedge. A month whose value
+    is missing stays absent; nothing is filled here."""
+    if snap is None or not snap.has(RF_TABLE):
+        return None
+    df = snap.table(RF_TABLE, keep=False)
+    d = pd.to_datetime(df["date"])
+    v = pd.to_numeric(df["value"], errors="coerce").astype(float)
+    s = pd.Series(v.values / 100.0 / 12.0, index=d.dt.to_period("M").values).dropna().sort_index()
+    if s.index.has_duplicates:
+        raise RuntimeError(f"{RF_TABLE}: more than one observation for a month — the table is malformed")
+    return s
+
 
 # =============================================================================
 # Snapshot: verified, lazy, read-only

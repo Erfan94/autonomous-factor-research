@@ -596,11 +596,88 @@ def regime_diagnostics(ls, mkt=None, top_years=3, lookback=12):
     return out
 
 
-def _cut_stats(ls_h, ls_r, ic, beta, oos_start, nw_lags=DEFAULT_NW_LAGS):
+# =============================================================================
+# The excess-hedge DIAGNOSTIC (risk-free credit on the hedge leg). Never a bar.
+# =============================================================================
+
+EXCESS_KEYS = ("ls_excess_n_months", "ls_excess_sharpe", "ls_excess_ann_return_pct", "ls_excess_maxdd_pct",
+               "ls_excess_tstat_nw", "ls_excess_sharpe_ex_top_years", "ls_excess_top_years", "ls_rf_credit_pp")
+
+
+def excess_hedge(hedged, beta, rf):
+    """(excess, credit): hedged_t + beta_t * rf_t, and the credit beta_t * rf_t.
+
+    The declared hedge (D4) subtracts beta_t x M_t, where M is the universe's
+    TOTAL cap-weighted return. A hedge held in futures or a financed short
+    earns M_t - rf_t instead, so the declared series under-credits a
+    positive-beta book by beta_t * rf_t each month (and over-credits a
+    negative-beta one). This adds it back. beta_t is EXACTLY the declared
+    ex-ante beta the hedge used (0 in the unhedged first months, so they
+    carry no credit); M, beta, the bear/bull states and every declared field
+    are untouched. A diagnostic, so the convention is stated, not optimised:
+
+      rf source   FRED TB3MS: the 3-month T-bill secondary-market rate,
+                  percent per annum on a DISCOUNT basis, the MONTHLY AVERAGE
+                  of the daily DTB3. Frozen in the snapshot as table TB3MS
+                  (data_layer.EXTERNAL_TABLES), dated the first of its month.
+      rf_t        TB3MS(month m) / 100 / 12, simple, no discount-to-yield or
+                  compounding conversion.
+      alignment   a long-short observation is labelled DATE = ret_end
+                  (data_layer.build_rebalance_schedule): the last business
+                  day of the HOLDING month, whose return runs from the signal
+                  close at the business month-end of month m-1 to the last
+                  close of month m. It is paired with TB3MS dated m-01, the
+                  average bill rate over that same holding month. Matching is
+                  by calendar month (DATE.to_period('M')). TB3MS(m) is known
+                  only once month m has ended, so the credit is not ex ante:
+                  irrelevant for a diagnostic of what the hedge earned.
+      missing     a month with no rf is dropped from the excess series (and
+                  counted in ls_excess_n_months); nothing is filled here.
+
+    `rf` is a Series indexed by Period('M') (data_layer.load_rf_monthly) or
+    by any datetime-like index, read by calendar month."""
+    h = pd.Series(hedged).astype(float).dropna()
+    idx = pd.DatetimeIndex(pd.to_datetime(h.index))
+    r = pd.Series(rf).astype(float)
+    if not isinstance(r.index, pd.PeriodIndex):
+        r.index = pd.DatetimeIndex(pd.to_datetime(r.index)).to_period("M")
+    r = r[~r.index.duplicated(keep="last")]
+    rf_al = pd.Series(r.reindex(idx.to_period("M")).values, index=h.index, dtype=float)
+    b = pd.Series(beta).astype(float).reindex(h.index).fillna(0.0)
+    credit = (b * rf_al).dropna()
+    excess = (h + b * rf_al).dropna()
+    return excess, credit
+
+
+def excess_stats(excess, credit, top_years=3, nw_lags=DEFAULT_NW_LAGS):
+    """The EXCESS_KEYS fields of an excess-hedge series, by the same formulas
+    as the declared ones (ls_stats_of, nw_tstat, the D5 ex-top-years rule run
+    on the EXCESS series — its own years, which it reports; the declared
+    ls_top_years is never touched). ls_rf_credit_pp = 12 x mean(beta_t rf_t) x 100."""
+    x = pd.Series(excess).astype(float).dropna()
+    c = pd.Series(credit).astype(float).reindex(x.index)
+    out = {k: float("nan") for k in EXCESS_KEYS}
+    out["ls_excess_n_months"] = int(len(x))
+    out["ls_excess_top_years"] = ""
+    if len(x) < 2:
+        return out
+    sh, dd = ls_stats_of(x)
+    reg = regime_diagnostics(x, None, top_years)
+    out.update({"ls_excess_sharpe": float(sh), "ls_excess_ann_return_pct": float(x.mean() * 1200),
+                "ls_excess_maxdd_pct": float(dd), "ls_excess_tstat_nw": float(nw_tstat(x, nw_lags)),
+                "ls_excess_sharpe_ex_top_years": float(reg["ls_sharpe_ex_top_years"]),
+                "ls_excess_top_years": reg["ls_top_years"],
+                "ls_rf_credit_pp": float(c.mean() * 1200)})
+    return out
+
+
+def _cut_stats(ls_h, ls_r, ic, beta, oos_start, nw_lags=DEFAULT_NW_LAGS, ls_x=None, credit=None, top_years=3):
     """Every LS/IC statistic on the two cuts of a series at `oos_start`:
     before it (cut_inwindow_*) and from it (cut_holdout_*). The hedge beta is
     whatever the continuous series used, so the holdout's first months are
-    hedged on the in-window history rather than on nothing."""
+    hedged on the in-window history rather than on nothing. `ls_x`/`credit`
+    (the excess-hedge series, only when the snapshot holds rf) add the
+    EXCESS_KEYS on each cut; absent otherwise."""
     b = pd.Timestamp(oos_start)
     keys = ("ic_mean", "ic_tstat_nw", "ls_sharpe", "ls_ann_return_pct", "ls_ann_vol_pct", "ls_maxdd_pct",
             "ls_tstat_nw", "ls_hit_rate_pct", "ls_raw_sharpe", "ls_raw_ann_return_pct", "ls_beta_mean")
@@ -612,6 +689,9 @@ def _cut_stats(ls_h, ls_r, ic, beta, oos_start, nw_lags=DEFAULT_NW_LAGS):
             return x[(idx < b) if before else (idx >= b)]
         h, r, i, be = cut(ls_h).dropna(), cut(ls_r).dropna(), cut(ic).dropna(), cut(beta)
         out[pre + "n_months"] = int(len(h))
+        if ls_x is not None:
+            out.update({pre + k: v for k, v in
+                        excess_stats(cut(ls_x), cut(credit), top_years, nw_lags).items()})
         if len(h) < 2 or len(i) < 2:
             for k in keys:
                 out[pre + k] = float("nan")
@@ -634,7 +714,7 @@ def _cut_stats(ls_h, ls_r, ic, beta, oos_start, nw_lags=DEFAULT_NW_LAGS):
 
 def print_summary(title, factor_monthly, count_monthly, ic_df, audit_df,
                   nw_lags=DEFAULT_NW_LAGS, decay=True, hedge=None, regime=None, oos_start=None,
-                  market=None):
+                  market=None, rf=None):
     """Print the standard report and RETURN the stats it printed. The result
     block is built from this dict, so it cannot drift from the report.
 
@@ -648,7 +728,12 @@ def print_summary(title, factor_monthly, count_monthly, ic_df, audit_df,
                before / from it (cut_inwindow_* / cut_holdout_*), the hedge
                beta estimated continuously across the boundary.
     market     an explicit market series (tests); otherwise derived from
-               audit_df."""
+               audit_df.
+    rf         the monthly risk-free series (data_layer.load_rf_monthly) when
+               the snapshot holds one: adds the excess-hedge DIAGNOSTIC
+               (hedged + beta x rf; convention in `excess_hedge`) as the
+               EXCESS_KEYS, on the cuts too. None = those fields are absent
+               and the report is exactly what it was without them."""
     decile_cols = [f"D{i}" for i in range(1, 11) if f"D{i}" in factor_monthly.columns]
     count_cols = [f"N_D{i}" for i in range(1, 11) if f"N_D{i}" in count_monthly.columns]
     avg_returns = factor_monthly[decile_cols].mean()
@@ -711,7 +796,13 @@ def print_summary(title, factor_monthly, count_monthly, ic_df, audit_df,
     top_k = int(rp.get("ex_regime_top_years", 3))
     look = int(rp.get("market_state_lookback_months", 12))
     reg = regime_diagnostics(ls_series, mkt if len(mkt) else None, top_k, look)
-    cuts = _cut_stats(ls_series, ls_raw, ic, beta_on, oos_start, nw_lags) if oos_start else {}
+    ls_x = credit = None
+    excess = {}
+    if rf is not None:
+        ls_x, credit = excess_hedge(ls_series, beta_on, rf)
+        excess = excess_stats(ls_x, credit, top_k, nw_lags)
+    cuts = (_cut_stats(ls_series, ls_raw, ic, beta_on, oos_start, nw_lags, ls_x=ls_x, credit=credit,
+                       top_years=top_k) if oos_start else {})
 
     mkt_proxy = factor_monthly[decile_cols].mean(axis=1)
     down_mask = mkt_proxy < -0.03
@@ -769,6 +860,14 @@ def print_summary(title, factor_monthly, count_monthly, ic_df, audit_df,
     print(f"  Raw LS          : {raw_ann:.2f}%/yr  vol {raw_vol:.2f}%  Sharpe {raw_sharpe:.4f}  MaxDD {raw_dd:.2f}%")
     print(f"  Beta            : trailing mean {beta_on.mean():+.3f}  last {beta_on.iloc[-1]:+.3f}  "
           f"full-window OLS of the raw LS {beta_full:+.3f}")
+    if excess:
+        print(f"  Excess hedge    : hedged + beta x rf (rf = TB3MS/1200 of the holding month; a diagnostic, "
+              f"never a bar) — {excess['ls_excess_ann_return_pct']:.2f}%/yr  Sharpe {excess['ls_excess_sharpe']:.4f}  "
+              f"t NW {excess['ls_excess_tstat_nw']:.2f}  MaxDD {excess['ls_excess_maxdd_pct']:.2f}%  "
+              f"rf credit {excess['ls_rf_credit_pp']:+.2f} pp/yr  ({excess['ls_excess_n_months']} of "
+              f"{len(ls_series)} months carry an rf)")
+        print(f"                    Sharpe ex top-{top_k} EXCESS years {excess['ls_excess_sharpe_ex_top_years']:.4f} "
+              f"(years {excess['ls_excess_top_years'] or '-'}; the declared ex-years below read the hedged series)")
     print(f"\n  --- Regime diagnostics (date-free; never a bar) ---")
     print(f"  Sharpe ex top-{top_k} LS years : {reg['ls_sharpe_ex_top_years']:.4f}  "
           f"(years {reg['ls_top_years'] or '-'}; they carry {reg['ls_top_years_share_pct']:.0f}% of the summed LS return)")
@@ -782,6 +881,13 @@ def print_summary(title, factor_monthly, count_monthly, ic_df, audit_df,
             print(f"  {lab:<12}{cuts[pre + 'n_months']:>7}{cuts[pre + 'ic_mean']:>9.4f}{cuts[pre + 'ic_tstat_nw']:>9.2f}"
                   f"{cuts[pre + 'ls_sharpe']:>8.3f}{cuts[pre + 'ls_ann_return_pct']:>8.2f}{cuts[pre + 'ls_maxdd_pct']:>8.1f}"
                   f"{cuts[pre + 'ls_raw_sharpe']:>8.3f}{cuts[pre + 'ls_beta_mean']:>7.2f}")
+        if excess:
+            for pre, lab in (("cut_inwindow_", "in-window"), ("cut_holdout_", "holdout")):
+                print(f"  {lab:<12} excess: Sharpe {cuts[pre + 'ls_excess_sharpe']:.3f}  "
+                      f"ann {cuts[pre + 'ls_excess_ann_return_pct']:.2f}%  t NW {cuts[pre + 'ls_excess_tstat_nw']:.2f}  "
+                      f"MaxDD {cuts[pre + 'ls_excess_maxdd_pct']:.1f}%  rf credit {cuts[pre + 'ls_rf_credit_pp']:+.2f} pp  "
+                      f"ex top-{top_k} Sharpe {cuts[pre + 'ls_excess_sharpe_ex_top_years']:.3f} "
+                      f"({cuts[pre + 'ls_excess_top_years'] or '-'})")
     print(f"\n  --- Annual IC ---")
     print(ic_annual.to_string())
     print(f"\n  --- Annual LS Return (%) ---")
@@ -811,8 +917,10 @@ def print_summary(title, factor_monthly, count_monthly, ic_df, audit_df,
         "ls_beta_fullwindow": float(beta_full), "ls_hedged_months": hedged_months,
         "hedge_on": str(bool(hedge)),
         "ls_raw_series": ls_raw, "ls_beta_series": beta_on,
-        **reg, **cuts,
+        **excess, **reg, **cuts,
     }
+    if ls_x is not None:
+        stats["ls_excess_series"] = ls_x
     for h, v in dec.items():
         stats[f"ic_decay_h{h}"] = float(v)
     return stats
@@ -996,7 +1104,8 @@ def _fmt(v):
     return str(v)
 
 
-SERIES_KEYS = {"ls_series", "ic_series", "resid_ic_series", "ls_raw_series", "ls_beta_series"}
+SERIES_KEYS = {"ls_series", "ic_series", "resid_ic_series", "ls_raw_series", "ls_beta_series",
+               "ls_excess_series"}
 
 
 def emit_result_block(fields):
@@ -1022,6 +1131,9 @@ STRING_KEYS = {
     "layer_book_start", "sector_group_labels", "borrow_mode", "paths_sha",
     # --return-start (diagnostic baseline)
     "return_start",
+    # the excess-hedge diagnostic (years picked by the D5 rule on the excess series)
+    "ls_excess_top_years", "cut_inwindow_ls_excess_top_years", "cut_holdout_ls_excess_top_years",
+    "base_ls_excess_top_years", "cand_ls_excess_top_years",
 }
 
 
@@ -1360,6 +1472,13 @@ def align_arms(base_stats, cand_stats, lags=DEFAULT_NW_LAGS):
                delta_icir=float(_safe_ratio(c_ic.loc[common_ic].mean(), c_ic.loc[common_ic].std())
                                 - _safe_ratio(b_ic.loc[common_ic].mean(), b_ic.loc[common_ic].std())),
                arm_months_aligned=str(not only))
+    if "ls_excess_series" in base_stats and "ls_excess_series" in cand_stats:
+        # The guard read on the EXCESS-hedge series: a DIAGNOSTIC beside the bar,
+        # which reads paired_delta_ls_tstat (the declared hedged series) and only that.
+        b_x, c_x = base_stats["ls_excess_series"], cand_stats["ls_excess_series"]
+        common_x = b_x.index.intersection(c_x.index)
+        xm, xt, xn = paired_delta(b_x.loc[common_x], c_x.loc[common_x], lags)
+        out.update(guard_excess_mean=xm, guard_excess_tstat_nw=xt, guard_excess_n=xn)
     if only:
         out["arm_months_unmatched"] = ",".join(pd.Timestamp(x).strftime("%Y-%m-%d") for x in sorted(only))
         print("\n  !! ARM MONTH MISMATCH — the arms did not cover the same months; every "

@@ -40,7 +40,8 @@ import numpy as np
 import pandas as pd
 
 from harness.analytics import (MIN_OBS_BUCKET_LS, DEFAULT_NW_LAGS, _safe_ratio, blend_ranks,
-                               compute_factor_ranks, cut_deciles, fullwindow_beta, hedge_long_short,
+                               compute_factor_ranks, cut_deciles, excess_hedge, excess_stats,
+                               fullwindow_beta, hedge_long_short,
                                hedge_params, ls_stats_of, nw_tstat, rank_group_col, rank_one_factor,
                                regime_diagnostics, regime_params, universe_market_return)
 
@@ -230,8 +231,13 @@ VARIANTS = {
 }
 
 
-def run_construction(audit, metas, cfg, log=print):
-    """Run every configured variant; return [(variant, stats_dict)]."""
+def run_construction(audit, metas, cfg, log=print, rf=None):
+    """Run every configured variant; return [(variant, stats_dict)].
+
+    `rf` (data_layer.load_rf_monthly, only when the snapshot holds it) adds
+    the excess-hedge diagnostic per variant: the variant's hedged series plus
+    the SAME ex-ante beta it was hedged with times rf (analytics.excess_hedge),
+    full window only (Stage 3 has no cuts). Absent when rf is None."""
     c = cfg["construction"]
     lags = int(cfg["statistics"]["newey_west_lags"])
     hedge, reg = hedge_params(cfg), regime_params(cfg)
@@ -261,6 +267,10 @@ def run_construction(audit, metas, cfg, log=print):
                        "hedge_on": str(bool(hedge))})
             st.update(regime_diagnostics(sh, mkt if len(mkt) else None,
                                          reg["ex_regime_top_years"], reg["market_state_lookback_months"]))
+            if rf is not None:
+                hs = sh.dropna()
+                x, credit = excess_hedge(hs, beta.reindex(hs.index), rf)
+                st.update(excess_stats(x, credit, reg["ex_regime_top_years"], lags))
         out.append((name, st))
     log("\n  --- Stage 3: portfolio construction on the composite (GROSS, "
         + ("hedged; raw Sharpe and beta beside" if hedge else "raw") + ") ---")
@@ -274,6 +284,14 @@ def run_construction(audit, metas, cfg, log=print):
             f"{st['ls_ann_vol_pct']:>7.2f}{st['ls_maxdd_pct']:>8.1f}{st['worst_12m_pct']:>10.1f}"
             f"{st['turnover_long_pct']:>6.1f}/{st['turnover_short_pct']:<5.1f}{st['n_months']:>8}"
             f"{st['ls_raw_sharpe']:>8.3f}{st['ls_beta_fullwindow']:>+7.2f}{st['ls_sharpe_ex_top_years']:>7.2f}")
+    if rf is not None:
+        log("  excess hedge (hedged + beta x rf; diagnostic, never a bar):")
+        for name, st in out:
+            if "ls_excess_sharpe" in st:
+                log(f"  {name:<20}{st['ls_excess_sharpe']:>8.3f}{st['ls_excess_tstat_nw']:>9.2f}"
+                    f"{st['ls_excess_ann_return_pct']:>8.2f}  MaxDD {st['ls_excess_maxdd_pct']:.1f}  "
+                    f"rf credit {st['ls_rf_credit_pp']:+.2f} pp  ex top years {st['ls_excess_sharpe_ex_top_years']:.2f} "
+                    f"({st['ls_excess_top_years'] or '-'})")
     for name, st in out:
         if st.get("construction_weights"):
             log(f"    {name}: {st['construction_weights']}")
