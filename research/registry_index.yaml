@@ -5,9 +5,9 @@ search_accounting:
   n_stage1_tested: 107
   n_stage1_passed: 24
   n_stage2_tested: 10
-  n_accepted: 5
+  n_accepted: 6
   n_inconclusive: 0
-  by_status: {"accepted": 5, "baseline": 5, "rejected": 84, "stage2_pending": 18}
+  by_status: {"accepted": 6, "baseline": 5, "rejected": 84, "stage2_pending": 17}
 factors:
   - {name: AM, status: rejected, batch: stage1_b1, ic: 0.0098, ic_t: 1.26, sharpe: -0.149, ret: -3.17, raw_ret: 4.72, cov: 99.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.34, sh_exreg: -0.449, family: null, decided_by: "ic_tstat_nw", run: "003"}
   - {name: Accruals, status: rejected, batch: stage1_b1, ic: 0.0048, ic_t: 1.84, sharpe: 0.329, ret: 2.49, raw_ret: 2.92, cov: 76.7, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.04, sh_exreg: 0.107, family: null, decided_by: "ic_tstat_nw", run: "003"}
@@ -48,7 +48,7 @@ factors:
   - {name: EarningsSurprise, status: rejected, batch: stage1_b3, ic: 0.0048, ic_t: 1.63, sharpe: 0.324, ret: 2.32, raw_ret: 1.33, cov: 86.2, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.09, sh_exreg: 0.051, family: null, decided_by: "ic_tstat_nw", run: "005"}
   - {name: EntMult, status: rejected, batch: stage1_b4, ic: 0.0134, ic_t: 1.96, sharpe: 0.194, ret: 2.85, raw_ret: 5.55, cov: 65.9, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.08, sh_exreg: -0.127, family: null, decided_by: "ic_tstat_nw", run: "006"}
   - {name: EquityDuration, status: rejected, batch: stage1_b4, ic: 0.0104, ic_t: 1.86, sharpe: 0.253, ret: 2.98, raw_ret: 2.33, cov: 94.7, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.30, sh_exreg: -0.061, family: null, decided_by: "ic_tstat_nw", run: "006"}
-  - {name: GP, status: stage2_pending, batch: stage1_b4, ic: 0.0155, ic_t: 3.52, sharpe: 1.091, ret: 11.34, raw_ret: 8.64, cov: 74.4, resid_t: 2.74, dic_t: -0.79, dls_t: 0.43, span_t: 3.62, d_sharpe: 0.011, beta: -0.45, sh_exreg: 0.921, family: "profitability", decided_by: "all bars", run: "006"}
+  - {name: GP, status: accepted, batch: stage1_b4, ic: 0.0155, ic_t: 3.52, sharpe: 1.091, ret: 11.34, raw_ret: 8.64, cov: 74.4, resid_t: 2.74, dic_t: -0.79, dls_t: 0.43, span_t: 3.62, d_sharpe: 0.011, beta: -0.45, sh_exreg: 0.921, family: "profitability", decided_by: "all bars", run: "006"}
   - {name: GrLTNOA, status: rejected, batch: stage1_b4, ic: -0.0059, ic_t: -2.75, sharpe: -0.114, ret: -0.76, raw_ret: -0.08, cov: 76.8, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.04, sh_exreg: -0.491, family: null, decided_by: "ic_tstat_nw", run: "006"}
   - {name: GrSaleToGrInv, status: rejected, batch: stage1_b4, ic: 0.0035, ic_t: 1.58, sharpe: 0.217, ret: 1.59, raw_ret: 1.62, cov: 57.1, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.01, sh_exreg: -0.167, family: null, decided_by: "ic_tstat_nw", run: "006"}
   - {name: GrSaleToGrOverhead, status: rejected, batch: stage1_b4, ic: -0.0020, ic_t: -0.75, sharpe: -0.394, ret: -2.73, raw_ret: -3.04, cov: 85.1, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.04, sh_exreg: -0.549, family: null, decided_by: "ic_tstat_nw", run: "006"}

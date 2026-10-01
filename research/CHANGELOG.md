@@ -135,3 +135,10 @@
 - Raw vs hedged dLS (pp/yr; hedge part = hedged - raw): GP +0.35 / +0.16 (-0.20); ShareIss1Y +0.04 / +0.07; MaxRet -0.59 / +2.23 (+2.82, opposite signs); roaq +0.72 / +1.23 (+0.51); RoE -0.45 / -0.31 (+0.14). Approximate raw t: 0.96 / 0.10 / -0.46 / 1.14 / -1.83.
 - RoE: residual share 0.24, dSharpe -0.036, spanning alpha t -0.33. Like XFIN, it is admitted by the -2.0 guard. The rules decide on residual IC and the hedged guard only.
 - Records: five rows carry stage2 fields (ShareIss1Y rejected; the other four stage2_pending). Logged provenance_verified, 5 factor_evaluated and registry_rows_written; index rebuilt; check OK. v6-v9 owed on application.
+
+## 2026-10-01 — v6 = v5 + GP (profitability, 3rd leg): accepted and applied (runs 024, 025); tag v6-add-GP owed
+- Accepted from run 023 rung 1 (base v5) on both bars: residual IC NW t 2.74 > 2.0, at 47% of its own IC; guard paired hedged dLS t 0.43 >= -2.0. Raw dLS +0.35 pp/yr beats the hedged +0.16, so the hedge subtracts 0.20 pp. dIC -0.0003 (t -0.79) against spanning alpha t 3.62: not reconciled (decision ladder2_acceptance).
+- Applied: GP.py moved to factors/accepted/; COMPOSITE_VERSION v6; COMPOSITE_SHA d27916e567f2 -> 21a6688ae5d1, the other stamps unchanged; pytest 434 passed. Profitability = Profitability, CBOperProf, GP at 0.056 each.
+- Run 024 reproduces the rung 1 WITH arm on 16 of 16 stats to six places: IC 0.024198 (NW t 4.23), hedged Sharpe 0.92549, 11.715703%/yr, MaxDD -49.42, beta -0.323, raw Sharpe 0.843, ex-top-years Sharpe 0.490.
+- Run 025 (Stage 3, never a gate): equal_rank_decile 0.925; icir_weighted 1.026 (raw 0.639, beta -0.55, MaxDD -28.1); tier_neutral 0.905; buffered 0.833 at turnover 13.3%; vol_targeted 0.686.
+- Records: manifest block v6; logged provenance_verified (024, 025), construction_reported and composite_updated; GP row set to accepted. Next: v7 = v6 + MaxRet (target IC 0.030522 / Sharpe 0.951223 / 13.947962%).

@@ -292,3 +292,55 @@ versions:
       - "XFIN was accepted on both bars (residual IC t 3.27 > 2.0; guard t -0.64 >= -2.0) while every diagnostic worsened: dIC -0.0005 (t -0.62), dSharpe -0.082 (0.996 -> 0.914), MaxDD 7.1 pts worse hedged (-40.6 -> -47.8) and 7.8 raw; raw dLS -0.41 pp/yr is also negative, so the hedge did not rescue it. The -2.0 guard admits it by design (decision ladder1_acceptance)."
       - "It halves ShareIss5Y's family weight (0.167 -> 0.083 each in external_financing), and the rung does not separate XFIN's own effect from that dilution; residual IC 0.0069 is ladder 1's lowest (41% of its own IC; Stage 1 annual-IC correlation 0.84 with ShareIss5Y); beta -0.26 -> -0.34, raw vol 13.0 -> 14.2."
       - "Every Stage 3 variant falls from v4 (equal_rank_decile 0.996 -> 0.914, tier_neutral 1.006 -> 0.861, icir_weighted 0.934 -> 0.926); ex-top-years Sharpe 0.61 -> 0.48, top-3 share 57 -> 63%; D10 (1.287) back below D9 (1.305); MEGA raw Sharpe 0.49 -> 0.35."
+  - version: v6
+    date: "2026-10-01"
+    git_tag: v6-add-GP  # owed; created by the coordinator after the commit
+    legs:
+      - {name: Size, family: size, osap_acronym: Size, weight: 1.0}
+      - {name: Value, family: value, osap_acronym: BM, weight: 1.0}
+      - {name: Profitability, family: profitability, osap_acronym: OperProf, weight: 1.0}
+      - {name: Investment, family: investment, osap_acronym: AssetGrowth, weight: 1.0}
+      - {name: Momentum, family: momentum, osap_acronym: Mom12m, weight: 1.0}
+      - {name: PctAcc, family: investment, osap_acronym: PctAcc, weight: 1.0}
+      - {name: CBOperProf, family: profitability, osap_acronym: CBOperProf, weight: 1.0}
+      - {name: ShareIss5Y, family: external_financing, osap_acronym: ShareIss5Y, weight: 1.0}
+      - {name: cfp, family: value, osap_acronym: cfp, weight: 1.0}
+      - {name: XFIN, family: external_financing, osap_acronym: XFIN, weight: 1.0}
+      - {name: GP, family: profitability, osap_acronym: GP, weight: 1.0}
+    families: "size:Size|value:Value,cfp|profitability:Profitability,CBOperProf,GP|investment:Investment,PctAcc|momentum:Momentum|external_financing:ShareIss5Y,XFIN"
+    construction_rule: "two-level family blend (1/6 per family, equal within: Profitability/CBOperProf/GP 0.056 each; Value/cfp, Investment/PctAcc, ShareIss5Y/XFIN 0.083 each; Size, Momentum 0.167; renormalised over available members) of within-sector percentile ranks (fallback cross-section if <10 names); D10-D1 equal-weight, hedged by ex-ante 36m beta to the universe cap-weighted return"
+    stamps: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: 21a6688ae5d1, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8}
+    window: {eval_start: "1999-01-01", eval_end: "2021-12-31", include_holdout: false}
+    ratchet:                             # run 023, ladder 2 rung 1 (stage2_order rank 6), base v5 (10 legs)
+      run: "023"
+      rung: 1
+      base: v5
+      bars: {resid_ic_tstat_nw: 2.7412, resid_ic_bound: "> 2.0", paired_delta_ls_tstat: 0.4291, guard_bound: ">= -2.0"}
+      diagnostics: {resid_ic_mean: 0.0073, resid_ic_share: 0.47, paired_delta_ic_mean: -0.0003, paired_delta_ic_tstat: -0.79, paired_delta_ls_ann_pct: 0.16, raw_delta_ls_ann_pct: 0.35, spanning_alpha_ann_pct: 7.78, spanning_alpha_tstat_nw: 3.62, spanning_beta: 0.31, spanning_r2: 0.14, corr_to_composite: 0.37, delta_ls_sharpe: 0.011, maxdd_worsening_pct: 1.67}
+      beta_regime: {base_ls_beta_fullwindow: -0.344, cand_ls_beta_fullwindow: -0.323, base_ls_beta_mean: -0.298, cand_ls_beta_mean: -0.277, base_ls_raw_sharpe: 0.808, cand_ls_raw_sharpe: 0.843, base_ls_sharpe_ex_top_years: 0.479, cand_ls_sharpe_ex_top_years: 0.490}
+    baseline:                            # run 024, GROSS; LS figures hedged, raw and beta beside; equals run 023 rung 1 WITH arm to six places
+      run: "024"
+      ic: {ic_mean: 0.0242, ic_tstat_nw: 4.23, icir: 0.306, ic_half1_mean: 0.0377, ic_half2_mean: 0.0107}
+      ic_decay: {h1: 0.0181, h2: 0.0169, h3: 0.0184, h6: 0.0162, h12: 0.0177}
+      ls_hedged: {ls_sharpe: 0.925, ls_tstat_nw: 3.44, ls_ann_return_pct: 11.72, ls_ann_vol_pct: 12.66, ls_maxdd_pct: -49.42, ls_hit_rate_pct: 62.0}
+      breadth: {turnover_d10_pct: 25.2, turnover_d1_pct: 22.3, coverage_pct: 100.0, avg_names_per_decile: 196.5, n_months: 276}
+      decile_avg_ret_pct: "0.301,0.690,0.661,0.861,1.046,1.143,1.151,1.280,1.248,1.288"
+      ls_raw: {ls_raw_sharpe: 0.843, ls_raw_ann_return_pct: 11.85, ls_raw_maxdd_pct: -48.15}
+      beta: {ls_beta_mean: -0.277, ls_beta_fullwindow: -0.323, ls_hedged_months: 264}
+      ex_regime: {ls_sharpe_ex_top_years: 0.490, ls_top_years: "2000,2001,2021", ls_top_years_share_pct: 62.4}
+      bear_bull: {ls_sharpe_bear: 1.269, ls_sharpe_bull: 0.842, n_bear_months: 64, n_bull_months: 200}
+      tiers: {MEGA: {ic: 0.0259, raw_ls_sharpe: 0.356, n: 393}, MID: {ic: 0.0221, raw_ls_sharpe: 0.856, n: 589}, SMALL: {ic: 0.0239, raw_ls_sharpe: 0.813, n: 981}}
+      coverage: {leg_coverage_pct_full: 46.5, leg_coverage_worst: "f_shareiss5y 62.6%", delisting_adjusted_pct: 0.44}
+    construction:                        # run 025, Stage 3, GROSS, hedged; raw Sharpe and full-window beta beside; never a gate
+      run: "025"
+      columns: [sharpe, ls_t_nw, ann_ret_pct, vol_pct, maxdd_pct, worst_12m_pct, turnover_long_pct, turnover_short_pct, raw_sharpe, beta_fullwindow, sharpe_ex_top_years]
+      equal_rank_decile: [0.925, 3.44, 11.72, 12.66, -49.4, -38.7, 25.2, 22.3, 0.843, -0.32, 0.49]
+      tier_neutral:      [0.905, 3.58, 11.66, 12.89, -47.9, -39.0, 28.0, 24.4, 0.741, -0.39, 0.51]
+      icir_weighted:     [1.026, 4.43, 12.10, 11.79, -28.1, -22.5, 21.0, 20.6, 0.639, -0.55, 0.72]
+      buffered:          [0.833, 3.07, 9.44, 11.34, -44.9, -33.5, 13.3, 10.6, 0.727, -0.32, 0.40]
+      vol_targeted:      [0.686, 2.85, 8.11, 11.82, -48.9, -34.2, 25.2, 22.3, 0.686, -0.19, 0.44]
+      icir_weights_avg: "Size=0.013;Value=0.041;Profitability=0.119;Investment=0.040;Momentum=0.070;PctAcc=0.125;CBOperProf=0.115;ShareIss5Y=0.136;cfp=0.118;XFIN=0.107;GP=0.116"
+    character:
+      - "GP was accepted on both bars (residual IC t 2.74 > 2.0, 47% of its own IC; guard t 0.43 >= -2.0) as the third profitability leg (0.056 each). Paired dIC -0.0003 (t -0.79) against spanning alpha 7.78%/yr (t 3.62, R2 0.14): both reported, not reconciled (decision ladder2_acceptance)."
+      - "The hedge subtracts 0.20 pp: raw dLS +0.35 pp/yr > hedged +0.16, as beta moves -0.344 -> -0.323 (ex ante -0.298 -> -0.277); raw Sharpe 0.808 -> 0.843, ex-top-years 0.479 -> 0.490, hedged MaxDD 1.7 pts worse (-47.8 -> -49.4); names scored on every leg 47.5 -> 46.5% (GP covers 74%)."
+      - "Stage 3 moves little from v5 except icir_weighted 0.926 -> 1.026 (MaxDD -33.7 -> -28.1, raw 0.639, beta -0.55, GP weight 0.116); equal_rank_decile 0.914 -> 0.925, tier_neutral 0.861 -> 0.905, buffered 0.830 -> 0.833, vol_targeted 0.653 -> 0.686."
