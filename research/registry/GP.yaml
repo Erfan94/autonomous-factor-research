@@ -6,7 +6,7 @@ batch: stage1_b4
 declaration_order: 3
 date_tested: "2026-10-01"
 run: "006"
-stage2_run: null
+stage2_run: "023"
 stage1_decision: PASS
 decided_by: "all bars"
 source: "Novy-Marx 2013 (JFE); SignalDoc sign +1, Cat.Economic profitability"
@@ -24,6 +24,18 @@ stage1:   # from the run 006 block, verbatim; the beta / ex-regime rows are D5 d
    ls_beta_fullwindow: -0.44573, ls_sharpe_ex_top_years: 0.921125, ls_top_years: "2000,2018,2021", ls_top_years_share_pct: 33.457251, ls_sharpe_bear: 1.256097,
    ls_sharpe_bull: 1.059867, decile_avg_ret_pct: "0.419,0.790,1.061,1.081,1.138,1.058,1.123,1.139,1.157,1.139", delisting_adjusted_pct: 0.436673}
 stage1_failed: []
+stage2:   # from the run 023 rung 1 block, verbatim; cand_* = WITH arm, base_* = WITHOUT arm; diagnostics never bars except the two named in stage2_checks
+  {ratchet_decision: "PASS", ratchet_order: 1, base_legs: "Size,Value,Profitability,Investment,Momentum,PctAcc,CBOperProf,ShareIss5Y,cfp,XFIN", family: "profitability", family_weight_with: 0.055556,
+   families_with: "size:Size|value:Value,cfp|profitability:Profitability,CBOperProf,GP|investment:Investment,PctAcc|momentum:Momentum|external_financing:ShareIss5Y,XFIN", resid_ic_mean: 0.007336,
+   resid_ic_tstat_nw: 2.741182, resid_ic_n: 276, solo_ic_mean: 0.015533, resid_ic_share: 0.472278, spanning_alpha_ann_pct: 7.779611, spanning_alpha_tstat_nw: 3.617822, spanning_beta: 0.307769,
+   spanning_r2: 0.140142, spanning_n: 276, corr_to_composite: 0.374356, paired_delta_ic_mean: -0.000279, paired_delta_ic_tstat: -0.790683, delta_ls_sharpe: 0.01137, maxdd_worsening_pct: 1.67029,
+   paired_delta_ls_mean: 0.000131, paired_delta_ls_tstat: 0.429106, base_ic_mean: 0.024477, cand_ic_mean: 0.024198, base_ls_sharpe: 0.91412, cand_ls_sharpe: 0.92549,
+   base_ls_ann_return_pct: 11.558369, cand_ls_ann_return_pct: 11.715703, base_ls_raw_ann_return_pct: 11.494738, cand_ls_raw_ann_return_pct: 11.847621, base_ls_raw_ann_vol_pct: 14.22287,
+   cand_ls_raw_ann_vol_pct: 14.047513, base_ls_maxdd_pct: -47.753265, cand_ls_maxdd_pct: -49.423555, base_ls_raw_maxdd_pct: -47.046056, cand_ls_raw_maxdd_pct: -48.153334,
+   base_ls_beta_fullwindow: -0.344484, cand_ls_beta_fullwindow: -0.322528, base_ls_beta_mean: -0.297501, cand_ls_beta_mean: -0.276604, base_ls_raw_sharpe: 0.808187, cand_ls_raw_sharpe: 0.843396,
+   base_ls_sharpe_ex_top_years: 0.478916, cand_ls_sharpe_ex_top_years: 0.489691, cand_ls_top_years: "2000,2001,2021", cand_ls_top_years_share_pct: 62.370913, base_ls_sharpe_bear: 1.127074,
+   cand_ls_sharpe_bear: 1.268595, base_ls_sharpe_bull: 0.873085, cand_ls_sharpe_bull: 0.842194, cand_ic_half1_mean: 0.037713, cand_ic_half2_mean: 0.010684, base_turnover_d10_pct: 25.017903,
+   cand_turnover_d10_pct: 25.232305, cand_leg_coverage_pct_full: 46.524318}
 stage2_failed: []
 character: >
   The spread is a D1 effect: D1 0.419, D2 0.790, D3-D10 flat at 1.06-1.16 %/mo; raw spread 8.64%/yr (Sharpe 0.688, MaxDD -22.1%). IC 0.0155 (NW t 3.52, ICIR 0.237) is positive in both halves (0.0206 / 0.0105). Tiers MEGA 0.0210, MID 0.0115, SMALL 0.0153 (raw LS Sharpe 0.522 / 0.526 / 0.643): MEGA has the highest IC. IC holds across horizons (0.0141 h1, 0.0133 h6, 0.0121 h12); turnover 9.0% / 10.4%. Beta -0.45 (ex ante -0.40); the hedge adds 2.70 pp, 24% of the hedged 11.34%/yr (Sharpe 1.091, LS NW t 5.10, MaxDD -17.4%). Ex-top-years Sharpe 0.921 (2000, 2018, 2021); bear 1.256 / bull 1.060; the hedged annual LS is negative only in 2012 (-7.2%) and 2020 (-3.6%). Coverage 74.4%: Real Estate 2.0%, Financial Services 3.4%, Healthcare 76.2%, the rest 87-98%.
@@ -34,5 +46,7 @@ caveats:
   - "hedged headline 11.34%/yr is not a Stage 1 bar (D11); 2.70 pp of it is the hedge at beta -0.45"
   - "coverage 46.0% at the 1998-12 preflight probe (15-month lookback before the panel start)"
   - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%, merger 0.43%)"
+  - "Stage 2 (run 023, rung 1, vs v5): dIC -0.0003 (t -0.79) against spanning alpha 7.78%/yr (t 3.62, R2 0.14, corr 0.37); both reported, not reconciled (cfp precedent)"
+  - "Stage 2: third profitability leg at 0.0556 (1/18); leg_coverage_pct_full 47.5 -> 46.5 (GP covers 74.4%); tier MID IC 0.0228 -> 0.0221; the hedge subtracts 0.20 pp (beta -0.344 -> -0.323)"
 decision: >
-  Passes every Stage 1 bar: IC 0.0155 >= 0.010, NW t 3.52 >= 2.5, halves min 0.0105, raw spread 8.64%/yr > 0, coverage 74.4% >= 40, 146.2 names per decile, 276 LS months. Status stage2_pending; family to be assigned in Phase C. Second-highest NW t of the five passers (CBOperProf 3.74); lower IC than CBOperProf (0.0209) with a higher raw spread (8.64 vs 7.24%/yr) and ex-top-years Sharpe (0.921 vs 0.638). Against v0 (IC 0.0145, halves 0.0275 / 0.0016, ex-top-years Sharpe 0.159) its IC is less front-loaded.
+  Passes every Stage 1 bar: IC 0.0155 >= 0.010, NW t 3.52 >= 2.5, halves min 0.0105, raw spread 8.64%/yr > 0, coverage 74.4% >= 40, 146.2 names per decile, 276 LS months. Status stage2_pending; family to be assigned in Phase C. Second-highest NW t of the five passers (CBOperProf 3.74); lower IC than CBOperProf (0.0209) with a higher raw spread (8.64 vs 7.24%/yr) and ex-top-years Sharpe (0.921 vs 0.638). Against v0 (IC 0.0145, halves 0.0275 / 0.0016, ex-top-years Sharpe 0.159) its IC is less front-loaded. Stage 2 (run 023, rung 1, vs v5): PASS on both bars, residual IC 0.0073 with NW t 2.74 > 2.0 (47% of its own 0.0155) and guard paired hedged dLS +0.16 pp/yr, t 0.43 >= -2.0 (raw +0.35, approximate t 0.96 on the hedged paired SE). Joins profitability beside Profitability and CBOperProf at 0.0556 each. Diagnostics (never bars): dIC -0.0003 (t -0.79), spanning alpha 7.78%/yr (t 3.62), dSharpe +0.011 (0.914 -> 0.925), MaxDD 1.7 pts worse (-47.8 -> -49.4); WITH beta -0.323 vs -0.344 (ex ante -0.277 / -0.298), raw Sharpe 0.843 / 0.808, ex-top-years 0.490 / 0.479. Status stays stage2_pending until the coordinator applies it (v6 owed).

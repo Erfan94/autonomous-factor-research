@@ -127,3 +127,11 @@
 - Run 021 reproduces the rung 5 WITH arm to six places: IC 0.024477 (NW t 4.27), hedged Sharpe 0.91412, 11.558369%/yr, MaxDD -47.75, beta -0.344, raw Sharpe 0.808, ex-top-years Sharpe 0.479.
 - Run 022 (Stage 3, never a gate): every variant is below v4. equal_rank_decile 0.914; icir_weighted 0.926 (raw 0.559, beta -0.55); tier_neutral 0.861; buffered 0.830 at turnover 13.2%; vol_targeted 0.653.
 - Records: manifest block v5; provenance_verified (021, 022), construction_reported, composite_updated, batch_closed stage2_l1 (5 pass); XFIN row accepted; index n_accepted 5. Next ladder: ranks 6-10 (GP, ShareIss1Y, MaxRet, roaq, RoE) on v5.
+
+## 2026-10-01 — Stage 2 ladder 2 (run 023): GP, MaxRet, roaq, RoE PASS; ShareIss1Y REJECTED; application pending the advisor
+- Bars (residual NW t > 2.0, paired hedged dLS t >= -2.0): GP 2.74 / 0.43 (profitability, 0.056); ShareIss1Y 1.88 / 0.17, rejected on resid_ic_tstat_nw (faced ShareIss5Y and XFIN); MaxRet 4.01 / 1.75 (opens volatility, 0.143); roaq 3.73 / 1.95 (profitability, 0.036); RoE 2.41 / -1.26 (profitability, 0.029). check_stage2 agrees 5/5.
+- Provenance: four stamps equal the repo, include_holdout False, eval_end 2021-12-31, 0 warnings. The base equals run 021 to six places; each base is the previous PASS rung's WITH arm, and ShareIss1Y is in no later base.
+- Path from v5 to rung 5 (hedged): IC 0.0245 -> 0.0323; Sharpe 0.914 -> 0.932 (peak 0.967 after roaq); 11.56 -> 14.87%/yr; MaxDD -47.8 -> -43.7; beta -0.34 -> -0.73; raw Sharpe 0.808 -> 0.579; turnover 25.0 -> 44.3%.
+- Raw vs hedged dLS (pp/yr; hedge part = hedged - raw): GP +0.35 / +0.16 (-0.20); ShareIss1Y +0.04 / +0.07; MaxRet -0.59 / +2.23 (+2.82, opposite signs); roaq +0.72 / +1.23 (+0.51); RoE -0.45 / -0.31 (+0.14). Approximate raw t: 0.96 / 0.10 / -0.46 / 1.14 / -1.83.
+- RoE: residual share 0.24, dSharpe -0.036, spanning alpha t -0.33. Like XFIN, it is admitted by the -2.0 guard. The rules decide on residual IC and the hedged guard only.
+- Records: five rows carry stage2 fields (ShareIss1Y rejected; the other four stage2_pending). Logged provenance_verified, 5 factor_evaluated and registry_rows_written; index rebuilt; check OK. v6-v9 owed on application.
