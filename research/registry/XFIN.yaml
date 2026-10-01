@@ -6,7 +6,7 @@ batch: stage1_b9
 declaration_order: 2
 date_tested: "2026-10-01"
 run: "011"
-stage2_run: null
+stage2_run: "012"
 stage1_decision: PASS
 decided_by: "all bars"
 source: "Bradshaw, Richardson and Sloan 2006 (JAE); SignalDoc sign -1, Cat.Economic external financing"
@@ -25,6 +25,19 @@ stage1:   # from the run 011 block, verbatim; the beta / ex-regime rows are D5 d
    ls_sharpe_bull: 0.878702, decile_avg_ret_pct: "0.618,0.915,0.868,1.017,1.029,1.014,1.064,1.160,1.090,1.166",
    delisting_adjusted_pct: 0.436673}
 stage1_failed: []
+stage2:   # from the run 012 rung 5 block, verbatim; cand_* = WITH arm, base_* = WITHOUT arm; diagnostics never bars except the two named in stage2_checks
+  {ratchet_decision: PASS, ratchet_order: 5, base_legs: "Size,Value,Profitability,Investment,Momentum,PctAcc,CBOperProf,ShareIss5Y,cfp", family: external_financing, family_weight_with: 0.083333,
+   families_with: "size:Size|value:Value,cfp|profitability:Profitability,CBOperProf|investment:Investment,PctAcc|momentum:Momentum|external_financing:ShareIss5Y,XFIN",
+   resid_ic_mean: 0.006947, resid_ic_tstat_nw: 3.27346, resid_ic_n: 276, solo_ic_mean: 0.017006, resid_ic_share: 0.408488,
+   spanning_alpha_ann_pct: 2.420776, spanning_alpha_tstat_nw: 1.282743, spanning_beta: 0.515092, spanning_r2: 0.280491, spanning_n: 276, corr_to_composite: 0.529614,
+   paired_delta_ic_mean: -0.000469, paired_delta_ic_tstat: -0.62083, delta_ls_sharpe: -0.081879, maxdd_worsening_pct: 7.120891,
+   paired_delta_ls_mean: -0.000384, paired_delta_ls_tstat: -0.637443, base_ic_mean: 0.024946, cand_ic_mean: 0.024477,
+   base_ls_sharpe: 0.995998, cand_ls_sharpe: 0.91412, base_ls_ann_return_pct: 12.019142, cand_ls_ann_return_pct: 11.558369,
+   base_ls_raw_ann_return_pct: 11.903401, cand_ls_raw_ann_return_pct: 11.494738, base_ls_maxdd_pct: -40.632374, cand_ls_maxdd_pct: -47.753265,
+   base_ls_beta_fullwindow: -0.262731, cand_ls_beta_fullwindow: -0.344484, base_ls_beta_mean: -0.22953, cand_ls_beta_mean: -0.297501,
+   base_ls_raw_sharpe: 0.91342, cand_ls_raw_sharpe: 0.808187, base_ls_sharpe_ex_top_years: 0.613504, cand_ls_sharpe_ex_top_years: 0.478916,
+   cand_ls_top_years: "2000,2001,2021", cand_ls_top_years_share_pct: 62.953302, cand_ls_sharpe_bear: 1.127074, cand_ls_sharpe_bull: 0.873085,
+   cand_ic_half2_mean: 0.010962, cand_turnover_d10_pct: 25.017903, cand_leg_coverage_pct_full: 47.545926}
 stage2_failed: []
 character: >
   D1-anchored and graded above it: D1 (heaviest net financing) 0.618, D2-D7 0.87-1.06, D8-D10 1.09-1.17 %/mo; raw spread 6.57%/yr at vol 13.8% (Sharpe 0.478, raw MaxDD -38.1%). IC 0.0170 (NW t 3.57, plain t 3.82, ICIR 0.230), halves 0.0235 / 0.0105; annual IC positive in 18 of 23 years (2021 +0.085, 2000 +0.077; 2020 -0.044, 2019 -0.012), 2011-2020 average 0.0047. Tiers MEGA 0.0182, MID 0.0162, SMALL 0.0162 (raw LS Sharpe 0.215 / 0.329 / 0.700). IC decays slowly (0.0158 h1, 0.0136 h6, 0.0130 h12); turnover 14.8% / 16.7%. Beta -0.47 (ex ante -0.42): the hedge adds 2.04 pp, 24% of the hedged 8.61%/yr (Sharpe 0.734, LS NW t 3.40, MaxDD -25.7%, hit 61.6%). Hedged LS 2021 +61.1%, 2000 +48.7%, 2006 +17.9% (56% of the summed LS); 2020 -19.1%, 1999 -7.0%, 2019 -3.3% (3 negative years); ex-top-years Sharpe 0.484; bear 0.566 / bull 0.879. Coverage 95.6%; Communication Services 92.5%, Technology 93.1%, best Utilities 97.6%.
@@ -35,5 +48,7 @@ caveats:
   - "approx translation: the OSAP code is followed (dlcch included, subsumed in SF1.ncfdebt); ncfcommon (net sstk - prstkc) zero-filled when null; positive ncfdiv clipped to 0; null ncfdiv / ncfdebt -> NaN; ART flows over same-filing assets; no |ratio| screen"
   - "Cat.Economic external financing: no v0 seed family covers it"
   - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+  - "Stage 2 (run 012): every diagnostic adverse while both bars pass: dIC -0.0005 (t -0.62), dSharpe -0.082, MaxDD 7.1 pts worse (raw 7.8), ex-top-years Sharpe -0.135, beta -0.26 -> -0.34, raw vol 13.0 -> 14.2"
+  - "Stage 2: second external_financing leg; halves ShareIss5Y's weight 0.1667 -> 0.0833; the rung does not separate XFIN's effect from that dilution; Stage 1 annual IC correlation 0.84 with ShareIss5Y; residual IC 0.0069 the ladder's lowest"
 decision: >
-  Passes every Stage 1 bar: IC 0.0170 >= 0.010, NW t 3.57 >= 2.5, halves min 0.0105, raw spread 6.57%/yr > 0, coverage 95.6% >= 40, 187.9 names per decile, 276 LS months >= 248. Status stage2_pending; family to be assigned in Phase C. Among the external-financing passers its NW t sits between ShareIss5Y 3.67 and ShareIss1Y 3.52 (NetEquityFinance 3.03); hedge share 24%, against 35-41% for NetEquityFinance and ShareIss5Y.
+  Stage 1 (run 011): passes every bar (IC 0.0170, NW t 3.57, halves min 0.0105, raw spread 6.57%/yr, coverage 95.6%, 187.9 names per decile, 276 LS months). Stage 2 (run 012, rung 5, vs v0 + PctAcc, CBOperProf, ShareIss5Y, cfp): PASS on both bars, residual IC 0.0069 with NW t 3.27 > 2.0 (41% of its own 0.0170) and guard paired hedged dLS -0.46 pp/yr, t -0.64 >= -2.0 (raw -0.41, approximate t -0.57 on the hedged paired SE). Joins external_financing beside ShareIss5Y at 0.0833 each. Diagnostics (never bars): dIC -0.0005 (t -0.62), spanning alpha 2.42%/yr (t 1.28, R2 0.28, corr 0.53), dSharpe -0.082 (0.996 -> 0.914), MaxDD 7.1 pts worse (-40.6 -> -47.8); WITH beta -0.344 vs -0.263 (ex ante -0.298 / -0.230), raw Sharpe 0.808 / 0.913, ex-top-years 0.479 / 0.614. The rules decide on the residual IC and the guard only. Status stays stage2_pending pending application (v5).

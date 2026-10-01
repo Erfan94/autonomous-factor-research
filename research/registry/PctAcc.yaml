@@ -6,7 +6,7 @@ batch: stage1_b7
 declaration_order: 4
 date_tested: "2026-10-01"
 run: "009"
-stage2_run: null
+stage2_run: "012"
 stage1_decision: PASS
 decided_by: "all bars"
 source: "Hafzalla, Lundholm and Van Winkle 2011 (AR); SignalDoc sign -1, Cat.Economic accruals"
@@ -24,6 +24,19 @@ stage1:   # from the run 009 block, verbatim; the beta / ex-regime rows are D5 d
    ls_top_years: "2000,2005,2021", ls_top_years_share_pct: 46.557188, ls_sharpe_bear: 0.90567, ls_sharpe_bull: 0.528236,
    decile_avg_ret_pct: "0.732,0.870,0.919,0.957,1.015,1.025,0.997,1.153,1.156,1.127", delisting_adjusted_pct: 0.436673}
 stage1_failed: []
+stage2:   # from the run 012 rung 1 block, verbatim; cand_* = WITH arm, base_* = WITHOUT arm; diagnostics never bars except the two named in stage2_checks
+  {ratchet_decision: PASS, ratchet_order: 1, base_legs: "Size,Value,Profitability,Investment,Momentum", family: investment, family_weight_with: 0.1,
+   families_with: "size:Size|value:Value|profitability:Profitability|investment:Investment,PctAcc|momentum:Momentum",
+   resid_ic_mean: 0.00982, resid_ic_tstat_nw: 4.673595, resid_ic_n: 276, solo_ic_mean: 0.011159, resid_ic_share: 0.879986,
+   spanning_alpha_ann_pct: 2.693932, spanning_alpha_tstat_nw: 2.474803, spanning_beta: 0.19852, spanning_r2: 0.15423, spanning_n: 276, corr_to_composite: 0.392721,
+   paired_delta_ic_mean: 0.002347, paired_delta_ic_tstat: 2.814759, delta_ls_sharpe: 0.014012, maxdd_worsening_pct: -4.278694,
+   paired_delta_ls_mean: 5.1e-05, paired_delta_ls_tstat: 0.087358, base_ic_mean: 0.014511, cand_ic_mean: 0.016858,
+   base_ls_sharpe: 0.599937, cand_ls_sharpe: 0.61395, base_ls_ann_return_pct: 7.321826, cand_ls_ann_return_pct: 7.382577,
+   base_ls_raw_ann_return_pct: 9.232042, cand_ls_raw_ann_return_pct: 9.218284, base_ls_maxdd_pct: -45.55987, cand_ls_maxdd_pct: -41.281176,
+   base_ls_beta_fullwindow: -0.139882, cand_ls_beta_fullwindow: -0.120962, base_ls_beta_mean: -0.084552, cand_ls_beta_mean: -0.074208,
+   base_ls_raw_sharpe: 0.719123, cand_ls_raw_sharpe: 0.73713, base_ls_sharpe_ex_top_years: 0.158973, cand_ls_sharpe_ex_top_years: 0.201714,
+   cand_ls_top_years: "2000,2001,2003", cand_ls_top_years_share_pct: 74.856153, cand_ls_sharpe_bear: 0.852601, cand_ls_sharpe_bull: 0.554404,
+   cand_ic_half2_mean: 0.003292, cand_turnover_d10_pct: 27.628054, cand_leg_coverage_pct_full: 91.359846}
 stage2_failed: []
 character: >
   Graded: D1 (highest percent accruals) 0.732 %/mo, D2-D7 0.87-1.03, D8-D10 1.13-1.16; raw spread 4.74%/yr at vol 6.2% (Sharpe 0.762, raw MaxDD -12.4%). IC 0.0112 (NW t 4.03, plain t 4.33, ICIR 0.261, 61.6% of months positive), halves 0.0152 / 0.0071; annual IC positive in 19 of 23 years. Tiers MEGA -0.0009, MID 0.0122, SMALL 0.0156 (raw LS Sharpe -0.015 / 0.467 / 0.907). IC decays: 0.0089 h1, 0.0078 h3, 0.0045 h6, 0.0031 h12; turnover 17.6% / 16.6%. Beta -0.04 (ex ante -0.05): the hedge subtracts 0.59 pp, hedged 4.15%/yr (Sharpe 0.672, LS NW t 3.16, MaxDD -11.0%). Summed hedged LS 79.3 pp over 1999-2006 against 18.1 pp over 2007-2021; 2000, 2005, 2021 carry 47% (2020 -9.7%); ex-top-years Sharpe 0.462; bear 0.906 / bull 0.528. Coverage 95.6% (51.4% at the 1998-12 probe), 92.3-97.4% by sector.
@@ -37,5 +50,7 @@ caveats:
   - "ib = netinc + netincdis (after NCI, extraordinary items not separable); ib == 0 -> NaN where OSAP divides by 0.01; the balance-sheet fallback for null ncfo not reproduced (median 0.3% of the universe NaN); ART as filed, no 6-month lag"
   - "Cat.Economic accruals: no v0 seed family covers it"
   - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+  - "Stage 2 (run 012): residual NW t 4.67 exceeds its own Stage 1 IC NW t 4.03 (residual IC 0.0098 vs 0.0112): projecting on the legs lowered the IC's monthly dispersion; share 88%, the ladder's highest, below the near-100% trigger"
+  - "Stage 2: the composite IC rose 0.0023 (paired t 2.81) while its LS barely moved (hedged +0.06, raw -0.01 pp/yr): the information shows in IC, not in the D10-D1 spread"
 decision: >
-  Passes every Stage 1 bar: IC 0.0112 >= 0.010 (margin 0.0012), NW t 4.03 >= 2.5, halves min 0.0071, raw spread 4.74%/yr > 0, coverage 95.6% >= 40, 187.8 names per decile, 276 LS months >= 248. Status stage2_pending; family to be assigned in Phase C. Highest NW t of the 11 passers (CBOperProf 3.74); only ChNNCOA (4.15, rejected on ic_mean) is higher among screened rows; second-lowest IC of the 11 passers (NetPayoutYield 0.0145).
+  Stage 1 (run 009): passes every bar (IC 0.0112, NW t 4.03, halves min 0.0071, raw spread 4.74%/yr, coverage 95.6%, 187.8 names per decile, 276 LS months). Stage 2 (run 012, ladder 1 rung 1, vs the five v0 legs): PASS on both bars, residual IC 0.0098 with NW t 4.67 > 2.0 and guard paired hedged dLS +0.06 pp/yr, t 0.09 >= -2.0 (raw dLS -0.01 pp/yr, approximate t -0.02 = raw mean delta over the hedged paired SE). Joins investment beside Investment at weight 0.10. Diagnostics: dIC +0.0023 (t 2.81), spanning alpha 2.69%/yr (t 2.47, R2 0.15), dSharpe +0.014, MaxDD 4.3 pts better; WITH-arm beta -0.121 vs base -0.140 (ex ante -0.074 / -0.085), raw Sharpe 0.737 / 0.719, ex-top-years Sharpe 0.202 / 0.159. Status stays stage2_pending: RECORDS has no pre-application status; the harness PASS awaits the composite update (v1).

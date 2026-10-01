@@ -84,3 +84,11 @@
 - PASS BidAskSpreadFlip, a flipped-sign second hypothesis judged at |NW t| >= 2.74: 2.762832 clears it by 0.0228. Its offset from run 003's negation: IC +0.000098, t -0.0076, raw spread +0.13 pp; no bar crossed. The raw Sharpe is 0.046 and beta -0.98, so the hedge is 88% of the hedged 8.72%/yr. D10 adds nothing and bear Sharpe is -0.244. Annual IC correlation with IdioVol3F is 0.98.
 - Rejected on ic_tstat_nw: dNoa 2.19 (also ic_mean and h2 -0.0002; raw Sharpe 0.95 from the D1 tail and 1999-2001, the NOA pattern), grcapx 1.37, grcapx3y 0.89 (both also fail ic_mean).
 - Provenance verified on 11 blocks, 0 validation warnings, check_stage1 11/11. Counters: 107 screened, 24 passed, 83 rejected; composite v0. Every constructible predictor now has a Stage 1 row.
+
+## 2026-10-01 — Stage 2 ladder 1 (run 012): all five rungs PASS; application pending the advisor
+- PASS on both bars, in the declared order (residual NW t > 2.0, paired hedged dLS t >= -2.0): PctAcc 4.67 / 0.09 (investment, weight 0.10), CBOperProf 3.02 / 0.95 (profitability, 0.10), ShareIss5Y 3.61 on 223 m / 2.83 (opens external_financing, 1/6), cfp 2.97 / 2.19 (value, 0.083), XFIN 3.27 / -0.64 (external_financing, 0.083). check_stage2 agrees on all five.
+- Provenance: four stamps equal the repo; include_holdout False; eval_end 2021-12-31; 0 validation warnings. The base arm equals run 001 to six places, and each rung's base equals the previous WITH arm.
+- Composite path, v0 to rung 5 (hedged): IC 0.0145 -> 0.0245, NW t 2.62 -> 4.27, Sharpe 0.600 -> 0.914 (0.996 after cfp), MaxDD -45.6 -> -47.8, beta -0.14 -> -0.34, ex-top-years Sharpe 0.16 -> 0.48 (0.61 after cfp).
+- Raw dLS next to the guard: -0.01 / +0.31 / +1.46 / +0.92 / -0.41 pp/yr, with approximate t -0.02 / 0.67 / 1.67 / 1.16 / -0.57 (hedged paired SE). The hedge adds about 1 pp on rungs 3 and 4.
+- XFIN facts: dIC -0.0005 (t -0.62), dSharpe -0.082, MaxDD 7.1 pts worse, beta -0.26 -> -0.34. It halves ShareIss5Y's weight. Both bars pass, and the rules decide on those bars alone.
+- Records: five rows carry stage2 fields with status stage2_pending; provenance_verified, 5 factor_evaluated and registry_rows_written are logged. No composite edit, manifest block or tag yet (v1..v5 owed on application).
