@@ -358,6 +358,58 @@ def load_or_build_panel(snap, cfg, runtime, data_sha, root=ROOT, log=print):
 
 
 # =============================================================================
+# First trade of each month — the skip-a-day return base (diagnostic only)
+# =============================================================================
+#
+# `--return-start skip1` (run_test.py, `--baseline --stage 2` only) moves the
+# base of month t+1's forward return from the signal-date close to the close
+# of the name's FIRST trade in month t+1. That needs one SEP row per
+# (ID, business month-end) the monthly panel does not carry (it holds the
+# LAST trade). It is built separately, and only when the flag is set, so the
+# panel, its cache key and every default-path number are untouched.
+
+RETURN_START_MODES = ("close", "skip1")
+
+
+def first_trade_cache_key(data_sha):
+    return hashlib.sha256(f"{data_sha}|first-trade-v1".encode()).hexdigest()[:12]
+
+
+def build_first_trade_monthly(snap, log=print):
+    """One row per (ID, business month-end): the FIRST SEP trade of the
+    calendar month. Columns: ID, me, first_date, first_closeadj."""
+    t0 = time.time()
+    tmap = snap.ticker_map("SEP")
+    sep = snap.table("SEP", ["ticker", "date", "closeadj"], keep=False)
+    sep = sep.assign(ID=sep["ticker"].map(tmap)).dropna(subset=["ID"])
+    sep["date"] = pd.to_datetime(sep["date"])
+    sep = sep.sort_values(["ID", "date"], kind="mergesort").reset_index(drop=True)
+    sep["me"] = to_bme(sep["date"]).values
+    first = sep.groupby(["ID", "me"], sort=False).head(1)
+    out = (first[["ID", "me", "date", "closeadj"]]
+           .rename(columns={"date": "first_date", "closeadj": "first_closeadj"})
+           .reset_index(drop=True))
+    del sep
+    log(f"    first-trade monthly: {len(out):,} ID-months in {time.time() - t0:.0f}s")
+    return out
+
+
+def load_or_build_first_trade(snap, runtime, data_sha, root=ROOT, log=print):
+    key = first_trade_cache_key(data_sha)
+    cache_dir = Path(root) / runtime["cache"]["dir"]
+    p = cache_dir / f"first_trade_monthly_{key}.parquet"
+    if runtime["cache"].get("enabled", True) and p.exists():
+        log(f"    first-trade monthly: cache hit {p.name}")
+        return pd.read_parquet(p)
+    out = build_first_trade_monthly(snap, log=log)
+    if runtime["cache"].get("enabled", True):
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        out.to_parquet(p, index=False)
+        log(f"    first-trade monthly: cached as {p.name}")
+    return out
+
+
+# =============================================================================
 # Daily value-weighted market return — built once per snapshot, cached on disk
 # =============================================================================
 #
@@ -2254,6 +2306,8 @@ class PanelIndex:
         self._tailex_loader = None
         self._trend = None
         self._trend_loader = None
+        self._first = None
+        self._first_loader = None
         # Universe membership by month-end, for the hysteresis chain
         # (build_universe). Filled forward from the first panel month.
         self.membership = {}
@@ -2329,6 +2383,25 @@ class PanelIndex:
             self._trend = (self._trend_loader() if self._trend_loader is not None
                            else build_trend_monthly(self._snap, self.cfg, log=lambda *a, **k: None))
         return self._trend
+
+    def set_first_trade_loader(self, loader):
+        """A zero-argument callable returning the first-trade-of-month frame
+        (the runner passes load_or_build_first_trade with its DATA_SHA, and
+        only under `--return-start skip1`). Called at most once."""
+        self._first_loader = loader
+        self._first = None
+
+    def first_trade_rows(self, me):
+        """Frame indexed by ID (first_date, first_closeadj) for the names'
+        first trade in the calendar month of business month-end `me`; None
+        when no name traded that month."""
+        if self._first is None:
+            fr = (self._first_loader() if self._first_loader is not None
+                  else build_first_trade_monthly(self._snap, log=lambda *a, **k: None))
+            fr = fr.assign(me=pd.to_datetime(fr["me"]), first_date=pd.to_datetime(fr["first_date"]))
+            self._first = {m: g.set_index("ID")[["first_date", "first_closeadj"]]
+                           for m, g in fr.groupby("me", sort=False)}
+        return self._first.get(pd.Timestamp(me))
 
     def month_rows(self, me):
         return self.by_me.get(pd.Timestamp(me))
@@ -2497,7 +2570,36 @@ def screen_month(pidx, me, cfg, prev_ids=None):
     return df[keep].sort_values("adv_usd", ascending=False)
 
 
-def forward_returns(pidx, universe, signal_asof, ret_end, cfg):
+def _skip1_base(pidx, universe, me1, ret_end, stale):
+    """(p0, ret_base) for `return_start="skip1"`: the base price of the
+    month-t+1 return is the adjusted close of the name's FIRST trade in the
+    calendar month of `me1` (the first trading day after the signal date),
+    when that trade is on or before `ret_end` and within the staleness window
+    (`universe.max_price_staleness_days`, the same tolerance the window END
+    uses) of the market's first trading day of the month (the earliest
+    first trade of any SEP name that month). Otherwise the base falls back
+    to the signal-date close, and the unchanged partial / gap / delisting
+    branches of forward_returns() then apply exactly as in the default.
+    ret_base: 'first_day' (base on the market's first trading day),
+    'first_trade_late' (the name's first trade, after the market's first
+    day but inside the tolerance), 'signal_close' (fallback)."""
+    p_sig = universe["closeadj"].astype(float)
+    first = pidx.first_trade_rows(me1)
+    if first is None or first.empty:
+        return p_sig, pd.Series("signal_close", index=universe.index, dtype=object)
+    mkt_first = first["first_date"].min()
+    f = first.reindex(universe.index)
+    fd = f["first_date"]
+    ok = (f["first_closeadj"].notna() & fd.notna() & (fd <= pd.Timestamp(ret_end))
+          & ((fd - mkt_first) <= stale))
+    p0 = f["first_closeadj"].astype(float).where(ok, p_sig)
+    base = pd.Series("signal_close", index=universe.index, dtype=object)
+    base[ok & (fd == mkt_first)] = "first_day"
+    base[ok & (fd != mkt_first)] = "first_trade_late"
+    return p0, base
+
+
+def forward_returns(pidx, universe, signal_asof, ret_end, cfg, return_start="close"):
     """Total return from the signal-date close to the last trade on or before
     `ret_end`, with the delisting convention applied to names that stop
     trading inside the window.
@@ -2505,12 +2607,43 @@ def forward_returns(pidx, universe, signal_asof, ret_end, cfg):
     Returns a frame indexed by ID: monthly_ret, ret_kind in
     {full, partial_delisted_performance, partial_delisted_merger, partial_gap,
     no_trade}.
+
+    `return_start` (diagnostic; run_test.py `--return-start`):
+      'close' (default)  the base is the signal-date close, as always. This
+                         path is the original code, line for line.
+      'skip1'            the base is the close of the name's first trade in
+                         month t+1 (_skip1_base); the END is unchanged (the
+                         last trade on or before `ret_end`, the next
+                         month-end close), and so are the staleness test and
+                         the delisting convention. A name that delists ON
+                         the first trading day has p1 == p0 (its first trade
+                         is its last), a stale end, partial 0.0 and then the
+                         configured delisting return; a name with no trade
+                         in month t+1 at all (delisted on or before the
+                         first trading day, or a gap) keeps the signal-close
+                         base, so its return and ret_kind equal the
+                         default's. The frame gains `ret_base`.
+    What shifts under skip1 is `monthly_ret` and everything computed from it
+    downstream: decile and long-short returns (raw and hedged), the market
+    return M the hedge reads (analytics.universe_market_return is the
+    cap-weighted mean of these same `monthly_ret`, weights = the signal-date
+    `mkt_cap_usd`, unchanged), the trailing beta (estimated on the shifted LS
+    and the shifted M, months t-36..t-1), the down-market and bull/bear
+    states (also read off that M), the IC, ICIR, IC decay and tier stats.
+    What does not shift: the universe, every signal, ranks, deciles, the
+    weights of M, ret_kind, coverage and the month count.
     """
     r = cfg["returns"]["delisting"]
     stale = pd.Timedelta(days=int(cfg["universe"]["max_price_staleness_days"]))
     me0 = pd.Timestamp(signal_asof)
     me1 = to_bme([pd.Timestamp(ret_end)]).iloc[0]
-    p0 = universe["closeadj"].astype(float)
+    if return_start not in RETURN_START_MODES:
+        raise ValueError(f"return_start {return_start!r} not in {RETURN_START_MODES}")
+    base = None
+    if return_start == "skip1":
+        p0, base = _skip1_base(pidx, universe, me1, ret_end, stale)
+    else:
+        p0 = universe["closeadj"].astype(float)
     nxt = pidx.month_rows(me1)
     if nxt is None:
         nxt = pd.DataFrame(columns=["ID", "closeadj", "date"]).set_index("ID")
@@ -2544,6 +2677,8 @@ def forward_returns(pidx, universe, signal_asof, ret_end, cfg):
     kind[merg] = "partial_delisted_merger"
     kind[gap & p1.notna()] = "partial_gap"
     kind[gap & p1.isna()] = "no_trade"
+    if base is not None:
+        return pd.DataFrame({"monthly_ret": ret, "ret_kind": kind, "ret_base": base})
     return pd.DataFrame({"monthly_ret": ret, "ret_kind": kind})
 
 
@@ -3311,12 +3446,18 @@ AUDIT_BASE_COLS = ["ID", "DATE", "DECILE", "COMPOSITE_SCORE", "monthly_ret",
 
 
 def compute_month_frame(snap, pidx, sf1_cache, factors, reb_dt, signal_asof,
-                        ret_start, ret_end, cfg):
+                        ret_start, ret_end, cfg, return_start="close"):
     """Universe + every factor's raw column + forward return, for one month.
 
     Returns the un-scored frame (no COMPOSITE_SCORE / DECILE yet) so a Stage 2
     ladder can score many arms off one computation. None if the month has no
     universe or no returns.
+
+    `return_start="skip1"` (diagnostic, forward_returns) puts the skip-a-day
+    return in `monthly_ret` and ALSO carries the default signal-close return
+    as `monthly_ret_close` and the base used as `RET_BASE`, so one run can
+    pair the two on identical universes and scores. The default adds
+    neither column.
     """
     univ = build_universe(pidx, signal_asof, cfg)
     if univ.empty:
@@ -3332,8 +3473,14 @@ def compute_month_frame(snap, pidx, sf1_cache, factors, reb_dt, signal_asof,
             s = s.where(gate)
         df[f.col] = s.astype(float)
     fr = forward_returns(pidx, univ, signal_asof, ret_end, cfg)
+    if return_start != "close":
+        fr_close = fr
+        fr = forward_returns(pidx, univ, signal_asof, ret_end, cfg, return_start=return_start)
     df["monthly_ret"] = fr["monthly_ret"]
     df["ret_kind"] = fr["ret_kind"]
+    if return_start != "close":
+        df["monthly_ret_close"] = fr_close["monthly_ret"]
+        df["RET_BASE"] = fr["ret_base"]
     df["DATE"] = pd.Timestamp(ret_end)
     df["RET_START"] = pd.Timestamp(ret_start)
     df["RET_END"] = pd.Timestamp(ret_end)

@@ -1020,6 +1020,8 @@ STRING_KEYS = {
     # construction layer (Phase E): a 12-hex LAYER_SHA of digits would parse as a float
     "layer_sha", "row", "row_note", "constraint", "half_spread_mode", "holdout_only",
     "layer_book_start", "sector_group_labels", "borrow_mode", "paths_sha",
+    # --return-start (diagnostic baseline)
+    "return_start",
 }
 
 

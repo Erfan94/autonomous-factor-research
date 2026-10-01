@@ -52,7 +52,8 @@ from harness.analytics import (SERIES_KEYS, align_arms, assign_composite_decile,
                                stage2_checks, survivorship_check, tier_scalars, nw_tstat)
 from harness.data_layer import (PanelIndex, build_rebalance_schedule,      # noqa: E402
                                 compute_month_frame, last_completed_month_end,
-                                load_or_build_cs_spread, load_or_build_ff3, load_or_build_market,
+                                load_or_build_cs_spread, load_or_build_ff3,
+                                load_or_build_first_trade, load_or_build_market,
                                 load_or_build_panel, load_or_build_ps,
                                 load_or_build_tailex, load_or_build_trend, load_snapshot)
 from harness import construction_layer as CL                                # noqa: E402
@@ -96,15 +97,19 @@ def load_composite():
 # Backtest engine
 # =============================================================================
 
-def precompute_month_frames(snap, pidx, factors, schedule, cfg, label="Backtest", log=print):
+def precompute_month_frames(snap, pidx, factors, schedule, cfg, label="Backtest", log=print,
+                            return_start="close"):
     """Universe + every factor column + forward return for every month, ONCE.
-    Every arm and every batch member is scored off these frames."""
+    Every arm and every batch member is scored off these frames.
+    `return_start` is the diagnostic forward-return base (data_layer.
+    forward_returns); "close" is the default and the only decision path."""
     sf1_cache = {}
     frames, failures = [], {}
     total, t0 = len(schedule), time.time()
     for i, (reb, sig, rs, re_) in enumerate(schedule):
         try:
-            fr = compute_month_frame(snap, pidx, sf1_cache, factors, reb, sig, rs, re_, cfg)
+            fr = compute_month_frame(snap, pidx, sf1_cache, factors, reb, sig, rs, re_, cfg,
+                                     return_start=return_start)
             if fr is not None and fr["monthly_ret"].notna().any():
                 frames.append(fr)
         except Exception as e:
@@ -133,7 +138,9 @@ def score_arm(frames, metas, weights, n_deciles, group_col=None):
     group ranking of config `ranking` (A.rank_group_col)."""
     ret_slices, cnt_slices, audits = [], [], []
     keep_cols = ["ID", "DATE", "monthly_ret", "ret_kind", "RET_START", "RET_END", "SIGNAL_ASOF",
-                 "region", "liq_tier", "sector", "industry_group", "mkt_cap_usd", "adv_usd"]
+                 "region", "liq_tier", "sector", "industry_group", "mkt_cap_usd", "adv_usd",
+                 # present only under --return-start skip1 (compute_month_frame)
+                 "monthly_ret_close", "RET_BASE"]
     for fr in frames:
         df = assign_composite_decile(fr, metas, weights, n_deciles, group_col=group_col)
         cols = [c for c in keep_cols if c in df.columns] + ["DECILE", "COMPOSITE_SCORE"]
@@ -357,7 +364,70 @@ def drive_stage1(frames, candidates, cfg, stamps, eval_start, eval_end, include_
     return blocks, summaries
 
 
-def drive_baseline(frames, legs, cfg, stamps, eval_start, eval_end, include_holdout, probes, C):
+def _paired_return_start(audit, metas, cfg):
+    """--return-start skip1 only: pair the skip-a-day return (`monthly_ret`)
+    with the default signal-close return (`monthly_ret_close`) on the SAME
+    audit frame (same universe, scores, ranks). Returns (fields, rows):
+    the composite IC on the close base (a self-check: it must equal the
+    default run's ic_mean), the paired monthly composite dIC, the base mix,
+    and each leg's standalone within-group rank IC under both bases."""
+    lags = int(cfg["statistics"]["newey_west_lags"])
+    gc = A.rank_group_col(cfg)
+    out = {}
+    live = audit.dropna(subset=["monthly_ret"])
+    if "RET_BASE" in live.columns and len(live):
+        mix = live["RET_BASE"].value_counts(normalize=True) * 100.0
+        for k in ("first_day", "first_trade_late", "signal_close"):
+            out[f"skip1_base_{k}_pct"] = float(mix.get(k, 0.0))
+    close = audit.drop(columns=["monthly_ret"]).rename(columns={"monthly_ret_close": "monthly_ret"})
+    ic_s = compute_ic(audit)["IC"]
+    ic_c = compute_ic(close)["IC"]
+    d = (ic_s - ic_c).dropna()
+    out.update({"paired_close_ic_mean": float(ic_c.mean()), "paired_close_ic_tstat_nw": float(nw_tstat(ic_c, lags)),
+                "paired_dic_mean": float(d.mean()), "paired_dic_tstat_nw": float(nw_tstat(d, lags)),
+                "paired_n_months": int(len(d))})
+    rows = []
+    extra = [c for c in (gc,) if c and c in audit.columns]
+    for m in metas:
+        if m["col"] not in audit.columns:
+            continue
+        sub = audit[["DATE", m["col"], "monthly_ret", "monthly_ret_close"] + extra]
+        rk = pd.concat([rank_one_factor(g, m["col"], ascending=m["ascending"], winsorize=m["winsorize"],
+                                        group_col=gc) for _, g in sub.groupby("DATE")])
+        f = sub.assign(_rk=rk.reindex(sub.index))
+        s_ic = compute_ic(f, "_rk")["IC"]
+        c_ic = compute_ic(f.drop(columns=["monthly_ret"]).rename(columns={"monthly_ret_close": "monthly_ret"}),
+                          "_rk")["IC"]
+        dd = (s_ic - c_ic).dropna()
+        row = {"leg": m["name"], "col": m["col"], "close": float(c_ic.mean()),
+               "close_t": float(nw_tstat(c_ic, lags)), "skip1": float(s_ic.mean()),
+               "skip1_t": float(nw_tstat(s_ic, lags)), "delta": float(dd.mean()),
+               "delta_t": float(nw_tstat(dd, lags))}
+        rows.append(row)
+        for k in ("close", "close_t", "skip1", "skip1_t", "delta", "delta_t"):
+            out[f"legic_{m['col']}_{k}"] = row[k]
+    return out, rows
+
+
+def _print_paired_return_start(pf, rows):
+    print("\n\n  --- Return start: skip1 vs signal close (paired, same universe and scores) ---")
+    print(f"  base of the skip1 return (% of name-months with a return): first trading day "
+          f"{_f(pf.get('skip1_base_first_day_pct'))}, own first trade later in the tolerance "
+          f"{_f(pf.get('skip1_base_first_trade_late_pct'))}, signal-close fallback "
+          f"{_f(pf.get('skip1_base_signal_close_pct'))}")
+    print(f"  composite IC on the signal-close base {pf['paired_close_ic_mean']:.6f} "
+          f"(NW t {pf['paired_close_ic_tstat_nw']:.4f}) — must equal the default run's ic_mean")
+    print(f"  paired composite dIC (skip1 - close) {pf['paired_dic_mean']:+.6f}  NW t "
+          f"{pf['paired_dic_tstat_nw']:.3f}  over {pf['paired_n_months']} months")
+    print("\n  Per-leg standalone IC (within-group rank, published orientation), mean and NW t:")
+    print(f"  {'leg':<16}{'close':>9}{'t':>8}{'skip1':>9}{'t':>8}{'delta':>9}{'t':>8}")
+    for r in rows:
+        print(f"  {r['leg']:<16}{r['close']:>9.4f}{r['close_t']:>8.2f}{r['skip1']:>9.4f}{r['skip1_t']:>8.2f}"
+              f"{r['delta']:>+9.4f}{r['delta_t']:>8.2f}")
+
+
+def drive_baseline(frames, legs, cfg, stamps, eval_start, eval_end, include_holdout, probes, C,
+                   return_start="close"):
     n_dec = int(cfg["rebalance"]["n_deciles"])
     metas = [f.meta() for f in legs]
     _print_families(metas)
@@ -379,6 +449,15 @@ def drive_baseline(frames, legs, cfg, stamps, eval_start, eval_end, include_hold
     fields["coverage_pct"] = cov
     fields.update({k: v for k, v in stats.items() if k not in SERIES_KEYS})
     values = dict(stats); values["coverage_pct"] = cov
+    if return_start != "close":
+        # A diagnostic run: the field sits right under `factor`, and the
+        # paired skip1-vs-close rows follow the default fields.
+        pf, rows = _paired_return_start(audit, metas, cfg)
+        _print_paired_return_start(pf, rows)
+        head = {k: fields[k] for k in ("stage", "factor")}
+        head["return_start"] = return_start
+        fields = {**head, **{k: v for k, v in fields.items() if k not in head}, **pf}
+        values.update(pf)
     return [emit_result_block(fields)], [_summary_record(fields["factor"], "baseline", values, buckets, [], "MEASURED")]
 
 
@@ -934,7 +1013,17 @@ def run(args, C=None, cfg=None, runtime=None, stamps=None, snap=None, root=ROOT,
         raise SystemExit("--construction-layer takes no --stage (it is its own run, stage E)")
     if not layer and args.stage is None:
         raise SystemExit("--stage is required (1, 2 or 3)")
+    return_start = getattr(args, "return_start", None) or "close"
+    if return_start != "close":
+        # A diagnostic of the measured composite only: never a decision path.
+        if not (args.baseline and args.stage == 2 and not layer):
+            raise SystemExit(f"--return-start {return_start} is a diagnostic of the live composite: "
+                             "use it with --baseline --stage 2 only")
+        if args.include_holdout or holdout_only:
+            raise SystemExit(f"--return-start {return_start} refuses the out-of-sample block")
     legs, cands, label = resolve_run(args, C, cfg)
+    if return_start != "close":
+        label = f"{label}_{return_start.upper()}"
     stage = LAYER_STAGE if layer else args.stage
     lcfg = layer_sha = None
     layer_info = {}
@@ -990,6 +1079,10 @@ def run(args, C=None, cfg=None, runtime=None, stamps=None, snap=None, root=ROOT,
         else:
             print(f"  LIVE_API_SHA  {live_api_sha}  ({n_auth} tables vouched for by the live API at run start)")
         print(f"  Backtest window : {eval_start}  →  {eval_end}")
+        if return_start != "close":
+            print(f"!! RETURN START  {return_start} — DIAGNOSTIC: the forward return of month t+1 starts at the "
+                  "close of the name's first trade in month t+1, not the signal-date close; the end, the "
+                  "signals and the universe are unchanged. NOT a decision run.")
         if args.include_holdout or holdout_only:
             print("!! OUT-OF-SAMPLE " + ("ONLY" if holdout_only else "INCLUDED")
                   + " — this run MUST NOT inform an accept/reject decision.")
@@ -1020,6 +1113,9 @@ def run(args, C=None, cfg=None, runtime=None, stamps=None, snap=None, root=ROOT,
                                                             stamps["data_sha"], root=root))
         pidx.set_trend_loader(lambda: load_or_build_trend(snap, cfg, runtime,
                                                           stamps["data_sha"], root=root))
+        if return_start != "close":
+            pidx.set_first_trade_loader(lambda: load_or_build_first_trade(snap, runtime,
+                                                                          stamps["data_sha"], root=root))
         schedule = build_rebalance_schedule(eval_start, eval_end)
         print(f"    rebalances      : {len(schedule)} months")
         hard, warns, probes = run_preflight(snap, pidx, factors_needed, schedule, cfg)
@@ -1032,7 +1128,11 @@ def run(args, C=None, cfg=None, runtime=None, stamps=None, snap=None, root=ROOT,
 
         print("\nBuilding PIT universes + factor columns monthly")
         print("=" * 72)
-        frames = precompute_month_frames(snap, pidx, factors_needed, schedule, cfg)
+        if return_start != "close":
+            frames = precompute_month_frames(snap, pidx, factors_needed, schedule, cfg,
+                                             return_start=return_start)
+        else:
+            frames = precompute_month_frames(snap, pidx, factors_needed, schedule, cfg)
         print("\nScoring and reporting")
         print("=" * 72)
         if layer:
@@ -1046,7 +1146,7 @@ def run(args, C=None, cfg=None, runtime=None, stamps=None, snap=None, root=ROOT,
                                              oos_flag, C)
         elif args.baseline:
             blocks, summaries = drive_baseline(frames, legs, cfg, stamps, eval_start, eval_end,
-                                               oos_flag, probe_fields, C)
+                                               oos_flag, probe_fields, C, return_start=return_start)
         elif stage == 1:
             blocks, summaries = drive_stage1(frames, cands, cfg, stamps, eval_start, eval_end,
                                              oos_flag, probe_fields)
@@ -1074,6 +1174,8 @@ def run(args, C=None, cfg=None, runtime=None, stamps=None, snap=None, root=ROOT,
                     "factors": [f.name for f in cands], "composite_version": C.COMPOSITE_VERSION,
                     "composite_legs": [f.name for f in legs], "eval_start": eval_start,
                     "eval_end": eval_end, "runtime_seconds": round(time.time() - run_start, 1)}
+            if return_start != "close":
+                meta["return_start"] = return_start
             if layer:
                 meta.update({"construction_layer": True, "layer_sha": layer_sha,
                              "paths_sha": layer_info.get("paths_sha"), "paths_file": layer_info.get("paths_file")})
@@ -1101,6 +1203,11 @@ def build_parser():
     ap.add_argument("--holdout-only", action="store_true",
                     help="FINAL validation only: the out-of-sample block alone")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--return-start", choices=("close", "skip1"), default="close",
+                    help="DIAGNOSTIC, --baseline --stage 2 only. 'close' (default): the forward return "
+                         "starts at the signal-date close. 'skip1': it starts at the close of the name's "
+                         "first trade in the next month (bid-ask-bounce sensitivity); stamped "
+                         "return_start in the block and meta, file label BASELINE_SKIP1.")
     ap.add_argument("--source", choices=("recorded", "api"), default="recorded",
                     help="DEFAULT 'recorded': measure on the frozen snapshot this project downloaded "
                          "from the Sharadar API, after the live API authorises its schema and history "
