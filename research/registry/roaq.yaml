@@ -1,0 +1,39 @@
+name: roaq
+osap_acronym: roaq
+status: stage2_pending
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b9
+declaration_order: 7
+date_tested: "2026-10-01"
+run: "011"
+stage2_run: null
+stage1_decision: PASS
+decided_by: "all bars"
+source: "Balakrishnan, Bartov and Faurel 2010 (JAE); SignalDoc sign +1, Cat.Economic profitability"
+orientation: "high quarterly income before extraordinary items / previous-quarter assets = attractive (SignalDoc sign +1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/roaq/spec.md}
+dimension_override: ARQ
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.090992, qcut_min_bins: 10, coverage_min_pct: 96.361245}
+stage1:   # from the run 011 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.020781, ic_tstat_nw: 3.366138, ic_half1_mean: 0.02383, ic_half2_mean: 0.017732, icir: 0.222491, ls_sharpe: 0.705325,
+   ls_ann_return_pct: 9.94735, ls_tstat_nw: 3.096618, ls_maxdd_pct: -32.744007, ls_raw_ann_return_pct: 5.283321, ls_raw_sharpe: 0.321689,
+   ls_raw_maxdd_pct: -54.076297, turnover_d10_pct: 21.082217, turnover_d1_pct: 26.561497, coverage_pct: 96.292151,
+   avg_names_per_decile: 189.193841, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.019878, ic_decay_h6: 0.01119, ic_decay_h12: 0.011541,
+   tier_MEGA_ic_mean: 0.0231, tier_MID_ic_mean: 0.0204, tier_SMALL_ic_mean: 0.0206, ls_beta_mean: -0.490586, ls_beta_fullwindow: -0.583954,
+   ls_sharpe_ex_top_years: 0.386253, ls_top_years: "2000,2002,2021", ls_top_years_share_pct: 61.884089, ls_sharpe_bear: 0.3558,
+   ls_sharpe_bull: 0.993394, decile_avg_ret_pct: "0.661,1.001,0.901,0.965,0.890,0.976,1.074,1.095,1.062,1.101",
+   delisting_adjusted_pct: 0.436673}
+stage1_failed: []
+stage2_failed: []
+character: >
+  A low D1 and a graded top: D1 0.661, D2 1.001, D3-D6 0.89-0.98, D7-D10 1.06-1.10 %/mo; raw spread 5.28%/yr at vol 16.4% (Sharpe 0.322, raw MaxDD -54.1%). IC 0.0208 (NW t 3.37, plain t 3.70, ICIR 0.223), halves 0.0238 / 0.0177; annual IC positive in 14 of 23 years (2000 +0.104, 2021 +0.090, 2002 +0.078; 2009 -0.042, 2010 -0.020). Tiers MEGA 0.0231, MID 0.0204, SMALL 0.0206 (raw LS Sharpe 0.377 / 0.296 / 0.252). IC halves after a quarter (0.0199 h1, 0.0190 h3, 0.0112 h6, 0.0115 h12); turnover 21.1% / 26.6%. Beta -0.58 (ex ante -0.49): the hedge adds 4.66 pp, 47% of the hedged 9.95%/yr (Sharpe 0.705, LS NW t 3.10, MaxDD -32.7%, hit 60.9%). Hedged LS 2000 +82.0%, 2021 +60.5%, 2002 +27.4% (62% of the summed LS); 2009 -22.7%, 1999 -20.7%, 2020 -13.2%; ex-top-years Sharpe 0.386; bear 0.356 / bull 0.993. Coverage 96.3%, 95.4-97.5% by sector.
+caveats:
+  - "the hedged headline is 47% hedge: raw 5.28%/yr (Sharpe 0.322) vs hedged 9.95%/yr (Sharpe 0.705) at beta -0.58; not a Stage 1 bar (D11)"
+  - "likely overlap with the profitability passers: annual IC correlation 0.97 with RoE (b8; its spec-measured Spearman with v0 Profitability 0.71), 0.91 OperProfRD (b7), 0.84 CBOperProf (b1), 0.72 GP (b4); same sign 22 / 21 / 21 / 19 of 23 years; same top years 2000 / 2002 / 2021 as RoE; 0.41 cfp; co-movement of annual IC, not a score correlation; no Stage 2 number exists"
+  - "a quarterly signal: IC h6 / h12 about half of h1, turnover 21-27%"
+  - "approx translation: ibq = netinc + netincdis at ARQ; previous-quarter assets from a 2-4 month reportperiod gap (missing quarter NaN); latest ARQ filing <= 110 days old; dimension override ARQ"
+  - "Cat.Economic profitability: v0 Profitability is the seed category"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Passes every Stage 1 bar: IC 0.0208 >= 0.010, NW t 3.37 >= 2.5, halves min 0.0177, raw spread 5.28%/yr > 0, coverage 96.3% >= 40, 189.2 names per decile, 276 LS months >= 248. Status stage2_pending; family to be assigned in Phase C. Against the profitability passers its NW t sits between CBOperProf 3.74 / GP 3.52 and RoE 3.34 / OperProfRD 3.18; the most even halves of the five (min/max 0.74).

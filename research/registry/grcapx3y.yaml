@@ -1,0 +1,36 @@
+name: grcapx3y
+osap_acronym: grcapx3y
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b9
+declaration_order: 6
+date_tested: "2026-10-01"
+run: "011"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Anderson and Garcia-Feijoo 2006 (JF); SignalDoc sign -1, Cat.Economic investment growth"
+orientation: "low capex relative to its prior three-year average = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/grcapx3y/spec.md}
+dimension_override: ARY
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.361011, qcut_min_bins: 10, coverage_min_pct: 12.143797}
+stage1:   # from the run 011 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.002821, ic_tstat_nw: 0.894426, ic_half1_mean: 0.004431, ic_half2_mean: 0.001211, icir: 0.059178, ls_sharpe: 0.445504,
+   ls_ann_return_pct: 3.419182, ls_tstat_nw: 2.119712, ls_maxdd_pct: -22.166724, ls_raw_ann_return_pct: 3.970816, ls_raw_sharpe: 0.523485,
+   ls_raw_maxdd_pct: -18.878889, turnover_d10_pct: 11.889892, turnover_d1_pct: 11.356383, coverage_pct: 72.336718,
+   avg_names_per_decile: 142.126449, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.002715, ic_decay_h6: 0.004747, ic_decay_h12: 0.002806,
+   tier_MEGA_ic_mean: 0.0042, tier_MID_ic_mean: 0.0015, tier_SMALL_ic_mean: 0.0014, ls_beta_mean: 0.002112, ls_beta_fullwindow: -0.04204,
+   ls_sharpe_ex_top_years: 0.232542, ls_top_years: "2001,2003,2010", ls_top_years_share_pct: 56.852421, ls_sharpe_bear: 0.777464,
+   ls_sharpe_bull: 0.34372, decile_avg_ret_pct: "0.772,1.039,0.974,0.991,1.036,1.105,1.013,1.101,1.246,1.103",
+   delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw]
+stage2_failed: []
+character: >
+  Weak and mostly D1: D1 0.772, D2-D10 0.97-1.25 %/mo with no grade (D9 1.246, D10 1.103); raw spread 3.97%/yr at vol 7.6% (Sharpe 0.523, raw MaxDD -18.9%). IC 0.0028 (NW t 0.89, plain t 0.98, ICIR 0.059), halves 0.0044 / 0.0012; annual IC positive in 12 of 23 years. Tiers MEGA 0.0042, MID 0.0015, SMALL 0.0014 (raw LS Sharpe 0.256 / 0.124 / 0.517). Decay flat (0.0027 h1, 0.0047 h6, 0.0028 h12); turnover 11.9% / 11.4%. Beta -0.04 (ex ante +0.00): hedged 3.42%/yr (Sharpe 0.446, LS NW t 2.12, MaxDD -22.2%); 2010, 2001, 2003 carry 57%; ex-top-years Sharpe 0.233; bear 0.778 / bull 0.344. Coverage 72.3%; Real Estate 57.4%, Financial Services 64.8%, best Utilities 82.2%.
+caveats:
+  - "annual IC correlation 0.96 with grcapx (this batch); the same top years 2001 / 2003 / 2010; co-movement of annual IC, not a score correlation"
+  - "approx translation: ARY capex over the sum of the three prior fiscal years (all required, reportperiod-aligned 45 days) x 3 (code over SignalDoc); positive SF1.capex NaN (capex_sign_ruling); ppent fallback dropped; base <= 0 NaN; coverage under 40% through 2000-12 from the three-year history need (pooled 72.3% passes)"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (0.89 < 2.5); ic_mean (0.0028 < 0.010) also fails. Halves (min 0.0012), raw spread 3.97%/yr, coverage 72.3%, 142.1 names and 276 LS months pass. Full sample: a rejection, not an inconclusive. No flip: the OSAP-sign t is positive.

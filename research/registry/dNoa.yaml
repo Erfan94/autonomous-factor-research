@@ -1,0 +1,37 @@
+name: dNoa
+osap_acronym: dNoa
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b9
+declaration_order: 4
+date_tested: "2026-10-01"
+run: "011"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Hirshleifer, Hou, Teoh and Zhang 2004 (JAE); SignalDoc sign -1, Cat.Economic investment"
+orientation: "low change in net operating assets / lagged assets = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/dNoa/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.090909, qcut_min_bins: 10, coverage_min_pct: 48.224463}
+stage1:   # from the run 011 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.007717, ic_tstat_nw: 2.188507, ic_half1_mean: 0.01559, ic_half2_mean: -0.000156, icir: 0.147629, ls_sharpe: 0.816622,
+   ls_ann_return_pct: 6.624822, ls_tstat_nw: 3.189122, ls_maxdd_pct: -27.332116, ls_raw_ann_return_pct: 7.742273, ls_raw_sharpe: 0.94741,
+   ls_raw_maxdd_pct: -29.998702, turnover_d10_pct: 18.398277, turnover_d1_pct: 15.671812, coverage_pct: 95.232001,
+   avg_names_per_decile: 187.11087, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.005488, ic_decay_h6: 0.003449, ic_decay_h12: 0.006536,
+   tier_MEGA_ic_mean: 0.0108, tier_MID_ic_mean: 0.0088, tier_SMALL_ic_mean: 0.0046, ls_beta_mean: -0.02306, ls_beta_fullwindow: -0.068516,
+   ls_sharpe_ex_top_years: 0.39542, ls_top_years: "1999,2000,2001", ls_top_years_share_pct: 61.429553, ls_sharpe_bear: 1.096007,
+   ls_sharpe_bull: 0.573878, decile_avg_ret_pct: "0.557,0.805,0.985,0.967,1.036,1.046,1.075,1.154,1.248,1.202",
+   delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  Tail-driven: D1 (largest NOA growth) 0.557, D2 0.805, D3-D10 0.97-1.25 %/mo (D9 1.248 > D10 1.202); 66% of the 0.645 %/mo D10-D1 lies between D1 and D3. Raw spread 7.74%/yr at vol 8.2% (Sharpe 0.947, raw MaxDD -30.0%) on IC 0.0077 (NW t 2.19, plain t 2.45, ICIR 0.148), halves 0.0156 / -0.0002; annual IC positive in 17 of 23 years, 1999-2001 0.028-0.041, 2011-2020 average -0.0013. Tiers MEGA 0.0108, MID 0.0088, SMALL 0.0046 (raw LS Sharpe 0.280 / 0.556 / 1.086): the portfolio spread is largest where the IC is smallest. Decay flat (0.0055 h1, 0.0034 h6, 0.0065 h12); turnover 18.4% / 15.7%. Beta -0.07 (ex ante -0.02): hedged 6.62%/yr, 1.12 pp below raw (Sharpe 0.817, LS NW t 3.19, MaxDD -27.3%). 2000 +53.4%, 2001 +29.6%, 1999 +25.3% carry 61% of the summed hedged LS; 2020 -21.6%; ex-top-years Sharpe 0.395; bear 1.096 / bull 0.574. Coverage 95.2%; Communication Services 91.3%, Technology 91.6%.
+caveats:
+  - "IC vs LS divergence is the decile shape (D1-D2 tail, flat interior), as NOA (b6, rejected: IC 0.0016, raw Sharpe 1.01, 67% of the spread in D1-D3, 1999-2001 49%); not a defect"
+  - "annual IC correlation 0.52 with NOA (b6), 0.82 DelCOA (b3), 0.64 PctAcc (b7, passer), 0.63 ChNNCOA (b2); all but PctAcc rejected; co-movement of annual IC, not a score correlation"
+  - "approx translation: SF1.debt for dltt + dlc, assets - liabilities for mib + pstk + ceq; no debtc gate (decision dnoa_debt_no_gate), so financials are scored with repo in debt; ASC 842 step declared; assets_lag > 0"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (2.19 < 2.5); ic_mean (0.0077 < 0.010) and ic_half_min (-0.0002 < 0) also fail. Raw spread 7.74%/yr, coverage 95.2%, 187.1 names and 276 LS months pass. Full sample: a rejection, not an inconclusive. No flip: the OSAP-sign t is positive. Its raw Sharpe 0.947 is the batch's highest and comes from the D1 tail and 1999-2001, the NOA pattern.

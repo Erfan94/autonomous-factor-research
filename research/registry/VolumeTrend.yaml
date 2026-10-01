@@ -1,0 +1,41 @@
+name: VolumeTrend
+osap_acronym: VolumeTrend
+status: stage2_pending
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b9
+declaration_order: 1
+date_tested: "2026-10-01"
+run: "011"
+stage2_run: null
+stage1_decision: PASS
+decided_by: "all bars"
+source: "Haugen and Baker 1996 (JFE); SignalDoc sign -1, Cat.Economic volume"
+orientation: "falling 60-month volume trend = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/VolumeTrend/spec.md}
+dimension_override: null
+history_gate_months: 59
+preflight: {masspoint_max_pct: 0.064851, qcut_min_bins: 0, coverage_min_pct: 0.0}
+stage1:   # from the run 011 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.011364, ic_tstat_nw: 2.869779, ic_half1_mean: 0.009133, ic_half2_mean: 0.013596, icir: 0.194145, ls_sharpe: 0.66116,
+   ls_ann_return_pct: 5.050555, ls_tstat_nw: 2.657508, ls_maxdd_pct: -32.677153, ls_raw_ann_return_pct: 2.399914, ls_raw_sharpe: 0.295379,
+   ls_raw_maxdd_pct: -35.937792, turnover_d10_pct: 10.182725, turnover_d1_pct: 9.381627, coverage_pct: 66.295212,
+   avg_names_per_decile: 157.678509, n_months: 228, ls_n_months: 228, ic_decay_h1: 0.011833, ic_decay_h6: 0.013085, ic_decay_h12: 0.012792,
+   tier_MEGA_ic_mean: 0.0047, tier_MID_ic_mean: 0.017, tier_SMALL_ic_mean: 0.0075, ls_beta_mean: -0.231341, ls_beta_fullwindow: -0.232902,
+   ls_sharpe_ex_top_years: 0.330737, ls_top_years: "2011,2014,2021", ls_top_years_share_pct: 62.211748, ls_sharpe_bear: 0.000175,
+   ls_sharpe_bull: 0.810562, decile_avg_ret_pct: "1.023,1.128,1.137,1.136,1.101,1.102,1.209,1.143,1.213,1.223",
+   delisting_adjusted_pct: 0.436673}
+stage1_failed: []
+stage2_failed: []
+character: >
+  D1-anchored with a top-half step, not a grade: D1 (steepest volume growth) 1.023, D2-D6 1.10-1.14, D7-D10 1.14-1.22 %/mo (D10 1.223); half of the 0.200 %/mo D10-D1 is D1 to D2. Raw spread 2.40%/yr at vol 8.1% (Sharpe 0.295, raw MaxDD -35.9%). IC 0.0114 (NW t 2.87, plain t 2.93, ICIR 0.194), halves 0.0091 / 0.0136; annual IC positive in 14 of 19 years (2021 +0.055, 2011 +0.052; 2003 -0.025, 2020 -0.023). Tiers MEGA 0.0047, MID 0.0170, SMALL 0.0075 (raw LS Sharpe -0.100 / 0.423 / 0.188): a MID effect. IC flat over horizons (0.0118 h1, 0.0131 h6, 0.0128 h12); turnover 10.2% / 9.4%. Beta -0.23 (ex ante -0.23): the hedge adds 2.65 pp, 52% of the hedged 5.05%/yr (Sharpe 0.661, LS NW t 2.66, MaxDD -32.7%, hit 61.0%). Hedged LS negative only in 2020 -26.1% and 2003 -10.1%; 2011, 2014, 2021 carry 62% (+22.7 / +18.5 / +22.6%); ex-top-years Sharpe 0.331; bear 0.0002 (40 months) / bull 0.811 (188). 228 months (first scored signal 2002-12). Coverage 66.3% pooled over 276 months with 48 leading null months (about 80% inside its 228); Communication Services 53.1%, Technology 56.6%, best Industrials 72.4%.
+caveats:
+  - "thin IC margin: 0.0114 vs the 0.010 bar (by 0.0014); NW t 2.87"
+  - "228 of 276 months: full 60-month window (history_months 59) on a 1997-12 SEP start; it never sees 1999-2002; the halves and the LS floor (205) run on the block's own 228 months; the 1998-12 preflight probe reads 0% coverage / 0 bins for that reason"
+  - "MEGA IC 0.0047, raw LS Sharpe -0.100: the spread is MID (0.423) and SMALL (0.188); bear Sharpe 0.0002 on 40 months"
+  - "the hedged headline is 52% hedge: raw 2.40%/yr (Sharpe 0.295) vs hedged 5.05%/yr (Sharpe 0.661) at beta -0.23; not a Stage 1 bar (D11)"
+  - "annual IC correlation 0.87 with IdioVol3F (b4), 0.83 zerotrade12M (this batch), 0.79 VolMkt and 0.54 VolSD (b8, both rejected), -0.10 DolVol (b3, rejected), -0.33 TrendFactor (b8); 19 common years; co-movement of annual IC, not a score correlation; no Stage 2 number exists"
+  - "approx translation: as-traded volume (volume x close / closeunadj), full 60-month window; OSAP's min-30 floor and pooled 1/99 trim not reproduced (decision volume_windows)"
+  - "Cat.Economic volume: no v0 seed family covers it"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Passes every Stage 1 bar: IC 0.0114 >= 0.010, NW t 2.87 >= 2.5, halves min 0.0091, raw spread 2.40%/yr > 0, coverage 66.3% >= 40, 157.7 names per decile, 228 LS months >= 205. Not inconclusive: 228 months >= 120 and the floor. Status stage2_pending; family to be assigned in Phase C. The volume-window rows VolSD and VolMkt (b8) were rejected on NW t 2.36 / 2.25; this trend sort clears at 2.87 on the narrowest IC margin of the batch.

@@ -1,0 +1,42 @@
+name: BidAskSpreadFlip
+osap_acronym: BidAskSpread
+status: stage2_pending
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b9
+declaration_order: 11
+date_tested: "2026-10-01"
+run: "011"
+stage2_run: null
+stage1_decision: PASS
+decided_by: "all bars"
+flipped_sign: true             # second hypothesis; Stage 1 IC-t bar |NW t| >= 2.74 (not 2.5)
+source: "Amihud and Mendelson 1986 (JFE), via OSAP BidAskSpread; SignalDoc sign +1, Cat.Economic liquidity; this row tests the REVERSED sign"
+orientation: "narrow Corwin-Schultz spread = attractive (AGAINST SignalDoc sign +1; declared second hypothesis)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/BidAskSpread/spec.md}
+dimension_override: null
+history_gate_months: 3
+preflight: {masspoint_max_pct: 0.056022, qcut_min_bins: 10, coverage_min_pct: 98.226644}
+stage1:   # from the run 011 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.020576, ic_tstat_nw: 2.762832, ic_half1_mean: 0.019759, ic_half2_mean: 0.021392, icir: 0.165083, ls_sharpe: 0.484778,
+   ls_ann_return_pct: 8.724697, ls_tstat_nw: 2.214414, ls_maxdd_pct: -48.984774, ls_raw_ann_return_pct: 1.066357, ls_raw_sharpe: 0.045835,
+   ls_raw_maxdd_pct: -74.099178, turnover_d10_pct: 66.068684, turnover_d1_pct: 59.990328, coverage_pct: 99.127207,
+   avg_names_per_decile: 194.76413, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.019013, ic_decay_h6: 0.013794, ic_decay_h12: 0.013656,
+   tier_MEGA_ic_mean: 0.0179, tier_MID_ic_mean: 0.0196, tier_SMALL_ic_mean: 0.0216, ls_beta_mean: -0.944295, ls_beta_fullwindow: -0.979137,
+   ls_sharpe_ex_top_years: 0.29511, ls_top_years: "2000,2014,2021", ls_top_years_share_pct: 57.541335, ls_sharpe_bear: -0.243644,
+   ls_sharpe_bull: 0.956392, decile_avg_ret_pct: "0.881,0.951,0.971,0.958,0.963,0.977,0.978,0.983,1.018,0.970",
+   delisting_adjusted_pct: 0.436673}
+stage1_failed: []
+stage2_failed: []
+character: >
+  A D1 effect with no long leg: D1 (widest spread) 0.881, D2-D8 0.95-0.98, D9 1.018, D10 (narrowest) 0.970 %/mo, inside the D2-D8 band; raw spread 1.07%/yr at vol 23.3% (Sharpe 0.046, raw MaxDD -74.1%). IC 0.0206 (NW t 2.762832, plain t 2.742564, ICIR 0.165), halves 0.0198 / 0.0214; annual IC positive in 14 of 23 years (2000 +0.097, 2021 +0.088; 2003 -0.035, 2020 -0.030). Tiers MEGA 0.0179, MID 0.0196, SMALL 0.0216 (raw LS Sharpe 0.088 / 0.032 / 0.067; MEGA raw MaxDD -82.5%). IC decays slowly (0.0190 h1, 0.0138 h6, 0.0137 h12); turnover 66.1% / 60.0%, the batch's highest. Beta -0.98 (ex ante -0.94): the hedge adds 7.66 pp, 88% of the hedged 8.72%/yr (Sharpe 0.485, LS NW t 2.21, MaxDD -49.0%, hit 62.0%). Hedged LS 2000 +50.0%, 2021 +40.2%, 2014 +27.7% (58% of the summed LS); 1999 -32.8%, 2009 -29.9%, 2020 -25.3%; ex-top-years Sharpe 0.295; bear -0.244 (64 months) / bull 0.956 (200). Coverage 99.1%, 98.2-99.7% by sector.
+caveats:
+  - "FLIPPED-SIGN SECOND HYPOTHESIS: oriented against SignalDoc sign +1 after run 003 measured the OSAP sign at NW t -2.770458; judged at |NW t| >= 2.74, not 2.5 (CLAUDE.md; flip_hypothesis_qualified, run 003); clears it by 0.022832 (2.762832; plain t 2.742564)"
+  - "measured offset vs the negation of run 003 (the D3 within-sector rank-reversal perturbation predicted by flip_not_screened_when_deterministic_fail): IC 0.020576 vs 0.020478 (+0.000098), NW t 2.762832 vs 2.770458 (-0.007626), halves 0.019759 / 0.021392 vs 0.019478 / 0.021478 (+0.000281 / -0.000086), raw spread 1.066357 vs 0.936354 %/yr (+0.130003), full-window beta -0.979 vs -0.970; annual IC correlation with BidAskSpread -1.00; the offset crosses no bar"
+  - "the hedged headline is 88% hedge: raw 1.07%/yr (Sharpe 0.046) vs hedged 8.72%/yr at beta -0.98, the largest hedge share and lowest raw Sharpe of the 24 passers (RealizedVol 72%, 0.128); bear Sharpe -0.244 the most negative of the passers (IdioVol3F -0.212); not a Stage 1 bar (D11)"
+  - "likely overlap with the volatility passers: annual IC correlation 0.98 IdioVol3F, 0.97 IdioVolAHT, 0.96 RealizedVol, 0.94 MaxRet, 0.92 VolMkt (b8, rejected); 0.90-0.93 with the zerotrade trio (this batch); -0.53 Illiquidity (b5); same hedged loss years 1999 / 2009 / 2020; co-movement of annual IC, not a score correlation; no Stage 2 number exists"
+  - "construction-layer dependency: docs/CONSTRUCTION.md and harness/construction_layer.py name f_bidaskspreadflip as the spread source (bootstrap); decision bidaskspreadflip_spread_source: D7.2 takes the half-spread from a harness-built series in Phase E; this verdict reads the 2.74 bar only"
+  - "construction identical to BidAskSpread (Corwin-Schultz on SEP high / low / close, screened days filled from the retained range); only ascending differs"
+  - "Cat.Economic liquidity: no v0 seed family covers it"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Passes every Stage 1 bar with the flip's IC-t bar: IC 0.0206 >= 0.010, NW t 2.762832 >= 2.74 (the harness printed the 2.5 bar; 2.74 applied here, and the stamped PASS holds under it), halves min 0.0198, raw spread 1.07%/yr > 0, coverage 99.1% >= 40, 194.8 names per decile, 276 LS months >= 248. Status stage2_pending; family to be assigned in Phase C, with the flipped-sign caveat. Its parent BidAskSpread stays rejected (run 003).

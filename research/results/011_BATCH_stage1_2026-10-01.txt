@@ -1,0 +1,3217 @@
+========================================================================
+  RUN 011  BATCH  stage 1
+  runner 2.0.0  generated 2026-10-01T04:56:29+00:00
+  HARNESS_SHA   73a95d352942
+  CONFIG_SHA    0d88328d5b10
+  COMPOSITE_SHA f9d9d9d95731   (v0: Size, Value, Profitability, Investment, Momentum)
+  FAMILIES      size:Size|value:Value|profitability:Profitability|investment:Investment|momentum:Momentum
+  DATA_SHA      198b281de1a0
+  UNIVERSE_SHA  1c6512b922a8
+  LIVE_API_SHA  3eb95d4c50c2  (14 tables vouched for by the live API at run start)
+  Backtest window : 1999-01-01  →  2021-12-31
+
+!! PER-FACTOR SF1 DIMENSION OVERRIDES — these legs were NOT measured under
+!! the project default ART:
+!!   f_grcapx: ARY
+!!   f_grcapx3y: ARY
+!!   f_roaq: ARQ
+
+** HISTORY GATES IN EFFECT — scored only for names with a trade near the
+** window start: f_bidaskspreadflip: 3m, f_voltrend: 59m, f_zt12m: 12m, f_zt1m: 1m, f_zt6m: 6m
+========================================================================
+
+STAGE 0 : Snapshot, panel, preflight
+========================================================================
+    monthly panel: cache hit monthly_panel_fb86ececd100.parquet
+    rebalances      : 276 months
+
+  Preflight on 3 probe months (mass-point cliff 10%, coverage bar 40%)
+  factor                        signal   univ  cover%          mode  mode% distinct qcut
+  VolumeTrend               1998-12-31   2281     0.0                  nan        0    0
+  XFIN                      1998-12-31   2281    51.8             0    0.3     1180   10
+  cfp                       1998-12-31   2281    51.8     0.0225083    0.1     1182   10
+  dNoa                      1998-12-31   2281    48.2    0.00338409    0.1     1100   10
+  grcapx                    1998-12-31   2281    23.7      0.327935    0.4      540   10
+  grcapx3y                  1998-12-31   2281    12.1       1.32258    0.4      277   10
+  roaq                      1998-12-31   2281    96.4             0    0.1     2197   10
+  zerotrade12M              1998-12-31   2281     0.0                  nan        0    0
+  zerotrade1M               1998-12-31   2281    98.4   1.87654e-05    0.0     2245   10
+  zerotrade6M               1998-12-31   2281    96.1   0.000113468    0.0     2193   10
+  BidAskSpreadFlip          1998-12-31   2281    99.2     0.0111283    0.0     2263   10
+  VolumeTrend               2010-06-30   1789    86.2   -0.00300272    0.1     1542   10
+  XFIN                      2010-06-30   1789    97.5             0    0.3     1741   10
+  cfp                       2010-06-30   1789    97.5     0.0589458    0.1     1744   10
+  dNoa                      2010-06-30   1789    97.7      0.390753    0.1     1748   10
+  grcapx                    2010-06-30   1789    89.7            -1    0.2     1601   10
+  grcapx3y                  2010-06-30   1789    83.0            -0    0.3     1480   10
+  roaq                      2010-06-30   1789    99.4      0.057004    0.1     1779   10
+  zerotrade12M              2010-06-30   1789    97.7   1.60505e-05    0.1     1747   10
+  zerotrade1M               2010-06-30   1789    99.8   3.08217e-06    0.1     1785   10
+  zerotrade6M               2010-06-30   1789    99.0    2.9349e-05    0.1     1771   10
+  BidAskSpreadFlip          2010-06-30   1789    99.8     0.0055842    0.1     1785   10
+  VolumeTrend               2021-11-30   2312    75.0     0.0335498    0.1     1733   10
+  XFIN                      2021-11-30   2312    92.1             0    0.1     2128   10
+  cfp                       2021-11-30   2312    92.4    0.00863833    0.0     2136   10
+  dNoa                      2021-11-30   2312    94.0      0.083233    0.0     2173   10
+  grcapx                    2021-11-30   2312    77.9            -1    0.2     1793   10
+  grcapx3y                  2021-11-30   2312    72.6            -0    0.2     1674   10
+  roaq                      2021-11-30   2312    99.1     0.0293403    0.0     2292   10
+  zerotrade12M              2021-11-30   2312    92.6   1.14596e-05    0.0     2142   10
+  zerotrade1M               2021-11-30   2312    99.6   4.01751e-06    0.0     2303   10
+  zerotrade6M               2021-11-30   2312    96.5   3.08493e-05    0.0     2231   10
+  BidAskSpreadFlip          2021-11-30   2312    98.2    0.00868657    0.0     2271   10
+
+  ** VolumeTrend: lookback 60m reaches 1993-12-31 but the panel starts 1997-12-31 — early months will be null, and coverage will read low in the first years for a data reason.
+  ** XFIN: lookback 15m reaches 1997-09-30 but the panel starts 1997-12-31 — early months will be null, and coverage will read low in the first years for a data reason.
+  ** cfp: lookback 15m reaches 1997-09-30 but the panel starts 1997-12-31 — early months will be null, and coverage will read low in the first years for a data reason.
+  ** dNoa: lookback 31m reaches 1996-05-31 but the panel starts 1997-12-31 — early months will be null, and coverage will read low in the first years for a data reason.
+  ** grcapx: lookback 43m reaches 1995-05-31 but the panel starts 1997-12-31 — early months will be null, and coverage will read low in the first years for a data reason.
+  ** grcapx3y: lookback 55m reaches 1994-05-31 but the panel starts 1997-12-31 — early months will be null, and coverage will read low in the first years for a data reason.
+  ** zerotrade12M: lookback 13m reaches 1997-11-30 but the panel starts 1997-12-31 — early months will be null, and coverage will read low in the first years for a data reason.
+  ** VolumeTrend @ 1998-12-31: coverage 0.0% < 40% Stage 1 bar.
+  ** grcapx @ 1998-12-31: coverage 23.7% < 40% Stage 1 bar.
+  ** grcapx3y @ 1998-12-31: coverage 12.1% < 40% Stage 1 bar.
+  ** zerotrade12M @ 1998-12-31: coverage 0.0% < 40% Stage 1 bar.
+
+Building PIT universes + factor columns monthly
+========================================================================
+[░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 1/276  Jan 1999  (0%)  Backtest — 32m 57s left    [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 2/276  Feb 1999  (1%)  Backtest — 26m 6s left    [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 3/276  Mar 1999  (1%)  Backtest — 24m 3s left    [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 4/276  Apr 1999  (1%)  Backtest — 22m 42s left    [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 5/276  May 1999  (2%)  Backtest — 22m 8s left    [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 6/276  Jun 1999  (2%)  Backtest — 21m 35s left    [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 7/276  Jul 1999  (3%)  Backtest — 21m 13s left    [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 8/276  Aug 1999  (3%)  Backtest — 20m 49s left    [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 9/276  Sep 1999  (3%)  Backtest — 20m 41s left    [█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 10/276  Oct 1999  (4%)  Backtest — 20m 26s left    [█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 11/276  Nov 1999  (4%)  Backtest — 20m 18s left    [█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 12/276  Dec 1999  (4%)  Backtest — 20m 10s left    [█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 13/276  Jan 2000  (5%)  Backtest — 19m 59s left    [█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 14/276  Feb 2000  (5%)  Backtest — 19m 55s left    [█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 15/276  Mar 2000  (5%)  Backtest — 19m 47s left    [█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 16/276  Apr 2000  (6%)  Backtest — 19m 45s left    [█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 17/276  May 2000  (6%)  Backtest — 19m 41s left    [█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 18/276  Jun 2000  (7%)  Backtest — 19m 40s left    [██░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 19/276  Jul 2000  (7%)  Backtest — 19m 34s left    [██░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 20/276  Aug 2000  (7%)  Backtest — 19m 34s left    [██░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 21/276  Sep 2000  (8%)  Backtest — 19m 30s left    [██░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 22/276  Oct 2000  (8%)  Backtest — 19m 22s left    [██░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 23/276  Nov 2000  (8%)  Backtest — 19m 16s left    [██░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 24/276  Dec 2000  (9%)  Backtest — 19m 9s left    [██░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 25/276  Jan 2001  (9%)  Backtest — 19m 3s left    [██░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 26/276  Feb 2001  (9%)  Backtest — 18m 56s left    [██░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 27/276  Mar 2001  (10%)  Backtest — 18m 49s left    [███░░░░░░░░░░░░░░░░░░░░░░░░░░░] 28/276  Apr 2001  (10%)  Backtest — 18m 41s left    [███░░░░░░░░░░░░░░░░░░░░░░░░░░░] 29/276  May 2001  (11%)  Backtest — 18m 36s left    [███░░░░░░░░░░░░░░░░░░░░░░░░░░░] 30/276  Jun 2001  (11%)  Backtest — 18m 31s left    [███░░░░░░░░░░░░░░░░░░░░░░░░░░░] 31/276  Jul 2001  (11%)  Backtest — 18m 25s left    [███░░░░░░░░░░░░░░░░░░░░░░░░░░░] 32/276  Aug 2001  (12%)  Backtest — 18m 17s left    [███░░░░░░░░░░░░░░░░░░░░░░░░░░░] 33/276  Sep 2001  (12%)  Backtest — 18m 10s left    [███░░░░░░░░░░░░░░░░░░░░░░░░░░░] 34/276  Oct 2001  (12%)  Backtest — 18m 2s left    [███░░░░░░░░░░░░░░░░░░░░░░░░░░░] 35/276  Nov 2001  (13%)  Backtest — 17m 55s left    [███░░░░░░░░░░░░░░░░░░░░░░░░░░░] 36/276  Dec 2001  (13%)  Backtest — 17m 48s left    [████░░░░░░░░░░░░░░░░░░░░░░░░░░] 37/276  Jan 2002  (13%)  Backtest — 17m 41s left    [████░░░░░░░░░░░░░░░░░░░░░░░░░░] 38/276  Feb 2002  (14%)  Backtest — 17m 35s left    [████░░░░░░░░░░░░░░░░░░░░░░░░░░] 39/276  Mar 2002  (14%)  Backtest — 17m 29s left    [████░░░░░░░░░░░░░░░░░░░░░░░░░░] 40/276  Apr 2002  (14%)  Backtest — 17m 23s left    [████░░░░░░░░░░░░░░░░░░░░░░░░░░] 41/276  May 2002  (15%)  Backtest — 17m 19s left    [████░░░░░░░░░░░░░░░░░░░░░░░░░░] 42/276  Jun 2002  (15%)  Backtest — 17m 14s left    [████░░░░░░░░░░░░░░░░░░░░░░░░░░] 43/276  Jul 2002  (16%)  Backtest — 17m 8s left    [████░░░░░░░░░░░░░░░░░░░░░░░░░░] 44/276  Aug 2002  (16%)  Backtest — 17m 2s left    [████░░░░░░░░░░░░░░░░░░░░░░░░░░] 45/276  Sep 2002  (16%)  Backtest — 16m 56s left    [█████░░░░░░░░░░░░░░░░░░░░░░░░░] 46/276  Oct 2002  (17%)  Backtest — 16m 53s left    [█████░░░░░░░░░░░░░░░░░░░░░░░░░] 47/276  Nov 2002  (17%)  Backtest — 16m 47s left    [█████░░░░░░░░░░░░░░░░░░░░░░░░░] 48/276  Dec 2002  (17%)  Backtest — 16m 41s left    [█████░░░░░░░░░░░░░░░░░░░░░░░░░] 49/276  Jan 2003  (18%)  Backtest — 16m 51s left    [█████░░░░░░░░░░░░░░░░░░░░░░░░░] 50/276  Feb 2003  (18%)  Backtest — 16m 59s left    [█████░░░░░░░░░░░░░░░░░░░░░░░░░] 51/276  Mar 2003  (18%)  Backtest — 17m 8s left    [█████░░░░░░░░░░░░░░░░░░░░░░░░░] 52/276  Apr 2003  (19%)  Backtest — 17m 16s left    [█████░░░░░░░░░░░░░░░░░░░░░░░░░] 53/276  May 2003  (19%)  Backtest — 17m 24s left    [█████░░░░░░░░░░░░░░░░░░░░░░░░░] 54/276  Jun 2003  (20%)  Backtest — 17m 30s left    [█████░░░░░░░░░░░░░░░░░░░░░░░░░] 55/276  Jul 2003  (20%)  Backtest — 17m 36s left    [██████░░░░░░░░░░░░░░░░░░░░░░░░] 56/276  Aug 2003  (20%)  Backtest — 17m 42s left    [██████░░░░░░░░░░░░░░░░░░░░░░░░] 57/276  Sep 2003  (21%)  Backtest — 17m 47s left    [██████░░░░░░░░░░░░░░░░░░░░░░░░] 58/276  Oct 2003  (21%)  Backtest — 17m 52s left    [██████░░░░░░░░░░░░░░░░░░░░░░░░] 59/276  Nov 2003  (21%)  Backtest — 17m 56s left    [██████░░░░░░░░░░░░░░░░░░░░░░░░] 60/276  Dec 2003  (22%)  Backtest — 18m 1s left    [██████░░░░░░░░░░░░░░░░░░░░░░░░] 61/276  Jan 2004  (22%)  Backtest — 18m 5s left    [██████░░░░░░░░░░░░░░░░░░░░░░░░] 62/276  Feb 2004  (22%)  Backtest — 18m 9s left    [██████░░░░░░░░░░░░░░░░░░░░░░░░] 63/276  Mar 2004  (23%)  Backtest — 18m 11s left    [██████░░░░░░░░░░░░░░░░░░░░░░░░] 64/276  Apr 2004  (23%)  Backtest — 18m 14s left    [███████░░░░░░░░░░░░░░░░░░░░░░░] 65/276  May 2004  (24%)  Backtest — 18m 16s left    [███████░░░░░░░░░░░░░░░░░░░░░░░] 66/276  Jun 2004  (24%)  Backtest — 18m 18s left    [███████░░░░░░░░░░░░░░░░░░░░░░░] 67/276  Jul 2004  (24%)  Backtest — 18m 19s left    [███████░░░░░░░░░░░░░░░░░░░░░░░] 68/276  Aug 2004  (25%)  Backtest — 18m 21s left    [███████░░░░░░░░░░░░░░░░░░░░░░░] 69/276  Sep 2004  (25%)  Backtest — 18m 22s left    [███████░░░░░░░░░░░░░░░░░░░░░░░] 70/276  Oct 2004  (25%)  Backtest — 18m 23s left    [███████░░░░░░░░░░░░░░░░░░░░░░░] 71/276  Nov 2004  (26%)  Backtest — 18m 24s left    [███████░░░░░░░░░░░░░░░░░░░░░░░] 72/276  Dec 2004  (26%)  Backtest — 18m 25s left    [███████░░░░░░░░░░░░░░░░░░░░░░░] 73/276  Jan 2005  (26%)  Backtest — 18m 25s left    [████████░░░░░░░░░░░░░░░░░░░░░░] 74/276  Feb 2005  (27%)  Backtest — 18m 24s left    [████████░░░░░░░░░░░░░░░░░░░░░░] 75/276  Mar 2005  (27%)  Backtest — 18m 24s left    [████████░░░░░░░░░░░░░░░░░░░░░░] 76/276  Apr 2005  (28%)  Backtest — 18m 24s left    [████████░░░░░░░░░░░░░░░░░░░░░░] 77/276  May 2005  (28%)  Backtest — 18m 24s left    [████████░░░░░░░░░░░░░░░░░░░░░░] 78/276  Jun 2005  (28%)  Backtest — 18m 24s left    [████████░░░░░░░░░░░░░░░░░░░░░░] 79/276  Jul 2005  (29%)  Backtest — 18m 24s left    [████████░░░░░░░░░░░░░░░░░░░░░░] 80/276  Aug 2005  (29%)  Backtest — 18m 23s left    [████████░░░░░░░░░░░░░░░░░░░░░░] 81/276  Sep 2005  (29%)  Backtest — 18m 22s left    [████████░░░░░░░░░░░░░░░░░░░░░░] 82/276  Oct 2005  (30%)  Backtest — 18m 20s left    [█████████░░░░░░░░░░░░░░░░░░░░░] 83/276  Nov 2005  (30%)  Backtest — 18m 18s left    [█████████░░░░░░░░░░░░░░░░░░░░░] 84/276  Dec 2005  (30%)  Backtest — 18m 17s left    [█████████░░░░░░░░░░░░░░░░░░░░░] 85/276  Jan 2006  (31%)  Backtest — 18m 15s left    [█████████░░░░░░░░░░░░░░░░░░░░░] 86/276  Feb 2006  (31%)  Backtest — 18m 13s left    [█████████░░░░░░░░░░░░░░░░░░░░░] 87/276  Mar 2006  (32%)  Backtest — 18m 10s left    [█████████░░░░░░░░░░░░░░░░░░░░░] 88/276  Apr 2006  (32%)  Backtest — 18m 8s left    [█████████░░░░░░░░░░░░░░░░░░░░░] 89/276  May 2006  (32%)  Backtest — 18m 6s left    [█████████░░░░░░░░░░░░░░░░░░░░░] 90/276  Jun 2006  (33%)  Backtest — 18m 3s left    [█████████░░░░░░░░░░░░░░░░░░░░░] 91/276  Jul 2006  (33%)  Backtest — 18m 1s left    [██████████░░░░░░░░░░░░░░░░░░░░] 92/276  Aug 2006  (33%)  Backtest — 17m 58s left    [██████████░░░░░░░░░░░░░░░░░░░░] 93/276  Sep 2006  (34%)  Backtest — 17m 55s left    [██████████░░░░░░░░░░░░░░░░░░░░] 94/276  Oct 2006  (34%)  Backtest — 17m 52s left    [██████████░░░░░░░░░░░░░░░░░░░░] 95/276  Nov 2006  (34%)  Backtest — 17m 50s left    [██████████░░░░░░░░░░░░░░░░░░░░] 96/276  Dec 2006  (35%)  Backtest — 17m 46s left    [██████████░░░░░░░░░░░░░░░░░░░░] 97/276  Jan 2007  (35%)  Backtest — 17m 43s left    [██████████░░░░░░░░░░░░░░░░░░░░] 98/276  Feb 2007  (36%)  Backtest — 17m 40s left    [██████████░░░░░░░░░░░░░░░░░░░░] 99/276  Mar 2007  (36%)  Backtest — 17m 37s left    [██████████░░░░░░░░░░░░░░░░░░░░] 100/276  Apr 2007  (36%)  Backtest — 17m 34s left    [██████████░░░░░░░░░░░░░░░░░░░░] 101/276  May 2007  (37%)  Backtest — 17m 32s left    [███████████░░░░░░░░░░░░░░░░░░░] 102/276  Jun 2007  (37%)  Backtest — 17m 30s left    [███████████░░░░░░░░░░░░░░░░░░░] 103/276  Jul 2007  (37%)  Backtest — 17m 27s left    [███████████░░░░░░░░░░░░░░░░░░░] 104/276  Aug 2007  (38%)  Backtest — 17m 25s left    [███████████░░░░░░░░░░░░░░░░░░░] 105/276  Sep 2007  (38%)  Backtest — 17m 22s left    [███████████░░░░░░░░░░░░░░░░░░░] 106/276  Oct 2007  (38%)  Backtest — 17m 19s left    [███████████░░░░░░░░░░░░░░░░░░░] 107/276  Nov 2007  (39%)  Backtest — 17m 16s left    [███████████░░░░░░░░░░░░░░░░░░░] 108/276  Dec 2007  (39%)  Backtest — 17m 13s left    [███████████░░░░░░░░░░░░░░░░░░░] 109/276  Jan 2008  (39%)  Backtest — 17m 10s left    [███████████░░░░░░░░░░░░░░░░░░░] 110/276  Feb 2008  (40%)  Backtest — 17m 7s left    [████████████░░░░░░░░░░░░░░░░░░] 111/276  Mar 2008  (40%)  Backtest — 17m 4s left    [████████████░░░░░░░░░░░░░░░░░░] 112/276  Apr 2008  (41%)  Backtest — 17m 2s left    [████████████░░░░░░░░░░░░░░░░░░] 113/276  May 2008  (41%)  Backtest — 17m 1s left    [████████████░░░░░░░░░░░░░░░░░░] 114/276  Jun 2008  (41%)  Backtest — 16m 58s left    [████████████░░░░░░░░░░░░░░░░░░] 115/276  Jul 2008  (42%)  Backtest — 16m 57s left    [████████████░░░░░░░░░░░░░░░░░░] 116/276  Aug 2008  (42%)  Backtest — 16m 54s left    [████████████░░░░░░░░░░░░░░░░░░] 117/276  Sep 2008  (42%)  Backtest — 16m 51s left    [████████████░░░░░░░░░░░░░░░░░░] 118/276  Oct 2008  (43%)  Backtest — 16m 48s left    [████████████░░░░░░░░░░░░░░░░░░] 119/276  Nov 2008  (43%)  Backtest — 16m 45s left    [█████████████░░░░░░░░░░░░░░░░░] 120/276  Dec 2008  (43%)  Backtest — 16m 43s left    [█████████████░░░░░░░░░░░░░░░░░] 121/276  Jan 2009  (44%)  Backtest — 16m 39s left    [█████████████░░░░░░░░░░░░░░░░░] 122/276  Feb 2009  (44%)  Backtest — 16m 36s left    [█████████████░░░░░░░░░░░░░░░░░] 123/276  Mar 2009  (45%)  Backtest — 16m 32s left    [█████████████░░░░░░░░░░░░░░░░░] 124/276  Apr 2009  (45%)  Backtest — 16m 28s left    [█████████████░░░░░░░░░░░░░░░░░] 125/276  May 2009  (45%)  Backtest — 16m 25s left    [█████████████░░░░░░░░░░░░░░░░░] 126/276  Jun 2009  (46%)  Backtest — 16m 19s left    [█████████████░░░░░░░░░░░░░░░░░] 127/276  Jul 2009  (46%)  Backtest — 16m 13s left    [█████████████░░░░░░░░░░░░░░░░░] 128/276  Aug 2009  (46%)  Backtest — 16m 8s left    [██████████████░░░░░░░░░░░░░░░░] 129/276  Sep 2009  (47%)  Backtest — 16m 2s left    [██████████████░░░░░░░░░░░░░░░░] 130/276  Oct 2009  (47%)  Backtest — 15m 56s left    [██████████████░░░░░░░░░░░░░░░░] 131/276  Nov 2009  (47%)  Backtest — 15m 50s left    [██████████████░░░░░░░░░░░░░░░░] 132/276  Dec 2009  (48%)  Backtest — 15m 44s left    [██████████████░░░░░░░░░░░░░░░░] 133/276  Jan 2010  (48%)  Backtest — 15m 37s left    [██████████████░░░░░░░░░░░░░░░░] 134/276  Feb 2010  (49%)  Backtest — 15m 31s left    [██████████████░░░░░░░░░░░░░░░░] 135/276  Mar 2010  (49%)  Backtest — 15m 24s left    [██████████████░░░░░░░░░░░░░░░░] 136/276  Apr 2010  (49%)  Backtest — 15m 18s left    [██████████████░░░░░░░░░░░░░░░░] 137/276  May 2010  (50%)  Backtest — 15m 12s left    [███████████████░░░░░░░░░░░░░░░] 138/276  Jun 2010  (50%)  Backtest — 15m 6s left    [███████████████░░░░░░░░░░░░░░░] 139/276  Jul 2010  (50%)  Backtest — 15m 0s left    [███████████████░░░░░░░░░░░░░░░] 140/276  Aug 2010  (51%)  Backtest — 14m 53s left    [███████████████░░░░░░░░░░░░░░░] 141/276  Sep 2010  (51%)  Backtest — 14m 47s left    [███████████████░░░░░░░░░░░░░░░] 142/276  Oct 2010  (51%)  Backtest — 14m 41s left    [███████████████░░░░░░░░░░░░░░░] 143/276  Nov 2010  (52%)  Backtest — 14m 34s left    [███████████████░░░░░░░░░░░░░░░] 144/276  Dec 2010  (52%)  Backtest — 14m 29s left    [███████████████░░░░░░░░░░░░░░░] 145/276  Jan 2011  (53%)  Backtest — 14m 22s left    [███████████████░░░░░░░░░░░░░░░] 146/276  Feb 2011  (53%)  Backtest — 14m 16s left    [███████████████░░░░░░░░░░░░░░░] 147/276  Mar 2011  (53%)  Backtest — 14m 10s left    [████████████████░░░░░░░░░░░░░░] 148/276  Apr 2011  (54%)  Backtest — 14m 4s left    [████████████████░░░░░░░░░░░░░░] 149/276  May 2011  (54%)  Backtest — 13m 58s left    [████████████████░░░░░░░░░░░░░░] 150/276  Jun 2011  (54%)  Backtest — 13m 52s left    [████████████████░░░░░░░░░░░░░░] 151/276  Jul 2011  (55%)  Backtest — 13m 46s left    [████████████████░░░░░░░░░░░░░░] 152/276  Aug 2011  (55%)  Backtest — 13m 40s left    [████████████████░░░░░░░░░░░░░░] 153/276  Sep 2011  (55%)  Backtest — 13m 34s left    [████████████████░░░░░░░░░░░░░░] 154/276  Oct 2011  (56%)  Backtest — 13m 28s left    [████████████████░░░░░░░░░░░░░░] 155/276  Nov 2011  (56%)  Backtest — 13m 21s left    [████████████████░░░░░░░░░░░░░░] 156/276  Dec 2011  (57%)  Backtest — 13m 15s left    [█████████████████░░░░░░░░░░░░░] 157/276  Jan 2012  (57%)  Backtest — 13m 9s left    [█████████████████░░░░░░░░░░░░░] 158/276  Feb 2012  (57%)  Backtest — 13m 3s left    [█████████████████░░░░░░░░░░░░░] 159/276  Mar 2012  (58%)  Backtest — 12m 57s left    [█████████████████░░░░░░░░░░░░░] 160/276  Apr 2012  (58%)  Backtest — 12m 51s left    [█████████████████░░░░░░░░░░░░░] 161/276  May 2012  (58%)  Backtest — 12m 45s left    [█████████████████░░░░░░░░░░░░░] 162/276  Jun 2012  (59%)  Backtest — 12m 39s left    [█████████████████░░░░░░░░░░░░░] 163/276  Jul 2012  (59%)  Backtest — 12m 33s left    [█████████████████░░░░░░░░░░░░░] 164/276  Aug 2012  (59%)  Backtest — 12m 27s left    [█████████████████░░░░░░░░░░░░░] 165/276  Sep 2012  (60%)  Backtest — 12m 21s left    [██████████████████░░░░░░░░░░░░] 166/276  Oct 2012  (60%)  Backtest — 12m 15s left    [██████████████████░░░░░░░░░░░░] 167/276  Nov 2012  (61%)  Backtest — 12m 9s left    [██████████████████░░░░░░░░░░░░] 168/276  Dec 2012  (61%)  Backtest — 12m 3s left    [██████████████████░░░░░░░░░░░░] 169/276  Jan 2013  (61%)  Backtest — 11m 56s left    [██████████████████░░░░░░░░░░░░] 170/276  Feb 2013  (62%)  Backtest — 11m 50s left    [██████████████████░░░░░░░░░░░░] 171/276  Mar 2013  (62%)  Backtest — 11m 44s left    [██████████████████░░░░░░░░░░░░] 172/276  Apr 2013  (62%)  Backtest — 11m 37s left    [██████████████████░░░░░░░░░░░░] 173/276  May 2013  (63%)  Backtest — 11m 31s left    [██████████████████░░░░░░░░░░░░] 174/276  Jun 2013  (63%)  Backtest — 11m 24s left    [███████████████████░░░░░░░░░░░] 175/276  Jul 2013  (63%)  Backtest — 11m 18s left    [███████████████████░░░░░░░░░░░] 176/276  Aug 2013  (64%)  Backtest — 11m 11s left    [███████████████████░░░░░░░░░░░] 177/276  Sep 2013  (64%)  Backtest — 11m 5s left    [███████████████████░░░░░░░░░░░] 178/276  Oct 2013  (64%)  Backtest — 10m 58s left    [███████████████████░░░░░░░░░░░] 179/276  Nov 2013  (65%)  Backtest — 10m 52s left    [███████████████████░░░░░░░░░░░] 180/276  Dec 2013  (65%)  Backtest — 10m 46s left    [███████████████████░░░░░░░░░░░] 181/276  Jan 2014  (66%)  Backtest — 10m 39s left    [███████████████████░░░░░░░░░░░] 182/276  Feb 2014  (66%)  Backtest — 10m 33s left    [███████████████████░░░░░░░░░░░] 183/276  Mar 2014  (66%)  Backtest — 10m 26s left    [████████████████████░░░░░░░░░░] 184/276  Apr 2014  (67%)  Backtest — 10m 20s left    [████████████████████░░░░░░░░░░] 185/276  May 2014  (67%)  Backtest — 10m 13s left    [████████████████████░░░░░░░░░░] 186/276  Jun 2014  (67%)  Backtest — 10m 7s left    [████████████████████░░░░░░░░░░] 187/276  Jul 2014  (68%)  Backtest — 10m 0s left    [████████████████████░░░░░░░░░░] 188/276  Aug 2014  (68%)  Backtest — 9m 54s left    [████████████████████░░░░░░░░░░] 189/276  Sep 2014  (68%)  Backtest — 9m 47s left    [████████████████████░░░░░░░░░░] 190/276  Oct 2014  (69%)  Backtest — 9m 41s left    [████████████████████░░░░░░░░░░] 191/276  Nov 2014  (69%)  Backtest — 9m 35s left    [████████████████████░░░░░░░░░░] 192/276  Dec 2014  (70%)  Backtest — 9m 28s left    [████████████████████░░░░░░░░░░] 193/276  Jan 2015  (70%)  Backtest — 9m 22s left    [█████████████████████░░░░░░░░░] 194/276  Feb 2015  (70%)  Backtest — 9m 15s left    [█████████████████████░░░░░░░░░] 195/276  Mar 2015  (71%)  Backtest — 9m 9s left    [█████████████████████░░░░░░░░░] 196/276  Apr 2015  (71%)  Backtest — 9m 2s left    [█████████████████████░░░░░░░░░] 197/276  May 2015  (71%)  Backtest — 8m 56s left    [█████████████████████░░░░░░░░░] 198/276  Jun 2015  (72%)  Backtest — 8m 49s left    [█████████████████████░░░░░░░░░] 199/276  Jul 2015  (72%)  Backtest — 8m 43s left    [█████████████████████░░░░░░░░░] 200/276  Aug 2015  (72%)  Backtest — 8m 36s left    [█████████████████████░░░░░░░░░] 201/276  Sep 2015  (73%)  Backtest — 8m 30s left    [█████████████████████░░░░░░░░░] 202/276  Oct 2015  (73%)  Backtest — 8m 23s left    [██████████████████████░░░░░░░░] 203/276  Nov 2015  (74%)  Backtest — 8m 17s left    [██████████████████████░░░░░░░░] 204/276  Dec 2015  (74%)  Backtest — 8m 10s left    [██████████████████████░░░░░░░░] 205/276  Jan 2016  (74%)  Backtest — 8m 4s left    [██████████████████████░░░░░░░░] 206/276  Feb 2016  (75%)  Backtest — 7m 57s left    [██████████████████████░░░░░░░░] 207/276  Mar 2016  (75%)  Backtest — 7m 50s left    [██████████████████████░░░░░░░░] 208/276  Apr 2016  (75%)  Backtest — 7m 44s left    [██████████████████████░░░░░░░░] 209/276  May 2016  (76%)  Backtest — 7m 37s left    [██████████████████████░░░░░░░░] 210/276  Jun 2016  (76%)  Backtest — 7m 31s left    [██████████████████████░░░░░░░░] 211/276  Jul 2016  (76%)  Backtest — 7m 24s left    [███████████████████████░░░░░░░] 212/276  Aug 2016  (77%)  Backtest — 7m 17s left    [███████████████████████░░░░░░░] 213/276  Sep 2016  (77%)  Backtest — 7m 11s left    [███████████████████████░░░░░░░] 214/276  Oct 2016  (78%)  Backtest — 7m 4s left    [███████████████████████░░░░░░░] 215/276  Nov 2016  (78%)  Backtest — 6m 57s left    [███████████████████████░░░░░░░] 216/276  Dec 2016  (78%)  Backtest — 6m 51s left    [███████████████████████░░░░░░░] 217/276  Jan 2017  (79%)  Backtest — 6m 44s left    [███████████████████████░░░░░░░] 218/276  Feb 2017  (79%)  Backtest — 6m 37s left    [███████████████████████░░░░░░░] 219/276  Mar 2017  (79%)  Backtest — 6m 30s left    [███████████████████████░░░░░░░] 220/276  Apr 2017  (80%)  Backtest — 6m 24s left    [████████████████████████░░░░░░] 221/276  May 2017  (80%)  Backtest — 6m 17s left    [████████████████████████░░░░░░] 222/276  Jun 2017  (80%)  Backtest — 6m 10s left    [████████████████████████░░░░░░] 223/276  Jul 2017  (81%)  Backtest — 6m 4s left    [████████████████████████░░░░░░] 224/276  Aug 2017  (81%)  Backtest — 5m 57s left    [████████████████████████░░░░░░] 225/276  Sep 2017  (82%)  Backtest — 5m 50s left    [████████████████████████░░░░░░] 226/276  Oct 2017  (82%)  Backtest — 5m 43s left    [████████████████████████░░░░░░] 227/276  Nov 2017  (82%)  Backtest — 5m 37s left    [████████████████████████░░░░░░] 228/276  Dec 2017  (83%)  Backtest — 5m 30s left    [████████████████████████░░░░░░] 229/276  Jan 2018  (83%)  Backtest — 5m 23s left    [█████████████████████████░░░░░] 230/276  Feb 2018  (83%)  Backtest — 5m 17s left    [█████████████████████████░░░░░] 231/276  Mar 2018  (84%)  Backtest — 5m 10s left    [█████████████████████████░░░░░] 232/276  Apr 2018  (84%)  Backtest — 5m 3s left    [█████████████████████████░░░░░] 233/276  May 2018  (84%)  Backtest — 4m 56s left    [█████████████████████████░░░░░] 234/276  Jun 2018  (85%)  Backtest — 4m 49s left    [█████████████████████████░░░░░] 235/276  Jul 2018  (85%)  Backtest — 4m 43s left    [█████████████████████████░░░░░] 236/276  Aug 2018  (86%)  Backtest — 4m 36s left    [█████████████████████████░░░░░] 237/276  Sep 2018  (86%)  Backtest — 4m 29s left    [█████████████████████████░░░░░] 238/276  Oct 2018  (86%)  Backtest — 4m 22s left    [█████████████████████████░░░░░] 239/276  Nov 2018  (87%)  Backtest — 4m 15s left    [██████████████████████████░░░░] 240/276  Dec 2018  (87%)  Backtest — 4m 9s left    [██████████████████████████░░░░] 241/276  Jan 2019  (87%)  Backtest — 4m 2s left    [██████████████████████████░░░░] 242/276  Feb 2019  (88%)  Backtest — 3m 55s left    [██████████████████████████░░░░] 243/276  Mar 2019  (88%)  Backtest — 3m 48s left    [██████████████████████████░░░░] 244/276  Apr 2019  (88%)  Backtest — 3m 41s left    [██████████████████████████░░░░] 245/276  May 2019  (89%)  Backtest — 3m 35s left    [██████████████████████████░░░░] 246/276  Jun 2019  (89%)  Backtest — 3m 28s left    [██████████████████████████░░░░] 247/276  Jul 2019  (89%)  Backtest — 3m 21s left    [██████████████████████████░░░░] 248/276  Aug 2019  (90%)  Backtest — 3m 14s left    [███████████████████████████░░░] 249/276  Sep 2019  (90%)  Backtest — 3m 7s left    [███████████████████████████░░░] 250/276  Oct 2019  (91%)  Backtest — 3m 0s left    [███████████████████████████░░░] 251/276  Nov 2019  (91%)  Backtest — 2m 53s left    [███████████████████████████░░░] 252/276  Dec 2019  (91%)  Backtest — 2m 46s left    [███████████████████████████░░░] 253/276  Jan 2020  (92%)  Backtest — 2m 40s left    [███████████████████████████░░░] 254/276  Feb 2020  (92%)  Backtest — 2m 33s left    [███████████████████████████░░░] 255/276  Mar 2020  (92%)  Backtest — 2m 26s left    [███████████████████████████░░░] 256/276  Apr 2020  (93%)  Backtest — 2m 19s left    [███████████████████████████░░░] 257/276  May 2020  (93%)  Backtest — 2m 12s left    [████████████████████████████░░] 258/276  Jun 2020  (93%)  Backtest — 2m 5s left    [████████████████████████████░░] 259/276  Jul 2020  (94%)  Backtest — 1m 58s left    [████████████████████████████░░] 260/276  Aug 2020  (94%)  Backtest — 1m 51s left    [████████████████████████████░░] 261/276  Sep 2020  (95%)  Backtest — 1m 44s left    [████████████████████████████░░] 262/276  Oct 2020  (95%)  Backtest — 1m 37s left    [████████████████████████████░░] 263/276  Nov 2020  (95%)  Backtest — 1m 30s left    [████████████████████████████░░] 264/276  Dec 2020  (96%)  Backtest — 1m 23s left    [████████████████████████████░░] 265/276  Jan 2021  (96%)  Backtest — 1m 16s left    [████████████████████████████░░] 266/276  Feb 2021  (96%)  Backtest — 1m 9s left    [█████████████████████████████░] 267/276  Mar 2021  (97%)  Backtest — 1m 2s left    [█████████████████████████████░] 268/276  Apr 2021  (97%)  Backtest — 0m 55s left    [█████████████████████████████░] 269/276  May 2021  (97%)  Backtest — 0m 49s left    [█████████████████████████████░] 270/276  Jun 2021  (98%)  Backtest — 0m 42s left    [█████████████████████████████░] 271/276  Jul 2021  (98%)  Backtest — 0m 35s left    [█████████████████████████████░] 272/276  Aug 2021  (99%)  Backtest — 0m 28s left    [█████████████████████████████░] 273/276  Sep 2021  (99%)  Backtest — 0m 21s left    [█████████████████████████████░] 274/276  Oct 2021  (99%)  Backtest — 0m 14s left    [█████████████████████████████░] 275/276  Nov 2021  (100%)  Backtest — 0m 7s left    [██████████████████████████████] 276/276  Dec 2021  (100%)  Backtest — done    
+
+Scoring and reporting
+========================================================================
+
+  BATCH STAGE 1 — 11 members, screened independently off one panel.
+  DECLARATION ORDER = Stage 2 order, fixed now:
+      1. VolumeTrend              col=f_voltrend
+      2. XFIN                     col=f_xfin
+      3. cfp                      col=f_cfp
+      4. dNoa                     col=f_dnoa
+      5. grcapx                   col=f_grcapx
+      6. grcapx3y                 col=f_grcapx3y
+      7. roaq                     col=f_roaq
+      8. zerotrade12M             col=f_zt12m
+      9. zerotrade1M              col=f_zt1m
+      10. zerotrade6M              col=f_zt6m
+      11. BidAskSpreadFlip         col=f_bidaskspreadflip
+
+
+########################################################################
+#  STAGE 1 : VolumeTrend
+########################################################################
+
+======================================================================
+  US UNIVERSE  —  VolumeTrend (standalone)
+  D1 = worst | D10 = best | LS = D10 − D1
+======================================================================
+             Avg Monthly Return (%)  Avg N Companies  t-stat
+D1                            1.023            158.0     NaN
+D2                            1.128            158.0     NaN
+D3                            1.137            158.0     NaN
+D4                            1.136            158.0     NaN
+D5                            1.101            158.0     NaN
+D6                            1.102            157.0     NaN
+D7                            1.209            158.0     NaN
+D8                            1.143            158.0     NaN
+D9                            1.213            158.0     NaN
+D10                           1.223            158.0     NaN
+LS (D10−D1)                   0.421              NaN  2.8819
+
+  --- IC Summary (Spearman, continuous score) ---
+  Mean IC   : 0.0114
+  Std IC    : 0.0585
+  ICIR      : 0.1941
+  t-stat    : 2.9315   (Newey-West 3 lags: 2.8698)
+  % Positive: 56.1%
+  Halves    : first 114m +0.0091 | second 114m +0.0136
+  Months    : 228
+  Decay     : h1=+0.0118  h2=+0.0116  h3=+0.0120  h6=+0.0131  h12=+0.0128
+
+  --- LS Portfolio Economics (equal-weight D10−D1, gross) ---
+  Ann. Return     : 5.05%
+  Ann. Volatility : 7.64%
+  Sharpe Ratio    : 0.6612   (LS t NW: 2.66)
+  Max Drawdown    : -32.68%
+  Calmar Ratio    : 0.1546
+  Hit Rate        : 61.0%  (139/228 months)
+  LS Months       : 228 of 228 (0 with no D10−D1)
+  Avg D10 Turnover: 10.2% per month
+  Avg D1  Turnover: 9.4% per month
+  LS in Down Mkt  : 0.53%  (avg over 41 months where mkt < -3%)
+
+  --- Market hedge (ex-ante trailing beta on the universe's cap-weighted return) ---
+  Hedge           : ON — window 36m, min 12m; 216 of 228 months hedged (beta = 0 before the minimum history). Every LS figure above is the HEDGED series.
+  Raw LS          : 2.40%/yr  vol 8.12%  Sharpe 0.2954  MaxDD -35.94%
+  Beta            : trailing mean -0.231  last -0.224  full-window OLS of the raw LS -0.233
+
+  --- Regime diagnostics (date-free; never a bar) ---
+  Sharpe ex top-3 LS years : 0.3307  (years 2011,2014,2021; they carry 62% of the summed LS return)
+  Sharpe by market state    : bear 0.0002 (40 m)  bull 0.8106 (188 m)   (state = sign of the trailing 12m market return, ex ante)
+
+  --- Annual IC ---
+      Mean IC  Std IC    ICIR
+DATE                         
+2003  -0.0248  0.0523 -0.4738
+2004  -0.0111  0.0557 -0.1998
+2005   0.0021  0.0612  0.0351
+2006   0.0236  0.0850  0.2773
+2007   0.0120  0.0370  0.3241
+2008   0.0282  0.0278  1.0128
+2009  -0.0109  0.0511 -0.2125
+2010   0.0109  0.0401  0.2709
+2011   0.0517  0.0520  0.9939
+2012   0.0021  0.0481  0.0441
+2013  -0.0038  0.0357 -0.1058
+2014   0.0267  0.0603  0.4423
+2015   0.0186  0.0540  0.3446
+2016   0.0024  0.0545  0.0432
+2017   0.0362  0.0561  0.6445
+2018   0.0104  0.0674  0.1543
+2019   0.0100  0.0358  0.2783
+2020  -0.0234  0.0645 -0.3619
+2021   0.0551  0.0945  0.5830
+
+  --- Annual LS Return (%) ---
+DATE
+2003   -10.06
+2004     1.02
+2005     0.31
+2006    11.63
+2007     9.00
+2008     6.42
+2009     2.00
+2010     8.46
+2011    22.67
+2012     3.38
+2013     1.96
+2014    18.51
+2015     3.97
+2016     6.87
+2017    13.39
+2018     4.08
+2019     3.76
+2020   -26.10
+2021    22.60
+
+
+  Per-(region × liq_tier) diagnostics
+========================================================================
+
+  IC + LS economics by (region × tier)
+  -- LS uses bucket-internal deciles (D10−D1 within bucket), RAW (unhedged) --
+
+region  tier  months  ls_months  avg_N  mean_IC   ICIR  IC_tstat  %_pos  LS_ann_%  LS_vol_%  LS_Sharpe  LS_MaxDD_%  LS_hit_%
+    US  MEGA     228        228    349   0.0047 0.0485      0.73   53.5     -1.37     13.71     -0.100      -55.69      50.9
+    US   MID     228        228    486   0.0170 0.2150      3.25   59.2      4.53     10.69      0.423      -33.17      55.7
+    US SMALL     228        228    740   0.0075 0.1315      1.99   56.6      1.63      8.69      0.188      -35.45      56.6
+   ALL   ALL     228        228   1576   0.0114 0.1941      2.93   56.1      2.40      8.12      0.295      -35.94      56.1
+
+  ICIR pivot:
+tier     MEGA    MID  SMALL    ALL
+region                            
+US      0.048  0.215  0.132    NaN
+ALL       NaN    NaN    NaN  0.194
+
+  LS_Sharpe pivot:
+tier    MEGA    MID  SMALL    ALL
+region                           
+US      -0.1  0.423  0.188    NaN
+ALL      NaN    NaN    NaN  0.295
+
+  LS_ann_% pivot:
+tier    MEGA   MID  SMALL  ALL
+region                        
+US     -1.37  4.53   1.63  NaN
+ALL      NaN   NaN    NaN  2.4
+
+  avg_N pivot:
+tier     MEGA    MID  SMALL     ALL
+region                             
+US      349.0  486.0  740.0     NaN
+ALL       NaN    NaN    NaN  1576.0
+
+
+  --- Per-leg coverage (% of universe-months with a non-null leg) ---
+    f_voltrend                    66.30%  #################
+
+  Coverage by sector (worst-covered sector first):
+                        f_voltrend
+sector                            
+Communication Services        53.1
+Technology                    56.6
+Healthcare                    64.0
+Energy                        68.5
+Consumer Cyclical             68.6
+Basic Materials               69.4
+Financial Services            70.1
+Consumer Defensive            70.5
+Real Estate                   71.2
+Utilities                     72.4
+Industrials                   72.4
+
+  --- Forward-return composition ---
+    full                                539,914   99.56%
+    partial_delisted_merger               2,347    0.43%
+    partial_delisted_performance             21    0.00%
+
+
+  --- Survivorship-bias check ---
+
+  Names appearing in year-Y but ABSENT in 2021
+  (= delisted/merged/acquired — confirms NO survivorship bias)
+
+    Year   Total IDs      Gone by 2021       %
+  ------  ----------  ----------------  ------
+    1999       3,225             2,448   75.9%
+    2003       2,322             1,433   61.7%
+    2008       2,171             1,075   49.5%
+    2015       2,280               748   32.8%
+    2020       2,283               156    6.8%
+
+  >5% gone confirms delisted names ARE retained at historical dates.
+  (a universe accidentally built from TODAY's tickers would show ~0%)
+
+  --- Stage 1 bars (ALL must hold) ---
+    ic_mean                        +0.011364  >= 0.01        PASS
+    ic_tstat_nw                    +2.869779  >= 2.5         PASS
+    ic_half_min                    +0.009133  >= 0.0         PASS
+    ls_raw_ann_return_pct          +2.399914  >= 0.0         PASS
+    coverage_pct                  +66.295212  >= 40.0        PASS
+    avg_names_per_decile         +157.678509  >= 30          PASS
+    ls_n_months                  +228.000000  >= 205         PASS
+
+  STAGE 1 VERDICT: PASS — earns a Stage 2 rung.
+
+
+########################################################################
+#  STAGE 1 : XFIN
+########################################################################
+
+======================================================================
+  US UNIVERSE  —  XFIN (standalone)
+  D1 = worst | D10 = best | LS = D10 − D1
+======================================================================
+             Avg Monthly Return (%)  Avg N Companies  t-stat
+D1                            0.618            188.0     NaN
+D2                            0.915            188.0     NaN
+D3                            0.868            188.0     NaN
+D4                            1.017            188.0     NaN
+D5                            1.029            188.0     NaN
+D6                            1.014            188.0     NaN
+D7                            1.064            188.0     NaN
+D8                            1.160            188.0     NaN
+D9                            1.090            188.0     NaN
+D10                           1.166            188.0     NaN
+LS (D10−D1)                   0.718              NaN   3.519
+
+  --- IC Summary (Spearman, continuous score) ---
+  Mean IC   : 0.0170
+  Std IC    : 0.0740
+  ICIR      : 0.2299
+  t-stat    : 3.8192   (Newey-West 3 lags: 3.5702)
+  % Positive: 56.9%
+  Halves    : first 138m +0.0235 | second 138m +0.0105
+  Months    : 276
+  Decay     : h1=+0.0158  h2=+0.0149  h3=+0.0142  h6=+0.0136  h12=+0.0130
+
+  --- LS Portfolio Economics (equal-weight D10−D1, gross) ---
+  Ann. Return     : 8.61%
+  Ann. Volatility : 11.74%
+  Sharpe Ratio    : 0.7338   (LS t NW: 3.40)
+  Max Drawdown    : -25.68%
+  Calmar Ratio    : 0.3353
+  Hit Rate        : 61.6%  (170/276 months)
+  LS Months       : 276 of 276 (0 with no D10−D1)
+  Avg D10 Turnover: 14.8% per month
+  Avg D1  Turnover: 16.7% per month
+  LS in Down Mkt  : 1.17%  (avg over 60 months where mkt < -3%)
+
+  --- Market hedge (ex-ante trailing beta on the universe's cap-weighted return) ---
+  Hedge           : ON — window 36m, min 12m; 264 of 276 months hedged (beta = 0 before the minimum history). Every LS figure above is the HEDGED series.
+  Raw LS          : 6.57%/yr  vol 13.76%  Sharpe 0.4775  MaxDD -38.07%
+  Beta            : trailing mean -0.422  last -0.459  full-window OLS of the raw LS -0.473
+
+  --- Regime diagnostics (date-free; never a bar) ---
+  Sharpe ex top-3 LS years : 0.4842  (years 2000,2006,2021; they carry 56% of the summed LS return)
+  Sharpe by market state    : bear 0.5659 (64 m)  bull 0.8787 (200 m)   (state = sign of the trailing 12m market return, ex ante)
+
+  --- Annual IC ---
+      Mean IC  Std IC    ICIR
+DATE                         
+1999   0.0162  0.0605  0.2677
+2000   0.0772  0.1324  0.5830
+2001   0.0424  0.1026  0.4132
+2002   0.0488  0.0681  0.7164
+2003  -0.0072  0.0409 -0.1759
+2004   0.0041  0.0638  0.0644
+2005   0.0060  0.0672  0.0888
+2006   0.0197  0.0622  0.3169
+2007   0.0043  0.0392  0.1101
+2008   0.0403  0.0600  0.6707
+2009   0.0013  0.0456  0.0285
+2010   0.0067  0.0453  0.1470
+2011   0.0269  0.0402  0.6678
+2012   0.0100  0.0319  0.3125
+2013  -0.0036  0.0495 -0.0728
+2014   0.0237  0.1045  0.2270
+2015   0.0129  0.0646  0.2003
+2016   0.0073  0.0898  0.0816
+2017  -0.0056  0.0464 -0.1199
+2018   0.0320  0.0689  0.4642
+2019  -0.0123  0.0674 -0.1827
+2020  -0.0444  0.0756 -0.5868
+2021   0.0846  0.1104  0.7664
+
+  --- Annual LS Return (%) ---
+DATE
+1999    -6.98
+2000    48.65
+2001     5.92
+2002     6.65
+2003    14.97
+2004     4.81
+2005    10.03
+2006    17.94
+2007     1.63
+2008     2.07
+2009     1.97
+2010     8.27
+2011    11.19
+2012     4.74
+2013     1.44
+2014     8.83
+2015     6.19
+2016    16.17
+2017     5.31
+2018     4.83
+2019    -3.31
+2020   -19.05
+2021    61.14
+
+
+  Per-(region × liq_tier) diagnostics
+========================================================================
+
+  IC + LS economics by (region × tier)
+  -- LS uses bucket-internal deciles (D10−D1 within bucket), RAW (unhedged) --
+
+region  tier  months  ls_months  avg_N  mean_IC   ICIR  IC_tstat  %_pos  LS_ann_%  LS_vol_%  LS_Sharpe  LS_MaxDD_%  LS_hit_%
+    US  MEGA     276        276    384   0.0182 0.1722      2.86   56.9      4.34     20.23      0.215      -62.27      52.9
+    US   MID     276        276    567   0.0162 0.1906      3.17   54.7      5.60     17.03      0.329      -36.86      50.7
+    US SMALL     276        276    927   0.0162 0.2363      3.93   57.6      8.71     12.45      0.700      -40.16      56.5
+   ALL   ALL     276        276   1879   0.0170 0.2299      3.82   56.9      6.57     13.76      0.478      -38.07      56.5
+
+  ICIR pivot:
+tier     MEGA    MID  SMALL   ALL
+region                           
+US      0.172  0.191  0.236   NaN
+ALL       NaN    NaN    NaN  0.23
+
+  LS_Sharpe pivot:
+tier     MEGA    MID  SMALL    ALL
+region                            
+US      0.215  0.329    0.7    NaN
+ALL       NaN    NaN    NaN  0.478
+
+  LS_ann_% pivot:
+tier    MEGA  MID  SMALL   ALL
+region                        
+US      4.34  5.6   8.71   NaN
+ALL      NaN  NaN    NaN  6.57
+
+  avg_N pivot:
+tier     MEGA    MID  SMALL     ALL
+region                             
+US      384.0  567.0  927.0     NaN
+ALL       NaN    NaN    NaN  1879.0
+
+
+  --- Per-leg coverage (% of universe-months with a non-null leg) ---
+    f_xfin                        95.64%  ########################
+
+  Coverage by sector (worst-covered sector first):
+                        f_xfin
+sector                        
+Communication Services    92.5
+Technology                93.1
+Energy                    95.4
+Healthcare                95.6
+Basic Materials           96.0
+Consumer Defensive        96.2
+Consumer Cyclical         96.5
+Financial Services        96.6
+Industrials               97.0
+Real Estate               97.3
+Utilities                 97.6
+
+  --- Forward-return composition ---
+    full                                539,914   99.56%
+    partial_delisted_merger               2,347    0.43%
+    partial_delisted_performance             21    0.00%
+
+
+  --- Survivorship-bias check ---
+
+  Names appearing in year-Y but ABSENT in 2021
+  (= delisted/merged/acquired — confirms NO survivorship bias)
+
+    Year   Total IDs      Gone by 2021       %
+  ------  ----------  ----------------  ------
+    1999       3,225             2,448   75.9%
+    2003       2,322             1,433   61.7%
+    2008       2,171             1,075   49.5%
+    2015       2,280               748   32.8%
+    2020       2,283               156    6.8%
+
+  >5% gone confirms delisted names ARE retained at historical dates.
+  (a universe accidentally built from TODAY's tickers would show ~0%)
+
+  --- Stage 1 bars (ALL must hold) ---
+    ic_mean                        +0.017006  >= 0.01        PASS
+    ic_tstat_nw                    +3.570243  >= 2.5         PASS
+    ic_half_min                    +0.010501  >= 0.0         PASS
+    ls_raw_ann_return_pct          +6.568956  >= 0.0         PASS
+    coverage_pct                  +95.637878  >= 40.0        PASS
+    avg_names_per_decile         +187.908333  >= 30          PASS
+    ls_n_months                  +276.000000  >= 248         PASS
+
+  STAGE 1 VERDICT: PASS — earns a Stage 2 rung.
+
+
+########################################################################
+#  STAGE 1 : cfp
+########################################################################
+
+======================================================================
+  US UNIVERSE  —  cfp (standalone)
+  D1 = worst | D10 = best | LS = D10 − D1
+======================================================================
+             Avg Monthly Return (%)  Avg N Companies  t-stat
+D1                            0.617            188.0     NaN
+D2                            0.683            188.0     NaN
+D3                            0.858            188.0     NaN
+D4                            0.909            188.0     NaN
+D5                            0.899            188.0     NaN
+D6                            1.008            188.0     NaN
+D7                            1.058            188.0     NaN
+D8                            1.139            188.0     NaN
+D9                            1.366            188.0     NaN
+D10                           1.405            188.0     NaN
+LS (D10−D1)                   0.622              NaN  2.4462
+
+  --- IC Summary (Spearman, continuous score) ---
+  Mean IC   : 0.0246
+  Std IC    : 0.0943
+  ICIR      : 0.2614
+  t-stat    : 4.3428   (Newey-West 3 lags: 3.6515)
+  % Positive: 57.2%
+  Halves    : first 138m +0.0391 | second 138m +0.0102
+  Months    : 276
+  Decay     : h1=+0.0174  h2=+0.0166  h3=+0.0168  h6=+0.0131  h12=+0.0152
+
+  --- LS Portfolio Economics (equal-weight D10−D1, gross) ---
+  Ann. Return     : 7.47%
+  Ann. Volatility : 14.64%
+  Sharpe Ratio    : 0.5101   (LS t NW: 2.25)
+  Max Drawdown    : -51.11%
+  Calmar Ratio    : 0.1461
+  Hit Rate        : 52.9%  (146/276 months)
+  LS Months       : 276 of 276 (0 with no D10−D1)
+  Avg D10 Turnover: 16.4% per month
+  Avg D1  Turnover: 16.7% per month
+  LS in Down Mkt  : 1.13%  (avg over 60 months where mkt < -3%)
+
+  --- Market hedge (ex-ante trailing beta on the universe's cap-weighted return) ---
+  Hedge           : ON — window 36m, min 12m; 264 of 276 months hedged (beta = 0 before the minimum history). Every LS figure above is the HEDGED series.
+  Raw LS          : 9.45%/yr  vol 15.13%  Sharpe 0.6245  MaxDD -47.03%
+  Beta            : trailing mean -0.140  last +0.102  full-window OLS of the raw LS -0.130
+
+  --- Regime diagnostics (date-free; never a bar) ---
+  Sharpe ex top-3 LS years : 0.2458  (years 2000,2002,2021; they carry 68% of the summed LS return)
+  Sharpe by market state    : bear 0.8803 (64 m)  bull 0.3977 (200 m)   (state = sign of the trailing 12m market return, ex ante)
+
+  --- Annual IC ---
+      Mean IC  Std IC    ICIR
+DATE                         
+1999   0.0106  0.0822  0.1290
+2000   0.0986  0.1835  0.5373
+2001   0.0848  0.1019  0.8323
+2002   0.0745  0.0777  0.9579
+2003   0.0271  0.0647  0.4191
+2004   0.0420  0.0536  0.7829
+2005   0.0293  0.0626  0.4679
+2006   0.0306  0.0675  0.4525
+2007  -0.0258  0.0796 -0.3239
+2008   0.0320  0.0850  0.3762
+2009   0.0413  0.1030  0.4010
+2010   0.0024  0.0555  0.0428
+2011   0.0060  0.0485  0.1229
+2012   0.0068  0.0414  0.1638
+2013   0.0287  0.0556  0.5169
+2014   0.0434  0.1053  0.4116
+2015  -0.0208  0.0592 -0.3520
+2016   0.0478  0.0817  0.5847
+2017  -0.0201  0.0725 -0.2776
+2018  -0.0155  0.0657 -0.2363
+2019  -0.0114  0.1302 -0.0873
+2020  -0.0492  0.0976 -0.5040
+2021   0.1040  0.1378  0.7546
+
+  --- Annual LS Return (%) ---
+DATE
+1999    -1.40
+2000    52.57
+2001    16.56
+2002    28.62
+2003    13.02
+2004     6.87
+2005    15.44
+2006    18.19
+2007    -5.15
+2008    10.67
+2009    15.31
+2010    -1.40
+2011     7.36
+2012    -3.77
+2013     4.21
+2014    10.80
+2015   -10.08
+2016    25.65
+2017   -12.16
+2018    -3.45
+2019   -15.25
+2020   -30.26
+2021    45.31
+
+
+  Per-(region × liq_tier) diagnostics
+========================================================================
+
+  IC + LS economics by (region × tier)
+  -- LS uses bucket-internal deciles (D10−D1 within bucket), RAW (unhedged) --
+
+region  tier  months  ls_months  avg_N  mean_IC   ICIR  IC_tstat  %_pos  LS_ann_%  LS_vol_%  LS_Sharpe  LS_MaxDD_%  LS_hit_%
+    US  MEGA     276        276    384   0.0175 0.1473      2.45   52.2      5.63     16.93      0.333      -53.46      48.9
+    US   MID     276        276    567   0.0222 0.2002      3.33   55.8     10.50     18.62      0.564      -64.14      53.3
+    US SMALL     276        276    927   0.0282 0.3066      5.09   62.3     10.26     15.60      0.658      -43.06      56.5
+   ALL   ALL     276        276   1879   0.0246 0.2614      4.34   57.2      9.45     15.13      0.625      -47.03      54.7
+
+  ICIR pivot:
+tier     MEGA  MID  SMALL    ALL
+region                          
+US      0.147  0.2  0.307    NaN
+ALL       NaN  NaN    NaN  0.261
+
+  LS_Sharpe pivot:
+tier     MEGA    MID  SMALL    ALL
+region                            
+US      0.333  0.564  0.658    NaN
+ALL       NaN    NaN    NaN  0.625
+
+  LS_ann_% pivot:
+tier    MEGA   MID  SMALL   ALL
+region                         
+US      5.63  10.5  10.26   NaN
+ALL      NaN   NaN    NaN  9.45
+
+  avg_N pivot:
+tier     MEGA    MID  SMALL     ALL
+region                             
+US      384.0  567.0  927.0     NaN
+ALL       NaN    NaN    NaN  1879.0
+
+
+  --- Per-leg coverage (% of universe-months with a non-null leg) ---
+    f_cfp                         95.67%  ########################
+
+  Coverage by sector (worst-covered sector first):
+                        f_cfp
+sector                       
+Communication Services   92.2
+Technology               93.3
+Energy                   95.3
+Healthcare               95.7
+Basic Materials          96.1
+Consumer Defensive       96.2
+Consumer Cyclical        96.4
+Financial Services       96.6
+Industrials              97.0
+Real Estate              97.3
+Utilities                97.6
+
+  --- Forward-return composition ---
+    full                                539,914   99.56%
+    partial_delisted_merger               2,347    0.43%
+    partial_delisted_performance             21    0.00%
+
+
+  --- Survivorship-bias check ---
+
+  Names appearing in year-Y but ABSENT in 2021
+  (= delisted/merged/acquired — confirms NO survivorship bias)
+
+    Year   Total IDs      Gone by 2021       %
+  ------  ----------  ----------------  ------
+    1999       3,225             2,448   75.9%
+    2003       2,322             1,433   61.7%
+    2008       2,171             1,075   49.5%
+    2015       2,280               748   32.8%
+    2020       2,283               156    6.8%
+
+  >5% gone confirms delisted names ARE retained at historical dates.
+  (a universe accidentally built from TODAY's tickers would show ~0%)
+
+  --- Stage 1 bars (ALL must hold) ---
+    ic_mean                        +0.024642  >= 0.01        PASS
+    ic_tstat_nw                    +3.651526  >= 2.5         PASS
+    ic_half_min                    +0.010212  >= 0.0         PASS
+    ls_raw_ann_return_pct          +9.449864  >= 0.0         PASS
+    coverage_pct                  +95.672731  >= 40.0        PASS
+    avg_names_per_decile         +187.976812  >= 30          PASS
+    ls_n_months                  +276.000000  >= 248         PASS
+
+  STAGE 1 VERDICT: PASS — earns a Stage 2 rung.
+
+
+########################################################################
+#  STAGE 1 : dNoa
+########################################################################
+
+======================================================================
+  US UNIVERSE  —  dNoa (standalone)
+  D1 = worst | D10 = best | LS = D10 − D1
+======================================================================
+             Avg Monthly Return (%)  Avg N Companies  t-stat
+D1                            0.557            188.0     NaN
+D2                            0.805            187.0     NaN
+D3                            0.985            187.0     NaN
+D4                            0.967            187.0     NaN
+D5                            1.036            187.0     NaN
+D6                            1.046            187.0     NaN
+D7                            1.075            187.0     NaN
+D8                            1.154            187.0     NaN
+D9                            1.248            187.0     NaN
+D10                           1.202            187.0     NaN
+LS (D10−D1)                   0.552              NaN  3.9164
+
+  --- IC Summary (Spearman, continuous score) ---
+  Mean IC   : 0.0077
+  Std IC    : 0.0523
+  ICIR      : 0.1476
+  t-stat    : 2.4526   (Newey-West 3 lags: 2.1885)
+  % Positive: 59.1%
+  Halves    : first 138m +0.0156 | second 138m -0.0002
+  Months    : 276
+  Decay     : h1=+0.0055  h2=+0.0053  h3=+0.0050  h6=+0.0034  h12=+0.0065
+
+  --- LS Portfolio Economics (equal-weight D10−D1, gross) ---
+  Ann. Return     : 6.62%
+  Ann. Volatility : 8.11%
+  Sharpe Ratio    : 0.8166   (LS t NW: 3.19)
+  Max Drawdown    : -27.33%
+  Calmar Ratio    : 0.2424
+  Hit Rate        : 56.2%  (155/276 months)
+  LS Months       : 276 of 276 (0 with no D10−D1)
+  Avg D10 Turnover: 18.4% per month
+  Avg D1  Turnover: 15.7% per month
+  LS in Down Mkt  : 0.57%  (avg over 61 months where mkt < -3%)
+
+  --- Market hedge (ex-ante trailing beta on the universe's cap-weighted return) ---
+  Hedge           : ON — window 36m, min 12m; 264 of 276 months hedged (beta = 0 before the minimum history). Every LS figure above is the HEDGED series.
+  Raw LS          : 7.74%/yr  vol 8.17%  Sharpe 0.9474  MaxDD -30.00%
+  Beta            : trailing mean -0.023  last -0.124  full-window OLS of the raw LS -0.069
+
+  --- Regime diagnostics (date-free; never a bar) ---
+  Sharpe ex top-3 LS years : 0.3954  (years 1999,2000,2001; they carry 61% of the summed LS return)
+  Sharpe by market state    : bear 1.0960 (64 m)  bull 0.5739 (200 m)   (state = sign of the trailing 12m market return, ex ante)
+
+  --- Annual IC ---
+      Mean IC  Std IC    ICIR
+DATE                         
+1999   0.0278  0.0429  0.6462
+2000   0.0394  0.0553  0.7112
+2001   0.0409  0.0719  0.5689
+2002   0.0180  0.0294  0.6115
+2003   0.0093  0.0305  0.3044
+2004  -0.0076  0.0317 -0.2398
+2005   0.0085  0.0380  0.2241
+2006   0.0170  0.0498  0.3407
+2007  -0.0152  0.0415 -0.3670
+2008   0.0181  0.0363  0.4972
+2009   0.0157  0.0591  0.2661
+2010   0.0024  0.0724  0.0337
+2011   0.0015  0.0319  0.0467
+2012   0.0167  0.0404  0.4127
+2013   0.0162  0.0448  0.3620
+2014   0.0125  0.0423  0.2950
+2015  -0.0095  0.0510 -0.1853
+2016   0.0068  0.0501  0.1361
+2017  -0.0128  0.0379 -0.3379
+2018   0.0157  0.0426  0.3690
+2019  -0.0214  0.0540 -0.3963
+2020  -0.0385  0.0709 -0.5438
+2021   0.0161  0.0926  0.1738
+
+  --- Annual LS Return (%) ---
+DATE
+1999    25.29
+2000    53.42
+2001    29.62
+2002    -0.65
+2003    24.32
+2004    -0.79
+2005     1.67
+2006    -0.02
+2007    -5.16
+2008     1.30
+2009    18.26
+2010     4.31
+2011    -0.44
+2012     7.96
+2013     2.81
+2014     4.02
+2015    -4.98
+2016     8.86
+2017    -0.48
+2018     7.18
+2019    -7.02
+2020   -21.55
+2021    24.78
+
+
+  Per-(region × liq_tier) diagnostics
+========================================================================
+
+  IC + LS economics by (region × tier)
+  -- LS uses bucket-internal deciles (D10−D1 within bucket), RAW (unhedged) --
+
+region  tier  months  ls_months  avg_N  mean_IC   ICIR  IC_tstat  %_pos  LS_ann_%  LS_vol_%  LS_Sharpe  LS_MaxDD_%  LS_hit_%
+    US  MEGA     276        276    383   0.0108 0.1258      2.09   52.5      4.17     14.92      0.280      -42.01      47.5
+    US   MID     276        276    565   0.0088 0.1370      2.28   57.2      5.51      9.92      0.556      -39.95      56.9
+    US SMALL     276        276    922   0.0046 0.0860      1.43   53.6      9.62      8.85      1.086      -24.23      59.8
+   ALL   ALL     276        276   1871   0.0077 0.1476      2.45   59.1      7.74      8.17      0.947      -30.00      59.4
+
+  ICIR pivot:
+tier     MEGA    MID  SMALL    ALL
+region                            
+US      0.126  0.137  0.086    NaN
+ALL       NaN    NaN    NaN  0.148
+
+  LS_Sharpe pivot:
+tier    MEGA    MID  SMALL    ALL
+region                           
+US      0.28  0.556  1.086    NaN
+ALL      NaN    NaN    NaN  0.947
+
+  LS_ann_% pivot:
+tier    MEGA   MID  SMALL   ALL
+region                         
+US      4.17  5.51   9.62   NaN
+ALL      NaN   NaN    NaN  7.74
+
+  avg_N pivot:
+tier     MEGA    MID  SMALL     ALL
+region                             
+US      383.0  565.0  922.0     NaN
+ALL       NaN    NaN    NaN  1871.0
+
+
+  --- Per-leg coverage (% of universe-months with a non-null leg) ---
+    f_dnoa                        95.23%  ########################
+
+  Coverage by sector (worst-covered sector first):
+                        f_dnoa
+sector                        
+Communication Services    91.3
+Technology                91.6
+Healthcare                95.2
+Energy                    95.7
+Consumer Defensive        96.0
+Basic Materials           96.2
+Consumer Cyclical         96.4
+Financial Services        96.5
+Industrials               96.7
+Utilities                 97.2
+Real Estate               97.2
+
+  --- Forward-return composition ---
+    full                                539,914   99.56%
+    partial_delisted_merger               2,347    0.43%
+    partial_delisted_performance             21    0.00%
+
+
+  --- Survivorship-bias check ---
+
+  Names appearing in year-Y but ABSENT in 2021
+  (= delisted/merged/acquired — confirms NO survivorship bias)
+
+    Year   Total IDs      Gone by 2021       %
+  ------  ----------  ----------------  ------
+    1999       3,225             2,448   75.9%
+    2003       2,322             1,433   61.7%
+    2008       2,171             1,075   49.5%
+    2015       2,280               748   32.8%
+    2020       2,283               156    6.8%
+
+  >5% gone confirms delisted names ARE retained at historical dates.
+  (a universe accidentally built from TODAY's tickers would show ~0%)
+
+  --- Stage 1 bars (ALL must hold) ---
+    ic_mean                        +0.007717  >= 0.01        FAIL
+    ic_tstat_nw                    +2.188507  >= 2.5         FAIL
+    ic_half_min                    -0.000156  >= 0.0         FAIL
+    ls_raw_ann_return_pct          +7.742273  >= 0.0         PASS
+    coverage_pct                  +95.232001  >= 40.0        PASS
+    avg_names_per_decile         +187.110870  >= 30          PASS
+    ls_n_months                  +276.000000  >= 248         PASS
+
+  STAGE 1 VERDICT: FAIL — does not reach Stage 2.
+
+
+########################################################################
+#  STAGE 1 : grcapx
+########################################################################
+
+======================================================================
+  US UNIVERSE  —  grcapx (standalone)
+  D1 = worst | D10 = best | LS = D10 − D1
+======================================================================
+             Avg Monthly Return (%)  Avg N Companies  t-stat
+D1                            0.779            160.0     NaN
+D2                            1.000            159.0     NaN
+D3                            0.924            159.0     NaN
+D4                            1.068            159.0     NaN
+D5                            1.026            159.0     NaN
+D6                            1.086            159.0     NaN
+D7                            1.107            159.0     NaN
+D8                            1.086            159.0     NaN
+D9                            1.162            159.0     NaN
+D10                           1.114            160.0     NaN
+LS (D10−D1)                   0.283              NaN  2.3403
+
+  --- IC Summary (Spearman, continuous score) ---
+  Mean IC   : 0.0041
+  Std IC    : 0.0459
+  ICIR      : 0.0888
+  t-stat    : 1.4753   (Newey-West 3 lags: 1.3746)
+  % Positive: 53.6%
+  Halves    : first 138m +0.0067 | second 138m +0.0015
+  Months    : 276
+  Decay     : h1=+0.0041  h2=+0.0030  h3=+0.0039  h6=+0.0044  h12=+0.0027
+
+  --- LS Portfolio Economics (equal-weight D10−D1, gross) ---
+  Ann. Return     : 3.40%
+  Ann. Volatility : 6.96%
+  Sharpe Ratio    : 0.4880   (LS t NW: 2.40)
+  Max Drawdown    : -19.02%
+  Calmar Ratio    : 0.1785
+  Hit Rate        : 52.5%  (145/276 months)
+  LS Months       : 276 of 276 (0 with no D10−D1)
+  Avg D10 Turnover: 12.4% per month
+  Avg D1  Turnover: 11.7% per month
+  LS in Down Mkt  : 0.37%  (avg over 56 months where mkt < -3%)
+
+  --- Market hedge (ex-ante trailing beta on the universe's cap-weighted return) ---
+  Hedge           : ON — window 36m, min 12m; 264 of 276 months hedged (beta = 0 before the minimum history). Every LS figure above is the HEDGED series.
+  Raw LS          : 4.02%/yr  vol 7.24%  Sharpe 0.5553  MaxDD -16.59%
+  Beta            : trailing mean -0.036  last -0.038  full-window OLS of the raw LS -0.079
+
+  --- Regime diagnostics (date-free; never a bar) ---
+  Sharpe ex top-3 LS years : 0.2626  (years 2001,2003,2010; they carry 57% of the summed LS return)
+  Sharpe by market state    : bear 0.7710 (64 m)  bull 0.3262 (200 m)   (state = sign of the trailing 12m market return, ex ante)
+
+  --- Annual IC ---
+      Mean IC  Std IC    ICIR
+DATE                         
+1999   0.0050  0.0369  0.1363
+2000   0.0051  0.0425  0.1197
+2001   0.0216  0.0667  0.3231
+2002   0.0388  0.0535  0.7261
+2003   0.0131  0.0254  0.5161
+2004  -0.0137  0.0527 -0.2596
+2005   0.0032  0.0275  0.1151
+2006   0.0091  0.0411  0.2214
+2007  -0.0233  0.0256 -0.9084
+2008   0.0297  0.0462  0.6423
+2009  -0.0180  0.0307 -0.5854
+2010   0.0222  0.0645  0.3432
+2011  -0.0070  0.0504 -0.1393
+2012   0.0257  0.0370  0.6958
+2013   0.0056  0.0286  0.1961
+2014   0.0167  0.0450  0.3717
+2015  -0.0071  0.0468 -0.1514
+2016   0.0128  0.0243  0.5258
+2017  -0.0159  0.0306 -0.5201
+2018   0.0037  0.0473  0.0775
+2019  -0.0112  0.0327 -0.3407
+2020  -0.0237  0.0368 -0.6453
+2021   0.0014  0.0788  0.0180
+
+  --- Annual LS Return (%) ---
+DATE
+1999    10.05
+2000     5.19
+2001    12.55
+2002     9.15
+2003    20.22
+2004    -0.57
+2005     2.66
+2006     0.80
+2007    -8.42
+2008     3.62
+2009     3.78
+2010    13.51
+2011     3.13
+2012     7.98
+2013    -3.58
+2014     3.84
+2015    -1.88
+2016     6.28
+2017    -7.87
+2018    -7.86
+2019     8.02
+2020    -6.90
+2021     5.75
+
+
+  Per-(region × liq_tier) diagnostics
+========================================================================
+
+  IC + LS economics by (region × tier)
+  -- LS uses bucket-internal deciles (D10−D1 within bucket), RAW (unhedged) --
+
+region  tier  months  ls_months  avg_N  mean_IC   ICIR  IC_tstat  %_pos  LS_ann_%  LS_vol_%  LS_Sharpe  LS_MaxDD_%  LS_hit_%
+    US  MEGA     276        276    342   0.0045 0.0524      0.87   52.9      3.04     13.33      0.228      -35.31      52.5
+    US   MID     276        276    489   0.0018 0.0284      0.47   51.8      0.07     10.58      0.007      -46.58      51.8
+    US SMALL     276        276    759   0.0038 0.0819      1.36   50.0      4.09      8.65      0.473      -16.65      54.0
+   ALL   ALL     276        276   1591   0.0041 0.0888      1.48   53.6      4.02      7.24      0.555      -16.59      53.6
+
+  ICIR pivot:
+tier     MEGA    MID  SMALL    ALL
+region                            
+US      0.052  0.028  0.082    NaN
+ALL       NaN    NaN    NaN  0.089
+
+  LS_Sharpe pivot:
+tier     MEGA    MID  SMALL    ALL
+region                            
+US      0.228  0.007  0.473    NaN
+ALL       NaN    NaN    NaN  0.555
+
+  LS_ann_% pivot:
+tier    MEGA   MID  SMALL   ALL
+region                         
+US      3.04  0.07   4.09   NaN
+ALL      NaN   NaN    NaN  4.02
+
+  avg_N pivot:
+tier     MEGA    MID  SMALL     ALL
+region                             
+US      342.0  489.0  759.0     NaN
+ALL       NaN    NaN    NaN  1591.0
+
+
+  --- Per-leg coverage (% of universe-months with a non-null leg) ---
+    f_grcapx                      81.01%  ####################
+
+  Coverage by sector (worst-covered sector first):
+                        f_grcapx
+sector                          
+Real Estate                 68.6
+Financial Services          71.1
+Communication Services      75.3
+Technology                  77.3
+Energy                      83.5
+Healthcare                  83.6
+Basic Materials             85.6
+Consumer Cyclical           86.6
+Consumer Defensive          87.5
+Industrials                 88.1
+Utilities                   88.8
+
+  --- Forward-return composition ---
+    full                                539,914   99.56%
+    partial_delisted_merger               2,347    0.43%
+    partial_delisted_performance             21    0.00%
+
+
+  --- Survivorship-bias check ---
+
+  Names appearing in year-Y but ABSENT in 2021
+  (= delisted/merged/acquired — confirms NO survivorship bias)
+
+    Year   Total IDs      Gone by 2021       %
+  ------  ----------  ----------------  ------
+    1999       3,225             2,448   75.9%
+    2003       2,322             1,433   61.7%
+    2008       2,171             1,075   49.5%
+    2015       2,280               748   32.8%
+    2020       2,283               156    6.8%
+
+  >5% gone confirms delisted names ARE retained at historical dates.
+  (a universe accidentally built from TODAY's tickers would show ~0%)
+
+  --- Stage 1 bars (ALL must hold) ---
+    ic_mean                        +0.004078  >= 0.01        FAIL
+    ic_tstat_nw                    +1.374614  >= 2.5         FAIL
+    ic_half_min                    +0.001457  >= 0.0         PASS
+    ls_raw_ann_return_pct          +4.020383  >= 0.0         PASS
+    coverage_pct                  +81.012462  >= 40.0        PASS
+    avg_names_per_decile         +159.172464  >= 30          PASS
+    ls_n_months                  +276.000000  >= 248         PASS
+
+  STAGE 1 VERDICT: FAIL — does not reach Stage 2.
+
+
+########################################################################
+#  STAGE 1 : grcapx3y
+########################################################################
+
+======================================================================
+  US UNIVERSE  —  grcapx3y (standalone)
+  D1 = worst | D10 = best | LS = D10 − D1
+======================================================================
+             Avg Monthly Return (%)  Avg N Companies  t-stat
+D1                            0.772            143.0     NaN
+D2                            1.039            142.0     NaN
+D3                            0.974            142.0     NaN
+D4                            0.991            142.0     NaN
+D5                            1.036            142.0     NaN
+D6                            1.105            142.0     NaN
+D7                            1.013            142.0     NaN
+D8                            1.101            142.0     NaN
+D9                            1.246            142.0     NaN
+D10                           1.103            142.0     NaN
+LS (D10−D1)                   0.285              NaN  2.1366
+
+  --- IC Summary (Spearman, continuous score) ---
+  Mean IC   : 0.0028
+  Std IC    : 0.0477
+  ICIR      : 0.0592
+  t-stat    : 0.9831   (Newey-West 3 lags: 0.8944)
+  % Positive: 54.0%
+  Halves    : first 138m +0.0044 | second 138m +0.0012
+  Months    : 276
+  Decay     : h1=+0.0027  h2=+0.0026  h3=+0.0041  h6=+0.0047  h12=+0.0028
+
+  --- LS Portfolio Economics (equal-weight D10−D1, gross) ---
+  Ann. Return     : 3.42%
+  Ann. Volatility : 7.67%
+  Sharpe Ratio    : 0.4455   (LS t NW: 2.12)
+  Max Drawdown    : -22.17%
+  Calmar Ratio    : 0.1542
+  Hit Rate        : 54.0%  (149/276 months)
+  LS Months       : 276 of 276 (0 with no D10−D1)
+  Avg D10 Turnover: 11.9% per month
+  Avg D1  Turnover: 11.4% per month
+  LS in Down Mkt  : -0.06%  (avg over 54 months where mkt < -3%)
+
+  --- Market hedge (ex-ante trailing beta on the universe's cap-weighted return) ---
+  Hedge           : ON — window 36m, min 12m; 264 of 276 months hedged (beta = 0 before the minimum history). Every LS figure above is the HEDGED series.
+  Raw LS          : 3.97%/yr  vol 7.59%  Sharpe 0.5235  MaxDD -18.88%
+  Beta            : trailing mean +0.002  last -0.025  full-window OLS of the raw LS -0.042
+
+  --- Regime diagnostics (date-free; never a bar) ---
+  Sharpe ex top-3 LS years : 0.2325  (years 2001,2003,2010; they carry 57% of the summed LS return)
+  Sharpe by market state    : bear 0.7775 (64 m)  bull 0.3437 (200 m)   (state = sign of the trailing 12m market return, ex ante)
+
+  --- Annual IC ---
+      Mean IC  Std IC    ICIR
+DATE                         
+1999  -0.0001  0.0489 -0.0012
+2000  -0.0144  0.0387 -0.3723
+2001   0.0235  0.0629  0.3734
+2002   0.0322  0.0505  0.6369
+2003   0.0086  0.0320  0.2700
+2004  -0.0111  0.0515 -0.2160
+2005   0.0023  0.0286  0.0801
+2006   0.0121  0.0351  0.3463
+2007  -0.0217  0.0364 -0.5971
+2008   0.0334  0.0547  0.6117
+2009  -0.0154  0.0358 -0.4285
+2010   0.0212  0.0819  0.2583
+2011  -0.0026  0.0475 -0.0544
+2012   0.0238  0.0345  0.6901
+2013   0.0083  0.0343  0.2418
+2014   0.0161  0.0294  0.5496
+2015  -0.0080  0.0446 -0.1798
+2016   0.0162  0.0284  0.5685
+2017  -0.0189  0.0423 -0.4464
+2018   0.0057  0.0497  0.1138
+2019  -0.0160  0.0391 -0.4090
+2020  -0.0276  0.0341 -0.8082
+2021  -0.0028  0.0752 -0.0376
+
+  --- Annual LS Return (%) ---
+DATE
+1999     1.55
+2000    -3.45
+2001    15.62
+2002    11.05
+2003    14.51
+2004     1.83
+2005    -0.04
+2006     3.72
+2007   -12.30
+2008     7.57
+2009     4.31
+2010    16.34
+2011     3.68
+2012    14.25
+2013    -3.99
+2014     4.72
+2015    -2.42
+2016    14.07
+2017    -9.33
+2018    -3.75
+2019     0.18
+2020    -7.49
+2021     9.77
+
+
+  Per-(region × liq_tier) diagnostics
+========================================================================
+
+  IC + LS economics by (region × tier)
+  -- LS uses bucket-internal deciles (D10−D1 within bucket), RAW (unhedged) --
+
+region  tier  months  ls_months  avg_N  mean_IC   ICIR  IC_tstat  %_pos  LS_ann_%  LS_vol_%  LS_Sharpe  LS_MaxDD_%  LS_hit_%
+    US  MEGA     276        276    319   0.0042 0.0477      0.79   49.6      4.31     16.84      0.256      -43.62      53.3
+    US   MID     276        276    440   0.0015 0.0220      0.37   50.0      1.44     11.62      0.124      -45.46      53.6
+    US SMALL     276        276    661   0.0014 0.0288      0.48   51.8      5.71     11.03      0.517      -26.94      55.8
+   ALL   ALL     276        276   1421   0.0028 0.0592      0.98   54.0      3.97      7.59      0.523      -18.88      54.7
+
+  ICIR pivot:
+tier     MEGA    MID  SMALL    ALL
+region                            
+US      0.048  0.022  0.029    NaN
+ALL       NaN    NaN    NaN  0.059
+
+  LS_Sharpe pivot:
+tier     MEGA    MID  SMALL    ALL
+region                            
+US      0.256  0.124  0.517    NaN
+ALL       NaN    NaN    NaN  0.523
+
+  LS_ann_% pivot:
+tier    MEGA   MID  SMALL   ALL
+region                         
+US      4.31  1.44   5.71   NaN
+ALL      NaN   NaN    NaN  3.97
+
+  avg_N pivot:
+tier     MEGA    MID  SMALL     ALL
+region                             
+US      319.0  440.0  661.0     NaN
+ALL       NaN    NaN    NaN  1421.0
+
+
+  --- Per-leg coverage (% of universe-months with a non-null leg) ---
+    f_grcapx3y                    72.34%  ##################
+
+  Coverage by sector (worst-covered sector first):
+                        f_grcapx3y
+sector                            
+Real Estate                   57.4
+Financial Services            64.8
+Communication Services        64.8
+Technology                    66.5
+Energy                        73.6
+Healthcare                    73.8
+Basic Materials               77.4
+Consumer Cyclical             79.1
+Consumer Defensive            80.1
+Industrials                   81.3
+Utilities                     82.2
+
+  --- Forward-return composition ---
+    full                                539,914   99.56%
+    partial_delisted_merger               2,347    0.43%
+    partial_delisted_performance             21    0.00%
+
+
+  --- Survivorship-bias check ---
+
+  Names appearing in year-Y but ABSENT in 2021
+  (= delisted/merged/acquired — confirms NO survivorship bias)
+
+    Year   Total IDs      Gone by 2021       %
+  ------  ----------  ----------------  ------
+    1999       3,225             2,448   75.9%
+    2003       2,322             1,433   61.7%
+    2008       2,171             1,075   49.5%
+    2015       2,280               748   32.8%
+    2020       2,283               156    6.8%
+
+  >5% gone confirms delisted names ARE retained at historical dates.
+  (a universe accidentally built from TODAY's tickers would show ~0%)
+
+  --- Stage 1 bars (ALL must hold) ---
+    ic_mean                        +0.002821  >= 0.01        FAIL
+    ic_tstat_nw                    +0.894426  >= 2.5         FAIL
+    ic_half_min                    +0.001211  >= 0.0         PASS
+    ls_raw_ann_return_pct          +3.970816  >= 0.0         PASS
+    coverage_pct                  +72.336718  >= 40.0        PASS
+    avg_names_per_decile         +142.126449  >= 30          PASS
+    ls_n_months                  +276.000000  >= 248         PASS
+
+  STAGE 1 VERDICT: FAIL — does not reach Stage 2.
+
+
+########################################################################
+#  STAGE 1 : roaq
+########################################################################
+
+======================================================================
+  US UNIVERSE  —  roaq (standalone)
+  D1 = worst | D10 = best | LS = D10 − D1
+======================================================================
+             Avg Monthly Return (%)  Avg N Companies  t-stat
+D1                            0.661            190.0     NaN
+D2                            1.001            189.0     NaN
+D3                            0.901            189.0     NaN
+D4                            0.965            189.0     NaN
+D5                            0.890            189.0     NaN
+D6                            0.976            189.0     NaN
+D7                            1.074            189.0     NaN
+D8                            1.095            189.0     NaN
+D9                            1.062            189.0     NaN
+D10                           1.101            189.0     NaN
+LS (D10−D1)                   0.829              NaN  3.3826
+
+  --- IC Summary (Spearman, continuous score) ---
+  Mean IC   : 0.0208
+  Std IC    : 0.0934
+  ICIR      : 0.2225
+  t-stat    : 3.6963   (Newey-West 3 lags: 3.3661)
+  % Positive: 58.3%
+  Halves    : first 138m +0.0238 | second 138m +0.0177
+  Months    : 276
+  Decay     : h1=+0.0199  h2=+0.0207  h3=+0.0190  h6=+0.0112  h12=+0.0115
+
+  --- LS Portfolio Economics (equal-weight D10−D1, gross) ---
+  Ann. Return     : 9.95%
+  Ann. Volatility : 14.10%
+  Sharpe Ratio    : 0.7053   (LS t NW: 3.10)
+  Max Drawdown    : -32.74%
+  Calmar Ratio    : 0.3038
+  Hit Rate        : 60.9%  (168/276 months)
+  LS Months       : 276 of 276 (0 with no D10−D1)
+  Avg D10 Turnover: 21.1% per month
+  Avg D1  Turnover: 26.6% per month
+  LS in Down Mkt  : 1.97%  (avg over 61 months where mkt < -3%)
+
+  --- Market hedge (ex-ante trailing beta on the universe's cap-weighted return) ---
+  Hedge           : ON — window 36m, min 12m; 264 of 276 months hedged (beta = 0 before the minimum history). Every LS figure above is the HEDGED series.
+  Raw LS          : 5.28%/yr  vol 16.42%  Sharpe 0.3217  MaxDD -54.08%
+  Beta            : trailing mean -0.491  last -0.636  full-window OLS of the raw LS -0.584
+
+  --- Regime diagnostics (date-free; never a bar) ---
+  Sharpe ex top-3 LS years : 0.3863  (years 2000,2002,2021; they carry 62% of the summed LS return)
+  Sharpe by market state    : bear 0.3558 (64 m)  bull 0.9934 (200 m)   (state = sign of the trailing 12m market return, ex ante)
+
+  --- Annual IC ---
+      Mean IC  Std IC    ICIR
+DATE                         
+1999   0.0043  0.0531  0.0802
+2000   0.1038  0.1108  0.9368
+2001   0.0359  0.1047  0.3432
+2002   0.0782  0.1061  0.7374
+2003  -0.0159  0.0846 -0.1878
+2004   0.0222  0.0533  0.4166
+2005   0.0191  0.0509  0.3757
+2006  -0.0101  0.0394 -0.2553
+2007   0.0567  0.0525  1.0787
+2008   0.0272  0.0857  0.3172
+2009  -0.0425  0.1235 -0.3441
+2010  -0.0198  0.1127 -0.1757
+2011   0.0526  0.0743  0.7079
+2012  -0.0010  0.0764 -0.0128
+2013  -0.0192  0.0509 -0.3777
+2014   0.0110  0.0851  0.1299
+2015   0.0368  0.0762  0.4826
+2016  -0.0079  0.1186 -0.0663
+2017   0.0361  0.0758  0.4758
+2018   0.0403  0.0577  0.6986
+2019  -0.0011  0.0868 -0.0130
+2020  -0.0192  0.1436 -0.1337
+2021   0.0905  0.1252  0.7227
+
+  --- Annual LS Return (%) ---
+DATE
+1999   -20.68
+2000    81.95
+2001    11.86
+2002    27.36
+2003     9.46
+2004    17.10
+2005     6.80
+2006     6.51
+2007    24.35
+2008     1.44
+2009   -22.67
+2010     0.36
+2011    18.05
+2012     1.33
+2013     3.40
+2014     6.68
+2015    13.27
+2016    -1.32
+2017    18.82
+2018     2.65
+2019     6.00
+2020   -13.21
+2021    60.51
+
+
+  Per-(region × liq_tier) diagnostics
+========================================================================
+
+  IC + LS economics by (region × tier)
+  -- LS uses bucket-internal deciles (D10−D1 within bucket), RAW (unhedged) --
+
+region  tier  months  ls_months  avg_N  mean_IC   ICIR  IC_tstat  %_pos  LS_ann_%  LS_vol_%  LS_Sharpe  LS_MaxDD_%  LS_hit_%
+    US  MEGA     276        276    382   0.0231 0.1972      3.28   56.9      6.58     17.48      0.377      -45.74      58.0
+    US   MID     276        276    569   0.0204 0.1995      3.31   58.7      5.54     18.70      0.296      -54.77      56.2
+    US SMALL     276        276    939   0.0206 0.2257      3.75   54.3      4.47     17.75      0.252      -60.63      51.4
+   ALL   ALL     276        276   1891   0.0208 0.2225      3.70   58.3      5.28     16.42      0.322      -54.08      55.8
+
+  ICIR pivot:
+tier     MEGA  MID  SMALL    ALL
+region                          
+US      0.197  0.2  0.226    NaN
+ALL       NaN  NaN    NaN  0.222
+
+  LS_Sharpe pivot:
+tier     MEGA    MID  SMALL    ALL
+region                            
+US      0.377  0.296  0.252    NaN
+ALL       NaN    NaN    NaN  0.322
+
+  LS_ann_% pivot:
+tier    MEGA   MID  SMALL   ALL
+region                         
+US      6.58  5.54   4.47   NaN
+ALL      NaN   NaN    NaN  5.28
+
+  avg_N pivot:
+tier     MEGA    MID  SMALL     ALL
+region                             
+US      382.0  569.0  939.0     NaN
+ALL       NaN    NaN    NaN  1891.0
+
+
+  --- Per-leg coverage (% of universe-months with a non-null leg) ---
+    f_roaq                        96.29%  ########################
+
+  Coverage by sector (worst-covered sector first):
+                        f_roaq
+sector                        
+Technology                95.4
+Communication Services    95.5
+Basic Materials           95.8
+Consumer Defensive        95.8
+Healthcare                95.9
+Energy                    96.1
+Consumer Cyclical         96.7
+Financial Services        96.9
+Industrials               96.9
+Real Estate               97.1
+Utilities                 97.5
+
+  --- Forward-return composition ---
+    full                                539,914   99.56%
+    partial_delisted_merger               2,347    0.43%
+    partial_delisted_performance             21    0.00%
+
+
+  --- Survivorship-bias check ---
+
+  Names appearing in year-Y but ABSENT in 2021
+  (= delisted/merged/acquired — confirms NO survivorship bias)
+
+    Year   Total IDs      Gone by 2021       %
+  ------  ----------  ----------------  ------
+    1999       3,225             2,448   75.9%
+    2003       2,322             1,433   61.7%
+    2008       2,171             1,075   49.5%
+    2015       2,280               748   32.8%
+    2020       2,283               156    6.8%
+
+  >5% gone confirms delisted names ARE retained at historical dates.
+  (a universe accidentally built from TODAY's tickers would show ~0%)
+
+  --- Stage 1 bars (ALL must hold) ---
+    ic_mean                        +0.020781  >= 0.01        PASS
+    ic_tstat_nw                    +3.366138  >= 2.5         PASS
+    ic_half_min                    +0.017732  >= 0.0         PASS
+    ls_raw_ann_return_pct          +5.283321  >= 0.0         PASS
+    coverage_pct                  +96.292151  >= 40.0        PASS
+    avg_names_per_decile         +189.193841  >= 30          PASS
+    ls_n_months                  +276.000000  >= 248         PASS
+
+  STAGE 1 VERDICT: PASS — earns a Stage 2 rung.
+
+
+########################################################################
+#  STAGE 1 : zerotrade12M
+########################################################################
+
+======================================================================
+  US UNIVERSE  —  zerotrade12M (standalone)
+  D1 = worst | D10 = best | LS = D10 − D1
+======================================================================
+             Avg Monthly Return (%)  Avg N Companies  t-stat
+D1                            0.758            187.0     NaN
+D2                            0.843            187.0     NaN
+D3                            1.033            187.0     NaN
+D4                            1.007            187.0     NaN
+D5                            1.012            187.0     NaN
+D6                            1.075            186.0     NaN
+D7                            1.127            187.0     NaN
+D8                            1.116            187.0     NaN
+D9                            1.071            187.0     NaN
+D10                           1.065            187.0     NaN
+LS (D10−D1)                   0.747              NaN  3.3112
+
+  --- IC Summary (Spearman, continuous score) ---
+  Mean IC   : 0.0180
+  Std IC    : 0.1022
+  ICIR      : 0.1759
+  t-stat    : 2.9175   (Newey-West 3 lags: 2.8315)
+  % Positive: 53.8%
+  Halves    : first 137m +0.0168 | second 138m +0.0191
+  Months    : 275
+  Decay     : h1=+0.0173  h2=+0.0171  h3=+0.0159  h6=+0.0137  h12=+0.0136
+
+  --- LS Portfolio Economics (equal-weight D10−D1, gross) ---
+  Ann. Return     : 8.97%
+  Ann. Volatility : 12.96%
+  Sharpe Ratio    : 0.6917   (LS t NW: 3.32)
+  Max Drawdown    : -34.96%
+  Calmar Ratio    : 0.2565
+  Hit Rate        : 64.7%  (178/275 months)
+  LS Months       : 275 of 275 (0 with no D10−D1)
+  Avg D10 Turnover: 13.2% per month
+  Avg D1  Turnover: 7.8% per month
+  LS in Down Mkt  : 1.52%  (avg over 61 months where mkt < -3%)
+
+  --- Market hedge (ex-ante trailing beta on the universe's cap-weighted return) ---
+  Hedge           : ON — window 36m, min 12m; 263 of 275 months hedged (beta = 0 before the minimum history). Every LS figure above is the HEDGED series.
+  Raw LS          : 3.69%/yr  vol 16.90%  Sharpe 0.2185  MaxDD -54.62%
+  Beta            : trailing mean -0.668  last -0.668  full-window OLS of the raw LS -0.699
+
+  --- Regime diagnostics (date-free; never a bar) ---
+  Sharpe ex top-3 LS years : 0.4495  (years 2000,2007,2011; they carry 43% of the summed LS return)
+  Sharpe by market state    : bear 0.0978 (64 m)  bull 1.0498 (200 m)   (state = sign of the trailing 12m market return, ex ante)
+
+  --- Annual IC ---
+      Mean IC  Std IC    ICIR
+DATE                         
+1999  -0.0131  0.0655 -0.2008
+2000   0.0631  0.1376  0.4589
+2001   0.0341  0.1479  0.2303
+2002   0.0569  0.1020  0.5581
+2003  -0.0320  0.0801 -0.3990
+2004  -0.0020  0.0848 -0.0231
+2005  -0.0027  0.1006 -0.0264
+2006   0.0286  0.1082  0.2648
+2007   0.0271  0.0637  0.4246
+2008   0.0570  0.0754  0.7556
+2009  -0.0367  0.0940 -0.3909
+2010  -0.0068  0.0982 -0.0690
+2011   0.0655  0.0965  0.6783
+2012   0.0040  0.1033  0.0386
+2013   0.0069  0.0684  0.1012
+2014   0.0277  0.0796  0.3480
+2015   0.0514  0.0796  0.6460
+2016   0.0002  0.1104  0.0022
+2017   0.0169  0.0790  0.2144
+2018   0.0487  0.0861  0.5650
+2019   0.0045  0.1183  0.0382
+2020  -0.0361  0.1231 -0.2934
+2021   0.0477  0.1569  0.3037
+
+  --- Annual LS Return (%) ---
+DATE
+1999   -17.72
+2000    49.16
+2001    -5.55
+2002    -1.13
+2003    14.19
+2004     6.83
+2005     5.86
+2006    20.58
+2007    25.39
+2008    -0.34
+2009   -14.43
+2010     4.77
+2011    25.98
+2012     5.77
+2013    16.38
+2014    18.35
+2015    18.34
+2016    -3.11
+2017    17.97
+2018    11.93
+2019    16.69
+2020    -4.97
+2021     3.15
+
+
+  Per-(region × liq_tier) diagnostics
+========================================================================
+
+  IC + LS economics by (region × tier)
+  -- LS uses bucket-internal deciles (D10−D1 within bucket), RAW (unhedged) --
+
+region  tier  months  ls_months  avg_N  mean_IC   ICIR  IC_tstat  %_pos  LS_ann_%  LS_vol_%  LS_Sharpe  LS_MaxDD_%  LS_hit_%
+    US  MEGA     275        275    383   0.0114 0.0650      1.08   48.4     -1.88     28.10     -0.067      -87.25      46.2
+    US   MID     275        275    564   0.0185 0.1546      2.56   55.3      1.87     18.71      0.100      -51.41      50.9
+    US SMALL     275        275    918   0.0175 0.2004      3.32   57.8      3.74     15.73      0.238      -47.07      55.6
+   ALL   ALL     275        275   1866   0.0180 0.1759      2.92   53.8      3.69     16.90      0.218      -54.62      53.5
+
+  ICIR pivot:
+tier     MEGA    MID  SMALL    ALL
+region                            
+US      0.065  0.155    0.2    NaN
+ALL       NaN    NaN    NaN  0.176
+
+  LS_Sharpe pivot:
+tier     MEGA  MID  SMALL    ALL
+region                          
+US     -0.067  0.1  0.238    NaN
+ALL       NaN  NaN    NaN  0.218
+
+  LS_ann_% pivot:
+tier    MEGA   MID  SMALL   ALL
+region                         
+US     -1.88  1.87   3.74   NaN
+ALL      NaN   NaN    NaN  3.69
+
+  avg_N pivot:
+tier     MEGA    MID  SMALL     ALL
+region                             
+US      383.0  564.0  918.0     NaN
+ALL       NaN    NaN    NaN  1866.0
+
+
+  --- Per-leg coverage (% of universe-months with a non-null leg) ---
+    f_zt12m                       94.67%  ########################
+
+  Coverage by sector (worst-covered sector first):
+                        f_zt12m
+sector                         
+Communication Services     90.0
+Technology                 91.0
+Healthcare                 94.7
+Energy                     95.4
+Consumer Defensive         95.6
+Basic Materials            95.8
+Consumer Cyclical          95.9
+Financial Services         95.9
+Industrials                96.3
+Real Estate                96.4
+Utilities                  96.9
+
+  --- Forward-return composition ---
+    full                                539,914   99.56%
+    partial_delisted_merger               2,347    0.43%
+    partial_delisted_performance             21    0.00%
+
+
+  --- Survivorship-bias check ---
+
+  Names appearing in year-Y but ABSENT in 2021
+  (= delisted/merged/acquired — confirms NO survivorship bias)
+
+    Year   Total IDs      Gone by 2021       %
+  ------  ----------  ----------------  ------
+    1999       3,225             2,448   75.9%
+    2003       2,322             1,433   61.7%
+    2008       2,171             1,075   49.5%
+    2015       2,280               748   32.8%
+    2020       2,283               156    6.8%
+
+  >5% gone confirms delisted names ARE retained at historical dates.
+  (a universe accidentally built from TODAY's tickers would show ~0%)
+
+  --- Stage 1 bars (ALL must hold) ---
+    ic_mean                        +0.017979  >= 0.01        PASS
+    ic_tstat_nw                    +2.831524  >= 2.5         PASS
+    ic_half_min                    +0.016811  >= 0.0         PASS
+    ls_raw_ann_return_pct          +3.692030  >= 0.0         PASS
+    coverage_pct                  +94.667535  >= 40.0        PASS
+    avg_names_per_decile         +186.678182  >= 30          PASS
+    ls_n_months                  +275.000000  >= 247         PASS
+
+  STAGE 1 VERDICT: PASS — earns a Stage 2 rung.
+
+
+########################################################################
+#  STAGE 1 : zerotrade1M
+########################################################################
+
+======================================================================
+  US UNIVERSE  —  zerotrade1M (standalone)
+  D1 = worst | D10 = best | LS = D10 − D1
+======================================================================
+             Avg Monthly Return (%)  Avg N Companies  t-stat
+D1                            0.768            196.0     NaN
+D2                            0.907            195.0     NaN
+D3                            0.975            195.0     NaN
+D4                            1.034            195.0     NaN
+D5                            0.986            195.0     NaN
+D6                            1.078            195.0     NaN
+D7                            0.939            195.0     NaN
+D8                            1.016            195.0     NaN
+D9                            0.975            195.0     NaN
+D10                           0.981            196.0     NaN
+LS (D10−D1)                   0.574              NaN  2.1171
+
+  --- IC Summary (Spearman, continuous score) ---
+  Mean IC   : 0.0155
+  Std IC    : 0.0983
+  ICIR      : 0.1581
+  t-stat    : 2.6273   (Newey-West 3 lags: 2.6261)
+  % Positive: 54.3%
+  Halves    : first 138m +0.0148 | second 138m +0.0163
+  Months    : 276
+  Decay     : h1=+0.0161  h2=+0.0177  h3=+0.0169  h6=+0.0149  h12=+0.0141
+
+  --- LS Portfolio Economics (equal-weight D10−D1, gross) ---
+  Ann. Return     : 6.89%
+  Ann. Volatility : 15.61%
+  Sharpe Ratio    : 0.4414   (LS t NW: 2.15)
+  Max Drawdown    : -45.82%
+  Calmar Ratio    : 0.1504
+  Hit Rate        : 59.8%  (165/276 months)
+  LS Months       : 276 of 276 (0 with no D10−D1)
+  Avg D10 Turnover: 39.5% per month
+  Avg D1  Turnover: 40.1% per month
+  LS in Down Mkt  : 1.14%  (avg over 62 months where mkt < -3%)
+
+  --- Market hedge (ex-ante trailing beta on the universe's cap-weighted return) ---
+  Hedge           : ON — window 36m, min 12m; 264 of 276 months hedged (beta = 0 before the minimum history). Every LS figure above is the HEDGED series.
+  Raw LS          : 2.56%/yr  vol 19.00%  Sharpe 0.1348  MaxDD -61.00%
+  Beta            : trailing mean -0.679  last -0.746  full-window OLS of the raw LS -0.727
+
+  --- Regime diagnostics (date-free; never a bar) ---
+  Sharpe ex top-3 LS years : 0.2812  (years 2007,2011,2014; they carry 42% of the summed LS return)
+  Sharpe by market state    : bear 0.1328 (64 m)  bull 0.7002 (200 m)   (state = sign of the trailing 12m market return, ex ante)
+
+  --- Annual IC ---
+      Mean IC  Std IC    ICIR
+DATE                         
+1999  -0.0177  0.0784 -0.2253
+2000   0.0480  0.1518  0.3164
+2001   0.0412  0.1268  0.3253
+2002   0.0495  0.0876  0.5653
+2003  -0.0316  0.0711 -0.4449
+2004   0.0034  0.0835  0.0405
+2005  -0.0021  0.0950 -0.0222
+2006   0.0248  0.1133  0.2192
+2007   0.0263  0.0568  0.4630
+2008   0.0526  0.0743  0.7085
+2009  -0.0386  0.0969 -0.3980
+2010  -0.0051  0.0930 -0.0545
+2011   0.0580  0.0941  0.6163
+2012   0.0033  0.0906  0.0368
+2013   0.0011  0.0698  0.0160
+2014   0.0310  0.0843  0.3683
+2015   0.0455  0.0702  0.6482
+2016  -0.0072  0.1069 -0.0672
+2017   0.0199  0.0818  0.2427
+2018   0.0453  0.0799  0.5663
+2019   0.0088  0.1039  0.0851
+2020  -0.0453  0.1230 -0.3681
+2021   0.0462  0.1440  0.3210
+
+  --- Annual LS Return (%) ---
+DATE
+1999   -29.14
+2000     6.14
+2001     4.95
+2002    -6.21
+2003    11.52
+2004    13.02
+2005     7.46
+2006    20.45
+2007    22.22
+2008     1.86
+2009   -13.05
+2010     4.27
+2011    25.88
+2012     4.66
+2013     9.76
+2014    24.43
+2015    15.39
+2016    -1.84
+2017    16.84
+2018     9.07
+2019    16.35
+2020   -19.85
+2021    10.16
+
+
+  Per-(region × liq_tier) diagnostics
+========================================================================
+
+  IC + LS economics by (region × tier)
+  -- LS uses bucket-internal deciles (D10−D1 within bucket), RAW (unhedged) --
+
+region  tier  months  ls_months  avg_N  mean_IC   ICIR  IC_tstat  %_pos  LS_ann_%  LS_vol_%  LS_Sharpe  LS_MaxDD_%  LS_hit_%
+    US  MEGA     276        276    392   0.0134 0.0755      1.25   50.7     -0.20     30.20     -0.007      -83.55      48.9
+    US   MID     276        276    585   0.0192 0.1614      2.68   56.5      0.86     20.74      0.041      -55.61      54.0
+    US SMALL     276        276    974   0.0110 0.1395      2.32   58.0     -0.02     15.19     -0.002      -65.23      54.3
+   ALL   ALL     276        276   1952   0.0155 0.1581      2.63   54.3      2.56     19.00      0.135      -61.00      55.8
+
+  ICIR pivot:
+tier     MEGA    MID  SMALL    ALL
+region                            
+US      0.076  0.161   0.14    NaN
+ALL       NaN    NaN    NaN  0.158
+
+  LS_Sharpe pivot:
+tier     MEGA    MID  SMALL    ALL
+region                            
+US     -0.007  0.041 -0.002    NaN
+ALL       NaN    NaN    NaN  0.135
+
+  LS_ann_% pivot:
+tier    MEGA   MID  SMALL   ALL
+region                         
+US      -0.2  0.86  -0.02   NaN
+ALL      NaN   NaN    NaN  2.56
+
+  avg_N pivot:
+tier     MEGA    MID  SMALL     ALL
+region                             
+US      392.0  585.0  974.0     NaN
+ALL       NaN    NaN    NaN  1952.0
+
+
+  --- Per-leg coverage (% of universe-months with a non-null leg) ---
+    f_zt1m                        99.38%  #########################
+
+  Coverage by sector (worst-covered sector first):
+                        f_zt1m
+sector                        
+Technology                99.0
+Communication Services    99.1
+Energy                    99.1
+Consumer Defensive        99.1
+Financial Services        99.4
+Healthcare                99.4
+Real Estate               99.5
+Industrials               99.6
+Utilities                 99.6
+Basic Materials           99.7
+Consumer Cyclical         99.7
+
+  --- Forward-return composition ---
+    full                                539,914   99.56%
+    partial_delisted_merger               2,347    0.43%
+    partial_delisted_performance             21    0.00%
+
+
+  --- Survivorship-bias check ---
+
+  Names appearing in year-Y but ABSENT in 2021
+  (= delisted/merged/acquired — confirms NO survivorship bias)
+
+    Year   Total IDs      Gone by 2021       %
+  ------  ----------  ----------------  ------
+    1999       3,225             2,448   75.9%
+    2003       2,322             1,433   61.7%
+    2008       2,171             1,075   49.5%
+    2015       2,280               748   32.8%
+    2020       2,283               156    6.8%
+
+  >5% gone confirms delisted names ARE retained at historical dates.
+  (a universe accidentally built from TODAY's tickers would show ~0%)
+
+  --- Stage 1 bars (ALL must hold) ---
+    ic_mean                        +0.015549  >= 0.01        PASS
+    ic_tstat_nw                    +2.626066  >= 2.5         PASS
+    ic_half_min                    +0.014817  >= 0.0         PASS
+    ls_raw_ann_return_pct          +2.560061  >= 0.0         PASS
+    coverage_pct                  +99.375602  >= 40.0        PASS
+    avg_names_per_decile         +195.252174  >= 30          PASS
+    ls_n_months                  +276.000000  >= 248         PASS
+
+  STAGE 1 VERDICT: PASS — earns a Stage 2 rung.
+
+
+########################################################################
+#  STAGE 1 : zerotrade6M
+########################################################################
+
+======================================================================
+  US UNIVERSE  —  zerotrade6M (standalone)
+  D1 = worst | D10 = best | LS = D10 − D1
+======================================================================
+             Avg Monthly Return (%)  Avg N Companies  t-stat
+D1                            0.681            192.0     NaN
+D2                            0.971            192.0     NaN
+D3                            0.935            192.0     NaN
+D4                            0.982            192.0     NaN
+D5                            1.014            192.0     NaN
+D6                            1.043            192.0     NaN
+D7                            1.100            192.0     NaN
+D8                            1.034            192.0     NaN
+D9                            1.032            192.0     NaN
+D10                           1.030            192.0     NaN
+LS (D10−D1)                   0.743              NaN  2.8864
+
+  --- IC Summary (Spearman, continuous score) ---
+  Mean IC   : 0.0185
+  Std IC    : 0.1033
+  ICIR      : 0.1796
+  t-stat    : 2.9831   (Newey-West 3 lags: 2.9273)
+  % Positive: 54.0%
+  Halves    : first 138m +0.0160 | second 138m +0.0211
+  Months    : 276
+  Decay     : h1=+0.0190  h2=+0.0184  h3=+0.0179  h6=+0.0159  h12=+0.0145
+
+  --- LS Portfolio Economics (equal-weight D10−D1, gross) ---
+  Ann. Return     : 8.92%
+  Ann. Volatility : 14.82%
+  Sharpe Ratio    : 0.6019   (LS t NW: 2.90)
+  Max Drawdown    : -41.50%
+  Calmar Ratio    : 0.2149
+  Hit Rate        : 63.4%  (175/276 months)
+  LS Months       : 276 of 276 (0 with no D10−D1)
+  Avg D10 Turnover: 16.3% per month
+  Avg D1  Turnover: 11.6% per month
+  LS in Down Mkt  : 1.36%  (avg over 61 months where mkt < -3%)
+
+  --- Market hedge (ex-ante trailing beta on the universe's cap-weighted return) ---
+  Hedge           : ON — window 36m, min 12m; 264 of 276 months hedged (beta = 0 before the minimum history). Every LS figure above is the HEDGED series.
+  Raw LS          : 4.19%/yr  vol 18.51%  Sharpe 0.2264  MaxDD -56.69%
+  Beta            : trailing mean -0.703  last -0.702  full-window OLS of the raw LS -0.732
+
+  --- Regime diagnostics (date-free; never a bar) ---
+  Sharpe ex top-3 LS years : 0.4265  (years 2000,2007,2011; they carry 40% of the summed LS return)
+  Sharpe by market state    : bear 0.0994 (64 m)  bull 0.9544 (200 m)   (state = sign of the trailing 12m market return, ex ante)
+
+  --- Annual IC ---
+      Mean IC  Std IC    ICIR
+DATE                         
+1999  -0.0229  0.0786 -0.2914
+2000   0.0627  0.1503  0.4173
+2001   0.0335  0.1336  0.2509
+2002   0.0539  0.0976  0.5520
+2003  -0.0309  0.0760 -0.4069
+2004   0.0012  0.0879  0.0131
+2005  -0.0047  0.1017 -0.0461
+2006   0.0303  0.1122  0.2697
+2007   0.0287  0.0628  0.4566
+2008   0.0558  0.0737  0.7575
+2009  -0.0363  0.0959 -0.3783
+2010  -0.0024  0.0917 -0.0261
+2011   0.0646  0.0956  0.6760
+2012   0.0005  0.0987  0.0052
+2013   0.0054  0.0698  0.0770
+2014   0.0296  0.0833  0.3553
+2015   0.0569  0.0784  0.7248
+2016  -0.0008  0.1124 -0.0067
+2017   0.0221  0.0851  0.2597
+2018   0.0500  0.0831  0.6012
+2019   0.0083  0.1128  0.0733
+2020  -0.0409  0.1255 -0.3263
+2021   0.0622  0.1681  0.3698
+
+  --- Annual LS Return (%) ---
+DATE
+1999   -28.86
+2000    37.46
+2001    -1.70
+2002    -9.19
+2003    17.14
+2004     7.98
+2005     2.51
+2006    22.74
+2007    24.13
+2008     3.02
+2009   -13.27
+2010     4.26
+2011    27.32
+2012     6.82
+2013    18.50
+2014    22.98
+2015    20.20
+2016    -3.64
+2017    18.92
+2018    11.42
+2019    17.47
+2020   -15.17
+2021    22.49
+
+
+  Per-(region × liq_tier) diagnostics
+========================================================================
+
+  IC + LS economics by (region × tier)
+  -- LS uses bucket-internal deciles (D10−D1 within bucket), RAW (unhedged) --
+
+region  tier  months  ls_months  avg_N  mean_IC   ICIR  IC_tstat  %_pos  LS_ann_%  LS_vol_%  LS_Sharpe  LS_MaxDD_%  LS_hit_%
+    US  MEGA     276        276    388   0.0129 0.0723      1.20   49.6     -2.95     29.96     -0.098      -91.08      47.5
+    US   MID     276        276    577   0.0206 0.1678      2.79   57.2      1.71     20.04      0.085      -48.60      53.6
+    US SMALL     276        276    950   0.0169 0.1954      3.25   58.0      2.80     16.52      0.169      -53.19      55.4
+   ALL   ALL     276        276   1917   0.0185 0.1796      2.98   54.0      4.19     18.51      0.226      -56.69      53.3
+
+  ICIR pivot:
+tier     MEGA    MID  SMALL   ALL
+region                           
+US      0.072  0.168  0.195   NaN
+ALL       NaN    NaN    NaN  0.18
+
+  LS_Sharpe pivot:
+tier     MEGA    MID  SMALL    ALL
+region                            
+US     -0.098  0.085  0.169    NaN
+ALL       NaN    NaN    NaN  0.226
+
+  LS_ann_% pivot:
+tier    MEGA   MID  SMALL   ALL
+region                         
+US     -2.95  1.71    2.8   NaN
+ALL      NaN   NaN    NaN  4.19
+
+  avg_N pivot:
+tier     MEGA    MID  SMALL     ALL
+region                             
+US      388.0  577.0  950.0     NaN
+ALL       NaN    NaN    NaN  1917.0
+
+
+  --- Per-leg coverage (% of universe-months with a non-null leg) ---
+    f_zt6m                        97.59%  ########################
+
+  Coverage by sector (worst-covered sector first):
+                        f_zt6m
+sector                        
+Communication Services    95.4
+Technology                95.7
+Energy                    97.6
+Healthcare                97.6
+Consumer Defensive        97.9
+Financial Services        98.2
+Real Estate               98.3
+Basic Materials           98.3
+Consumer Cyclical         98.4
+Industrials               98.5
+Utilities                 98.7
+
+  --- Forward-return composition ---
+    full                                539,914   99.56%
+    partial_delisted_merger               2,347    0.43%
+    partial_delisted_performance             21    0.00%
+
+
+  --- Survivorship-bias check ---
+
+  Names appearing in year-Y but ABSENT in 2021
+  (= delisted/merged/acquired — confirms NO survivorship bias)
+
+    Year   Total IDs      Gone by 2021       %
+  ------  ----------  ----------------  ------
+    1999       3,225             2,448   75.9%
+    2003       2,322             1,433   61.7%
+    2008       2,171             1,075   49.5%
+    2015       2,280               748   32.8%
+    2020       2,283               156    6.8%
+
+  >5% gone confirms delisted names ARE retained at historical dates.
+  (a universe accidentally built from TODAY's tickers would show ~0%)
+
+  --- Stage 1 bars (ALL must hold) ---
+    ic_mean                        +0.018548  >= 0.01        PASS
+    ic_tstat_nw                    +2.927305  >= 2.5         PASS
+    ic_half_min                    +0.016040  >= 0.0         PASS
+    ls_raw_ann_return_pct          +4.190425  >= 0.0         PASS
+    coverage_pct                  +97.592765  >= 40.0        PASS
+    avg_names_per_decile         +191.749275  >= 30          PASS
+    ls_n_months                  +276.000000  >= 248         PASS
+
+  STAGE 1 VERDICT: PASS — earns a Stage 2 rung.
+
+
+########################################################################
+#  STAGE 1 : BidAskSpreadFlip
+########################################################################
+
+======================================================================
+  US UNIVERSE  —  BidAskSpreadFlip (standalone)
+  D1 = worst | D10 = best | LS = D10 − D1
+======================================================================
+             Avg Monthly Return (%)  Avg N Companies  t-stat
+D1                            0.881            195.0     NaN
+D2                            0.951            195.0     NaN
+D3                            0.971            195.0     NaN
+D4                            0.958            195.0     NaN
+D5                            0.963            195.0     NaN
+D6                            0.977            194.0     NaN
+D7                            0.978            195.0     NaN
+D8                            0.983            195.0     NaN
+D9                            1.018            195.0     NaN
+D10                           0.970            195.0     NaN
+LS (D10−D1)                   0.727              NaN  2.3249
+
+  --- IC Summary (Spearman, continuous score) ---
+  Mean IC   : 0.0206
+  Std IC    : 0.1246
+  ICIR      : 0.1651
+  t-stat    : 2.7426   (Newey-West 3 lags: 2.7628)
+  % Positive: 55.1%
+  Halves    : first 138m +0.0198 | second 138m +0.0214
+  Months    : 276
+  Decay     : h1=+0.0190  h2=+0.0182  h3=+0.0178  h6=+0.0138  h12=+0.0137
+
+  --- LS Portfolio Economics (equal-weight D10−D1, gross) ---
+  Ann. Return     : 8.72%
+  Ann. Volatility : 18.00%
+  Sharpe Ratio    : 0.4848   (LS t NW: 2.21)
+  Max Drawdown    : -48.98%
+  Calmar Ratio    : 0.1781
+  Hit Rate        : 62.0%  (171/276 months)
+  LS Months       : 276 of 276 (0 with no D10−D1)
+  Avg D10 Turnover: 66.1% per month
+  Avg D1  Turnover: 60.0% per month
+  LS in Down Mkt  : 1.85%  (avg over 62 months where mkt < -3%)
+
+  --- Market hedge (ex-ante trailing beta on the universe's cap-weighted return) ---
+  Hedge           : ON — window 36m, min 12m; 264 of 276 months hedged (beta = 0 before the minimum history). Every LS figure above is the HEDGED series.
+  Raw LS          : 1.07%/yr  vol 23.26%  Sharpe 0.0458  MaxDD -74.10%
+  Beta            : trailing mean -0.944  last -0.743  full-window OLS of the raw LS -0.979
+
+  --- Regime diagnostics (date-free; never a bar) ---
+  Sharpe ex top-3 LS years : 0.2951  (years 2000,2014,2021; they carry 58% of the summed LS return)
+  Sharpe by market state    : bear -0.2436 (64 m)  bull 0.9564 (200 m)   (state = sign of the trailing 12m market return, ex ante)
+
+  --- Annual IC ---
+      Mean IC  Std IC    ICIR
+DATE                         
+1999  -0.0076  0.0797 -0.0958
+2000   0.0967  0.1554  0.6218
+2001   0.0265  0.1665  0.1591
+2002   0.0560  0.1484  0.3777
+2003  -0.0347  0.0896 -0.3878
+2004  -0.0062  0.0983 -0.0629
+2005   0.0131  0.1012  0.1296
+2006   0.0132  0.1115  0.1187
+2007   0.0279  0.0677  0.4117
+2008   0.0442  0.0722  0.6130
+2009  -0.0275  0.1596 -0.1721
+2010  -0.0082  0.1710 -0.0477
+2011   0.0651  0.1343  0.4847
+2012  -0.0001  0.1189 -0.0010
+2013  -0.0077  0.0828 -0.0926
+2014   0.0489  0.1312  0.3729
+2015   0.0417  0.0995  0.4192
+2016  -0.0073  0.1411 -0.0515
+2017   0.0194  0.1039  0.1870
+2018   0.0528  0.1255  0.4208
+2019   0.0093  0.1234  0.0751
+2020  -0.0304  0.1310 -0.2322
+2021   0.0880  0.1629  0.5402
+
+  --- Annual LS Return (%) ---
+DATE
+1999   -32.83
+2000    50.00
+2001   -12.71
+2002    -5.93
+2003    14.28
+2004    13.72
+2005    10.97
+2006    19.84
+2007    20.00
+2008    -5.98
+2009   -29.93
+2010     8.35
+2011    25.34
+2012    12.80
+2013    17.09
+2014    27.65
+2015    16.56
+2016     2.59
+2017    18.95
+2018     5.23
+2019    24.43
+2020   -25.28
+2021    40.17
+
+
+  Per-(region × liq_tier) diagnostics
+========================================================================
+
+  IC + LS economics by (region × tier)
+  -- LS uses bucket-internal deciles (D10−D1 within bucket), RAW (unhedged) --
+
+region  tier  months  ls_months  avg_N  mean_IC   ICIR  IC_tstat  %_pos  LS_ann_%  LS_vol_%  LS_Sharpe  LS_MaxDD_%  LS_hit_%
+    US  MEGA     276        276    391   0.0179 0.1195      1.98   50.0      2.48     28.26      0.088      -82.45      50.0
+    US   MID     276        276    585   0.0196 0.1412      2.35   56.2      0.82     25.31      0.032      -69.96      54.0
+    US SMALL     276        276    970   0.0216 0.1901      3.16   56.9      1.53     22.95      0.067      -76.34      49.6
+   ALL   ALL     276        276   1947   0.0206 0.1651      2.74   55.1      1.07     23.26      0.046      -74.10      51.8
+
+  ICIR pivot:
+tier    MEGA    MID  SMALL    ALL
+region                           
+US      0.12  0.141   0.19    NaN
+ALL      NaN    NaN    NaN  0.165
+
+  LS_Sharpe pivot:
+tier     MEGA    MID  SMALL    ALL
+region                            
+US      0.088  0.032  0.067    NaN
+ALL       NaN    NaN    NaN  0.046
+
+  LS_ann_% pivot:
+tier    MEGA   MID  SMALL   ALL
+region                         
+US      2.48  0.82   1.53   NaN
+ALL      NaN   NaN    NaN  1.07
+
+  avg_N pivot:
+tier     MEGA    MID  SMALL     ALL
+region                             
+US      391.0  585.0  970.0     NaN
+ALL       NaN    NaN    NaN  1947.0
+
+
+  --- Per-leg coverage (% of universe-months with a non-null leg) ---
+    f_bidaskspreadflip            99.13%  #########################
+
+  Coverage by sector (worst-covered sector first):
+                        f_bidaskspreadflip
+sector                                    
+Communication Services                98.2
+Technology                            98.4
+Healthcare                            99.0
+Energy                                99.3
+Consumer Cyclical                     99.3
+Basic Materials                       99.4
+Financial Services                    99.4
+Consumer Defensive                    99.5
+Real Estate                           99.5
+Industrials                           99.5
+Utilities                             99.7
+
+  --- Forward-return composition ---
+    full                                539,914   99.56%
+    partial_delisted_merger               2,347    0.43%
+    partial_delisted_performance             21    0.00%
+
+
+  --- Survivorship-bias check ---
+
+  Names appearing in year-Y but ABSENT in 2021
+  (= delisted/merged/acquired — confirms NO survivorship bias)
+
+    Year   Total IDs      Gone by 2021       %
+  ------  ----------  ----------------  ------
+    1999       3,225             2,448   75.9%
+    2003       2,322             1,433   61.7%
+    2008       2,171             1,075   49.5%
+    2015       2,280               748   32.8%
+    2020       2,283               156    6.8%
+
+  >5% gone confirms delisted names ARE retained at historical dates.
+  (a universe accidentally built from TODAY's tickers would show ~0%)
+
+  --- Stage 1 bars (ALL must hold) ---
+    ic_mean                        +0.020576  >= 0.01        PASS
+    ic_tstat_nw                    +2.762832  >= 2.5         PASS
+    ic_half_min                    +0.019759  >= 0.0         PASS
+    ls_raw_ann_return_pct          +1.066357  >= 0.0         PASS
+    coverage_pct                  +99.127207  >= 40.0        PASS
+    avg_names_per_decile         +194.764130  >= 30          PASS
+    ls_n_months                  +276.000000  >= 248         PASS
+
+  STAGE 1 VERDICT: PASS — earns a Stage 2 rung.
+
+========================================================================
+  DONE — total runtime: 33m 47s   (11 result block(s))
+========================================================================
+
+--- BEGIN RESULT BLOCK ---
+stage: 1
+factor: VolumeTrend
+harness_sha: 73a95d352942
+config_sha: 0d88328d5b10
+data_sha: 198b281de1a0
+universe_sha: 1c6512b922a8
+eval_start: 1999-01-01
+eval_end: 2021-12-31
+include_holdout: False
+dimension_overrides: {}
+history_gates: {'f_voltrend': 59}
+batch_size: 11
+batch_members: VolumeTrend,XFIN,cfp,dNoa,grcapx,grcapx3y,roaq,zerotrade12M,zerotrade1M,zerotrade6M,BidAskSpreadFlip
+declaration_order: 1
+coverage_pct: 66.295212
+stage1_decision: PASS
+stage1_bars_failed: (none)
+preflight_masspoint_max_pct: 0.064851
+preflight_qcut_min_bins: 0
+preflight_coverage_min_pct: 0.000000
+ic_mean: 0.011364
+ic_std: 0.058535
+icir: 0.194145
+ic_tstat: 2.931520
+ic_tstat_nw: 2.869779
+ic_pct_positive: 56.140351
+n_months: 228
+ic_half1_mean: 0.009133
+ic_half2_mean: 0.013596
+ic_half_min: 0.009133
+ls_mean_monthly: 0.004209
+ls_tstat: 2.881929
+ls_tstat_nw: 2.657508
+ls_ann_return_pct: 5.050555
+ls_ann_vol_pct: 7.638931
+ls_sharpe: 0.661160
+ls_maxdd_pct: -32.677153
+ls_calmar: 0.154559
+ls_hit_rate_pct: 60.964912
+ls_n_months: 228
+ls_n_months_missing: 0
+turnover_d10_pct: 10.182725
+turnover_d1_pct: 9.381627
+ls_down_mkt_pct: 0.531867
+n_down_months: 41
+avg_names_per_decile: 157.678509
+decile_avg_ret_pct: 1.023,1.128,1.137,1.136,1.101,1.102,1.209,1.143,1.213,1.223
+ls_raw_ann_return_pct: 2.399914
+ls_raw_ann_vol_pct: 8.124857
+ls_raw_sharpe: 0.295379
+ls_raw_maxdd_pct: -35.937792
+ls_beta_mean: -0.231341
+ls_beta_last: -0.224176
+ls_beta_fullwindow: -0.232902
+ls_hedged_months: 216
+hedge_on: True
+ls_sharpe_ex_top_years: 0.330737
+ls_top_years: 2011,2014,2021
+ls_top_years_share_pct: 62.211748
+ls_sharpe_bear: 0.000175
+ls_sharpe_bull: 0.810562
+n_bear_months: 40
+n_bull_months: 188
+ic_decay_h1: 0.011833
+ic_decay_h2: 0.011609
+ic_decay_h3: 0.012025
+ic_decay_h6: 0.013085
+ic_decay_h12: 0.012792
+tier_MEGA_ic_mean: 0.004700
+tier_MEGA_ls_sharpe: -0.100000
+tier_MEGA_avg_n: 349
+tier_MID_ic_mean: 0.017000
+tier_MID_ls_sharpe: 0.423000
+tier_MID_avg_n: 486
+tier_SMALL_ic_mean: 0.007500
+tier_SMALL_ls_sharpe: 0.188000
+tier_SMALL_avg_n: 740
+leg_coverage_worst_leg: f_voltrend
+leg_coverage_worst_pct: 66.295212
+leg_coverage_mean_legs: 1.000000
+leg_coverage_pct_full: 100.000000
+leg_coverage_pct_half_or_less: 0.000000
+leg_coverage_worst_sector: Communication Services
+leg_coverage_worst_sector_mean_pct: 53.104925
+delisting_adjusted_pct: 0.436673
+survivorship_max_gone_pct: 75.906977
+--- END RESULT BLOCK ---
+
+--- BEGIN RESULT BLOCK ---
+stage: 1
+factor: XFIN
+harness_sha: 73a95d352942
+config_sha: 0d88328d5b10
+data_sha: 198b281de1a0
+universe_sha: 1c6512b922a8
+eval_start: 1999-01-01
+eval_end: 2021-12-31
+include_holdout: False
+dimension_overrides: {}
+history_gates: {}
+batch_size: 11
+batch_members: VolumeTrend,XFIN,cfp,dNoa,grcapx,grcapx3y,roaq,zerotrade12M,zerotrade1M,zerotrade6M,BidAskSpreadFlip
+declaration_order: 2
+coverage_pct: 95.637878
+stage1_decision: PASS
+stage1_bars_failed: (none)
+preflight_masspoint_max_pct: 0.286533
+preflight_qcut_min_bins: 10
+preflight_coverage_min_pct: 51.819377
+ic_mean: 0.017006
+ic_std: 0.073973
+icir: 0.229892
+ic_tstat: 3.819246
+ic_tstat_nw: 3.570243
+ic_pct_positive: 56.884058
+n_months: 276
+ic_half1_mean: 0.023511
+ic_half2_mean: 0.010501
+ic_half_min: 0.010501
+ls_mean_monthly: 0.007176
+ls_tstat: 3.518960
+ls_tstat_nw: 3.397479
+ls_ann_return_pct: 8.611745
+ls_ann_vol_pct: 11.736558
+ls_sharpe: 0.733754
+ls_maxdd_pct: -25.684096
+ls_calmar: 0.335295
+ls_hit_rate_pct: 61.594203
+ls_n_months: 276
+ls_n_months_missing: 0
+turnover_d10_pct: 14.761564
+turnover_d1_pct: 16.710418
+ls_down_mkt_pct: 1.167203
+n_down_months: 60
+avg_names_per_decile: 187.908333
+decile_avg_ret_pct: 0.618,0.915,0.868,1.017,1.029,1.014,1.064,1.160,1.090,1.166
+ls_raw_ann_return_pct: 6.568956
+ls_raw_ann_vol_pct: 13.756291
+ls_raw_sharpe: 0.477524
+ls_raw_maxdd_pct: -38.074740
+ls_beta_mean: -0.421701
+ls_beta_last: -0.459294
+ls_beta_fullwindow: -0.473269
+ls_hedged_months: 264
+hedge_on: True
+ls_sharpe_ex_top_years: 0.484195
+ls_top_years: 2000,2006,2021
+ls_top_years_share_pct: 56.447948
+ls_sharpe_bear: 0.565925
+ls_sharpe_bull: 0.878702
+n_bear_months: 64
+n_bull_months: 200
+ic_decay_h1: 0.015825
+ic_decay_h2: 0.014930
+ic_decay_h3: 0.014248
+ic_decay_h6: 0.013635
+ic_decay_h12: 0.012989
+tier_MEGA_ic_mean: 0.018200
+tier_MEGA_ls_sharpe: 0.215000
+tier_MEGA_avg_n: 384
+tier_MID_ic_mean: 0.016200
+tier_MID_ls_sharpe: 0.329000
+tier_MID_avg_n: 567
+tier_SMALL_ic_mean: 0.016200
+tier_SMALL_ls_sharpe: 0.700000
+tier_SMALL_avg_n: 927
+leg_coverage_worst_leg: f_xfin
+leg_coverage_worst_pct: 95.637878
+leg_coverage_mean_legs: 1.000000
+leg_coverage_pct_full: 100.000000
+leg_coverage_pct_half_or_less: 0.000000
+leg_coverage_worst_sector: Communication Services
+leg_coverage_worst_sector_mean_pct: 92.505353
+delisting_adjusted_pct: 0.436673
+survivorship_max_gone_pct: 75.906977
+--- END RESULT BLOCK ---
+
+--- BEGIN RESULT BLOCK ---
+stage: 1
+factor: cfp
+harness_sha: 73a95d352942
+config_sha: 0d88328d5b10
+data_sha: 198b281de1a0
+universe_sha: 1c6512b922a8
+eval_start: 1999-01-01
+eval_end: 2021-12-31
+include_holdout: False
+dimension_overrides: {}
+history_gates: {}
+batch_size: 11
+batch_members: VolumeTrend,XFIN,cfp,dNoa,grcapx,grcapx3y,roaq,zerotrade12M,zerotrade1M,zerotrade6M,BidAskSpreadFlip
+declaration_order: 3
+coverage_pct: 95.672731
+stage1_decision: PASS
+stage1_bars_failed: (none)
+preflight_masspoint_max_pct: 0.084602
+preflight_qcut_min_bins: 10
+preflight_coverage_min_pct: 51.819377
+ic_mean: 0.024642
+ic_std: 0.094268
+icir: 0.261406
+ic_tstat: 4.342800
+ic_tstat_nw: 3.651526
+ic_pct_positive: 57.246377
+n_months: 276
+ic_half1_mean: 0.039073
+ic_half2_mean: 0.010212
+ic_half_min: 0.010212
+ls_mean_monthly: 0.006221
+ls_tstat: 2.446183
+ls_tstat_nw: 2.249571
+ls_ann_return_pct: 7.465551
+ls_ann_vol_pct: 14.636483
+ls_sharpe: 0.510065
+ls_maxdd_pct: -51.106948
+ls_calmar: 0.146077
+ls_hit_rate_pct: 52.898551
+ls_n_months: 276
+ls_n_months_missing: 0
+turnover_d10_pct: 16.443244
+turnover_d1_pct: 16.737605
+ls_down_mkt_pct: 1.132435
+n_down_months: 60
+avg_names_per_decile: 187.976812
+decile_avg_ret_pct: 0.617,0.683,0.858,0.909,0.899,1.008,1.058,1.139,1.366,1.405
+ls_raw_ann_return_pct: 9.449864
+ls_raw_ann_vol_pct: 15.131575
+ls_raw_sharpe: 0.624513
+ls_raw_maxdd_pct: -47.031494
+ls_beta_mean: -0.140448
+ls_beta_last: 0.102199
+ls_beta_fullwindow: -0.129694
+ls_hedged_months: 264
+hedge_on: True
+ls_sharpe_ex_top_years: 0.245827
+ls_top_years: 2000,2002,2021
+ls_top_years_share_pct: 68.323984
+ls_sharpe_bear: 0.880324
+ls_sharpe_bull: 0.397680
+n_bear_months: 64
+n_bull_months: 200
+ic_decay_h1: 0.017424
+ic_decay_h2: 0.016582
+ic_decay_h3: 0.016809
+ic_decay_h6: 0.013104
+ic_decay_h12: 0.015216
+tier_MEGA_ic_mean: 0.017500
+tier_MEGA_ls_sharpe: 0.333000
+tier_MEGA_avg_n: 384
+tier_MID_ic_mean: 0.022200
+tier_MID_ls_sharpe: 0.564000
+tier_MID_avg_n: 567
+tier_SMALL_ic_mean: 0.028200
+tier_SMALL_ls_sharpe: 0.658000
+tier_SMALL_avg_n: 927
+leg_coverage_worst_leg: f_cfp
+leg_coverage_worst_pct: 95.672731
+leg_coverage_mean_legs: 1.000000
+leg_coverage_pct_full: 100.000000
+leg_coverage_pct_half_or_less: 0.000000
+leg_coverage_worst_sector: Communication Services
+leg_coverage_worst_sector_mean_pct: 92.182276
+delisting_adjusted_pct: 0.436673
+survivorship_max_gone_pct: 75.906977
+--- END RESULT BLOCK ---
+
+--- BEGIN RESULT BLOCK ---
+stage: 1
+factor: dNoa
+harness_sha: 73a95d352942
+config_sha: 0d88328d5b10
+data_sha: 198b281de1a0
+universe_sha: 1c6512b922a8
+eval_start: 1999-01-01
+eval_end: 2021-12-31
+include_holdout: False
+dimension_overrides: {}
+history_gates: {}
+batch_size: 11
+batch_members: VolumeTrend,XFIN,cfp,dNoa,grcapx,grcapx3y,roaq,zerotrade12M,zerotrade1M,zerotrade6M,BidAskSpreadFlip
+declaration_order: 4
+coverage_pct: 95.232001
+stage1_decision: FAIL
+stage1_bars_failed: ic_mean,ic_tstat_nw,ic_half_min
+preflight_masspoint_max_pct: 0.090909
+preflight_qcut_min_bins: 10
+preflight_coverage_min_pct: 48.224463
+ic_mean: 0.007717
+ic_std: 0.052275
+icir: 0.147629
+ic_tstat: 2.452592
+ic_tstat_nw: 2.188507
+ic_pct_positive: 59.057971
+n_months: 276
+ic_half1_mean: 0.015590
+ic_half2_mean: -0.000156
+ic_half_min: -0.000156
+ls_mean_monthly: 0.005521
+ls_tstat: 3.916381
+ls_tstat_nw: 3.189122
+ls_ann_return_pct: 6.624822
+ls_ann_vol_pct: 8.112472
+ls_sharpe: 0.816622
+ls_maxdd_pct: -27.332116
+ls_calmar: 0.242382
+ls_hit_rate_pct: 56.159420
+ls_n_months: 276
+ls_n_months_missing: 0
+turnover_d10_pct: 18.398277
+turnover_d1_pct: 15.671812
+ls_down_mkt_pct: 0.568227
+n_down_months: 61
+avg_names_per_decile: 187.110870
+decile_avg_ret_pct: 0.557,0.805,0.985,0.967,1.036,1.046,1.075,1.154,1.248,1.202
+ls_raw_ann_return_pct: 7.742273
+ls_raw_ann_vol_pct: 8.172043
+ls_raw_sharpe: 0.947410
+ls_raw_maxdd_pct: -29.998702
+ls_beta_mean: -0.023060
+ls_beta_last: -0.123861
+ls_beta_fullwindow: -0.068516
+ls_hedged_months: 264
+hedge_on: True
+ls_sharpe_ex_top_years: 0.395420
+ls_top_years: 1999,2000,2001
+ls_top_years_share_pct: 61.429553
+ls_sharpe_bear: 1.096007
+ls_sharpe_bull: 0.573878
+n_bear_months: 64
+n_bull_months: 200
+ic_decay_h1: 0.005488
+ic_decay_h2: 0.005323
+ic_decay_h3: 0.005011
+ic_decay_h6: 0.003449
+ic_decay_h12: 0.006536
+tier_MEGA_ic_mean: 0.010800
+tier_MEGA_ls_sharpe: 0.280000
+tier_MEGA_avg_n: 383
+tier_MID_ic_mean: 0.008800
+tier_MID_ls_sharpe: 0.556000
+tier_MID_avg_n: 565
+tier_SMALL_ic_mean: 0.004600
+tier_SMALL_ls_sharpe: 1.086000
+tier_SMALL_avg_n: 922
+leg_coverage_worst_leg: f_dnoa
+leg_coverage_worst_pct: 95.232001
+leg_coverage_mean_legs: 1.000000
+leg_coverage_pct_full: 100.000000
+leg_coverage_pct_half_or_less: 0.000000
+leg_coverage_worst_sector: Communication Services
+leg_coverage_worst_sector_mean_pct: 91.303204
+delisting_adjusted_pct: 0.436673
+survivorship_max_gone_pct: 75.906977
+--- END RESULT BLOCK ---
+
+--- BEGIN RESULT BLOCK ---
+stage: 1
+factor: grcapx
+harness_sha: 73a95d352942
+config_sha: 0d88328d5b10
+data_sha: 198b281de1a0
+universe_sha: 1c6512b922a8
+eval_start: 1999-01-01
+eval_end: 2021-12-31
+include_holdout: False
+dimension_overrides: {'f_grcapx': 'ARY'}
+history_gates: {}
+batch_size: 11
+batch_members: VolumeTrend,XFIN,cfp,dNoa,grcapx,grcapx3y,roaq,zerotrade12M,zerotrade1M,zerotrade6M,BidAskSpreadFlip
+declaration_order: 5
+coverage_pct: 81.012462
+stage1_decision: FAIL
+stage1_bars_failed: ic_mean,ic_tstat_nw
+preflight_masspoint_max_pct: 0.369686
+preflight_qcut_min_bins: 10
+preflight_coverage_min_pct: 23.717668
+ic_mean: 0.004078
+ic_std: 0.045918
+icir: 0.088803
+ic_tstat: 1.475312
+ic_tstat_nw: 1.374614
+ic_pct_positive: 53.623188
+n_months: 276
+ic_half1_mean: 0.006698
+ic_half2_mean: 0.001457
+ic_half_min: 0.001457
+ls_mean_monthly: 0.002830
+ls_tstat: 2.340263
+ls_tstat_nw: 2.395265
+ls_ann_return_pct: 3.396010
+ls_ann_vol_pct: 6.959342
+ls_sharpe: 0.487979
+ls_maxdd_pct: -19.022648
+ls_calmar: 0.178525
+ls_hit_rate_pct: 52.536232
+ls_n_months: 276
+ls_n_months_missing: 0
+turnover_d10_pct: 12.379442
+turnover_d1_pct: 11.670611
+ls_down_mkt_pct: 0.370324
+n_down_months: 56
+avg_names_per_decile: 159.172464
+decile_avg_ret_pct: 0.779,1.000,0.924,1.068,1.026,1.086,1.107,1.086,1.162,1.114
+ls_raw_ann_return_pct: 4.020383
+ls_raw_ann_vol_pct: 7.239585
+ls_raw_sharpe: 0.555333
+ls_raw_maxdd_pct: -16.585895
+ls_beta_mean: -0.036098
+ls_beta_last: -0.038383
+ls_beta_fullwindow: -0.078799
+ls_hedged_months: 264
+hedge_on: True
+ls_sharpe_ex_top_years: 0.262563
+ls_top_years: 2001,2003,2010
+ls_top_years_share_pct: 56.846390
+ls_sharpe_bear: 0.771007
+ls_sharpe_bull: 0.326243
+n_bear_months: 64
+n_bull_months: 200
+ic_decay_h1: 0.004097
+ic_decay_h2: 0.002994
+ic_decay_h3: 0.003852
+ic_decay_h6: 0.004404
+ic_decay_h12: 0.002727
+tier_MEGA_ic_mean: 0.004500
+tier_MEGA_ls_sharpe: 0.228000
+tier_MEGA_avg_n: 342
+tier_MID_ic_mean: 0.001800
+tier_MID_ls_sharpe: 0.007000
+tier_MID_avg_n: 489
+tier_SMALL_ic_mean: 0.003800
+tier_SMALL_ls_sharpe: 0.473000
+tier_SMALL_avg_n: 759
+leg_coverage_worst_leg: f_grcapx
+leg_coverage_worst_pct: 81.012462
+leg_coverage_mean_legs: 1.000000
+leg_coverage_pct_full: 100.000000
+leg_coverage_pct_half_or_less: 0.000000
+leg_coverage_worst_sector: Real Estate
+leg_coverage_worst_sector_mean_pct: 68.605480
+delisting_adjusted_pct: 0.436673
+survivorship_max_gone_pct: 75.906977
+--- END RESULT BLOCK ---
+
+--- BEGIN RESULT BLOCK ---
+stage: 1
+factor: grcapx3y
+harness_sha: 73a95d352942
+config_sha: 0d88328d5b10
+data_sha: 198b281de1a0
+universe_sha: 1c6512b922a8
+eval_start: 1999-01-01
+eval_end: 2021-12-31
+include_holdout: False
+dimension_overrides: {'f_grcapx3y': 'ARY'}
+history_gates: {}
+batch_size: 11
+batch_members: VolumeTrend,XFIN,cfp,dNoa,grcapx,grcapx3y,roaq,zerotrade12M,zerotrade1M,zerotrade6M,BidAskSpreadFlip
+declaration_order: 6
+coverage_pct: 72.336718
+stage1_decision: FAIL
+stage1_bars_failed: ic_mean,ic_tstat_nw
+preflight_masspoint_max_pct: 0.361011
+preflight_qcut_min_bins: 10
+preflight_coverage_min_pct: 12.143797
+ic_mean: 0.002821
+ic_std: 0.047673
+icir: 0.059178
+ic_tstat: 0.983134
+ic_tstat_nw: 0.894426
+ic_pct_positive: 53.985507
+n_months: 276
+ic_half1_mean: 0.004431
+ic_half2_mean: 0.001211
+ic_half_min: 0.001211
+ls_mean_monthly: 0.002849
+ls_tstat: 2.136563
+ls_tstat_nw: 2.119712
+ls_ann_return_pct: 3.419182
+ls_ann_vol_pct: 7.674861
+ls_sharpe: 0.445504
+ls_maxdd_pct: -22.166724
+ls_calmar: 0.154248
+ls_hit_rate_pct: 53.985507
+ls_n_months: 276
+ls_n_months_missing: 0
+turnover_d10_pct: 11.889892
+turnover_d1_pct: 11.356383
+ls_down_mkt_pct: -0.055799
+n_down_months: 54
+avg_names_per_decile: 142.126449
+decile_avg_ret_pct: 0.772,1.039,0.974,0.991,1.036,1.105,1.013,1.101,1.246,1.103
+ls_raw_ann_return_pct: 3.970816
+ls_raw_ann_vol_pct: 7.585354
+ls_raw_sharpe: 0.523485
+ls_raw_maxdd_pct: -18.878889
+ls_beta_mean: 0.002112
+ls_beta_last: -0.024638
+ls_beta_fullwindow: -0.042040
+ls_hedged_months: 264
+hedge_on: True
+ls_sharpe_ex_top_years: 0.232542
+ls_top_years: 2001,2003,2010
+ls_top_years_share_pct: 56.852421
+ls_sharpe_bear: 0.777464
+ls_sharpe_bull: 0.343720
+n_bear_months: 64
+n_bull_months: 200
+ic_decay_h1: 0.002715
+ic_decay_h2: 0.002629
+ic_decay_h3: 0.004067
+ic_decay_h6: 0.004747
+ic_decay_h12: 0.002806
+tier_MEGA_ic_mean: 0.004200
+tier_MEGA_ls_sharpe: 0.256000
+tier_MEGA_avg_n: 319
+tier_MID_ic_mean: 0.001500
+tier_MID_ls_sharpe: 0.124000
+tier_MID_avg_n: 440
+tier_SMALL_ic_mean: 0.001400
+tier_SMALL_ls_sharpe: 0.517000
+tier_SMALL_avg_n: 661
+leg_coverage_worst_leg: f_grcapx3y
+leg_coverage_worst_pct: 72.336718
+leg_coverage_mean_legs: 1.000000
+leg_coverage_pct_full: 100.000000
+leg_coverage_pct_half_or_less: 0.000000
+leg_coverage_worst_sector: Real Estate
+leg_coverage_worst_sector_mean_pct: 57.368916
+delisting_adjusted_pct: 0.436673
+survivorship_max_gone_pct: 75.906977
+--- END RESULT BLOCK ---
+
+--- BEGIN RESULT BLOCK ---
+stage: 1
+factor: roaq
+harness_sha: 73a95d352942
+config_sha: 0d88328d5b10
+data_sha: 198b281de1a0
+universe_sha: 1c6512b922a8
+eval_start: 1999-01-01
+eval_end: 2021-12-31
+include_holdout: False
+dimension_overrides: {'f_roaq': 'ARQ'}
+history_gates: {}
+batch_size: 11
+batch_members: VolumeTrend,XFIN,cfp,dNoa,grcapx,grcapx3y,roaq,zerotrade12M,zerotrade1M,zerotrade6M,BidAskSpreadFlip
+declaration_order: 7
+coverage_pct: 96.292151
+stage1_decision: PASS
+stage1_bars_failed: (none)
+preflight_masspoint_max_pct: 0.090992
+preflight_qcut_min_bins: 10
+preflight_coverage_min_pct: 96.361245
+ic_mean: 0.020781
+ic_std: 0.093401
+icir: 0.222491
+ic_tstat: 3.696292
+ic_tstat_nw: 3.366138
+ic_pct_positive: 58.333333
+n_months: 276
+ic_half1_mean: 0.023830
+ic_half2_mean: 0.017732
+ic_half_min: 0.017732
+ls_mean_monthly: 0.008289
+ls_tstat: 3.382620
+ls_tstat_nw: 3.096618
+ls_ann_return_pct: 9.947350
+ls_ann_vol_pct: 14.103214
+ls_sharpe: 0.705325
+ls_maxdd_pct: -32.744007
+ls_calmar: 0.303791
+ls_hit_rate_pct: 60.869565
+ls_n_months: 276
+ls_n_months_missing: 0
+turnover_d10_pct: 21.082217
+turnover_d1_pct: 26.561497
+ls_down_mkt_pct: 1.970047
+n_down_months: 61
+avg_names_per_decile: 189.193841
+decile_avg_ret_pct: 0.661,1.001,0.901,0.965,0.890,0.976,1.074,1.095,1.062,1.101
+ls_raw_ann_return_pct: 5.283321
+ls_raw_ann_vol_pct: 16.423689
+ls_raw_sharpe: 0.321689
+ls_raw_maxdd_pct: -54.076297
+ls_beta_mean: -0.490586
+ls_beta_last: -0.635834
+ls_beta_fullwindow: -0.583954
+ls_hedged_months: 264
+hedge_on: True
+ls_sharpe_ex_top_years: 0.386253
+ls_top_years: 2000,2002,2021
+ls_top_years_share_pct: 61.884089
+ls_sharpe_bear: 0.355800
+ls_sharpe_bull: 0.993394
+n_bear_months: 64
+n_bull_months: 200
+ic_decay_h1: 0.019878
+ic_decay_h2: 0.020681
+ic_decay_h3: 0.019028
+ic_decay_h6: 0.011190
+ic_decay_h12: 0.011541
+tier_MEGA_ic_mean: 0.023100
+tier_MEGA_ls_sharpe: 0.377000
+tier_MEGA_avg_n: 382
+tier_MID_ic_mean: 0.020400
+tier_MID_ls_sharpe: 0.296000
+tier_MID_avg_n: 569
+tier_SMALL_ic_mean: 0.020600
+tier_SMALL_ls_sharpe: 0.252000
+tier_SMALL_avg_n: 939
+leg_coverage_worst_leg: f_roaq
+leg_coverage_worst_pct: 96.292151
+leg_coverage_mean_legs: 1.000000
+leg_coverage_pct_full: 100.000000
+leg_coverage_pct_half_or_less: 0.000000
+leg_coverage_worst_sector: Technology
+leg_coverage_worst_sector_mean_pct: 95.436414
+delisting_adjusted_pct: 0.436673
+survivorship_max_gone_pct: 75.906977
+--- END RESULT BLOCK ---
+
+--- BEGIN RESULT BLOCK ---
+stage: 1
+factor: zerotrade12M
+harness_sha: 73a95d352942
+config_sha: 0d88328d5b10
+data_sha: 198b281de1a0
+universe_sha: 1c6512b922a8
+eval_start: 1999-01-01
+eval_end: 2021-12-31
+include_holdout: False
+dimension_overrides: {}
+history_gates: {'f_zt12m': 12}
+batch_size: 11
+batch_members: VolumeTrend,XFIN,cfp,dNoa,grcapx,grcapx3y,roaq,zerotrade12M,zerotrade1M,zerotrade6M,BidAskSpreadFlip
+declaration_order: 8
+coverage_pct: 94.667535
+stage1_decision: PASS
+stage1_bars_failed: (none)
+preflight_masspoint_max_pct: 0.057241
+preflight_qcut_min_bins: 0
+preflight_coverage_min_pct: 0.000000
+ic_mean: 0.017979
+ic_std: 0.102195
+icir: 0.175932
+ic_tstat: 2.917507
+ic_tstat_nw: 2.831524
+ic_pct_positive: 53.818182
+n_months: 275
+ic_half1_mean: 0.016811
+ic_half2_mean: 0.019139
+ic_half_min: 0.016811
+ls_mean_monthly: 0.007471
+ls_tstat: 3.311158
+ls_tstat_nw: 3.320805
+ls_ann_return_pct: 8.965494
+ls_ann_vol_pct: 12.961940
+ls_sharpe: 0.691678
+ls_maxdd_pct: -34.955588
+ls_calmar: 0.256482
+ls_hit_rate_pct: 64.727273
+ls_n_months: 275
+ls_n_months_missing: 0
+turnover_d10_pct: 13.247970
+turnover_d1_pct: 7.822012
+ls_down_mkt_pct: 1.518215
+n_down_months: 61
+avg_names_per_decile: 186.678182
+decile_avg_ret_pct: 0.758,0.843,1.033,1.007,1.012,1.075,1.127,1.116,1.071,1.065
+ls_raw_ann_return_pct: 3.692030
+ls_raw_ann_vol_pct: 16.897279
+ls_raw_sharpe: 0.218499
+ls_raw_maxdd_pct: -54.624947
+ls_beta_mean: -0.668499
+ls_beta_last: -0.668109
+ls_beta_fullwindow: -0.698587
+ls_hedged_months: 263
+hedge_on: True
+ls_sharpe_ex_top_years: 0.449484
+ls_top_years: 2000,2007,2011
+ls_top_years_share_pct: 42.968399
+ls_sharpe_bear: 0.097760
+ls_sharpe_bull: 1.049759
+n_bear_months: 64
+n_bull_months: 200
+ic_decay_h1: 0.017293
+ic_decay_h2: 0.017116
+ic_decay_h3: 0.015902
+ic_decay_h6: 0.013653
+ic_decay_h12: 0.013566
+tier_MEGA_ic_mean: 0.011400
+tier_MEGA_ls_sharpe: -0.067000
+tier_MEGA_avg_n: 383
+tier_MID_ic_mean: 0.018500
+tier_MID_ls_sharpe: 0.100000
+tier_MID_avg_n: 564
+tier_SMALL_ic_mean: 0.017500
+tier_SMALL_ls_sharpe: 0.238000
+tier_SMALL_avg_n: 918
+leg_coverage_worst_leg: f_zt12m
+leg_coverage_worst_pct: 94.667535
+leg_coverage_mean_legs: 1.000000
+leg_coverage_pct_full: 100.000000
+leg_coverage_pct_half_or_less: 0.000000
+leg_coverage_worst_sector: Communication Services
+leg_coverage_worst_sector_mean_pct: 90.025921
+delisting_adjusted_pct: 0.436673
+survivorship_max_gone_pct: 75.906977
+--- END RESULT BLOCK ---
+
+--- BEGIN RESULT BLOCK ---
+stage: 1
+factor: zerotrade1M
+harness_sha: 73a95d352942
+config_sha: 0d88328d5b10
+data_sha: 198b281de1a0
+universe_sha: 1c6512b922a8
+eval_start: 1999-01-01
+eval_end: 2021-12-31
+include_holdout: False
+dimension_overrides: {}
+history_gates: {'f_zt1m': 1}
+batch_size: 11
+batch_members: VolumeTrend,XFIN,cfp,dNoa,grcapx,grcapx3y,roaq,zerotrade12M,zerotrade1M,zerotrade6M,BidAskSpreadFlip
+declaration_order: 9
+coverage_pct: 99.375602
+stage1_decision: PASS
+stage1_bars_failed: (none)
+preflight_masspoint_max_pct: 0.056022
+preflight_qcut_min_bins: 10
+preflight_coverage_min_pct: 98.421745
+ic_mean: 0.015549
+ic_std: 0.098321
+icir: 0.158147
+ic_tstat: 2.627343
+ic_tstat_nw: 2.626066
+ic_pct_positive: 54.347826
+n_months: 276
+ic_half1_mean: 0.014817
+ic_half2_mean: 0.016282
+ic_half_min: 0.014817
+ls_mean_monthly: 0.005744
+ls_tstat: 2.117111
+ls_tstat_nw: 2.146558
+ls_ann_return_pct: 6.892314
+ls_ann_vol_pct: 15.612961
+ls_sharpe: 0.441448
+ls_maxdd_pct: -45.824586
+ls_calmar: 0.150406
+ls_hit_rate_pct: 59.782609
+ls_n_months: 276
+ls_n_months_missing: 0
+turnover_d10_pct: 39.529593
+turnover_d1_pct: 40.112600
+ls_down_mkt_pct: 1.139727
+n_down_months: 62
+avg_names_per_decile: 195.252174
+decile_avg_ret_pct: 0.768,0.907,0.975,1.034,0.986,1.078,0.939,1.016,0.975,0.981
+ls_raw_ann_return_pct: 2.560061
+ls_raw_ann_vol_pct: 18.996435
+ls_raw_sharpe: 0.134765
+ls_raw_maxdd_pct: -61.003286
+ls_beta_mean: -0.679014
+ls_beta_last: -0.746335
+ls_beta_fullwindow: -0.727455
+ls_hedged_months: 264
+hedge_on: True
+ls_sharpe_ex_top_years: 0.281155
+ls_top_years: 2007,2011,2014
+ls_top_years_share_pct: 41.867190
+ls_sharpe_bear: 0.132753
+ls_sharpe_bull: 0.700220
+n_bear_months: 64
+n_bull_months: 200
+ic_decay_h1: 0.016134
+ic_decay_h2: 0.017718
+ic_decay_h3: 0.016901
+ic_decay_h6: 0.014855
+ic_decay_h12: 0.014120
+tier_MEGA_ic_mean: 0.013400
+tier_MEGA_ls_sharpe: -0.007000
+tier_MEGA_avg_n: 392
+tier_MID_ic_mean: 0.019200
+tier_MID_ls_sharpe: 0.041000
+tier_MID_avg_n: 585
+tier_SMALL_ic_mean: 0.011000
+tier_SMALL_ls_sharpe: -0.002000
+tier_SMALL_avg_n: 974
+leg_coverage_worst_leg: f_zt1m
+leg_coverage_worst_pct: 99.375602
+leg_coverage_mean_legs: 1.000000
+leg_coverage_pct_full: 100.000000
+leg_coverage_pct_half_or_less: 0.000000
+leg_coverage_worst_sector: Technology
+leg_coverage_worst_sector_mean_pct: 98.994135
+delisting_adjusted_pct: 0.436673
+survivorship_max_gone_pct: 75.906977
+--- END RESULT BLOCK ---
+
+--- BEGIN RESULT BLOCK ---
+stage: 1
+factor: zerotrade6M
+harness_sha: 73a95d352942
+config_sha: 0d88328d5b10
+data_sha: 198b281de1a0
+universe_sha: 1c6512b922a8
+eval_start: 1999-01-01
+eval_end: 2021-12-31
+include_holdout: False
+dimension_overrides: {}
+history_gates: {'f_zt6m': 6}
+batch_size: 11
+batch_members: VolumeTrend,XFIN,cfp,dNoa,grcapx,grcapx3y,roaq,zerotrade12M,zerotrade1M,zerotrade6M,BidAskSpreadFlip
+declaration_order: 10
+coverage_pct: 97.592765
+stage1_decision: PASS
+stage1_bars_failed: (none)
+preflight_masspoint_max_pct: 0.056465
+preflight_qcut_min_bins: 10
+preflight_coverage_min_pct: 96.142043
+ic_mean: 0.018548
+ic_std: 0.103300
+icir: 0.179559
+ic_tstat: 2.983060
+ic_tstat_nw: 2.927305
+ic_pct_positive: 53.985507
+n_months: 276
+ic_half1_mean: 0.016040
+ic_half2_mean: 0.021057
+ic_half_min: 0.016040
+ls_mean_monthly: 0.007434
+ls_tstat: 2.886390
+ls_tstat_nw: 2.902619
+ls_ann_return_pct: 8.921051
+ls_ann_vol_pct: 14.822617
+ls_sharpe: 0.601854
+ls_maxdd_pct: -41.504077
+ls_calmar: 0.214944
+ls_hit_rate_pct: 63.405797
+ls_n_months: 276
+ls_n_months_missing: 0
+turnover_d10_pct: 16.303019
+turnover_d1_pct: 11.614785
+ls_down_mkt_pct: 1.364950
+n_down_months: 61
+avg_names_per_decile: 191.749275
+decile_avg_ret_pct: 0.681,0.971,0.935,0.982,1.014,1.043,1.100,1.034,1.032,1.030
+ls_raw_ann_return_pct: 4.190425
+ls_raw_ann_vol_pct: 18.510677
+ls_raw_sharpe: 0.226379
+ls_raw_maxdd_pct: -56.685977
+ls_beta_mean: -0.702528
+ls_beta_last: -0.702466
+ls_beta_fullwindow: -0.731875
+ls_hedged_months: 264
+hedge_on: True
+ls_sharpe_ex_top_years: 0.426546
+ls_top_years: 2000,2007,2011
+ls_top_years_share_pct: 40.223117
+ls_sharpe_bear: 0.099368
+ls_sharpe_bull: 0.954439
+n_bear_months: 64
+n_bull_months: 200
+ic_decay_h1: 0.019008
+ic_decay_h2: 0.018404
+ic_decay_h3: 0.017935
+ic_decay_h6: 0.015915
+ic_decay_h12: 0.014455
+tier_MEGA_ic_mean: 0.012900
+tier_MEGA_ls_sharpe: -0.098000
+tier_MEGA_avg_n: 388
+tier_MID_ic_mean: 0.020600
+tier_MID_ls_sharpe: 0.085000
+tier_MID_avg_n: 577
+tier_SMALL_ic_mean: 0.016900
+tier_SMALL_ls_sharpe: 0.169000
+tier_SMALL_avg_n: 950
+leg_coverage_worst_leg: f_zt6m
+leg_coverage_worst_pct: 97.592765
+leg_coverage_mean_legs: 1.000000
+leg_coverage_pct_full: 100.000000
+leg_coverage_pct_half_or_less: 0.000000
+leg_coverage_worst_sector: Communication Services
+leg_coverage_worst_sector_mean_pct: 95.390511
+delisting_adjusted_pct: 0.436673
+survivorship_max_gone_pct: 75.906977
+--- END RESULT BLOCK ---
+
+--- BEGIN RESULT BLOCK ---
+stage: 1
+factor: BidAskSpreadFlip
+harness_sha: 73a95d352942
+config_sha: 0d88328d5b10
+data_sha: 198b281de1a0
+universe_sha: 1c6512b922a8
+eval_start: 1999-01-01
+eval_end: 2021-12-31
+include_holdout: False
+dimension_overrides: {}
+history_gates: {'f_bidaskspreadflip': 3}
+batch_size: 11
+batch_members: VolumeTrend,XFIN,cfp,dNoa,grcapx,grcapx3y,roaq,zerotrade12M,zerotrade1M,zerotrade6M,BidAskSpreadFlip
+declaration_order: 11
+coverage_pct: 99.127207
+stage1_decision: PASS
+stage1_bars_failed: (none)
+preflight_masspoint_max_pct: 0.056022
+preflight_qcut_min_bins: 10
+preflight_coverage_min_pct: 98.226644
+ic_mean: 0.020576
+ic_std: 0.124637
+icir: 0.165083
+ic_tstat: 2.742564
+ic_tstat_nw: 2.762832
+ic_pct_positive: 55.072464
+n_months: 276
+ic_half1_mean: 0.019759
+ic_half2_mean: 0.021392
+ic_half_min: 0.019759
+ls_mean_monthly: 0.007271
+ls_tstat: 2.324914
+ls_tstat_nw: 2.214414
+ls_ann_return_pct: 8.724697
+ls_ann_vol_pct: 17.997304
+ls_sharpe: 0.484778
+ls_maxdd_pct: -48.984774
+ls_calmar: 0.178110
+ls_hit_rate_pct: 61.956522
+ls_n_months: 276
+ls_n_months_missing: 0
+turnover_d10_pct: 66.068684
+turnover_d1_pct: 59.990328
+ls_down_mkt_pct: 1.851412
+n_down_months: 62
+avg_names_per_decile: 194.764130
+decile_avg_ret_pct: 0.881,0.951,0.971,0.958,0.963,0.977,0.978,0.983,1.018,0.970
+ls_raw_ann_return_pct: 1.066357
+ls_raw_ann_vol_pct: 23.264955
+ls_raw_sharpe: 0.045835
+ls_raw_maxdd_pct: -74.099178
+ls_beta_mean: -0.944295
+ls_beta_last: -0.742960
+ls_beta_fullwindow: -0.979137
+ls_hedged_months: 264
+hedge_on: True
+ls_sharpe_ex_top_years: 0.295110
+ls_top_years: 2000,2014,2021
+ls_top_years_share_pct: 57.541335
+ls_sharpe_bear: -0.243644
+ls_sharpe_bull: 0.956392
+n_bear_months: 64
+n_bull_months: 200
+ic_decay_h1: 0.019013
+ic_decay_h2: 0.018177
+ic_decay_h3: 0.017831
+ic_decay_h6: 0.013794
+ic_decay_h12: 0.013656
+tier_MEGA_ic_mean: 0.017900
+tier_MEGA_ls_sharpe: 0.088000
+tier_MEGA_avg_n: 391
+tier_MID_ic_mean: 0.019600
+tier_MID_ls_sharpe: 0.032000
+tier_MID_avg_n: 585
+tier_SMALL_ic_mean: 0.021600
+tier_SMALL_ls_sharpe: 0.067000
+tier_SMALL_avg_n: 970
+leg_coverage_worst_leg: f_bidaskspreadflip
+leg_coverage_worst_pct: 99.127207
+leg_coverage_mean_legs: 1.000000
+leg_coverage_pct_full: 100.000000
+leg_coverage_pct_half_or_less: 0.000000
+leg_coverage_worst_sector: Communication Services
+leg_coverage_worst_sector_mean_pct: 98.234344
+delisting_adjusted_pct: 0.436673
+survivorship_max_gone_pct: 75.906977
+--- END RESULT BLOCK ---
+
+Written to research/results/011_BATCH_stage1_2026-10-01.txt

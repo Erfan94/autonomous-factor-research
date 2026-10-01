@@ -1,0 +1,39 @@
+name: XFIN
+osap_acronym: XFIN
+status: stage2_pending
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b9
+declaration_order: 2
+date_tested: "2026-10-01"
+run: "011"
+stage2_run: null
+stage1_decision: PASS
+decided_by: "all bars"
+source: "Bradshaw, Richardson and Sloan 2006 (JAE); SignalDoc sign -1, Cat.Economic external financing"
+orientation: "low net external financing / assets = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/XFIN/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.286533, qcut_min_bins: 10, coverage_min_pct: 51.819377}
+stage1:   # from the run 011 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.017006, ic_tstat_nw: 3.570243, ic_half1_mean: 0.023511, ic_half2_mean: 0.010501, icir: 0.229892, ls_sharpe: 0.733754,
+   ls_ann_return_pct: 8.611745, ls_tstat_nw: 3.397479, ls_maxdd_pct: -25.684096, ls_raw_ann_return_pct: 6.568956, ls_raw_sharpe: 0.477524,
+   ls_raw_maxdd_pct: -38.07474, turnover_d10_pct: 14.761564, turnover_d1_pct: 16.710418, coverage_pct: 95.637878,
+   avg_names_per_decile: 187.908333, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.015825, ic_decay_h6: 0.013635, ic_decay_h12: 0.012989,
+   tier_MEGA_ic_mean: 0.0182, tier_MID_ic_mean: 0.0162, tier_SMALL_ic_mean: 0.0162, ls_beta_mean: -0.421701, ls_beta_fullwindow: -0.473269,
+   ls_sharpe_ex_top_years: 0.484195, ls_top_years: "2000,2006,2021", ls_top_years_share_pct: 56.447948, ls_sharpe_bear: 0.565925,
+   ls_sharpe_bull: 0.878702, decile_avg_ret_pct: "0.618,0.915,0.868,1.017,1.029,1.014,1.064,1.160,1.090,1.166",
+   delisting_adjusted_pct: 0.436673}
+stage1_failed: []
+stage2_failed: []
+character: >
+  D1-anchored and graded above it: D1 (heaviest net financing) 0.618, D2-D7 0.87-1.06, D8-D10 1.09-1.17 %/mo; raw spread 6.57%/yr at vol 13.8% (Sharpe 0.478, raw MaxDD -38.1%). IC 0.0170 (NW t 3.57, plain t 3.82, ICIR 0.230), halves 0.0235 / 0.0105; annual IC positive in 18 of 23 years (2021 +0.085, 2000 +0.077; 2020 -0.044, 2019 -0.012), 2011-2020 average 0.0047. Tiers MEGA 0.0182, MID 0.0162, SMALL 0.0162 (raw LS Sharpe 0.215 / 0.329 / 0.700). IC decays slowly (0.0158 h1, 0.0136 h6, 0.0130 h12); turnover 14.8% / 16.7%. Beta -0.47 (ex ante -0.42): the hedge adds 2.04 pp, 24% of the hedged 8.61%/yr (Sharpe 0.734, LS NW t 3.40, MaxDD -25.7%, hit 61.6%). Hedged LS 2021 +61.1%, 2000 +48.7%, 2006 +17.9% (56% of the summed LS); 2020 -19.1%, 1999 -7.0%, 2019 -3.3% (3 negative years); ex-top-years Sharpe 0.484; bear 0.566 / bull 0.879. Coverage 95.6%; Communication Services 92.5%, Technology 93.1%, best Utilities 97.6%.
+caveats:
+  - "halves 0.0235 / 0.0105: the second half leans on 2021 (+0.085); 2021 hedged +61.1% is the largest year"
+  - "likely overlap with the external-financing passers: annual IC correlation 0.95 with NetEquityFinance (b6) and ShareIss1Y (b8), 0.89 NetPayoutYield (b6), 0.84 ShareIss5Y (b8); 0.64 NetDebtFinance (b6, rejected), -0.02 CompEquIss (b2, rejected); 0.76 cfp (this batch); co-movement of annual IC, not a score correlation; no Stage 2 number exists"
+  - "vs v0 Investment (asset growth): external financing funds asset growth, a mechanical link by construction; not measured"
+  - "approx translation: the OSAP code is followed (dlcch included, subsumed in SF1.ncfdebt); ncfcommon (net sstk - prstkc) zero-filled when null; positive ncfdiv clipped to 0; null ncfdiv / ncfdebt -> NaN; ART flows over same-filing assets; no |ratio| screen"
+  - "Cat.Economic external financing: no v0 seed family covers it"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Passes every Stage 1 bar: IC 0.0170 >= 0.010, NW t 3.57 >= 2.5, halves min 0.0105, raw spread 6.57%/yr > 0, coverage 95.6% >= 40, 187.9 names per decile, 276 LS months >= 248. Status stage2_pending; family to be assigned in Phase C. Among the external-financing passers its NW t sits between ShareIss5Y 3.67 and ShareIss1Y 3.52 (NetEquityFinance 3.03); hedge share 24%, against 35-41% for NetEquityFinance and ShareIss5Y.

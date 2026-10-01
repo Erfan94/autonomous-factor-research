@@ -1,0 +1,40 @@
+name: zerotrade12M
+osap_acronym: zerotrade12M
+status: stage2_pending
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b9
+declaration_order: 8
+date_tested: "2026-10-01"
+run: "011"
+stage2_run: null
+stage1_decision: PASS
+decided_by: "all bars"
+source: "Liu 2006 (JFE); SignalDoc sign +1, Cat.Economic liquidity (Acronym2 zerotradeAlt12)"
+orientation: "many zero-volume days / low 12-month turnover (illiquid) = attractive (SignalDoc sign +1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/zerotrade12M/spec.md}
+dimension_override: null
+history_gate_months: 12
+preflight: {masspoint_max_pct: 0.057241, qcut_min_bins: 0, coverage_min_pct: 0.0}
+stage1:   # from the run 011 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.017979, ic_tstat_nw: 2.831524, ic_half1_mean: 0.016811, ic_half2_mean: 0.019139, icir: 0.175932, ls_sharpe: 0.691678,
+   ls_ann_return_pct: 8.965494, ls_tstat_nw: 3.320805, ls_maxdd_pct: -34.955588, ls_raw_ann_return_pct: 3.69203, ls_raw_sharpe: 0.218499,
+   ls_raw_maxdd_pct: -54.624947, turnover_d10_pct: 13.24797, turnover_d1_pct: 7.822012, coverage_pct: 94.667535,
+   avg_names_per_decile: 186.678182, n_months: 275, ls_n_months: 275, ic_decay_h1: 0.017293, ic_decay_h6: 0.013653, ic_decay_h12: 0.013566,
+   tier_MEGA_ic_mean: 0.0114, tier_MID_ic_mean: 0.0185, tier_SMALL_ic_mean: 0.0175, ls_beta_mean: -0.668499, ls_beta_fullwindow: -0.698587,
+   ls_sharpe_ex_top_years: 0.449484, ls_top_years: "2000,2007,2011", ls_top_years_share_pct: 42.968399, ls_sharpe_bear: 0.09776,
+   ls_sharpe_bull: 1.049759, decile_avg_ret_pct: "0.758,0.843,1.033,1.007,1.012,1.075,1.127,1.116,1.071,1.065",
+   delisting_adjusted_pct: 0.436673}
+stage1_failed: []
+stage2_failed: []
+character: >
+  A D1 effect with a flat top: D1 (highest turnover) 0.758, D2 0.843, D3-D10 1.01-1.13 %/mo (D7 1.127, D10 1.065); raw spread 3.69%/yr at vol 16.9% (Sharpe 0.218, raw MaxDD -54.6%). IC 0.0180 (NW t 2.83, plain t 2.92, ICIR 0.176), halves 0.0168 / 0.0191; annual IC positive in 15 of 23 years (2011 +0.065, 2000 +0.063; 2009 -0.037, 2020 -0.036). Tiers MEGA 0.0114, MID 0.0185, SMALL 0.0175 (raw LS Sharpe -0.067 / 0.100 / 0.238; MEGA raw MaxDD -87.3%). IC decays slowly (0.0173 h1, 0.0137 h6, 0.0136 h12); turnover 13.2% / 7.8%. Beta -0.70 (ex ante -0.67): the hedge adds 5.27 pp, 59% of the hedged 8.97%/yr (Sharpe 0.692, LS NW t 3.32, MaxDD -35.0%, hit 64.7%). Hedged LS 2000 +49.2%, 2011 +26.0%, 2007 +25.4% (43% of the summed LS); 1999 -17.7%, 2009 -14.4%; ex-top-years Sharpe 0.450; bear 0.098 / bull 1.050. 275 months (the 1998-12 window touches the 1997-12 SEP stub). Coverage 94.7%; Communication Services 90.0%, Technology 91.0%.
+caveats:
+  - "one low-turnover sort in three windows: about 99.3-99.9% of names have no zero-volume day, so the signal is in effect 1/turnover (alpha_review Spearman with 1/Turn 0.997 / 0.992 / 0.983 for 1M / 6M / 12M); annual IC correlation 0.99 among the three (same sign 23 / 21 / 21 of 23 years for 1M-6M / 1M-12M / 6M-12M); co-movement of annual IC"
+  - "likely overlap with the volatility passers: annual IC correlation 0.94 IdioVol3F, 0.95 IdioVolAHT, 0.95 RealizedVol, 0.92 MaxRet (b4/b5/b7), 0.92 BidAskSpreadFlip (this batch), 0.96 VolMkt (b8, rejected); -0.30 Illiquidity (b5), 0.18 DolVol (b3); beta -0.70 and loss years 1999 / 2009 as the volatility rows; co-movement of annual IC, not a score correlation; no Stage 2 number exists"
+  - "the hedged headline is 59% hedge: raw 3.69%/yr (Sharpe 0.218) vs hedged 8.97%/yr at beta -0.70; MEGA raw LS Sharpe -0.067; bear Sharpe 0.098; not a Stage 1 bar (D11)"
+  - "275 of 276 months (LS floor 247 met); the 1998-12 preflight probe reads 0% / 0 bins for the stub"
+  - "approx translation: (countzero + (1/Turn)/480000) x 21N/ndays over calendar months t-N..t-1; turnover summed over days with a share count, shares required every window month (decision zerotrade_turnover_sum); SF1.sharesbas ART at business month-ends; Turn == 0 NaN"
+  - "Cat.Economic liquidity: no v0 seed family covers it; the zerotrade trio and BidAskSpreadFlip are the liquidity passers"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Passes every Stage 1 bar: IC 0.0180 >= 0.010, NW t 2.83 >= 2.5, halves min 0.0168, raw spread 3.69%/yr > 0, coverage 94.7% >= 40, 186.7 names per decile, 275 LS months >= 247. Status stage2_pending; family to be assigned in Phase C. Second NW t of the trio (6M 2.93, 1M 2.63).

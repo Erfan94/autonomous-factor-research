@@ -1,0 +1,39 @@
+name: cfp
+osap_acronym: cfp
+status: stage2_pending
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b9
+declaration_order: 3
+date_tested: "2026-10-01"
+run: "011"
+stage2_run: null
+stage1_decision: PASS
+decided_by: "all bars"
+source: "Desai, Rajgopal and Venkatachalam 2004 (The Accounting Review); SignalDoc sign +1, Cat.Economic valuation"
+orientation: "high operating cash flow / market cap = attractive (SignalDoc sign +1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/cfp/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.084602, qcut_min_bins: 10, coverage_min_pct: 51.819377}
+stage1:   # from the run 011 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.024642, ic_tstat_nw: 3.651526, ic_half1_mean: 0.039073, ic_half2_mean: 0.010212, icir: 0.261406, ls_sharpe: 0.510065,
+   ls_ann_return_pct: 7.465551, ls_tstat_nw: 2.249571, ls_maxdd_pct: -51.106948, ls_raw_ann_return_pct: 9.449864, ls_raw_sharpe: 0.624513,
+   ls_raw_maxdd_pct: -47.031494, turnover_d10_pct: 16.443244, turnover_d1_pct: 16.737605, coverage_pct: 95.672731,
+   avg_names_per_decile: 187.976812, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.017424, ic_decay_h6: 0.013104, ic_decay_h12: 0.015216,
+   tier_MEGA_ic_mean: 0.0175, tier_MID_ic_mean: 0.0222, tier_SMALL_ic_mean: 0.0282, ls_beta_mean: -0.140448, ls_beta_fullwindow: -0.129694,
+   ls_sharpe_ex_top_years: 0.245827, ls_top_years: "2000,2002,2021", ls_top_years_share_pct: 68.323984, ls_sharpe_bear: 0.880324,
+   ls_sharpe_bull: 0.39768, decile_avg_ret_pct: "0.617,0.683,0.858,0.909,0.899,1.008,1.058,1.139,1.366,1.405",
+   delisting_adjusted_pct: 0.436673}
+stage1_failed: []
+stage2_failed: []
+character: >
+  Graded through the top: D1 0.617, D2-D6 0.68-1.01, D7-D8 1.06-1.14, D9-D10 1.37-1.41 %/mo; raw spread 9.45%/yr at vol 15.1% (Sharpe 0.625, raw MaxDD -47.0%). IC 0.0246 (NW t 3.65, plain t 4.34, ICIR 0.261), halves 0.0391 / 0.0102: front-loaded; 2000-2002 annual IC 0.074-0.099, 2015-2020 negative in 5 of 6 years (2020 -0.049), 2021 +0.104; positive in 17 of 23, 2011-2020 average 0.0016. Tiers MEGA 0.0175, MID 0.0222, SMALL 0.0282 (raw LS Sharpe 0.333 / 0.564 / 0.658). IC flat over horizons (0.0174 h1, 0.0131 h6, 0.0152 h12); turnover 16.4% / 16.7%. Beta -0.13 (ex ante -0.14, last +0.10); the hedged series earns 7.47%/yr, 1.98 pp below raw (Sharpe 0.510, LS NW t 2.25, MaxDD -51.1%, hit 52.9%). Hedged LS 2000 +52.6%, 2021 +45.3%, 2002 +28.6% (68% of the summed LS); 9 negative years, 2020 -30.3%, 2019 -15.3%, 2017 -12.2%; ex-top-years Sharpe 0.246; bear 0.880 / bull 0.398. Coverage 95.7%; Communication Services 92.2%, Technology 93.3%, best Utilities 97.6%.
+caveats:
+  - "front-loaded: halves 0.0391 / 0.0102; the second half leans on 2021 (+0.104); 68% of the summed hedged LS sits in 2000 / 2002 / 2021; hedged LS NW t 2.25 against IC NW t 3.65"
+  - "likely overlap with CF (b2, passer, (ib + dp) / market equity): annual IC correlation 0.96, same sign 21 of 23 years, same top years 2000 / 2002 / 2021 and the same worst year 2020; vs the valuation rows 0.90 BMdec, 0.87 SP, 0.85 EP, 0.80 AM (all rejected), 0.74 NetPayoutYield (b6); 0.49-0.64 with the profitability passers; co-movement of annual IC, not a score correlation; no Stage 2 number exists"
+  - "hedged below raw (7.47 vs 9.45%/yr) at a negative full-window beta (-0.13; last ex-ante beta +0.10): recorded as reported"
+  - "approx translation: ART ncfo over DAILY market cap, fxusd == 1, cap > 0; OSAP's accrual fallback for a missing oancf not built (decision cfp_fallback_branch): ncfo null 40-48% at the first three signal months, about 10-13% through 1999-2000"
+  - "Cat.Economic valuation: v0 Value is the valuation seed category"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Passes every Stage 1 bar: IC 0.0246 >= 0.010 (the highest IC of the 24 passers; IdioVolAHT 0.0238), NW t 3.65 >= 2.5, halves min 0.0102, raw spread 9.45%/yr > 0, coverage 95.7% >= 40, 188.0 names per decile, 276 LS months >= 248. Status stage2_pending; family to be assigned in Phase C. Against CF (NW t 3.03, raw 3.32%/yr, ex-top-years Sharpe -0.169) it prints a larger raw spread and a positive ex-top-years Sharpe (0.246) on the same front-loaded IC path.
