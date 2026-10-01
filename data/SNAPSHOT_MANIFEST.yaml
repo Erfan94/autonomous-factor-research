@@ -1,16 +1,16 @@
 schema_version: 1
 status: FROZEN
-recorded_on: '2026-09-30T16:39:10Z'
-source: Sharadar direct API bulk export (api.sharadar.com/v1.0, years=full), Bundle
-  / Full History
+recorded_on: '2026-10-01T23:26:28Z'
+source: 'Sharadar direct API bulk export (api.sharadar.com/v1.0, years=full), Bundle
+  / Full History; external (kind: external, keyless public source): TB3MS'
 note: 'DATA_SHA is derived from the per-table sha256 values below. Re-running `snapshot.py
   manifest` after a refresh MOVES it and is a re-baseline: log it in research/CHANGELOG.md
   and re-run the baseline.'
 tables:
   ACTIONS:
     file: ACTIONS.parquet
-    rows: 711947
-    sha256: a8738a046750f8a90c5208dc124e7c446b88345e86d6444fb957ab916658d3f2
+    rows: 714029
+    sha256: d2e3ae5a8b9713b482fc7a8db6bbcac61bf0c220d5c514dcd618241d5251819a
     columns:
     - date
     - action
@@ -19,13 +19,13 @@ tables:
     - value
     - contraticker
     - contraname
-    bytes: 6215010
+    bytes: 6254220
     min_date: '1997-12-31'
-    max_date: '2026-10-01'
+    max_date: '2026-10-05'
   DAILY:
     file: DAILY.parquet
-    rows: 39848528
-    sha256: e4d957c74e9f686dad17fdd0aecf9d7d3ee09717a9573b850c291c2491aae835
+    rows: 39855506
+    sha256: 387cb1f37863b50dbd67251de2cdab154a28bc206e3dd49f83ba59f8d6e37cd8
     columns:
     - ticker
     - date
@@ -37,9 +37,9 @@ tables:
     - pb
     - pe
     - ps
-    bytes: 887773999
+    bytes: 887920955
     min_date: '1998-12-01'
-    max_date: '2026-09-29'
+    max_date: '2026-10-01'
   DESCRIPTIONS:
     file: DESCRIPTIONS.parquet
     rows: 386
@@ -55,19 +55,19 @@ tables:
     bytes: 36816
   EVENTS:
     file: EVENTS.parquet
-    rows: 2532599
-    sha256: 6722b70b5bf7cf1f303466bf4fdcd0a200b05dd9e97adbe46dae6760030f5b19
+    rows: 2532960
+    sha256: b6136b31e2c3e8fed27a43e50db8cae0d7b2b07d50c71937f27ae2d98747c9b9
     columns:
     - ticker
     - date
     - eventcodes
-    bytes: 7673540
+    bytes: 7642652
     min_date: '1993-11-08'
-    max_date: '2026-09-29'
+    max_date: '2026-10-01'
   METRICS:
     file: METRICS.parquet
-    rows: 30936
-    sha256: 64d2fe5a9bba5c98a15d96d3dbcfe4f74a697bb159001bd3ef95fd9418c511ec
+    rows: 30939
+    sha256: 15d340d1e2b5015c532e1e5168b8ba50ebd2d4ffd2427319f0cb908ac4e219a1
     columns:
     - ticker
     - date
@@ -91,13 +91,13 @@ tables:
     - volume
     - volumeavg1m
     - volumeavg3m
-    bytes: 2087581
+    bytes: 2099855
     min_date: '1997-12-31'
-    max_date: '2026-09-29'
+    max_date: '2026-10-01'
   SEP:
     file: SEP.parquet
-    rows: 45385374
-    sha256: 4b586ae769ea33a534c57816c8cc19f9649b92cc55e617ea72682ff3cd1c350f
+    rows: 45393854
+    sha256: 681480ae6faf3efbddc848b31e58a6150a1f90729f62504786568b2cd2f60c66
     columns:
     - ticker
     - date
@@ -109,13 +109,13 @@ tables:
     - closeadj
     - closeunadj
     - lastupdated
-    bytes: 1556844903
+    bytes: 1553620398
     min_date: '1997-12-31'
-    max_date: '2026-09-29'
+    max_date: '2026-10-01'
   SF1:
     file: SF1.parquet
-    rows: 3217929
-    sha256: c8d538fda6ac7eae39a925535f79245e03aa1022783aa99fb501652bc26298ec
+    rows: 3218127
+    sha256: 8fea1c09442ae5e894e4054b6fd7c0cbebf1bf53f6341f2ab851d25274d5c10d
     columns:
     - ticker
     - dimension
@@ -229,13 +229,13 @@ tables:
     - taxliabilities
     - tbvps
     - workingcapital
-    bytes: 869179315
+    bytes: 869527321
     min_date: '1990-06-06'
-    max_date: '2026-09-29'
+    max_date: '2026-10-01'
   SF2:
     file: SF2.parquet
-    rows: 11561052
-    sha256: 0d7a27be433478e918543bda516dbb1b4ecdf559f9fa7495104dce5c56077a6d
+    rows: 11559783
+    sha256: 1587e0bf6cba99ea07ae9eccca2c465255d349b320aac659c42bb71563f67ac1
     columns:
     - ticker
     - date
@@ -260,13 +260,13 @@ tables:
     - priceexercisable
     - expirationdate
     - rownum
-    bytes: 308767492
+    bytes: 308368974
     min_date: '2008-01-02'
-    max_date: '2026-09-29'
+    max_date: '2026-09-30'
   SF3:
     file: SF3.parquet
     rows: 81210476
-    sha256: 5f91da4fbc0a8edb207415e57dace7cef86a8e3f41df8aeb875c0d0c3ab92ab8
+    sha256: 7545db3c1c71247ba027e0315e73debfe80fef48665b0059291824d87bfd1bad
     columns:
     - ticker
     - investorid
@@ -274,7 +274,7 @@ tables:
     - date
     - value
     - units
-    bytes: 491312414
+    bytes: 487887125
     min_date: '2013-06-30'
     max_date: '2026-06-30'
   SF3A:
@@ -315,7 +315,7 @@ tables:
   SF3B:
     file: SF3B.parquet
     rows: 306512
-    sha256: d1a03c1302c7483cbf0f681830e53429433e96236467efb03661c7d3839086c3
+    sha256: 87121705ec02b071681e51fdd434207cc588a2848f5fec0335eb9e86c411e950
     columns:
     - date
     - investorid
@@ -346,11 +346,11 @@ tables:
     - undvalue
     - totalvalue
     - percentoftotal
-    bytes: 10408343
+    bytes: 10351847
   SP500:
     file: SP500.parquet
-    rows: 59682
-    sha256: d83e285d06698cde9408a0bb39e5fc88dda70edf417dff61054a3c2f7ce5a430
+    rows: 60185
+    sha256: 2cb322ee57eb8cd27d26074fc37692c90be2906585a571d49303e22a56bae67f
     columns:
     - date
     - action
@@ -359,13 +359,27 @@ tables:
     - contraticker
     - contraname
     - note
-    bytes: 181308
+    bytes: 194208
     min_date: '1957-03-04'
-    max_date: '2026-09-29'
+    max_date: '2026-10-01'
+  TB3MS:
+    file: TB3MS.parquet
+    rows: 1113
+    sha256: b51ab04740964a6fb667c673dd3ec0cfc402ec4898c2553635099b2af27703c9
+    columns:
+    - date
+    - value
+    bytes: 15670
+    min_date: '1934-01-01'
+    max_date: '2026-09-01'
+    kind: external
+    source_url: https://fred.stlouisfed.org/graph/fredgraph.csv?id=TB3MS
+    fetched_at: '2026-10-01T23:25:54Z'
+    filled_months: {}
   TICKERS:
     file: TICKERS.parquet
-    rows: 74285
-    sha256: 8855fd955092b399631665bc1e38649f72ced96e08e3a5e4812b2f90166272cd
+    rows: 74282
+    sha256: a0c9e995fa4c51224632b3a25d9ac31e6c67d65b9adbd8cfaa3396eb23ac1c5e
     columns:
     - table
     - permaticker
@@ -395,5 +409,5 @@ tables:
     - lastquarter
     - secfilings
     - companysite
-    bytes: 4398722
-data_sha: 198b281de1a0
+    bytes: 4404313
+data_sha: 42587e08609a

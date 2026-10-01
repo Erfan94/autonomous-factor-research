@@ -1,7 +1,8 @@
-checked_at: '2026-09-30T16:39:43Z'
-data_sha: 198b281de1a0
+checked_at: '2026-10-01T23:26:55Z'
+data_sha: 42587e08609a
 api_base: https://api.sharadar.com/v1.0
 tables_checked: 14
+sharadar_tables_held: 13
 column_complete: true
 problems: []
 mapped_but_absent:
@@ -24,34 +25,34 @@ detail:
 history:
   SEP:
     verdict: ok
-    detail: 1997-12-31..2026-09-29 (6 tickers probed)
+    detail: 1997-12-31..2026-10-01 (6 tickers probed)
   SF1:
     verdict: ok
-    detail: 1990-06-06..2026-09-29 (6 tickers probed)
+    detail: 1990-06-06..2026-10-01 (6 tickers probed)
   DAILY:
     verdict: ok
-    detail: 1998-12-01..2026-09-29 (6 tickers probed)
+    detail: 1998-12-01..2026-10-01 (6 tickers probed)
   TICKERS:
     verdict: '-'
     detail: no date/ticker column
   ACTIONS:
     verdict: ok
-    detail: 1997-12-31..2026-10-01 (6 tickers probed)
+    detail: 1997-12-31..2026-10-05 (6 tickers probed)
   EVENTS:
     verdict: ok
-    detail: 1993-11-08..2026-09-29 (6 tickers probed)
+    detail: 1993-11-08..2026-10-01 (6 tickers probed)
   SF2:
     verdict: ok
-    detail: 2008-01-02..2026-09-29 (6 tickers probed)
+    detail: 2008-01-02..2026-09-30 (6 tickers probed)
   SF3:
     verdict: ok
     detail: 2013-06-30..2026-06-30 (6 tickers probed)
   SP500:
     verdict: ok
-    detail: 1957-03-04..2026-09-29 (6 tickers probed)
+    detail: 1957-03-04..2026-10-01 (6 tickers probed)
   METRICS:
     verdict: ok
-    detail: 1997-12-31..2026-09-29 (6 tickers probed)
+    detail: 1997-12-31..2026-10-01 (6 tickers probed)
   SF3A:
     verdict: ok
     detail: 2013-06-30..2026-06-30 (6 tickers probed)
@@ -65,3 +66,10 @@ history:
     verdict: '-'
     detail: not held
 history_checked: true
+external_tables:
+  TB3MS:
+    kind: external
+    vouched_by_api: false
+    source_url: https://fred.stlouisfed.org/graph/fredgraph.csv?id=TB3MS
+    fetched_at: '2026-10-01T23:25:54Z'
+    filled_months: {}

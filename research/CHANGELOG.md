@@ -235,3 +235,4 @@
 - Return per unit turnover ~0.11 for equal_rank_decile and the layer, but buffered 0.145 and layer_no_buffer 0.070: return is concave in turnover.
 - Provenance: 5 stamps plus the layer pin match; holdout off; book 2001-01..2021-12; 0 warnings; guards held (spread 99.95% vs 95, first beta 2000-01, 0 dropped, residuals 0).
 - Records: manifest v14 `construction_layer` block; events run_completed, provenance_verified, construction_reported; CONSTRUCTION.md §10; JOURNAL. No gate, registry row or composite change.
+- 2026-10-01 — D8 refresh (owner-approved stop-and-ask 3): DATA_SHA 198b281de1a0 -> 42587e08609a; 13 Sharadar tables re-pulled full history (SEP to 2026-10-01, 2026-09-30 present) + TB3MS external (FRED, 2026-09 = 3.94, no fill); live check OK. Re-baseline owed: run 053 (v14 in-window) is compared field by field to run 052; restatements logged.
