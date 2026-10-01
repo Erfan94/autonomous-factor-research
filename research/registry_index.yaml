@@ -5,9 +5,9 @@ search_accounting:
   n_stage1_tested: 107
   n_stage1_passed: 24
   n_stage2_tested: 20
-  n_accepted: 12
+  n_accepted: 13
   n_inconclusive: 0
-  by_status: {"accepted": 12, "baseline": 5, "rejected": 89, "stage2_pending": 6}
+  by_status: {"accepted": 13, "baseline": 5, "rejected": 89, "stage2_pending": 5}
 factors:
   - {name: AM, status: rejected, batch: stage1_b1, ic: 0.0098, ic_t: 1.26, sharpe: -0.149, ret: -3.17, raw_ret: 4.72, cov: 99.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.34, sh_exreg: -0.449, family: null, decided_by: "ic_tstat_nw", run: "003"}
   - {name: Accruals, status: rejected, batch: stage1_b1, ic: 0.0048, ic_t: 1.84, sharpe: 0.329, ret: 2.49, raw_ret: 2.92, cov: 76.7, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.04, sh_exreg: 0.107, family: null, decided_by: "ic_tstat_nw", run: "003"}
@@ -111,7 +111,7 @@ factors:
   - {name: VarCF, status: rejected, batch: stage1_b8, ic: 0.0064, ic_t: 0.76, sharpe: 0.406, ret: 5.59, raw_ret: -3.97, cov: 60.7, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.79, sh_exreg: 0.174, family: null, decided_by: "ic_tstat_nw", run: "010"}
   - {name: VolMkt, status: rejected, batch: stage1_b8, ic: 0.0161, ic_t: 2.25, sharpe: 0.551, ret: 9.55, raw_ret: 2.38, cov: 97.1, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.94, sh_exreg: 0.320, family: null, decided_by: "ic_tstat_nw", run: "010"}
   - {name: VolSD, status: rejected, batch: stage1_b8, ic: 0.0112, ic_t: 2.36, sharpe: 0.534, ret: 6.05, raw_ret: 1.95, cov: 79.8, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.47, sh_exreg: 0.398, family: null, decided_by: "ic_tstat_nw", run: "010"}
-  - {name: VolumeTrend, status: stage2_pending, batch: stage1_b9, ic: 0.0114, ic_t: 2.87, sharpe: 0.661, ret: 5.05, raw_ret: 2.40, cov: 66.3, resid_t: 2.04, dic_t: -0.19, dls_t: -0.09, span_t: 0.67, d_sharpe: -0.006, beta: -0.23, sh_exreg: 0.331, family: "liquidity", decided_by: "all bars", run: "011"}
+  - {name: VolumeTrend, status: accepted, batch: stage1_b9, ic: 0.0114, ic_t: 2.87, sharpe: 0.661, ret: 5.05, raw_ret: 2.40, cov: 66.3, resid_t: 2.04, dic_t: -0.19, dls_t: -0.09, span_t: 0.67, d_sharpe: -0.006, beta: -0.23, sh_exreg: 0.331, family: "liquidity", decided_by: "all bars", run: "011"}
   - {name: XFIN, status: accepted, batch: stage1_b9, ic: 0.0170, ic_t: 3.57, sharpe: 0.734, ret: 8.61, raw_ret: 6.57, cov: 95.6, resid_t: 3.27, dic_t: -0.62, dls_t: -0.64, span_t: 1.28, d_sharpe: -0.082, beta: -0.47, sh_exreg: 0.484, family: "external_financing", decided_by: "all bars", run: "011"}
   - {name: cfp, status: accepted, batch: stage1_b9, ic: 0.0246, ic_t: 3.65, sharpe: 0.510, ret: 7.47, raw_ret: 9.45, cov: 95.7, resid_t: 2.97, dic_t: 3.10, dls_t: 2.19, span_t: 0.40, d_sharpe: 0.148, beta: -0.13, sh_exreg: 0.246, family: "value", decided_by: "all bars", run: "011"}
   - {name: dNoa, status: rejected, batch: stage1_b9, ic: 0.0077, ic_t: 2.19, sharpe: 0.817, ret: 6.62, raw_ret: 7.74, cov: 95.2, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.07, sh_exreg: 0.395, family: null, decided_by: "ic_tstat_nw", run: "011"}

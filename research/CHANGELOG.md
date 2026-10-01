@@ -203,3 +203,10 @@
 - Hedged Sharpe gain is hedge-carried (raw 0.737 -> 0.708, raw vol 17.7 -> 19.3%); MEGA tier Sharpe 0.427 -> 0.256; bear/bull 1.085/1.064 -> 0.925/1.229.
 - Run 039 (Stage 3, never a gate): equal_rank_decile 0.985; buffered 0.957 at turnover 36.8%; vol_targeted 0.900; tier_neutral 0.853 (the only variant below v11); icir_weighted 0.790 (raw 0.355, beta -0.95).
 - Records: manifest block v12; logged run_started/run_completed (038, 039), provenance_verified (038, 039), construction_reported, composite_updated; zerotrade6M row set to accepted. Next: v13 = v12 + VolumeTrend (target IC 0.037197 / Sharpe 0.978584 / 16.125905%).
+
+## 2026-10-01 — v13 = v12 + VolumeTrend (liquidity, 2nd leg): accepted and applied (runs 040, 041); tag v13-add-VolumeTrend owed
+- Accepted from run 037 rung 2 (base v12) on both bars: residual IC NW t 2.043637 > 2.0 (margin 0.0436, second-thinnest after IdioVol3F; 228 months from 2002-12); guard t -0.09 >= -2.0. dIC -0.0001 (t -0.19): admitted on residual information while the blend barely moves, the RoE / XFIN pattern (decision ladder4_acceptance).
+- Applied by the coordinator: VolumeTrend.py moved to factors/accepted/; COMPOSITE_VERSION v13; COMPOSITE_SHA 612e59349f40 -> fa17bd1cd37e, other stamps unchanged; pytest 434 passed. Liquidity = zerotrade6M, VolumeTrend at 1/18 each; other families unchanged.
+- Run 040 reproduces the rung 2 WITH arm on 66 of 66 fields to six places: IC 0.037197 (NW t 5.24, ICIR 0.362), hedged Sharpe 0.978584, 16.125905%/yr, MaxDD -41.60, beta -0.619, raw Sharpe 0.719, ex-top-years 0.635, turnover 56.6%.
+- Run 041 (Stage 3, never a gate): equal_rank_decile 0.979; buffered 0.945 at turnover 36.7%; vol_targeted 0.909; icir_weighted 0.800 (raw 0.367, beta -0.95); tier_neutral 0.826 (MaxDD -46.5).
+- Records: manifest block v13; logged run_started/run_completed (040, 041), provenance_verified (040, 041), construction_reported, composite_updated; VolumeTrend row set to accepted. Next: v14 = v13 + TrendFactor (target IC 0.038944 / Sharpe 0.982552 / 16.122152%).

@@ -1,0 +1,43 @@
+{
+  "seq": 41,
+  "label": "CONSTRUCTION",
+  "stage": 3,
+  "baseline": true,
+  "include_holdout": false,
+  "holdout_only": false,
+  "stamps": {
+    "harness_sha": "73a95d352942",
+    "config_sha": "0d88328d5b10",
+    "composite_sha": "fa17bd1cd37e",
+    "data_sha": "198b281de1a0",
+    "universe_sha": "1c6512b922a8"
+  },
+  "live_api_sha": "3eb95d4c50c2",
+  "live_api_tables": 14,
+  "api_authorised": true,
+  "factors": [],
+  "composite_version": "v13",
+  "composite_legs": [
+    "Size",
+    "Value",
+    "Profitability",
+    "Investment",
+    "Momentum",
+    "PctAcc",
+    "CBOperProf",
+    "ShareIss5Y",
+    "cfp",
+    "XFIN",
+    "GP",
+    "MaxRet",
+    "roaq",
+    "RoE",
+    "IdioVol3F",
+    "STreversal",
+    "zerotrade6M",
+    "VolumeTrend"
+  ],
+  "eval_start": "1999-01-01",
+  "eval_end": "2021-12-31",
+  "runtime_seconds": 1816.4
+}
