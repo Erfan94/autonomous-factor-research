@@ -156,3 +156,10 @@
 - Run 028 reproduces the rung 4 WITH arm on 16 of 16 stats to six places: IC 0.032018 (NW t 4.50), hedged Sharpe 0.967311, 15.18071%/yr, MaxDD -43.36, beta -0.721, raw Sharpe 0.613, ex-top-years Sharpe 0.604, turnover 44.1%.
 - Run 029 (Stage 3, never a gate): equal_rank_decile 0.967 (the best); tier_neutral 0.947; buffered 0.938 at turnover 25.5%; vol_targeted 0.844; icir_weighted 0.817 (raw 0.423, beta -0.83).
 - Records: manifest block v8; logged provenance_verified (028, 029), construction_reported and composite_updated; roaq row set to accepted. Next: v9 = v8 + RoE (target IC 0.032255 / Sharpe 0.931566 / 14.870865%).
+
+## 2026-10-01 — v9 = v8 + RoE (profitability, 5th leg): accepted and applied (runs 030, 031); ladder 2 closed 4/5; tag v9-add-RoE owed
+- Accepted from run 023 rung 5 (base v8) on both bars: residual IC NW t 2.41 > 2.0; guard t -1.26 >= -2.0. Every LS diagnostic worsened: dSharpe -0.036, spanning alpha -1.00%/yr (t -0.33), raw dLS -0.45 pp/yr (approximate t -1.83, the closest to -2.0 in either ladder). Raw Sharpe, ex-top-years, bear, bull and hit rate all fell. Residual share 0.24, the ladder low. The -2.0 guard admits it by design (decision ladder2_acceptance).
+- Applied: RoE.py moved to factors/accepted/; COMPOSITE_VERSION v9; COMPOSITE_SHA a12e87c5fb36 -> c961f5791816, the other stamps unchanged; pytest 434 passed. Profitability now has 5 legs at 1/35 each; 7 families.
+- Run 030 reproduces the rung 5 WITH arm on 16 of 16 stats to six places: IC 0.032255 (NW t 4.50), hedged Sharpe 0.931566, 14.870865%/yr, MaxDD -43.67, beta -0.734, raw Sharpe 0.579, ex-top-years Sharpe 0.581.
+- Run 031 (Stage 3, never a gate): every variant is below v8. equal_rank_decile 0.932; buffered 0.919 at turnover 25.8%; tier_neutral 0.905; icir_weighted 0.806 (raw 0.415, beta -0.85); vol_targeted 0.777.
+- Records: manifest block v9; logged provenance_verified (030, 031), construction_reported, composite_updated and batch_closed stage2_l2 (4 pass, 1 fail); RoE row set to accepted. Next ladder: ranks 11-15 on v9.

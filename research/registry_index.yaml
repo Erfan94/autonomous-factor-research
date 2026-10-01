@@ -5,9 +5,9 @@ search_accounting:
   n_stage1_tested: 107
   n_stage1_passed: 24
   n_stage2_tested: 10
-  n_accepted: 8
+  n_accepted: 9
   n_inconclusive: 0
-  by_status: {"accepted": 8, "baseline": 5, "rejected": 84, "stage2_pending": 15}
+  by_status: {"accepted": 9, "baseline": 5, "rejected": 84, "stage2_pending": 14}
 factors:
   - {name: AM, status: rejected, batch: stage1_b1, ic: 0.0098, ic_t: 1.26, sharpe: -0.149, ret: -3.17, raw_ret: 4.72, cov: 99.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.34, sh_exreg: -0.449, family: null, decided_by: "ic_tstat_nw", run: "003"}
   - {name: Accruals, status: rejected, batch: stage1_b1, ic: 0.0048, ic_t: 1.84, sharpe: 0.329, ret: 2.49, raw_ret: 2.92, cov: 76.7, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.04, sh_exreg: 0.107, family: null, decided_by: "ic_tstat_nw", run: "003"}
@@ -99,7 +99,7 @@ factors:
   - {name: ReturnSkew, status: rejected, batch: stage1_b7, ic: 0.0050, ic_t: 2.22, sharpe: 0.066, ret: 0.45, raw_ret: 0.40, cov: 99.8, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.03, sh_exreg: -0.269, family: null, decided_by: "ic_tstat_nw", run: "009"}
   - {name: ReturnSkew3F, status: rejected, batch: stage1_b8, ic: 0.0007, ic_t: 0.35, sharpe: -0.307, ret: -1.93, raw_ret: -1.34, cov: 96.7, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.02, sh_exreg: -0.679, family: null, decided_by: "ic_tstat_nw", run: "010"}
   - {name: RevenueSurprise, status: rejected, batch: stage1_b8, ic: 0.0094, ic_t: 2.78, sharpe: 0.347, ret: 2.59, raw_ret: 1.82, cov: 86.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.05, sh_exreg: 0.093, family: null, decided_by: "ic_mean", run: "010"}
-  - {name: RoE, status: stage2_pending, batch: stage1_b8, ic: 0.0192, ic_t: 3.34, sharpe: 0.532, ret: 7.38, raw_ret: 2.95, cov: 93.1, resid_t: 2.41, dic_t: 1.44, dls_t: -1.26, span_t: -0.33, d_sharpe: -0.036, beta: -0.59, sh_exreg: 0.372, family: "profitability", decided_by: "all bars", run: "010"}
+  - {name: RoE, status: accepted, batch: stage1_b8, ic: 0.0192, ic_t: 3.34, sharpe: 0.532, ret: 7.38, raw_ret: 2.95, cov: 93.1, resid_t: 2.41, dic_t: 1.44, dls_t: -1.26, span_t: -0.33, d_sharpe: -0.036, beta: -0.59, sh_exreg: 0.372, family: "profitability", decided_by: "all bars", run: "010"}
   - {name: SP, status: rejected, batch: stage1_b8, ic: 0.0182, ic_t: 2.50, sharpe: 0.145, ret: 2.79, raw_ret: 9.21, cov: 96.1, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.18, sh_exreg: -0.201, family: null, decided_by: "ic_tstat_nw", run: "010"}
   - {name: STreversal, status: stage2_pending, batch: stage1_b8, ic: 0.0145, ic_t: 2.96, sharpe: -0.029, ret: -0.48, raw_ret: 3.37, cov: 99.8, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.44, sh_exreg: -0.369, family: "short_term_reversal", decided_by: "all bars", run: "010"}
   - {name: ShareIss1Y, status: rejected, batch: stage1_b8, ic: 0.0165, ic_t: 3.52, sharpe: 0.909, ret: 9.06, raw_ret: 7.12, cov: 90.5, resid_t: 1.88, dic_t: 1.76, dls_t: 0.17, span_t: 2.61, d_sharpe: -0.026, beta: -0.38, sh_exreg: 0.742, family: "external_financing", decided_by: "resid_ic_tstat_nw", run: "010"}
