@@ -167,6 +167,12 @@ in-window hedged Sharpe, and its in-window ex-top-3-years Sharpe. The paper
 reads the holdout against both. After the spend: no composite change, no
 re-baseline, no further Stage 2 on this snapshot, no layer retuning.
 
+Note 2026-10-01 (process_finding d8_predecessor_restatement_figure): the
+parenthetical "the earlier search measured ~0.03% on composite statistics"
+in step 2 is another project's measurement and is not evidence here. Step 2
+stands without it: every difference between the refreshed and the frozen
+in-window block is logged and measured on this project's own bytes.
+
 ## D9 — 2026-09-30 — Version control is local only until the owner publishes (owner: Erfan)
 
 A local git repository with hooks and no remote. Commits at every logical
