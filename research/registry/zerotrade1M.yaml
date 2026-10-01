@@ -1,14 +1,14 @@
 name: zerotrade1M
 osap_acronym: zerotrade1M
-status: stage2_pending
+status: rejected
 family: liquidity
 batch: stage1_b9
 declaration_order: 9
 date_tested: "2026-10-01"
 run: "011"
-stage2_run: null
+stage2_run: "044"
 stage1_decision: PASS
-decided_by: "all bars"
+decided_by: "resid_ic_tstat_nw"
 source: "Liu 2006 (JFE); SignalDoc sign +1, Cat.Economic liquidity (Acronym2 zerotradeAlt1)"
 orientation: "many zero-volume days / low 1-month turnover (illiquid) = attractive (SignalDoc sign +1)"
 provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/zerotrade1M/spec.md}
@@ -25,7 +25,20 @@ stage1:   # from the run 011 block, verbatim; the beta / ex-regime rows are D5 d
    ls_sharpe_bull: 0.70022, decile_avg_ret_pct: "0.768,0.907,0.975,1.034,0.986,1.078,0.939,1.016,0.975,0.981",
    delisting_adjusted_pct: 0.436673}
 stage1_failed: []
-stage2_failed: []
+stage2:   # from the run 044 rung 3 block, verbatim; cand_* = WITH arm, base_* = WITHOUT arm; diagnostics never bars except the two named in stage2_checks
+  {ratchet_decision: "FAIL", ratchet_order: 3, base_legs: "Size,Value,Profitability,Investment,Momentum,PctAcc,CBOperProf,ShareIss5Y,cfp,XFIN,GP,MaxRet,roaq,RoE,IdioVol3F,STreversal,zerotrade6M,VolumeTrend,TrendFactor", family: "liquidity",
+   family_weight_with: 0.037037,
+   families_with: "size:Size|value:Value,cfp|profitability:Profitability,CBOperProf,GP,roaq,RoE|investment:Investment,PctAcc|momentum:Momentum,TrendFactor|external_financing:ShareIss5Y,XFIN|volatility:MaxRet,IdioVol3F|short_term_reversal:STreversal|liquidity:zerotrade6M,VolumeTrend,zerotrade1M",
+   resid_ic_mean: -0.002453, resid_ic_tstat_nw: -1.278064, resid_ic_n: 276, solo_ic_mean: 0.015549, resid_ic_share: -0.157748, spanning_alpha_ann_pct: -2.391499,
+   spanning_alpha_tstat_nw: -0.737239, spanning_beta: 0.575842, spanning_r2: 0.366244, spanning_n: 276, corr_to_composite: 0.605181, paired_delta_ic_mean: -0.000096,
+   paired_delta_ic_tstat: -0.362156, delta_ls_sharpe: 0.003768, maxdd_worsening_pct: -2.147853, paired_delta_ls_mean: 0.00004, paired_delta_ls_tstat: 0.114335, base_ic_mean: 0.038944,
+   cand_ic_mean: 0.038848, base_ls_sharpe: 0.982552, cand_ls_sharpe: 0.98632, base_ls_ann_return_pct: 16.122152, cand_ls_ann_return_pct: 16.169949, base_ls_raw_ann_return_pct: 14.619309,
+   cand_ls_raw_ann_return_pct: 14.589253, base_ls_raw_ann_vol_pct: 18.903011, cand_ls_raw_ann_vol_pct: 19.039623, base_ls_maxdd_pct: -43.214321, cand_ls_maxdd_pct: -41.066468, base_ls_raw_maxdd_pct: -45.196967,
+   cand_ls_raw_maxdd_pct: -45.110506, base_ls_beta_fullwindow: -0.55956, cand_ls_beta_fullwindow: -0.578369, base_ls_beta_mean: -0.543694, cand_ls_beta_mean: -0.556477, base_ls_raw_sharpe: 0.773385,
+   cand_ls_raw_sharpe: 0.766257, base_ls_sharpe_ex_top_years: 0.649801, cand_ls_sharpe_ex_top_years: 0.699006, cand_ls_top_years: "2000,2001,2021", cand_ls_top_years_share_pct: 50.995149, base_ls_sharpe_bear: 1.219243,
+   cand_ls_sharpe_bear: 1.256634, base_ls_sharpe_bull: 1.114622, cand_ls_sharpe_bull: 1.103371, cand_ic_half1_mean: 0.049832, cand_ic_half2_mean: 0.027863, base_turnover_d10_pct: 58.135039,
+   cand_turnover_d10_pct: 58.556189, cand_leg_coverage_pct_full: 45.38764}
+stage2_failed: [resid_ic_tstat_nw]
 character: >
   A D1 effect with no grade above it: D1 (highest turnover) 0.768, D2-D10 0.91-1.08 %/mo (D6 1.078, D7 0.939, D10 0.981); raw spread 2.56%/yr at vol 19.0% (Sharpe 0.135, raw MaxDD -61.0%). IC 0.0155 (NW t 2.63, plain t 2.63, ICIR 0.158), halves 0.0148 / 0.0163; annual IC positive in 16 of 23 years (2011 +0.058, 2008 +0.053; 2020 -0.045, 2009 -0.039). Tiers MEGA 0.0134, MID 0.0192, SMALL 0.0110 (raw LS Sharpe -0.007 / 0.041 / -0.002 against pooled 0.135: the raw spread is cross-tier). IC holds over horizons (0.0161 h1, 0.0177 h2, 0.0149 h6, 0.0141 h12); turnover 39.5% / 40.1%. Beta -0.73 (ex ante -0.68): the hedge adds 4.33 pp, 63% of the hedged 6.89%/yr (Sharpe 0.441, LS NW t 2.15, MaxDD -45.8%, hit 59.8%). Hedged LS 2011 +25.9%, 2014 +24.4%, 2007 +22.2% (42% of the summed LS); 1999 -29.1%, 2020 -19.9%, 2009 -13.1%; ex-top-years Sharpe 0.281; bear 0.133 / bull 0.700. Coverage 99.4%, 99.0-99.7% by sector.
 caveats:
@@ -37,5 +50,8 @@ caveats:
   - "approx translation: (countzero + (1/Turn)/480000) x 21N/ndays over calendar months t-N..t-1; turnover summed over days with a share count, shares required every window month (decision zerotrade_turnover_sum); SF1.sharesbas ART at business month-ends; Turn == 0 NaN"
   - "Cat.Economic liquidity: no v0 seed family covers it; the zerotrade trio and BidAskSpreadFlip are the liquidity passers"
   - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+  - "Stage 2 (run 044, rung 3, vs v14): faced zerotrade6M (the same construct over 6 months; Stage 1 annual IC corr 0.988, 23 / 23 same sign) and VolumeTrend (0.847, 14 / 19); zerotrade12M was rejected against the same pair in ladder 4 (resid t 0.49); residual IC -0.0025, -16% of its own 0.0155 (276 months), the ladder's only negative residual (registry: OperProfRD -0.42); spanning R2 0.37, corr 0.61"
+  - "Stage 2 diagnostics: dIC -0.0001 (t -0.36), spanning alpha -2.39%/yr (t -0.74), dSharpe +0.004, MaxDD 2.1 pts better (-43.2 -> -41.1); WITH beta -0.578 vs -0.560 (ex ante -0.556 / -0.544), raw Sharpe 0.766 / 0.773, ex-top-years 0.699 / 0.650 and bear 1.257 / 1.219 (the ladder's only rise in both), bull 1.103 / 1.115; halves 0.0498 / 0.0279 vs 0.0498 / 0.0281; turnover D10 58.1 -> 58.6%"
+  - "Stage 2: raw dLS -0.03 vs hedged +0.05 pp/yr (approx raw t -0.07; guard t 0.11); hedge part +0.08 at dbeta_mean -0.013; the off-horizon caveat stands (screened at a 1-month hold)"
 decision: >
-  Passes every Stage 1 bar: IC 0.0155 >= 0.010, NW t 2.63 >= 2.5, halves min 0.0148, raw spread 2.56%/yr > 0, coverage 99.4% >= 40, 195.3 names per decile, 276 LS months >= 248. Status stage2_pending; family to be assigned in Phase C; the off-horizon caveat travels with it. Lowest NW t of the trio (6M 2.93, 12M 2.83), on the same sort.
+  Passes every Stage 1 bar: IC 0.0155 >= 0.010, NW t 2.63 >= 2.5, halves min 0.0148, raw spread 2.56%/yr > 0, coverage 99.4% >= 40, 195.3 names per decile, 276 LS months >= 248. Status stage2_pending; family to be assigned in Phase C; the off-horizon caveat travels with it. Lowest NW t of the trio (6M 2.93, 12M 2.83), on the same sort. Stage 2 (run 044, rung 3, vs v14, 19 legs): REJECTED on resid_ic_tstat_nw -1.28, not > 2.0 (residual IC -0.0025 against its own 0.0155); the guard passes (paired hedged dLS +0.05 pp/yr, t 0.11; raw -0.03, approximate t -0.07). It would have been the third liquidity leg at 0.0370. Diagnostics (never bars): dIC -0.0001 (t -0.36), spanning alpha -2.39%/yr (t -0.74), dSharpe +0.004 (0.983 -> 0.986), MaxDD 2.1 pts better (-43.2 -> -41.1); WITH beta -0.578 vs -0.560, raw Sharpe 0.766 / 0.773, ex-top-years 0.699 / 0.650. Facing zerotrade6M (annual IC corr 0.99), the same outcome as zerotrade12M (0.49); the rules decide on the residual IC. The file stays in factors/candidates/.

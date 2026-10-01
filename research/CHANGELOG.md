@@ -218,3 +218,11 @@
 - Front-loaded (dIC +0.0031 half 1, +0.0004 half 2); MaxDD 1.6 pts worse; bear/bull 0.962/1.204 -> 1.219/1.115. Composite NW t nears the ~6 single-leg review level: noted, not a trigger.
 - Run 043 (Stage 3, never a gate): equal_rank_decile 0.983; buffered 0.954 at turnover 38.5%; icir_weighted 0.902 (from 0.800; raw 0.464, beta -0.93); vol_targeted 0.901; tier_neutral 0.858.
 - Records: manifest block v14; logged run_started/run_completed (042, 043), provenance_verified (042, 043), construction_reported, composite_updated, batch_closed stage2_l4 (3 pass, 2 fail); TrendFactor row set to accepted. Next ladder: ranks 21-24 on v14.
+
+## 2026-10-01 — Stage 2 ladder 5 (run 044, vs v14): 0 pass, 4 rejected, 0 inconclusive; v14 unchanged; last ladder, every passer now has a Stage 2 row
+- Rejected on resid_ic_tstat_nw (bar strictly > 2.0); every guard passes: BidAskSpreadFlip 1.77 (guard t 0.43), IdioVolAHT 1.92 (0.06), zerotrade1M -1.28 (0.11), NetPayoutYield 0.12 (0.06). Each would have been a third leg at 0.0370.
+- IdioVolAHT is a near miss, short by 0.076 (272 months; residual share 0.31): the closest Stage 2 rejection so far (ShareIss1Y 1.88). Its family has IdioVol3F (accepted, 2.03) and RealizedVol (rejected, 1.73).
+- Same-family overlap by Stage 1 annual IC correlation: zerotrade1M vs zerotrade6M 0.99, the only negative residual in the ladder (-0.0025), as zerotrade12M before it. IdioVolAHT vs IdioVol3F 0.98. BidAskSpreadFlip vs zerotrade6M 0.93; it keeps its flipped-sign caveat. NetPayoutYield vs cfp 0.74 (vs XFIN 0.89).
+- Diagnostics, never bars: BidAskSpreadFlip dIC t 1.83; its hedged dLS +0.20 against raw -0.20 pp, with beta -0.617 vs -0.560 (the negative-beta guard property). IdioVolAHT is the only rung where MaxDD worsens (+1.2 pts). NetPayoutYield raw dLS -0.43 vs hedged +0.03 pp. Every WITH arm has a lower raw Sharpe than v14's 0.773.
+- Provenance: 5 stamps match; holdout off; eval_end 2021-12-31; 0 warnings; arms aligned; check_stage2 agrees 4/4; every base arm equals run 042 on 66/66 fields.
+- Records: four rows set to rejected, index rebuilt (24/24 passers Stage 2-tested, 14 accepted), events 044 logged, batch_closed stage2_l5. No composite, manifest or tag change.

@@ -1,14 +1,14 @@
 name: NetPayoutYield
 osap_acronym: NetPayoutYield
-status: stage2_pending
+status: rejected
 family: value
 batch: stage1_b6
 declaration_order: 12
 date_tested: "2026-10-01"
 run: "008"
-stage2_run: null
+stage2_run: "044"
 stage1_decision: PASS
-decided_by: "all bars"
+decided_by: "resid_ic_tstat_nw"
 source: "Boudoukh, Michaely, Richardson and Roberts 2007 (JF); SignalDoc sign +1, Cat.Economic valuation"
 orientation: "high net payout (dividends + repurchases - issuance) / market equity at t-6 = attractive (SignalDoc sign +1)"
 provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/NetPayoutYield/spec.md}
@@ -24,7 +24,20 @@ stage1:   # from the run 008 block, verbatim; the beta / ex-regime rows are D5 d
    ls_top_years: "2002,2009,2021", ls_top_years_share_pct: 55.02167, ls_sharpe_bear: 0.534537, ls_sharpe_bull: 0.542975,
    decile_avg_ret_pct: "0.821,0.909,1.027,0.983,1.000,0.918,0.959,1.083,1.139,1.232", delisting_adjusted_pct: 0.436673}
 stage1_failed: []
-stage2_failed: []
+stage2:   # from the run 044 rung 4 block, verbatim; cand_* = WITH arm, base_* = WITHOUT arm; diagnostics never bars except the two named in stage2_checks
+  {ratchet_decision: "FAIL", ratchet_order: 4, base_legs: "Size,Value,Profitability,Investment,Momentum,PctAcc,CBOperProf,ShareIss5Y,cfp,XFIN,GP,MaxRet,roaq,RoE,IdioVol3F,STreversal,zerotrade6M,VolumeTrend,TrendFactor", family: "value",
+   family_weight_with: 0.037037,
+   families_with: "size:Size|value:Value,cfp,NetPayoutYield|profitability:Profitability,CBOperProf,GP,roaq,RoE|investment:Investment,PctAcc|momentum:Momentum,TrendFactor|external_financing:ShareIss5Y,XFIN|volatility:MaxRet,IdioVol3F|short_term_reversal:STreversal|liquidity:zerotrade6M,VolumeTrend",
+   resid_ic_mean: 0.000254, resid_ic_tstat_nw: 0.116485, resid_ic_n: 264, solo_ic_mean: 0.014492, resid_ic_share: 0.017542, spanning_alpha_ann_pct: -2.47789,
+   spanning_alpha_tstat_nw: -1.048599, spanning_beta: 0.520201, spanning_r2: 0.416136, spanning_n: 264, corr_to_composite: 0.645086, paired_delta_ic_mean: -0.000262,
+   paired_delta_ic_tstat: -0.562604, delta_ls_sharpe: -0.00036, maxdd_worsening_pct: -0.289806, paired_delta_ls_mean: 0.000022, paired_delta_ls_tstat: 0.060369, base_ic_mean: 0.038944,
+   cand_ic_mean: 0.038682, base_ls_sharpe: 0.982552, cand_ls_sharpe: 0.982193, base_ls_ann_return_pct: 16.122152, cand_ls_ann_return_pct: 16.148534, base_ls_raw_ann_return_pct: 14.619309,
+   cand_ls_raw_ann_return_pct: 14.193923, base_ls_raw_ann_vol_pct: 18.903011, cand_ls_raw_ann_vol_pct: 19.150437, base_ls_maxdd_pct: -43.214321, cand_ls_maxdd_pct: -42.924515, base_ls_raw_maxdd_pct: -45.196967,
+   cand_ls_raw_maxdd_pct: -46.16729, base_ls_beta_fullwindow: -0.55956, cand_ls_beta_fullwindow: -0.592844, base_ls_beta_mean: -0.543694, cand_ls_beta_mean: -0.565662, base_ls_raw_sharpe: 0.773385,
+   cand_ls_raw_sharpe: 0.74118, base_ls_sharpe_ex_top_years: 0.649801, cand_ls_sharpe_ex_top_years: 0.674153, cand_ls_top_years: "2000,2001,2021", cand_ls_top_years_share_pct: 52.67506, base_ls_sharpe_bear: 1.219243,
+   cand_ls_sharpe_bear: 1.116427, base_ls_sharpe_bull: 1.114622, cand_ls_sharpe_bull: 1.148302, cand_ic_half1_mean: 0.048506, cand_ic_half2_mean: 0.028857, base_turnover_d10_pct: 58.135039,
+   cand_turnover_d10_pct: 57.384414, cand_leg_coverage_pct_full: 44.379861}
+stage2_failed: [resid_ic_tstat_nw]
 character: >
   Window 1999-12..2021-11 (264 months; history_months 24 nulls the first 12). Long-leg graded: D1 0.821, D2 0.909, D3-D7 0.92-1.03, D8 1.083, D9 1.139, D10 1.232 %/mo. Raw 4.92%/yr (Sharpe 0.357, MaxDD -39.4%). IC 0.0145 (NW t 2.60, plain t 2.74, ICIR 0.169), halves 0.0142 / 0.0148 (132 months each); tiers MEGA 0.0180, MID 0.0173, SMALL 0.0114 (raw LS Sharpe 0.379 / 0.347 / 0.284); IC decays slowly (0.0132 h1, 0.0109 h6, 0.0100 h12); turnover 15.0% / 16.4%. Beta -0.41 (ex ante -0.41): hedged 6.87%/yr (Sharpe 0.542, LS NW t 2.77, MaxDD -31.1%), the hedge supplying 1.95 pp (28%). 2002, 2009, 2021 carry 55% of the summed LS; 2021 alone +62.3%, 2020 -22.4%; ex-top-years Sharpe 0.302; bear 0.535 / bull 0.543. Coverage 65.5%: Financial Services 3.0%, Real Estate 1.6%, Communication Services 66.0%; merger-delisted returns 0.43%, performance 0.00%.
 caveats:
@@ -34,5 +47,9 @@ caveats:
   - "financials dropped by CURRENT SIC 6000-6999 (look-ahead, current_sic_signal_values); preferred excluded from ncfcommon"
   - "one year carries much of the return: 2021 hedged +62.3% after 2020 -22.4%"
   - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+  - "Stage 2 (run 044, rung 4, vs v14): faced Value and cfp in value; Stage 1 annual IC corr 0.737 cfp (16 / 22 same sign; Value is a v0 seed leg, baseline row, with no Stage 1 annual-IC series); residual IC 0.0003, 2% of its own 0.0145, on its own 264 months; spanning R2 0.42, corr 0.65"
+  - "its annual IC co-moves more with the external_financing legs than with cfp: 0.891 XFIN (17 / 22 same sign), 0.806 ShareIss5Y (14 / 19); co-movement of annual IC, not a score correlation; the family is fixed (Phase C)"
+  - "Stage 2 diagnostics: dIC -0.0003 (t -0.56), spanning alpha -2.48%/yr (t -1.05), dSharpe -0.0004, MaxDD 0.3 pts better; WITH beta -0.593 vs -0.560 (ex ante -0.566 / -0.544), raw Sharpe 0.741 / 0.773, ex-top-years 0.674 / 0.650, bear 1.219 -> 1.116 / bull 1.115 -> 1.148; halves 0.0485 / 0.0289 vs 0.0498 / 0.0281; leg coverage full 45.39 -> 44.38% (Financial Services 84.0 -> 79.2%), from its 65.5% coverage"
+  - "Stage 2: raw dLS -0.43 vs hedged +0.03 pp/yr (approx raw t -0.97; guard t 0.06); hedge part +0.45 at dbeta_mean -0.022 (implied universe mean about 20.5%/yr, loosely read: not proportional to dbeta_mean)"
 decision: >
-  Passes every Stage 1 bar: IC 0.0145 >= 0.010, NW t 2.60 >= 2.5, halves min 0.0142, raw spread 4.92%/yr > 0, coverage 65.5% >= 40, 134.6 names per decile, 264 LS months >= 237. Status stage2_pending; family to be assigned in Phase C. Lowest NW t of the eight passers (IdioVolAHT 2.63); IC equals v0's 0.0145 at t 2.60 vs 2.62 with level halves; ex-top-years Sharpe 0.302 is second-lowest among the passers (CF -0.169).
+  Passes every Stage 1 bar: IC 0.0145 >= 0.010, NW t 2.60 >= 2.5, halves min 0.0142, raw spread 4.92%/yr > 0, coverage 65.5% >= 40, 134.6 names per decile, 264 LS months >= 237. Status stage2_pending; family to be assigned in Phase C. Lowest NW t of the eight passers (IdioVolAHT 2.63); IC equals v0's 0.0145 at t 2.60 vs 2.62 with level halves; ex-top-years Sharpe 0.302 is second-lowest among the passers (CF -0.169). Stage 2 (run 044, rung 4, vs v14, 19 legs): REJECTED on resid_ic_tstat_nw 0.12, not > 2.0 (residual IC 0.0003, 2% of its own 0.0145, 264 months); the guard passes (paired hedged dLS +0.03 pp/yr, t 0.06; raw -0.43, approximate t -0.97). It would have been the third value leg at 0.0370. Diagnostics (never bars): dIC -0.0003 (t -0.56), spanning alpha -2.48%/yr (t -1.05), dSharpe -0.0004 (0.983 -> 0.982), MaxDD 0.3 pts better (-43.2 -> -42.9); WITH beta -0.593 vs -0.560, raw Sharpe 0.741 / 0.773, ex-top-years 0.674 / 0.650. The second value-family rejection after CF (1.02); the rules decide on the residual IC. The file stays in factors/candidates/.

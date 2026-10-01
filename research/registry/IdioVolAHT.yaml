@@ -1,14 +1,14 @@
 name: IdioVolAHT
 osap_acronym: IdioVolAHT
-status: stage2_pending
+status: rejected
 family: volatility
 batch: stage1_b4
 declaration_order: 12
 date_tested: "2026-10-01"
 run: "006"
-stage2_run: null
+stage2_run: "044"
 stage1_decision: PASS
-decided_by: "all bars"
+decided_by: "resid_ic_tstat_nw"
 source: "Ali, Hwang and Trombley 2003 (JFE); SignalDoc sign -1, Cat.Economic volatility"
 orientation: "low 252-day CAPM residual daily volatility = attractive (SignalDoc sign -1)"
 provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/IdioVolAHT/spec.md}
@@ -24,7 +24,20 @@ stage1:   # from the run 006 block, verbatim; the beta / ex-regime rows are D5 d
    ls_beta_fullwindow: -1.072857, ls_sharpe_ex_top_years: 0.388836, ls_top_years: "2000,2014,2021", ls_top_years_share_pct: 53.398072, ls_sharpe_bear: -0.115022,
    ls_sharpe_bull: 0.871932, decile_avg_ret_pct: "0.665,0.930,1.069,0.986,0.985,1.020,1.007,1.017,0.971,0.990", delisting_adjusted_pct: 0.436673}
 stage1_failed: []
-stage2_failed: []
+stage2:   # from the run 044 rung 2 block, verbatim; cand_* = WITH arm, base_* = WITHOUT arm; diagnostics never bars except the two named in stage2_checks
+  {ratchet_decision: "FAIL", ratchet_order: 2, base_legs: "Size,Value,Profitability,Investment,Momentum,PctAcc,CBOperProf,ShareIss5Y,cfp,XFIN,GP,MaxRet,roaq,RoE,IdioVol3F,STreversal,zerotrade6M,VolumeTrend,TrendFactor", family: "volatility",
+   family_weight_with: 0.037037,
+   families_with: "size:Size|value:Value,cfp|profitability:Profitability,CBOperProf,GP,roaq,RoE|investment:Investment,PctAcc|momentum:Momentum,TrendFactor|external_financing:ShareIss5Y,XFIN|volatility:MaxRet,IdioVol3F,IdioVolAHT|short_term_reversal:STreversal|liquidity:zerotrade6M,VolumeTrend",
+   resid_ic_mean: 0.007275, resid_ic_tstat_nw: 1.923537, resid_ic_n: 272, solo_ic_mean: 0.023776, resid_ic_share: 0.305979, spanning_alpha_ann_pct: -2.836031,
+   spanning_alpha_tstat_nw: -0.694723, spanning_beta: 0.844807, spanning_r2: 0.403678, spanning_n: 272, corr_to_composite: 0.635357, paired_delta_ic_mean: 0.000226,
+   paired_delta_ic_tstat: 0.712343, delta_ls_sharpe: -0.015829, maxdd_worsening_pct: 1.245547, paired_delta_ls_mean: 0.000017, paired_delta_ls_tstat: 0.061723, base_ic_mean: 0.038944,
+   cand_ic_mean: 0.03917, base_ls_sharpe: 0.982552, cand_ls_sharpe: 0.966723, base_ls_ann_return_pct: 16.122152, cand_ls_ann_return_pct: 16.142616, base_ls_raw_ann_return_pct: 14.619309,
+   cand_ls_raw_ann_return_pct: 14.63746, base_ls_raw_ann_vol_pct: 18.903011, cand_ls_raw_ann_vol_pct: 19.367352, base_ls_maxdd_pct: -43.214321, cand_ls_maxdd_pct: -44.459868, base_ls_raw_maxdd_pct: -45.196967,
+   cand_ls_raw_maxdd_pct: -47.524518, base_ls_beta_fullwindow: -0.55956, cand_ls_beta_fullwindow: -0.584626, base_ls_beta_mean: -0.543694, cand_ls_beta_mean: -0.563214, base_ls_raw_sharpe: 0.773385,
+   cand_ls_raw_sharpe: 0.75578, base_ls_sharpe_ex_top_years: 0.649801, cand_ls_sharpe_ex_top_years: 0.630019, cand_ls_top_years: "2000,2001,2021", cand_ls_top_years_share_pct: 54.498431, base_ls_sharpe_bear: 1.219243,
+   cand_ls_sharpe_bear: 1.214388, base_ls_sharpe_bull: 1.114622, cand_ls_sharpe_bull: 1.108937, cand_ic_half1_mean: 0.049654, cand_ic_half2_mean: 0.028685, base_turnover_d10_pct: 58.135039,
+   cand_turnover_d10_pct: 55.794559, cand_leg_coverage_pct_full: 45.38764}
+stage2_failed: [resid_ic_tstat_nw]
 character: >
   The spread is a D1 effect: D1 0.665 %/mo, D2-D10 0.93-1.07; raw spread 3.89%/yr at vol 27.1% (Sharpe 0.144, MaxDD -72.4%). IC 0.0238 (NW t 2.63, ICIR 0.165), halves 0.0249 / 0.0226; tiers MEGA 0.0193, MID 0.0269, SMALL 0.0251 (raw LS Sharpe 0.059 / 0.238 / 0.189; MEGA raw MaxDD -90.1%). IC decays slowly (0.0230 h1, 0.0184 h6, 0.0189 h12); turnover 10.9% / 15.3%. Beta -1.07 (ex ante -1.04): the hedge adds 7.79 pp, 67% of the hedged 11.68%/yr (Sharpe 0.545, LS NW t 2.58). Ex-top-years Sharpe 0.389 (2000, 2014, 2021); bear -0.115 / bull 0.872; hedged LS -20.2% (1999), -27.9% (2009), -27.9% (2020), +70.3% (2000). Coverage 96.8%, 94.4-97.7% by sector.
 caveats:
@@ -34,5 +47,9 @@ caveats:
   - "near-duplicate of IdioVol3F (see its row): same construct, shape, beta and top years; differs in window and turnover (11% vs 64%); overlap not measured at Stage 1"
   - "NW t 2.63 clears 2.5 by 0.13, the thinnest margin of the five passers"
   - "delisting_adjusted_pct 0.44% is universe-wide"
+  - "Stage 2 (run 044, rung 2, vs v14): faced MaxRet and IdioVol3F in volatility; Stage 1 annual IC corr 0.978 IdioVol3F (20 / 23 same sign), 0.969 MaxRet (19 / 23), 0.949 zerotrade6M (19 / 23); residual IC 0.0073, 31% of its own 0.0238 (the ladder's highest share) on its own 272 months; spanning R2 0.40, corr 0.64; co-movement of annual IC, not a score correlation"
+  - "NEAR MISS: resid t 1.923537 against the strict bar > 2.0, short by 0.076463; the closest Stage 2 rejection in the registry (next ShareIss1Y 1.88); the bar is the bar"
+  - "Stage 2 diagnostics: dIC +0.0002 (t 0.71), spanning alpha -2.84%/yr (t -0.69), dSharpe -0.016, MaxDD 1.2 pts worse (-43.2 -> -44.5, the ladder's only worsening; raw -45.2 -> -47.5); WITH beta -0.585 vs -0.560 (ex ante -0.563 / -0.544), raw Sharpe 0.756 / 0.773, ex-top-years 0.630 / 0.650, bear 1.219 -> 1.214 / bull 1.115 -> 1.109; halves 0.0497 / 0.0287 vs 0.0498 / 0.0281; turnover D10 58.1 -> 55.8%"
+  - "Stage 2: raw dLS +0.02 vs hedged +0.02 pp/yr (guard t 0.06), same sign; hedge part +0.002 at dbeta_mean -0.020"
 decision: >
-  Passes every Stage 1 bar: IC 0.0238 >= 0.010, NW t 2.63 >= 2.5, halves min 0.0226, raw spread 3.89%/yr > 0, coverage 96.8% >= 40, 192.9 names per decile, 272 LS months >= 244. Status stage2_pending; family to be assigned in Phase C. Higher mean IC than IdioVol3F (0.0238 vs 0.0229) at a lower t (2.63 vs 3.15; ICIR 0.165 vs 0.190) and about a sixth of the turnover.
+  Passes every Stage 1 bar: IC 0.0238 >= 0.010, NW t 2.63 >= 2.5, halves min 0.0226, raw spread 3.89%/yr > 0, coverage 96.8% >= 40, 192.9 names per decile, 272 LS months >= 244. Status stage2_pending; family to be assigned in Phase C. Higher mean IC than IdioVol3F (0.0238 vs 0.0229) at a lower t (2.63 vs 3.15; ICIR 0.165 vs 0.190) and about a sixth of the turnover. Stage 2 (run 044, rung 2, vs v14, 19 legs): REJECTED on resid_ic_tstat_nw 1.92, not > 2.0, short by 0.076 (residual IC 0.0073, 31% of its own 0.0238, 272 months); the guard passes (paired hedged dLS +0.02 pp/yr, t 0.06; raw +0.02). It would have been the third volatility leg at 0.0370. Diagnostics (never bars): dIC +0.0002 (t 0.71), spanning alpha -2.84%/yr (t -0.69), dSharpe -0.016 (0.983 -> 0.967), MaxDD 1.2 pts worse (-43.2 -> -44.5); WITH beta -0.585 vs -0.560, raw Sharpe 0.756 / 0.773, ex-top-years 0.630 / 0.650. In its family IdioVol3F was accepted at 2.03 and RealizedVol rejected at 1.73; facing IdioVol3F (annual IC corr 0.98) and MaxRet (0.97), the rules decide on the residual IC. The file stays in factors/candidates/.
