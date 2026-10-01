@@ -1,0 +1,36 @@
+name: Mom12mOffSeason
+osap_acronym: Mom12mOffSeason
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b6
+declaration_order: 2
+date_tested: "2026-10-01"
+run: "008"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Heston and Sadka 2008 (JFE); SignalDoc sign +1, Cat.Economic other"
+orientation: "high arithmetic mean of the monthly returns t-10..t-1 = attractive (SignalDoc sign +1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/Mom12mOffSeason/spec.md}
+dimension_override: null
+history_gate_months: 11
+preflight: {masspoint_max_pct: 0.11396, qcut_min_bins: 10, coverage_min_pct: 93.598616}
+stage1:   # from the run 008 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.008394, ic_tstat_nw: 1.23615, ic_half1_mean: 0.004675, ic_half2_mean: 0.012114, icir: 0.069457, ls_sharpe: 0.583082,
+   ls_ann_return_pct: 13.335847, ls_tstat_nw: 3.014752, ls_maxdd_pct: -60.295661, ls_raw_ann_return_pct: 7.07593, ls_raw_sharpe: 0.314224,
+   ls_raw_maxdd_pct: -66.102313, turnover_d10_pct: 29.773627, turnover_d1_pct: 33.574165, coverage_pct: 96.448342, avg_names_per_decile: 189.500725,
+   n_months: 276, ls_n_months: 276, ic_decay_h1: 0.007132, ic_decay_h6: -0.001128, ic_decay_h12: 0.002283, tier_MEGA_ic_mean: 0.0089,
+   tier_MID_ic_mean: 0.0094, tier_SMALL_ic_mean: 0.0071, ls_beta_mean: -0.218447, ls_beta_fullwindow: -0.348947, ls_sharpe_ex_top_years: 0.417626,
+   ls_top_years: "1999,2007,2017", ls_top_years_share_pct: 35.503507, ls_sharpe_bear: -0.126343, ls_sharpe_bull: 0.944001,
+   decile_avg_ret_pct: "0.720,0.967,0.937,0.998,0.957,0.942,1.015,0.982,1.116,1.310", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw]
+stage2_failed: []
+character: >
+  Deciles rise from D1 0.720 to D10 1.310 %/mo with D2-D8 flat (0.94-1.02): both tails; raw spread 7.08%/yr (Sharpe 0.314, MaxDD -66.1%). IC 0.0084 (NW t 1.24, ICIR 0.070), halves 0.0047 / 0.0121; tiers MEGA 0.0089, MID 0.0094, SMALL 0.0071; decay 0.0071 h1, -0.0011 h6, 0.0023 h12; turnover 29.8% / 33.6%. Annual IC -0.084 in 2009, -0.047 in 2016, +0.067 in 2007. Beta -0.35 (ex ante -0.22): hedged 13.34%/yr (Sharpe 0.583, LS NW t 3.01, MaxDD -60.3%), the hedge supplying 6.26 pp (47%); ex-top-years Sharpe 0.418 (1999, 2007, 2017); bear -0.126 / bull 0.944. Coverage 96.4%.
+caveats:
+  - "window t-10..t-1 is the v0 Momentum leg's t-11..t-1 minus month t-11, averaged not compounded: overlap with a v0 leg by construction; v0 Momentum has no standalone row to compare against"
+  - "the hedged 13.34%/yr is half hedge at beta -0.35; not a bar (D11)"
+  - "history_months 11, skipna=False: names with part of the window are NaN (OSAP scores them)"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (1.24 < 2.5); ic_mean 0.0084 also fails; halves, raw spread 7.08%/yr, coverage 96.4%, 189.5 names and 276 LS months pass. A momentum-crash profile (2009 IC -0.084, bear Sharpe -0.13) as for Mom6m.

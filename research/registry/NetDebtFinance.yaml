@@ -1,0 +1,36 @@
+name: NetDebtFinance
+osap_acronym: NetDebtFinance
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b6
+declaration_order: 10
+date_tested: "2026-10-01"
+run: "008"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Bradshaw, Richardson and Sloan 2006 (JAE); SignalDoc sign -1, Cat.Economic external financing"
+orientation: "low net debt financing / average total assets = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/NetDebtFinance/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 9.457513, qcut_min_bins: 10, coverage_min_pct: 44.454187}
+stage1:   # from the run 008 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.003414, ic_tstat_nw: 1.384269, ic_half1_mean: 0.008698, ic_half2_mean: -0.00187, icir: 0.085795, ls_sharpe: 0.454788,
+   ls_ann_return_pct: 2.94694, ls_tstat_nw: 2.024062, ls_maxdd_pct: -23.573312, ls_raw_ann_return_pct: 2.248649, ls_raw_sharpe: 0.32077,
+   ls_raw_maxdd_pct: -30.550539, turnover_d10_pct: 18.546835, turnover_d1_pct: 16.086955, coverage_pct: 88.143623, avg_names_per_decile: 173.183696,
+   n_months: 276, ls_n_months: 276, ic_decay_h1: 0.002176, ic_decay_h6: 0.003613, ic_decay_h12: 0.005125, tier_MEGA_ic_mean: -0.0009,
+   tier_MID_ic_mean: 0.0034, tier_SMALL_ic_mean: 0.0038, ls_beta_mean: -0.118242, ls_beta_fullwindow: -0.158381, ls_sharpe_ex_top_years: 0.162682,
+   ls_top_years: "2000,2003,2021", ls_top_years_share_pct: 72.390762, ls_sharpe_bear: 0.054811, ls_sharpe_bull: 0.567095,
+   decile_avg_ret_pct: "0.834,0.934,0.957,0.971,1.035,1.066,1.020,1.097,1.057,1.021", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  Deciles rise from D1 0.834 to D8 1.097 %/mo then flatten (D10 1.021); raw spread 2.25%/yr (Sharpe 0.321, MaxDD -30.6%). IC 0.0034 (NW t 1.38, ICIR 0.086), halves 0.0087 / -0.0019; tiers MEGA -0.0009, MID 0.0034, SMALL 0.0038 (raw LS Sharpe -0.053 / 0.031 / 0.362); decay rises 0.0022 h1 to 0.0051 h12; turnover 18.5% / 16.1%. Annual IC negative 2017-2020 (-0.018 to -0.026), +0.027 in 2021. Beta -0.16 (ex ante -0.12): hedged 2.95%/yr (Sharpe 0.455, LS NW t 2.02, MaxDD -23.6%); ex-top-years Sharpe 0.163 (2000, 2003, 2021; 72%); bear 0.055 / bull 0.567. Coverage 88.1% (Technology 75.6%).
+caveats:
+  - "alpha_review medium (SF1.debt includes operating leases from FY2019): per-year decile bins and within-sector mass are not printed; pooled Avg N per decile 172-175, 276 / 276 LS months, 0 partial-collapse months, mode 9.5% at the 2021-11 probe; IC 2019 -0.022, 2020 -0.026, 2021 +0.027. The verdict is insensitive: t 1.38 vs 2.5 and the first-half IC alone (0.0087) is below 0.010"
+  - "tie rule: NaN where debt is 0 at both year-ends and ncfdebt == 0; ART TTM flow, no 6-month lag"
+  - "raw Sharpe 0.3208 and top years equal NetEquityFinance's: distinct series (raw vol 7.01 vs 14.16%, 2021 LS 27.6 vs 39.0%), coincidence"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (1.38 < 2.5); ic_mean 0.0034 and ic_half_min (-0.0019) also fail. 276 LS months, 173.2 names, coverage 88.1%: not inconclusive. The debt-side twin of NetEquityFinance (passed this batch) carries no rank information; CompositeDebtIssuance (b2, t 1.49) failed likewise.

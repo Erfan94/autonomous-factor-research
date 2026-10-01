@@ -1,13 +1,13 @@
 # DERIVED — rebuilt by `python3 scripts/records.py index` from research/registry/*.yaml.
 # One line per factor; the full row is research/registry/<name>.yaml. Never edit by hand.
 search_accounting:
-  n_candidates_suggested: 60
-  n_stage1_tested: 60
-  n_stage1_passed: 6
+  n_candidates_suggested: 72
+  n_stage1_tested: 72
+  n_stage1_passed: 8
   n_stage2_tested: 0
   n_accepted: 0
   n_inconclusive: 0
-  by_status: {"baseline": 5, "rejected": 54, "stage2_pending": 6}
+  by_status: {"baseline": 5, "rejected": 64, "stage2_pending": 8}
 factors:
   - {name: AM, status: rejected, batch: stage1_b1, ic: 0.0098, ic_t: 1.26, sharpe: -0.149, ret: -3.17, raw_ret: 4.72, cov: 99.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.34, sh_exreg: -0.449, family: null, decided_by: "ic_tstat_nw", run: "003"}
   - {name: Accruals, status: rejected, batch: stage1_b1, ic: 0.0048, ic_t: 1.84, sharpe: 0.329, ret: 2.49, raw_ret: 2.92, cov: 76.7, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.04, sh_exreg: 0.107, family: null, decided_by: "ic_tstat_nw", run: "003"}
@@ -70,7 +70,19 @@ factors:
   - {name: Leverage, status: rejected, batch: stage1_b5, ic: 0.0125, ic_t: 1.71, sharpe: -0.025, ret: -0.50, raw_ret: 7.09, cov: 99.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.30, sh_exreg: -0.342, family: null, decided_by: "ic_tstat_nw", run: "007"}
   - {name: MRreversal, status: rejected, batch: stage1_b5, ic: -0.0043, ic_t: -0.96, sharpe: 0.051, ret: 0.62, raw_ret: 3.69, cov: 91.0, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.09, sh_exreg: -0.200, family: null, decided_by: "ic_tstat_nw", run: "007"}
   - {name: MaxRet, status: stage2_pending, batch: stage1_b5, ic: 0.0233, ic_t: 3.42, sharpe: 0.611, ret: 10.57, raw_ret: 4.17, cov: 99.8, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.86, sh_exreg: 0.544, family: null, decided_by: "all bars", run: "007"}
+  - {name: MeanRankRevGrowth, status: rejected, batch: stage1_b6, ic: -0.0005, ic_t: -0.12, sharpe: 0.093, ret: 0.76, raw_ret: 2.23, cov: 46.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.10, sh_exreg: -0.225, family: null, decided_by: "ic_tstat_nw", run: "008"}
+  - {name: Mom12mOffSeason, status: rejected, batch: stage1_b6, ic: 0.0084, ic_t: 1.24, sharpe: 0.583, ret: 13.34, raw_ret: 7.08, cov: 96.4, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.35, sh_exreg: 0.418, family: null, decided_by: "ic_tstat_nw", run: "008"}
+  - {name: Mom6m, status: rejected, batch: stage1_b6, ic: 0.0077, ic_t: 1.24, sharpe: 0.616, ret: 12.93, raw_ret: 6.47, cov: 98.2, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.47, sh_exreg: 0.449, family: null, decided_by: "ic_tstat_nw", run: "008"}
+  - {name: MomOffSeason, status: rejected, batch: stage1_b6, ic: -0.0052, ic_t: -0.97, sharpe: 0.113, ret: 1.19, raw_ret: 2.23, cov: 66.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.05, sh_exreg: -0.208, family: null, decided_by: "ic_tstat_nw", run: "008"}
+  - {name: MomOffSeason06YrPlus, status: rejected, batch: stage1_b6, ic: 0.0065, ic_t: 1.76, sharpe: 0.268, ret: 1.64, raw_ret: 1.45, cov: 40.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.01, sh_exreg: -0.063, family: null, decided_by: "ic_tstat_nw", run: "008"}
+  - {name: MomSeason, status: rejected, batch: stage1_b6, ic: 0.0020, ic_t: 0.58, sharpe: 0.022, ret: 0.17, raw_ret: -0.27, cov: 66.1, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.00, sh_exreg: -0.221, family: null, decided_by: "ic_tstat_nw", run: "008"}
+  - {name: MomSeason06YrPlus, status: rejected, batch: stage1_b6, ic: 0.0069, ic_t: 1.90, sharpe: 0.018, ret: 0.12, raw_ret: 0.21, cov: 40.3, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.00, sh_exreg: -0.287, family: null, decided_by: "ic_tstat_nw", run: "008"}
+  - {name: MomSeasonShort, status: rejected, batch: stage1_b6, ic: 0.0013, ic_t: 0.28, sharpe: 0.096, ret: 1.02, raw_ret: -0.44, cov: 96.1, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.02, sh_exreg: -0.345, family: null, decided_by: "ic_tstat_nw", run: "008"}
   - {name: Momentum, status: baseline, batch: BASELINE, ic: null, ic_t: null, sharpe: null, ret: null, raw_ret: null, cov: null, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: null, sh_exreg: null, family: "momentum", decided_by: null, run: "001"}
+  - {name: NOA, status: rejected, batch: stage1_b6, ic: 0.0016, ic_t: 0.62, sharpe: 0.907, ret: 7.92, raw_ret: 8.64, cov: 77.3, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.02, sh_exreg: 0.605, family: null, decided_by: "ic_tstat_nw", run: "008"}
+  - {name: NetDebtFinance, status: rejected, batch: stage1_b6, ic: 0.0034, ic_t: 1.38, sharpe: 0.455, ret: 2.95, raw_ret: 2.25, cov: 88.1, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.16, sh_exreg: 0.163, family: null, decided_by: "ic_tstat_nw", run: "008"}
+  - {name: NetEquityFinance, status: stage2_pending, batch: stage1_b6, ic: 0.0166, ic_t: 3.03, sharpe: 0.601, ret: 7.02, raw_ret: 4.54, cov: 93.9, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.52, sh_exreg: 0.434, family: null, decided_by: "all bars", run: "008"}
+  - {name: NetPayoutYield, status: stage2_pending, batch: stage1_b6, ic: 0.0145, ic_t: 2.60, sharpe: 0.542, ret: 6.87, raw_ret: 4.92, cov: 65.5, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.41, sh_exreg: 0.302, family: null, decided_by: "all bars", run: "008"}
   - {name: Profitability, status: baseline, batch: BASELINE, ic: null, ic_t: null, sharpe: null, ret: null, raw_ret: null, cov: null, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: null, sh_exreg: null, family: "profitability", decided_by: null, run: "001"}
   - {name: Size, status: baseline, batch: BASELINE, ic: null, ic_t: null, sharpe: null, ret: null, raw_ret: null, cov: null, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: null, sh_exreg: null, family: "size", decided_by: null, run: "001"}
   - {name: Value, status: baseline, batch: BASELINE, ic: null, ic_t: null, sharpe: null, ret: null, raw_ret: null, cov: null, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: null, sh_exreg: null, family: "value", decided_by: null, run: "001"}

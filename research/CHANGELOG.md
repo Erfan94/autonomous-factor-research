@@ -53,3 +53,11 @@
 - Every long-term-reversal signal has non-positive IC. The Intan quartet's raw 4.3-5.2%/yr is beta (0.56-0.67): hedged -3.5 to -4.3%/yr, same top years 2003/2009/2016. The quartet shares Ret60, and LRreversal's window lies inside it.
 - Not inconclusive: Intan 228 LS months >= 205, coverage 61-63%; LRreversal 251 >= 225, MRreversal 269 >= 242, IntMom 275 >= 247. No flip qualifies (largest |t| LRreversal 1.29 < 2.74).
 - Provenance verified on 12 blocks, 0 validation warnings, check_stage1 matches 12/12. InvestmentTWX D10 (negative-x0 names) read: nothing visible. Counters: 60 screened, 6 passed, 54 rejected; composite v0.
+
+## 2026-10-01 — Stage 1 batch 6 (run 008): NetEquityFinance and NetPayoutYield pass, 10 rejected, 0 inconclusive
+- PASS NetEquityFinance (external financing; IC 0.0166, NW t 3.03, halves 0.0199 / 0.0132, raw 4.54%/yr, Sharpe 0.32). D1 (heaviest issuers) anchors the spread; beta -0.52, so the hedge adds 2.48 pp (35%). Ex-top-years Sharpe 0.43. PASS NetPayoutYield (valuation; IC 0.0145, NW t 2.60 on a thin margin, halves 0.0142 / 0.0148, raw 4.92%/yr). Its spread is graded in the long leg; beta -0.41; 2021 alone +62.3% hedged; ex-top-years Sharpe 0.30. Both stage2_pending.
+- The two passers use the same net equity flow with opposite sign: annual IC correlation 0.90, same sign in 15 of 22 years, both lose about 21% in 2020. Against CompEquIss (b2) the annual IC correlation is 0.06 / -0.12. There is a mechanical link to v0 Investment. No Stage 2 number exists.
+- Rejected on ic_tstat_nw (each also fails ic_mean): MeanRankRevGrowth -0.12, Mom12mOffSeason 1.24, Mom6m 1.24, MomOffSeason -0.97, MomOffSeason06YrPlus 1.76, MomSeason 0.58, MomSeason06YrPlus 1.90, MomSeasonShort 0.28, NOA 0.62, NetDebtFinance 1.38. Mom6m and Mom12mOffSeason use windows inside v0 Momentum's.
+- The 06YrPlus pair are rejected, not inconclusive: 169 / 168 months >= 120, LS floors 152 / 151 met, coverage 40.62 / 40.27% >= 40. That coverage is pooled over 276 months with 107 / 108 leading null months.
+- NOA: raw Sharpe 1.01 on IC 0.0016. 67% of the D10-D1 spread lies in D1-D3 and the interior is flat; 1999-2001 carry 49% of the return. No flip qualifies (largest |t| 1.90).
+- Provenance verified on 12 blocks, 0 validation warnings, check_stage1 matches 12/12. Counters: 72 screened, 8 passed, 64 rejected; composite v0.

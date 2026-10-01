@@ -1,0 +1,38 @@
+name: NetEquityFinance
+osap_acronym: NetEquityFinance
+status: stage2_pending
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b6
+declaration_order: 11
+date_tested: "2026-10-01"
+run: "008"
+stage2_run: null
+stage1_decision: PASS
+decided_by: "all bars"
+source: "Bradshaw, Richardson and Sloan 2006 (JAE); SignalDoc sign -1, Cat.Economic external financing"
+orientation: "low net equity financing (issuance - repurchases - dividends) / average total assets = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/NetEquityFinance/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 3.676826, qcut_min_bins: 10, coverage_min_pct: 47.084612}
+stage1:   # from the run 008 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.016576, ic_tstat_nw: 3.027885, ic_half1_mean: 0.019924, ic_half2_mean: 0.013227, icir: 0.187562, ls_sharpe: 0.601217,
+   ls_ann_return_pct: 7.020289, ls_tstat_nw: 3.014473, ls_maxdd_pct: -29.42785, ls_raw_ann_return_pct: 4.540983, ls_raw_sharpe: 0.320765,
+   ls_raw_maxdd_pct: -38.74664, turnover_d10_pct: 10.215698, turnover_d1_pct: 14.913831, coverage_pct: 93.892477, avg_names_per_decile: 184.478986,
+   n_months: 276, ls_n_months: 276, ic_decay_h1: 0.016966, ic_decay_h6: 0.013042, ic_decay_h12: 0.011209, tier_MEGA_ic_mean: 0.0233,
+   tier_MID_ic_mean: 0.0201, tier_SMALL_ic_mean: 0.0122, ls_beta_mean: -0.468517, ls_beta_fullwindow: -0.517488, ls_sharpe_ex_top_years: 0.433539,
+   ls_top_years: "2000,2003,2021", ls_top_years_share_pct: 50.240495, ls_sharpe_bear: 0.412199, ls_sharpe_bull: 0.732791,
+   decile_avg_ret_pct: "0.794,1.031,1.018,0.988,0.963,1.021,1.072,1.102,1.098,1.172", delisting_adjusted_pct: 0.436673}
+stage1_failed: []
+stage2_failed: []
+character: >
+  Short-leg anchored: D1 (heaviest issuers) 0.794, D2-D6 0.96-1.03, D7-D10 1.07-1.17 %/mo; D1-D2 is 0.237 of the 0.378 %/mo D10-D1. Raw 4.54%/yr (Sharpe 0.321, MaxDD -38.7%). IC 0.0166 (NW t 3.03, ICIR 0.188), halves 0.0199 / 0.0132; tiers MEGA 0.0233, MID 0.0201, SMALL 0.0122 (raw LS Sharpe 0.197 / 0.251 / 0.420); IC decays slowly (0.0170 h1, 0.0130 h6, 0.0112 h12); turnover 10.2% / 14.9%. Beta -0.52 (ex ante -0.47): hedged 7.02%/yr (Sharpe 0.601, LS NW t 3.01, MaxDD -29.4%), the hedge supplying 2.48 pp (35%). 2000, 2003, 2021 carry 50% of the summed LS (27.6 / 17.9 / 39.0%); 2020 -21.1%; ex-top-years Sharpe 0.434; bear 0.412 / bull 0.733. Coverage 93.9% (lowest Technology 89.9%); merger-delisted returns 0.43%, performance 0.00%.
+caveats:
+  - "likely overlap with NetPayoutYield: the numerator is the same net equity flow with the opposite sign; ranks differ through the scaler (average assets vs ME at t-6), NPY's 6-month lag, exact-zero drop and financials exclusion; annual IC same sign 15 / 22 years, correlation 0.90 (co-movement of annual IC, not a cross-sectional score correlation); no Stage 2 number exists"
+  - "vs CompEquIss (b2, rejected at t 2.44): annual IC correlation 0.06, same sign 10 / 19 years; vs v0 Investment (asset growth): equity raised enters assets, a mechanical link by construction; not measured"
+  - "ART TTM flows 0-3 months old with no 6-month annual lag (fresher than OSAP); preferred excluded from ncfcommon; dividends included (code, SignalDoc text omits)"
+  - "exact-zero net flow kept as a real value (mode 3.7% at the 2021-11 probe)"
+  - "2020 -21.1% then 2021 +39.0% (hedged): 2021 is a top year and the last decision year"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Passes every Stage 1 bar: IC 0.0166 >= 0.010, NW t 3.03 >= 2.5, halves min 0.0132, raw spread 4.54%/yr > 0, coverage 93.9% >= 40, 184.5 names per decile, 276 LS months >= 248. Status stage2_pending; family to be assigned in Phase C. NW t 3.027885 sits 0.00003 above CF (3.027856) among the eight passers; its IC exceeds v0's (0.0145) with more balanced halves (v0 0.0275 / 0.0016); ex-top-years Sharpe 0.434 vs v0 0.159.

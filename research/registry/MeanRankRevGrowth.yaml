@@ -1,0 +1,37 @@
+name: MeanRankRevGrowth
+osap_acronym: MeanRankRevGrowth
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b6
+declaration_order: 1
+date_tested: "2026-10-01"
+run: "008"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Lakonishok, Shleifer and Vishny 1994 (JF); SignalDoc sign +1, Cat.Economic sales growth"
+orientation: "high weighted mean rank of the past five years' revenue growth (rank 1 = highest growth), i.e. persistently low growth = attractive (SignalDoc sign +1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/MeanRankRevGrowth/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.156372, qcut_min_bins: 0, coverage_min_pct: 0.0}
+stage1:   # from the run 008 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: -0.000504, ic_tstat_nw: -0.117059, ic_half1_mean: 0.001936, ic_half2_mean: -0.002944, icir: -0.008825, ls_sharpe: 0.092997,
+   ls_ann_return_pct: 0.757522, ls_tstat_nw: 0.341527, ls_maxdd_pct: -38.309198, ls_raw_ann_return_pct: 2.227769, ls_raw_sharpe: 0.272494,
+   ls_raw_maxdd_pct: -29.254815, turnover_d10_pct: 26.228441, turnover_d1_pct: 25.401732, coverage_pct: 46.613939, avg_names_per_decile: 117.027315,
+   n_months: 216, ls_n_months: 216, ic_decay_h1: -0.003108, ic_decay_h6: -0.000734, ic_decay_h12: -0.002089, tier_MEGA_ic_mean: 0.0016,
+   tier_MID_ic_mean: 0.0052, tier_SMALL_ic_mean: -0.0062, ls_beta_mean: 0.089502, ls_beta_fullwindow: 0.099082, ls_sharpe_ex_top_years: -0.225402,
+   ls_top_years: "2006,2012,2021", ls_top_years_share_pct: 281.281087, ls_sharpe_bear: -0.11821, ls_sharpe_bull: 0.135537,
+   decile_avg_ret_pct: "0.992,1.012,1.156,1.065,1.115,1.011,1.010,1.061,1.083,1.177", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  Window 2003-12..2021-11 (216 months; five years of growth ranks plus a year-ago filing on a 1997Q4 SF1 start), so it never sees 1999-2003. Deciles are flat (D1 0.992 to D10 1.177 %/mo, D3 1.156, D6-D7 1.010); raw spread 2.23%/yr (Sharpe 0.272, MaxDD -29.3%). IC -0.0005 (NW t -0.12, ICIR -0.009), halves 0.0019 / -0.0029; tiers MEGA 0.0016, MID 0.0052, SMALL -0.0062; decay -0.0031 h1, -0.0007 h6, -0.0021 h12; turnover 26.2% / 25.4%. Annual IC from -0.046 (2020) to +0.029 (2012). Beta 0.10 (ex ante 0.09): hedged 0.76%/yr (Sharpe 0.093, LS NW t 0.34, MaxDD -38.3%); ex-top-years Sharpe -0.225 (2006, 2012, 2021); bear -0.118 / bull 0.136. Coverage 46.6%.
+caveats:
+  - "no NASDAQ exclusion (a SignalDoc portfolio filter, not in predictor.py); ranks over the harness universe"
+  - "ART quarterly-refreshed TTM revenue growth vs OSAP's annual step (ARY is closer); declared in the file"
+  - "216 months >= min_months 120 and LS floor 194; coverage 46.6% >= 40 (pooled over 276 months with the first 60 null)"
+  - "ls_top_years_share_pct 281% recorded as-is (near-zero summed LS)"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (-0.12 < 2.5); ic_mean (-0.0005) and ic_half_min (-0.0029) also fail. Not inconclusive: 216 months, 216 LS months (floor 194), 117.0 names, coverage 46.6%.

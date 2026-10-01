@@ -1,0 +1,35 @@
+name: MomSeasonShort
+osap_acronym: MomSeasonShort
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b6
+declaration_order: 8
+date_tested: "2026-10-01"
+run: "008"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Heston and Sadka 2008 (JFE); SignalDoc sign +1, Cat.Economic other"
+orientation: "high return in the same calendar month one year ago (month t-11) = attractive (SignalDoc sign +1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/MomSeasonShort/spec.md}
+dimension_override: null
+history_gate_months: 12
+preflight: {masspoint_max_pct: 1.251739, qcut_min_bins: 10, coverage_min_pct: 92.776817}
+stage1:   # from the run 008 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.001315, ic_tstat_nw: 0.277806, ic_half1_mean: 0.005386, ic_half2_mean: -0.002756, icir: 0.019467, ls_sharpe: 0.095948,
+   ls_ann_return_pct: 1.024933, ls_tstat_nw: 0.404176, ls_maxdd_pct: -43.751439, ls_raw_ann_return_pct: -0.436557, ls_raw_sharpe: -0.042406,
+   ls_raw_maxdd_pct: -52.868703, turnover_d10_pct: 86.854711, turnover_d1_pct: 86.969021, coverage_pct: 96.106454, avg_names_per_decile: 188.828986,
+   n_months: 276, ls_n_months: 276, ic_decay_h1: -0.010192, ic_decay_h6: 0.004187, ic_decay_h12: 0.004973, tier_MEGA_ic_mean: 0.0025,
+   tier_MID_ic_mean: -0.0026, tier_SMALL_ic_mean: 0.0022, ls_beta_mean: 0.015235, ls_beta_fullwindow: 0.020953, ls_sharpe_ex_top_years: -0.344839,
+   ls_top_years: "1999,2002,2020", ls_top_years_share_pct: 392.962639, ls_sharpe_bear: 0.574064, ls_sharpe_bull: -0.3055,
+   decile_avg_ret_pct: "1.007,0.982,1.020,0.915,0.931,1.018,1.038,1.110,1.011,0.970", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min, ls_raw_ann_return_pct]
+stage2_failed: []
+character: >
+  Deciles flat with no order: D1 1.007, D4 0.915, D8 1.110, D10 0.970 %/mo; raw spread -0.44%/yr (Sharpe -0.042, MaxDD -52.9%). IC 0.0013 (NW t 0.28, ICIR 0.020), halves 0.0054 / -0.0028; tiers MEGA 0.0025, MID -0.0026, SMALL 0.0022; decay -0.0102 h1, 0.0042 h6, 0.0050 h12; turnover 86.9% / 87.0% (one monthly return). Annual IC -0.035 / -0.034 / -0.051 in 2017-2019. Beta 0.02 (ex ante 0.02): hedged 1.02%/yr (Sharpe 0.096, MaxDD -43.8%); ex-top-years Sharpe -0.345 (1999, 2002, 2020); bear 0.574 / bull -0.306. Coverage 96.1%.
+caveats:
+  - "single-month signal: mode 1.3% at the 1998-12 probe (zero returns), below the cliff"
+  - "ls_top_years_share_pct 393% recorded as-is (near-zero summed LS)"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (0.28 < 2.5); ic_mean, ic_half_min (-0.0028) and the raw spread (-0.44%/yr) also fail. 276 LS months, 188.8 names, coverage 96.1%: not inconclusive.

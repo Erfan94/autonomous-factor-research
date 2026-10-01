@@ -1,0 +1,36 @@
+name: MomSeason06YrPlus
+osap_acronym: MomSeason06YrPlus
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b6
+declaration_order: 7
+date_tested: "2026-10-01"
+run: "008"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Heston and Sadka 2008 (JFE); SignalDoc sign +1, Cat.Economic other"
+orientation: "high mean same-calendar-month return in years 6-10 (lags 71, 83, 95, 107, 119) = attractive (SignalDoc sign +1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/MomSeason06YrPlus/spec.md}
+dimension_override: null
+history_gate_months: 120
+preflight: {masspoint_max_pct: 0.076336, qcut_min_bins: 0, coverage_min_pct: 0.0}
+stage1:   # from the run 008 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.006938, ic_tstat_nw: 1.901406, ic_half1_mean: 0.012421, ic_half2_mean: 0.001455, icir: 0.149713, ls_sharpe: 0.017549,
+   ls_ann_return_pct: 0.121941, ls_tstat_nw: 0.062911, ls_maxdd_pct: -30.736105, ls_raw_ann_return_pct: 0.208882, ls_raw_sharpe: 0.030168,
+   ls_raw_maxdd_pct: -33.237949, turnover_d10_pct: 86.37876, turnover_d1_pct: 86.473691, coverage_pct: 40.271667, avg_names_per_decile: 129.991667,
+   n_months: 168, ls_n_months: 168, ic_decay_h1: -0.002281, ic_decay_h6: -0.001894, ic_decay_h12: 0.005482, tier_MEGA_ic_mean: 0.0197,
+   tier_MID_ic_mean: 0.0035, tier_SMALL_ic_mean: 0.0019, ls_beta_mean: -0.021655, ls_beta_fullwindow: -0.002847, ls_sharpe_ex_top_years: -0.287414,
+   ls_top_years: "2009,2012,2014", ls_top_years_share_pct: 1402.72305, ls_sharpe_bear: 0.688468, ls_sharpe_bull: -0.235615,
+   decile_avg_ret_pct: "1.039,0.976,0.924,1.086,1.052,1.095,1.040,1.241,1.131,1.056", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw]
+stage2_failed: []
+character: >
+  Window 2007-12..2021-11 (168 months; history gate 120 leaves the first 108 decision months null), halves split near 2014-15. Deciles humped: D1 1.039, D3 0.924, D8 1.241, D10 1.056 %/mo; raw spread 0.21%/yr (Sharpe 0.030, MaxDD -33.2%). IC 0.0069 (NW t 1.90, ICIR 0.150), halves 0.0124 / 0.0015; tiers MEGA 0.0197 (ICIR 0.251), MID 0.0035, SMALL 0.0019; decay -0.0023 h1, -0.0019 h6, 0.0055 h12; turnover 86.4% / 86.5%. Beta -0.003 (ex ante -0.02): hedged 0.12%/yr (Sharpe 0.018, MaxDD -30.7%); ex-top-years Sharpe -0.287 (2009, 2012, 2014); bear 0.689 / bull -0.236. Coverage 40.3% pooled.
+caveats:
+  - "not inconclusive under the rules (validate_results, CLAUDE.md pre-committed): n_months 168 >= min_months 120; LS months 168 >= floor 151; 130.0 names >= 30; coverage 40.27% >= 40.0 (margin 0.27 pp), so the Phase A coverage-floor note does not apply"
+  - "the 40.3% is pooled over 276 months with 108 leading null months; within the scorable window preflight read 73.2% (2010-06) and 58.8% (2021-11): a data-start artefact, not thin coverage"
+  - "the IC sits in MEGA (0.0197) while the LS is flat; ls_top_years_share_pct 1403% recorded as-is"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (1.90 < 2.5), the batch's largest failing |t|; ic_mean 0.0069 also fails; halves (min 0.0015), raw spread 0.21%/yr, coverage 40.3%, 130.0 names and 168 LS months (floor 151) pass. Measured above every sample floor: a rejection, not an inconclusive (stage1_decided_by_convention).

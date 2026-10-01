@@ -1,0 +1,37 @@
+name: MomOffSeason
+osap_acronym: MomOffSeason
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b6
+declaration_order: 4
+date_tested: "2026-10-01"
+run: "008"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Heston and Sadka 2008 (JFE); SignalDoc sign -1, Cat.Economic other"
+orientation: "low mean of the 44 off-season monthly returns in years 2-5 = attractive (SignalDoc sign -1, long-term reversal)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/MomOffSeason/spec.md}
+dimension_override: null
+history_gate_months: 59
+preflight: {masspoint_max_pct: 0.064851, qcut_min_bins: 0, coverage_min_pct: 0.0}
+stage1:   # from the run 008 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: -0.005224, ic_tstat_nw: -0.968679, ic_half1_mean: 0.001484, ic_half2_mean: -0.011873, icir: -0.070953, ls_sharpe: 0.112502,
+   ls_ann_return_pct: 1.189884, ls_tstat_nw: 0.456423, ls_maxdd_pct: -43.658046, ls_raw_ann_return_pct: 2.226319, ls_raw_sharpe: 0.213129,
+   ls_raw_maxdd_pct: -38.962995, turnover_d10_pct: 35.509858, turnover_d1_pct: 28.889836, coverage_pct: 66.591921, avg_names_per_decile: 157.692576,
+   n_months: 229, ls_n_months: 229, ic_decay_h1: -0.008231, ic_decay_h6: 0.000881, ic_decay_h12: 0.003194, tier_MEGA_ic_mean: -0.0144,
+   tier_MID_ic_mean: -0.0037, tier_SMALL_ic_mean: -0.0024, ls_beta_mean: -0.048473, ls_beta_fullwindow: 0.051417, ls_sharpe_ex_top_years: -0.208225,
+   ls_top_years: "2009,2016,2021", ls_top_years_share_pct: 229.3225, ls_sharpe_bear: 0.472909, ls_sharpe_bull: 0.008999,
+   decile_avg_ret_pct: "1.014,1.186,1.099,1.165,1.176,1.045,1.039,1.130,1.115,1.199", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  Window 2002-11..2021-11 (229 months; history gate 59). Deciles flat with D1 the low point: D1 1.014, D2 1.186, D3-D9 1.04-1.18, D10 1.199 %/mo; raw spread 2.23%/yr (Sharpe 0.213, MaxDD -39.0%). IC -0.0052 (NW t -0.97, ICIR -0.071), halves 0.0015 / -0.0119; tiers MEGA -0.0144, MID -0.0037, SMALL -0.0024; decay -0.0082 h1, 0.0009 h6, 0.0032 h12; turnover 35.5% / 28.9%. Annual IC +0.112 in 2002 (one month), -0.053 in 2020. Beta 0.05 (ex ante -0.05): hedged 1.19%/yr (Sharpe 0.113, MaxDD -43.7%); ex-top-years Sharpe -0.208 (2009, 2016, 2021); bear 0.473 / bull 0.009. Coverage 66.6%.
+caveats:
+  - "the reversal reading has non-positive IC, as LRreversal, MRreversal and the Intan quartet (b5)"
+  - "229 months >= 120, LS floor 206; coverage 66.6% pooled with the first 47 months null"
+  - "history_months 59, skipna=False: names under five years of history are NaN (OSAP scores them)"
+  - "ls_top_years_share_pct 229% recorded as-is (near-zero summed LS)"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (-0.97 < 2.5); ic_mean and ic_half_min (-0.0119) also fail. Not inconclusive: 229 months, 229 LS months (floor 206), 157.7 names. Long-horizon reversal again reads non-positive on this snapshot.
