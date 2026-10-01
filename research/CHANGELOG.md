@@ -99,3 +99,10 @@
 - Run 013 (--baseline --stage 2) reproduces the rung 1 WITH arm to six places: IC 0.016858 (NW t 3.02), hedged Sharpe 0.61395, 7.382577%/yr, MaxDD -41.28, beta -0.121, raw Sharpe 0.737, ex-top-years Sharpe 0.202, turnover 27.6%.
 - Run 014 (Stage 3, never a gate): equal_rank_decile 0.614; icir_weighted 0.709 hedged (raw 0.494, beta -0.39, PctAcc weight 0.29); tier_neutral 0.604; buffered 0.555 at turnover 14.7%; vol_targeted 0.339.
 - Records: manifest block v1; provenance_verified (013, 014), construction_reported, composite_updated; PctAcc row accepted; index n_accepted 1. Next: v2 (CBOperProf) on the coordinator's word.
+
+## 2026-10-01 — v2 = v1 + CBOperProf (profitability family): accepted and applied (runs 015, 016); tag v2-add-CBOperProf owed
+- Accepted from run 012 rung 2 (base v1) on both bars: residual IC NW t 3.02 > 2.0 (50% of its own IC); guard paired hedged dLS t 0.95 >= -2.0 (hedged +0.44, raw +0.31 pp/yr, same sign). Paired dIC -0.0000 (t -0.01) is a diagnostic.
+- Applied: CBOperProf.py moved to factors/accepted/ and appended; COMPOSITE_VERSION v2; COMPOSITE_SHA cbeb16455bf4 -> 8b444636f0a1, the other stamps unchanged; pytest 434 passed. Families: profitability = Profitability, CBOperProf (0.10 each).
+- Run 015 reproduces the rung 2 WITH arm to six places: IC 0.016855 (NW t 3.02), hedged Sharpe 0.660554, 7.821336%/yr, MaxDD -37.07, beta -0.122, raw Sharpe 0.777, ex-top-years Sharpe 0.249; full-leg coverage 72.7% (Financials/Real Estate).
+- Run 016 (Stage 3, never a gate): equal_rank_decile 0.661; icir_weighted 0.813 hedged (raw 0.499, beta -0.47); tier_neutral 0.692; buffered 0.632 at turnover 15.0%; vol_targeted 0.378.
+- Records: manifest block v2 (the v1 git_tag line is left as it reads); provenance_verified (015, 016), construction_reported, composite_updated; CBOperProf row accepted; index n_accepted 2.

@@ -5,9 +5,9 @@ search_accounting:
   n_stage1_tested: 107
   n_stage1_passed: 24
   n_stage2_tested: 5
-  n_accepted: 1
+  n_accepted: 2
   n_inconclusive: 0
-  by_status: {"accepted": 1, "baseline": 5, "rejected": 83, "stage2_pending": 23}
+  by_status: {"accepted": 2, "baseline": 5, "rejected": 83, "stage2_pending": 22}
 factors:
   - {name: AM, status: rejected, batch: stage1_b1, ic: 0.0098, ic_t: 1.26, sharpe: -0.149, ret: -3.17, raw_ret: 4.72, cov: 99.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.34, sh_exreg: -0.449, family: null, decided_by: "ic_tstat_nw", run: "003"}
   - {name: Accruals, status: rejected, batch: stage1_b1, ic: 0.0048, ic_t: 1.84, sharpe: 0.329, ret: 2.49, raw_ret: 2.92, cov: 76.7, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.04, sh_exreg: 0.107, family: null, decided_by: "ic_tstat_nw", run: "003"}
@@ -21,7 +21,7 @@ factors:
   - {name: BidAskSpread, status: rejected, batch: stage1_b1, ic: -0.0205, ic_t: -2.77, sharpe: -0.482, ret: -8.63, raw_ret: -0.94, cov: 99.1, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.97, sh_exreg: -0.889, family: null, decided_by: "ic_tstat_nw", run: "003"}
   - {name: BidAskSpreadFlip, status: stage2_pending, batch: stage1_b9, ic: 0.0206, ic_t: 2.76, sharpe: 0.485, ret: 8.72, raw_ret: 1.07, cov: 99.1, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.98, sh_exreg: 0.295, family: "liquidity", decided_by: "all bars", run: "011"}
   - {name: BookLeverage, status: rejected, batch: stage1_b1, ic: -0.0096, ic_t: -2.59, sharpe: -0.130, ret: -1.29, raw_ret: -3.63, cov: 99.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.04, sh_exreg: -0.398, family: null, decided_by: "ic_tstat_nw", run: "003"}
-  - {name: CBOperProf, status: stage2_pending, batch: stage1_b1, ic: 0.0209, ic_t: 3.74, sharpe: 0.901, ret: 11.24, raw_ret: 7.24, cov: 73.4, resid_t: 3.02, dic_t: -0.01, dls_t: 0.95, span_t: 3.71, d_sharpe: 0.047, beta: -0.57, sh_exreg: 0.638, family: "profitability", decided_by: "all bars", run: "003"}
+  - {name: CBOperProf, status: accepted, batch: stage1_b1, ic: 0.0209, ic_t: 3.74, sharpe: 0.901, ret: 11.24, raw_ret: 7.24, cov: 73.4, resid_t: 3.02, dic_t: -0.01, dls_t: 0.95, span_t: 3.71, d_sharpe: 0.047, beta: -0.57, sh_exreg: 0.638, family: "profitability", decided_by: "all bars", run: "003"}
   - {name: CF, status: stage2_pending, batch: stage1_b2, ic: 0.0201, ic_t: 3.03, sharpe: 0.179, ret: 2.75, raw_ret: 3.32, cov: 96.1, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.29, sh_exreg: -0.169, family: "value", decided_by: "all bars", run: "004"}
   - {name: Cash, status: rejected, batch: stage1_b2, ic: -0.0091, ic_t: -1.86, sharpe: -0.017, ret: -0.24, raw_ret: -0.57, cov: 99.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.33, sh_exreg: -0.426, family: null, decided_by: "ic_tstat_nw", run: "004"}
   - {name: CashProd, status: rejected, batch: stage1_b2, ic: 0.0030, ic_t: 0.47, sharpe: -0.127, ret: -1.75, raw_ret: 3.74, cov: 99.2, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.26, sh_exreg: -0.483, family: null, decided_by: "ic_tstat_nw", run: "004"}
