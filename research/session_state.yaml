@@ -1,11 +1,11 @@
 # The CURRENT state of the loop — replace, never append. History: session_history.md.
-updated: "2026-10-01T06:36:46Z"
-step: phase_D_apply_l1   # ladder 1 accepted 5/5; v3 applied (ShareIss5Y); v4, v5 next
+updated: "2026-10-01T06:47:34Z"
+step: phase_D_apply_l1   # ladder 1 accepted 5/5; v4 applied (cfp); v5 next
 phase: phase_D_ratchet
-composite: {version: v3, legs: 8, families: 6, sha: 73ee92fe0723, legs_list: [Size, Value, Profitability, Investment, Momentum, PctAcc, CBOperProf, ShareIss5Y]}
-versions: {v0: "f9d9d9d95731 v0-baseline", v1: "cbeb16455bf4 commit 0d52a33; tag v1-add-PctAcc MIS-POINTED at 2e37d4b (owner)", v2: "8b444636f0a1 v2-add-CBOperProf", v3: "73ee92fe0723 v3-add-ShareIss5Y"}
-stamps: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: 73ee92fe0723, data_sha: 198b281de1a0}
-counters: {osap: 212, inventoried: 212, infeasible: 73, translated: 106, preflight_failed: 28, screened: 107, passed: 24, families: 9, ratcheted: 5, accepted: 3, rejected: 83, inconclusive: 0}
+composite: {version: v4, legs: 9, families: 6, sha: 3329679c69fb, legs_list: [Size, Value, Profitability, Investment, Momentum, PctAcc, CBOperProf, ShareIss5Y, cfp]}
+versions: {v0: "f9d9d9d95731 v0-baseline", v1: "cbeb16455bf4 commit 0d52a33; tag v1-add-PctAcc MIS-POINTED at 2e37d4b (owner)", v2: "8b444636f0a1 v2-add-CBOperProf", v3: "73ee92fe0723 v3-add-ShareIss5Y", v4: "3329679c69fb v4-add-cfp"}
+stamps: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: 3329679c69fb, data_sha: 198b281de1a0}
+counters: {osap: 212, inventoried: 212, infeasible: 73, translated: 106, preflight_failed: 28, screened: 107, passed: 24, families: 9, ratcheted: 5, accepted: 4, rejected: 83, inconclusive: 0}
 holdout: unspent
 v0_baseline: {runs: "001,002", ic: 0.0145, ic_t_nw: 2.62, ls_sharpe_hedged: 0.600, ann_ret_hedged: 7.32, maxdd_hedged: -45.56, beta_fw: -0.140, turnover_d10: 28.0}
 open:

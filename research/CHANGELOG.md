@@ -113,3 +113,10 @@
 - Run 017 reproduces the rung 3 WITH arm to six places: IC 0.021532 (NW t 3.98), hedged Sharpe 0.847944, 10.287625%/yr, MaxDD -41.92, beta -0.192, raw Sharpe 0.874, ex-top-years Sharpe 0.465. Full-leg coverage 47.6%.
 - Run 018 (Stage 3, never a gate): equal_rank_decile 0.848; icir_weighted 0.948 hedged (raw 0.580, beta -0.47); tier_neutral 0.909; buffered 0.789 at turnover 13.9%; vol_targeted 0.655.
 - Records: manifest block v3; provenance_verified (017, 018), construction_reported, composite_updated; ShareIss5Y row accepted; index n_accepted 3.
+
+## 2026-10-01 — v4 = v3 + cfp (value family): accepted and applied (runs 019, 020); tag v4-add-cfp owed
+- Accepted from run 012 rung 4 (base v3) on both bars. Residual IC NW t 2.97 > 2.0, at 42% of its own IC. Guard paired hedged dLS t 2.19 >= -2.0; raw dLS +0.92 pp/yr agrees in sign with the hedged +1.73, so the hedge adds about 0.8 pp. Spanning alpha t 0.40 (R2 0.26) against residual t 2.97 / dIC t 3.10: both reported, not reconciled.
+- Applied: cfp.py moved to factors/accepted/; COMPOSITE_VERSION v4; COMPOSITE_SHA 73ee92fe0723 -> 3329679c69fb, the other stamps unchanged; pytest 434 passed. Families: value = Value, cfp (0.083 each); still 6 families.
+- Run 019 reproduces the rung 4 WITH arm to six places: IC 0.024946 (NW t 4.51), hedged Sharpe 0.995998, 12.019142%/yr, MaxDD -40.63, beta -0.263, raw Sharpe 0.913, ex-top-years Sharpe 0.614.
+- Run 020 (Stage 3, never a gate): equal_rank_decile 0.996; tier_neutral 1.006 (raw 0.834, beta -0.34); icir_weighted 0.934 (raw 0.605, beta -0.47); buffered 0.904 at turnover 13.0%; vol_targeted 0.774.
+- Records: manifest block v4; provenance_verified (019, 020), construction_reported, composite_updated; cfp row accepted; index n_accepted 4. CF (rank 14, annual-IC correlation 0.96) will face a base holding cfp.
