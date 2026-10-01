@@ -397,3 +397,57 @@ versions:
       - "MaxRet was accepted on both bars, opening volatility at 1/7. Raw dLS -0.59 pp/yr sits beside hedged +2.23: the guard's positive delta is entirely hedge (hedge part +2.82 pp against a paired SE of about 1.3). For a new negative-beta family the guard is near non-binding, so residual IC (t 4.01; dIC +0.0063, t 2.61) is the operative gate (decision hedge_guard_negative_beta_property)."
       - "The proxy is the universe's TOTAL return, so the hedge also credits |dbeta|*rf, about 0.6 pp of this rung's hedge part. The snapshot holds no rf series; deferred to Phase E (D7.1 beta constraint). Beta -0.32 -> -0.65 (ex ante -0.28 -> -0.59); raw Sharpe 0.843 -> 0.622; raw vol 14.0 -> 18.1; D10 turnover 25% -> 43%. Reported, never decides."
       - "Hedged MaxDD -49.4 -> -41.7 (raw -48.2 -> -49.2); ex-top-years Sharpe 0.490 -> 0.623; top-3 share 62 -> 55%; IC 0.0242 -> 0.0305 with every tier up. Stage 3: tier_neutral 0.968 is now above equal_rank_decile 0.951; icir_weighted falls 1.026 -> 0.911 (raw 0.493, beta -0.76); buffered 0.928 holds turnover at 24.6%."
+  - version: v8
+    date: "2026-10-01"
+    git_tag: v8-add-roaq  # owed; created by the coordinator after the commit
+    legs:
+      - {name: Size, family: size, osap_acronym: Size, weight: 1.0}
+      - {name: Value, family: value, osap_acronym: BM, weight: 1.0}
+      - {name: Profitability, family: profitability, osap_acronym: OperProf, weight: 1.0}
+      - {name: Investment, family: investment, osap_acronym: AssetGrowth, weight: 1.0}
+      - {name: Momentum, family: momentum, osap_acronym: Mom12m, weight: 1.0}
+      - {name: PctAcc, family: investment, osap_acronym: PctAcc, weight: 1.0}
+      - {name: CBOperProf, family: profitability, osap_acronym: CBOperProf, weight: 1.0}
+      - {name: ShareIss5Y, family: external_financing, osap_acronym: ShareIss5Y, weight: 1.0}
+      - {name: cfp, family: value, osap_acronym: cfp, weight: 1.0}
+      - {name: XFIN, family: external_financing, osap_acronym: XFIN, weight: 1.0}
+      - {name: GP, family: profitability, osap_acronym: GP, weight: 1.0}
+      - {name: MaxRet, family: volatility, osap_acronym: MaxRet, weight: 1.0}
+      - {name: roaq, family: profitability, osap_acronym: roaq, weight: 1.0}
+    families: "size:Size|value:Value,cfp|profitability:Profitability,CBOperProf,GP,roaq|investment:Investment,PctAcc|momentum:Momentum|external_financing:ShareIss5Y,XFIN|volatility:MaxRet"
+    construction_rule: "two-level family blend (1/7 per family, equal within: Size, Momentum, MaxRet 0.143; Value/cfp, Investment/PctAcc, ShareIss5Y/XFIN 0.071 each; Profitability/CBOperProf/GP/roaq 0.036 each; renormalised over available members) of within-sector percentile ranks (fallback cross-section if <10 names); D10-D1 equal-weight, hedged by ex-ante 36m beta to the universe cap-weighted (total) return"
+    stamps: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: a12e87c5fb36, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8}
+    window: {eval_start: "1999-01-01", eval_end: "2021-12-31", include_holdout: false}
+    ratchet:                             # run 023, ladder 2 rung 4 (stage2_order rank 9), base v7 (12 legs)
+      run: "023"
+      rung: 4
+      base: v7
+      bars: {resid_ic_tstat_nw: 3.7278, resid_ic_bound: "> 2.0", paired_delta_ls_tstat: 1.9515, guard_bound: ">= -2.0"}
+      diagnostics: {resid_ic_mean: 0.0119, resid_ic_share: 0.57, paired_delta_ic_mean: 0.0015, paired_delta_ic_tstat: 2.66, paired_delta_ls_ann_pct: 1.23, raw_delta_ls_ann_pct: 0.72, spanning_alpha_ann_pct: 1.06, spanning_alpha_tstat_nw: 0.39, spanning_beta: 0.64, spanning_r2: 0.44, corr_to_composite: 0.66, delta_ls_sharpe: 0.016, maxdd_worsening_pct: 1.69}
+      beta_regime: {base_ls_beta_fullwindow: -0.649, cand_ls_beta_fullwindow: -0.721, base_ls_beta_mean: -0.587, cand_ls_beta_mean: -0.650, base_ls_raw_sharpe: 0.622, cand_ls_raw_sharpe: 0.613, base_ls_sharpe_ex_top_years: 0.623, cand_ls_sharpe_ex_top_years: 0.604}
+    baseline:                            # run 028, GROSS; LS figures hedged, raw and beta beside; equals run 023 rung 4 WITH arm to six places
+      run: "028"
+      ic: {ic_mean: 0.0320, ic_tstat_nw: 4.50, icir: 0.316, ic_half1_mean: 0.0460, ic_half2_mean: 0.0180}
+      ic_decay: {h1: 0.0246, h2: 0.0216, h3: 0.0224, h6: 0.0197, h12: 0.0222}
+      ls_hedged: {ls_sharpe: 0.967, ls_tstat_nw: 3.76, ls_ann_return_pct: 15.18, ls_ann_vol_pct: 15.69, ls_maxdd_pct: -43.36, ls_hit_rate_pct: 64.1}
+      breadth: {turnover_d10_pct: 44.1, turnover_d1_pct: 39.5, coverage_pct: 100.0, avg_names_per_decile: 196.5, n_months: 276}
+      decile_avg_ret_pct: "0.313,0.519,0.823,0.960,0.976,1.141,1.152,1.171,1.304,1.311"
+      ls_raw: {ls_raw_sharpe: 0.613, ls_raw_ann_return_pct: 11.98, ls_raw_ann_vol_pct: 19.56, ls_raw_maxdd_pct: -53.01}
+      beta: {ls_beta_mean: -0.650, ls_beta_fullwindow: -0.721, ls_hedged_months: 264}
+      ex_regime: {ls_sharpe_ex_top_years: 0.604, ls_top_years: "2000,2001,2021", ls_top_years_share_pct: 57.4}
+      bear_bull: {ls_sharpe_bear: 0.961, ls_sharpe_bull: 1.122, n_bear_months: 64, n_bull_months: 200}
+      tiers: {MEGA: {ic: 0.0299, raw_ls_sharpe: 0.413, n: 393}, MID: {ic: 0.0281, raw_ls_sharpe: 0.589, n: 589}, SMALL: {ic: 0.0337, raw_ls_sharpe: 0.608, n: 981}}
+      coverage: {leg_coverage_pct_full: 45.4, leg_coverage_worst: "f_shareiss5y 62.6%", delisting_adjusted_pct: 0.44}
+    construction:                        # run 029, Stage 3, GROSS, hedged; raw Sharpe and full-window beta beside; never a gate
+      run: "029"
+      columns: [sharpe, ls_t_nw, ann_ret_pct, vol_pct, maxdd_pct, worst_12m_pct, turnover_long_pct, turnover_short_pct, raw_sharpe, beta_fullwindow, sharpe_ex_top_years]
+      equal_rank_decile: [0.967, 3.76, 15.18, 15.69, -43.4, -38.6, 44.1, 39.5, 0.613, -0.72, 0.60]
+      tier_neutral:      [0.947, 3.84, 15.28, 16.14, -43.5, -39.9, 45.4, 40.5, 0.568, -0.76, 0.64]
+      icir_weighted:     [0.817, 3.57, 13.41, 16.42, -30.9, -30.4, 29.0, 27.4, 0.423, -0.83, 0.52]
+      buffered:          [0.938, 3.60, 13.94, 14.86, -44.1, -38.1, 25.5, 20.9, 0.596, -0.68, 0.56]
+      vol_targeted:      [0.844, 3.71, 9.74, 11.54, -32.9, -28.7, 44.1, 39.5, 0.517, -0.42, 0.58]
+      icir_weights_avg: "Size=0.012;Value=0.036;Profitability=0.095;Investment=0.034;Momentum=0.057;PctAcc=0.104;CBOperProf=0.092;ShareIss5Y=0.108;cfp=0.102;XFIN=0.088;GP=0.092;MaxRet=0.086;roaq=0.094"
+    character:
+      - "roaq was accepted on both bars (residual IC t 3.73 > 2.0, 57% of its own IC; guard t 1.95 >= -2.0). Raw dLS +0.72 and hedged +1.23 pp/yr agree in sign; the hedge part is +0.51 (about 41%) at dbeta_mean -0.063 (decision ladder2_acceptance)."
+      - "Spanning alpha t 0.39 (1.06%/yr) at R2 0.44, corr 0.66, against residual t 3.73 and dIC +0.0015 (t 2.66): reported, not reconciled. Profitability now has 4 legs at 0.036 each; beta -0.65 -> -0.72, raw Sharpe 0.622 -> 0.613, raw vol 18.1 -> 19.6, raw MaxDD -49.2 -> -53.0."
+      - "Hedged Sharpe 0.951 -> 0.967 with MaxDD 1.7 pts worse (-41.7 -> -43.4); ex-top-years 0.623 -> 0.604. Stage 3: equal_rank_decile 0.967 is now the best variant (tier_neutral 0.947, buffered 0.938 at turnover 25.5%); icir_weighted falls 0.911 -> 0.817 (raw 0.423, beta -0.83)."

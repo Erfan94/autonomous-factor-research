@@ -149,3 +149,10 @@
 - Run 026 reproduces the rung 3 WITH arm on 16 of 16 stats to six places: IC 0.030522 (NW t 4.49), hedged Sharpe 0.951223, 13.947962%/yr, MaxDD -41.68, beta -0.649, raw Sharpe 0.622, ex-top-years Sharpe 0.623, turnover 43.4%.
 - Run 027 (Stage 3, never a gate): tier_neutral 0.968 (beta -0.71); equal_rank_decile 0.951; buffered 0.928 at turnover 24.6%; icir_weighted 0.911 (raw 0.493, beta -0.76); vol_targeted 0.842.
 - The total-return proxy credits |dbeta|*rf, about 0.6 pp here; deferred to Phase E. Records: manifest block v7; logged provenance_verified (026, 027), construction_reported and composite_updated; MaxRet row set to accepted.
+
+## 2026-10-01 — v8 = v7 + roaq (profitability, 4th leg): accepted and applied (runs 028, 029); tag v8-add-roaq owed
+- Accepted from run 023 rung 4 (base v7) on both bars: residual IC NW t 3.73 > 2.0, at 57% of its own IC; guard t 1.95 >= -2.0. Raw dLS +0.72 and hedged +1.23 pp/yr agree in sign; the hedge part is +0.51 (about 41%). Spanning alpha t 0.39 at R2 0.44 against residual t 3.73 and dIC t 2.66: not reconciled.
+- Applied: roaq.py moved to factors/accepted/; COMPOSITE_VERSION v8; COMPOSITE_SHA 43c92213ae73 -> a12e87c5fb36, the other stamps unchanged; pytest 434 passed. Profitability = Profitability, CBOperProf, GP, roaq at 0.036 each; 7 families.
+- Run 028 reproduces the rung 4 WITH arm on 16 of 16 stats to six places: IC 0.032018 (NW t 4.50), hedged Sharpe 0.967311, 15.18071%/yr, MaxDD -43.36, beta -0.721, raw Sharpe 0.613, ex-top-years Sharpe 0.604, turnover 44.1%.
+- Run 029 (Stage 3, never a gate): equal_rank_decile 0.967 (the best); tier_neutral 0.947; buffered 0.938 at turnover 25.5%; vol_targeted 0.844; icir_weighted 0.817 (raw 0.423, beta -0.83).
+- Records: manifest block v8; logged provenance_verified (028, 029), construction_reported and composite_updated; roaq row set to accepted. Next: v9 = v8 + RoE (target IC 0.032255 / Sharpe 0.931566 / 14.870865%).

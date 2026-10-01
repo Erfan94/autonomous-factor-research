@@ -1,6 +1,6 @@
 name: roaq
 osap_acronym: roaq
-status: stage2_pending
+status: accepted
 family: profitability
 batch: stage1_b9
 declaration_order: 7
@@ -51,4 +51,4 @@ caveats:
   - "Stage 2 (run 023, rung 4, vs v5 + GP, MaxRet): spanning alpha 1.06%/yr (t 0.39) at R2 0.44, corr 0.66, against residual t 3.73 and dIC t 2.66; reported, not reconciled"
   - "Stage 2: hedged dLS +1.23 pp/yr vs raw +0.72 (same sign); hedge part +0.51 pp at dbeta_mean -0.063; fourth profitability leg at 0.0357 (1/28)"
 decision: >
-  Passes every Stage 1 bar: IC 0.0208 >= 0.010, NW t 3.37 >= 2.5, halves min 0.0177, raw spread 5.28%/yr > 0, coverage 96.3% >= 40, 189.2 names per decile, 276 LS months >= 248. Status stage2_pending; family to be assigned in Phase C. Against the profitability passers its NW t sits between CBOperProf 3.74 / GP 3.52 and RoE 3.34 / OperProfRD 3.18; the most even halves of the five (min/max 0.74). Stage 2 (run 023, rung 4, vs v5 + GP, MaxRet): PASS on both bars, residual IC 0.0119 with NW t 3.73 > 2.0 (57% of its own 0.0208) and guard paired hedged dLS +1.23 pp/yr, t 1.95 >= -2.0 (raw +0.72, approximate t 1.14). Diagnostics (never bars): dIC +0.0015 (t 2.66), spanning alpha 1.06%/yr (t 0.39, R2 0.44, corr 0.66), dSharpe +0.016 (0.951 -> 0.967), MaxDD 1.7 pts worse (-41.7 -> -43.4); WITH beta -0.721 vs -0.649 (ex ante -0.650 / -0.587), raw Sharpe 0.613 / 0.622, ex-top-years 0.604 / 0.623. Status stays stage2_pending until applied (v8 owed).
+  Passes every Stage 1 bar: IC 0.0208 >= 0.010, NW t 3.37 >= 2.5, halves min 0.0177, raw spread 5.28%/yr > 0, coverage 96.3% >= 40, 189.2 names per decile, 276 LS months >= 248. Status stage2_pending; family to be assigned in Phase C. Against the profitability passers its NW t sits between CBOperProf 3.74 / GP 3.52 and RoE 3.34 / OperProfRD 3.18; the most even halves of the five (min/max 0.74). Stage 2 (run 023, rung 4, vs v5 + GP, MaxRet): PASS on both bars, residual IC 0.0119 with NW t 3.73 > 2.0 (57% of its own 0.0208) and guard paired hedged dLS +1.23 pp/yr, t 1.95 >= -2.0 (raw +0.72, approximate t 1.14). Diagnostics (never bars): dIC +0.0015 (t 2.66), spanning alpha 1.06%/yr (t 0.39, R2 0.44, corr 0.66), dSharpe +0.016 (0.951 -> 0.967), MaxDD 1.7 pts worse (-41.7 -> -43.4); WITH beta -0.721 vs -0.649 (ex ante -0.650 / -0.587), raw Sharpe 0.613 / 0.622, ex-top-years 0.604 / 0.623. Accepted as v8 (factors/accepted/roaq.py, COMPOSITE_SHA a12e87c5fb36) under decision ladder2_acceptance; run 028 baseline reproduces the rung 4 WITH arm to six places (16 of 16 stats); Stage 3 run 029; tag v8-add-roaq owed.
