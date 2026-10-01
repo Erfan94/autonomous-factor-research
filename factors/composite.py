@@ -215,12 +215,13 @@ from factors.accepted.ShareIss5Y import FACTOR as SHAREISS5Y  # v3, run 012 rung
 from factors.accepted.cfp import FACTOR as CFP  # v4, run 012 rung 4, family value
 from factors.accepted.XFIN import FACTOR as XFIN  # v5, run 012 rung 5, family external_financing
 from factors.accepted.GP import FACTOR as GP  # v6, run 023 rung 1, family profitability
+from factors.accepted.MaxRet import FACTOR as MAXRET  # v7, run 023 rung 3, family volatility
 
-COMPOSITE_FACTORS = [SIZE, VALUE, PROFITABILITY, INVESTMENT, MOMENTUM, PCTACC, CBOPERPROF, SHAREISS5Y, CFP, XFIN, GP]
+COMPOSITE_FACTORS = [SIZE, VALUE, PROFITABILITY, INVESTMENT, MOMENTUM, PCTACC, CBOPERPROF, SHAREISS5Y, CFP, XFIN, GP, MAXRET]
 
 # Model version this file currently represents. factor-evaluator bumps it when
 # a factor is accepted, and MODEL_MANIFEST.yaml must gain a matching block.
-COMPOSITE_VERSION = "v6"
+COMPOSITE_VERSION = "v7"
 
 
 def active_factors():

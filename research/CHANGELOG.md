@@ -142,3 +142,10 @@
 - Run 024 reproduces the rung 1 WITH arm on 16 of 16 stats to six places: IC 0.024198 (NW t 4.23), hedged Sharpe 0.92549, 11.715703%/yr, MaxDD -49.42, beta -0.323, raw Sharpe 0.843, ex-top-years Sharpe 0.490.
 - Run 025 (Stage 3, never a gate): equal_rank_decile 0.925; icir_weighted 1.026 (raw 0.639, beta -0.55, MaxDD -28.1); tier_neutral 0.905; buffered 0.833 at turnover 13.3%; vol_targeted 0.686.
 - Records: manifest block v6; logged provenance_verified (024, 025), construction_reported and composite_updated; GP row set to accepted. Next: v7 = v6 + MaxRet (target IC 0.030522 / Sharpe 0.951223 / 13.947962%).
+
+## 2026-10-01 — v7 = v6 + MaxRet (opens volatility, 7th family): accepted and applied (runs 026, 027); tag v7-add-MaxRet owed
+- Accepted from run 023 rung 3 (base v6) on both bars: residual IC NW t 4.01 > 2.0, at 77% of its own IC; guard t 1.75 >= -2.0. Raw dLS is -0.59 pp/yr against hedged +2.23, so the guard's gain is all hedge (+2.82 pp, paired SE about 1.3). Residual IC is the operative gate (decision hedge_guard_negative_beta_property).
+- Applied: MaxRet.py moved to factors/accepted/; COMPOSITE_VERSION v7; COMPOSITE_SHA 21a6688ae5d1 -> 43c92213ae73, the other stamps unchanged; pytest 434 passed. Families: 7 at 1/7 each; Size, Momentum and MaxRet carry 0.143 each.
+- Run 026 reproduces the rung 3 WITH arm on 16 of 16 stats to six places: IC 0.030522 (NW t 4.49), hedged Sharpe 0.951223, 13.947962%/yr, MaxDD -41.68, beta -0.649, raw Sharpe 0.622, ex-top-years Sharpe 0.623, turnover 43.4%.
+- Run 027 (Stage 3, never a gate): tier_neutral 0.968 (beta -0.71); equal_rank_decile 0.951; buffered 0.928 at turnover 24.6%; icir_weighted 0.911 (raw 0.493, beta -0.76); vol_targeted 0.842.
+- The total-return proxy credits |dbeta|*rf, about 0.6 pp here; deferred to Phase E. Records: manifest block v7; logged provenance_verified (026, 027), construction_reported and composite_updated; MaxRet row set to accepted.
