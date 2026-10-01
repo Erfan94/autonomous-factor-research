@@ -179,3 +179,11 @@
 - Diagnostics (never bars): dSharpe -0.012, MaxDD 2.11 pts worse, dIC +0.0003 (t 0.81), spanning alpha -2.87%/yr (t -0.85); D10 turnover 44.3 -> 39.8% as MaxRet's weight halves.
 - Run 034 (Stage 3, never a gate): equal_rank_decile 0.919; buffered 0.899 at turnover 22.0%; tier_neutral 0.874; vol_targeted 0.794 (the only variant above v9); icir_weighted 0.763 (raw 0.361, beta -0.93).
 - Records: manifest block v10; logged run_started/run_completed (033, 034), provenance_verified (033, 034), construction_reported and composite_updated; IdioVol3F row set to accepted. STreversal (v11) waits on the alpha-reviewer audit.
+
+## 2026-10-01 — v11 = v10 + STreversal (opens short_term_reversal, 8th family): accepted and applied (runs 035, 036); ladder 3 closed 2/5; tag v11-add-STreversal owed
+- Accepted from run 032 rung 5 (base v10) on both bars: residual IC NW t 3.81 > 2.0; guard t -0.54 >= -2.0. Residual share 1.06 audited clean before application (alpha_review 09:05:04Z, clear_to_apply; decision ladder3_acceptance).
+- Applied: STreversal.py moved to factors/accepted/; COMPOSITE_VERSION v11; COMPOSITE_SHA 1b4195ff18b4 -> 335b06e3d608, the other stamps unchanged; pytest 434 passed. 8 families at 1/8 (families_max 9): Size, Momentum, STreversal 0.125; profitability legs 0.025.
+- Run 035 reproduces the rung 5 WITH arm on 66 of 66 fields to six places: IC 0.035537 (NW t 5.36, ICIR 0.381), hedged Sharpe 0.942303, 14.613948%/yr, MaxDD -39.53, beta -0.512, raw Sharpe 0.737, ex-top-years 0.565, turnover 59.1%.
+- Hedge reading: raw dLS +1.09 vs hedged -0.64 pp/yr (hedge part -1.73 at dbeta +0.20), MaxRet's split in reverse (decision hedge_guard_negative_beta_property); the raw-Sharpe gain is beta unwinding, not alpha. The IC gain does not involve the hedge. Hit 63.4 -> 59.4%.
+- Run 036 (Stage 3, never a gate): equal_rank_decile 0.942; buffered 0.907 at turnover 40.1%; tier_neutral 0.868 (the only variant below v10); vol_targeted 0.827; icir_weighted 0.787 (raw 0.367, beta -0.91).
+- Records: manifest block v11; logged run_started/run_completed (035, 036), provenance_verified (035, 036), construction_reported, composite_updated and batch_closed stage2_l3 (2 pass, 3 fail); STreversal row set to accepted. Next ladder: ranks 16-20 on v11.
