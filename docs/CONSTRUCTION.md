@@ -6,9 +6,9 @@ predecessor's final design (its r2), with its parameters in
 `config/construction_layer.yaml`, plus the three changes `docs/DECISIONS.md`
 D7 owed it (§9, items 24–29):
 
-1. **A market-beta constraint (done).** The predecessor's book was sector-
-   and dollar-neutral but not beta-neutral; its holdout loss sat in the beta
-   the optimiser never saw. The layer's default constraint is now
+1. **A market-beta constraint (done).** A sector- and dollar-neutral book
+   still carries market beta that the optimiser never prices; D7 requires
+   zero ex-ante beta. The layer's default constraint is now
    `sector_beta_neutral`: [S | β]'w = 0, the sector groups plus each name's
    trailing beta on D4's market M (§5). The sector-only book is kept as the
    reference row `layer_no_beta_constraint`, and every row reports the

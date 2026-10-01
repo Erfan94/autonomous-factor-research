@@ -137,6 +137,12 @@ is carried as a template. Before its first number, Phase E must:
    composite's in-window LS, and pin `composite.composite_sha`.
 Each moves LAYER_SHA, which is outside CONFIG_SHA; each is logged.
 
+Note 2026-10-01 (process_finding d7_predecessor_outcome_clause): the clause
+"which is where its loss sat" in item 1 cites another project's outcome and
+is not evidence here. Item 1 stands on the design reason alone: a sector-
+and dollar-neutral book carries market beta the optimiser never prices. The
+text above is left as dated; this note governs.
+
 ## D8 — 2026-09-30 — The holdout spend protocol, declared before any out-of-sample number (owner: loop)
 
 The block ends 2026-09-30, after the search's snapshot was pulled, so the
