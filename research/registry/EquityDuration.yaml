@@ -1,0 +1,36 @@
+name: EquityDuration
+osap_acronym: EquityDuration
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b4
+declaration_order: 2
+date_tested: "2026-10-01"
+run: "006"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Dechow, Sloan and Soliman 2004 (RAST); SignalDoc sign -1, Cat.Economic valuation"
+orientation: "short implied equity duration = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/EquityDuration/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.091912, qcut_min_bins: 10, coverage_min_pct: 47.698378}
+stage1:   # from the run 006 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.010353, ic_tstat_nw: 1.855813, ic_half1_mean: 0.020293, ic_half2_mean: 0.000413, icir: 0.131575,
+   ls_sharpe: 0.25294, ls_ann_return_pct: 2.983156, ls_tstat_nw: 1.053659, ls_maxdd_pct: -51.504203, ls_raw_ann_return_pct: 2.326483,
+   ls_raw_sharpe: 0.180558, ls_raw_maxdd_pct: -60.039796, turnover_d10_pct: 16.869955, turnover_d1_pct: 14.991028, coverage_pct: 94.74185,
+   avg_names_per_decile: 186.147826, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.010742, ic_decay_h6: 0.011606,
+   ic_decay_h12: 0.010522, tier_MEGA_ic_mean: 0.0073, tier_MID_ic_mean: 0.0087, tier_SMALL_ic_mean: 0.0112, ls_beta_mean: -0.279534,
+   ls_beta_fullwindow: -0.300382, ls_sharpe_ex_top_years: -0.060914, ls_top_years: "2000,2001,2002", ls_top_years_share_pct: 116.166002, ls_sharpe_bear: 0.457449,
+   ls_sharpe_bull: 0.222373, decile_avg_ret_pct: "0.889,0.969,1.045,1.000,0.938,1.022,0.962,1.108,1.089,1.083", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_tstat_nw]
+stage2_failed: []
+character: >
+  Weak tilt, no grading: D1 0.889, D8-D10 1.08-1.11 %/mo, the middle 0.94-1.05; raw spread 2.33%/yr (Sharpe 0.181, MaxDD -60.0%). IC 0.0104 (NW t 1.86, 46.4% of months positive) is a first-half signal: 0.0203 then 0.0004; 2000-2002 ICs 0.063-0.069, 2020 -0.047. Tiers MEGA 0.0073, MID 0.0087, SMALL 0.0112 (SMALL raw LS Sharpe 0.007). IC flat across horizons (0.0107 h1, 0.0116 h6, 0.0105 h12); turnover 16.9% / 15.0%. Beta -0.30 (ex ante -0.28); hedged 2.98%/yr (Sharpe 0.253); ex-top-years Sharpe -0.061 (2000, 2001, 2002); bear 0.457 / bull 0.222. Coverage 94.7%.
+caveats:
+  - "second half 0.0004: the hedged LS earns 37.8 / 21.2 / 23.1% in 2000-2002 and -31.5% in 2020"
+  - "approx translation: 10-year ROE/growth projection on ART TTM aligned by reportperiod; ceq includes preferred; ME = SEP.close at reportperiod x sharesbas; OSAP growth fillna(0) reproduced"
+  - "coverage 47.7% at the 1998-12 preflight probe (year-ago filing thin in 1999-2000)"
+  - "delisting_adjusted_pct 0.44% is universe-wide"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (1.86 < 2.5); every other bar passes (ic_mean 0.0104 by 0.0004, ic_half_min 0.0004, raw spread 2.33%/yr). Not inconclusive. Same first-half profile as EntMult in the same SignalDoc category (valuation): 2000-2002 carry the IC and the return.

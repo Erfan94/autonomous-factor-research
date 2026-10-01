@@ -1,0 +1,37 @@
+name: EntMult
+osap_acronym: EntMult
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b4
+declaration_order: 1
+date_tested: "2026-10-01"
+run: "006"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Loughran and Wellman 2011 (JFQA); SignalDoc sign -1, Cat.Economic valuation"
+orientation: "low enterprise multiple (EV / OIBDP) = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/EntMult/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.120192, qcut_min_bins: 10, coverage_min_pct: 36.47523}
+stage1:   # from the run 006 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.013405, ic_tstat_nw: 1.961106, ic_half1_mean: 0.032043, ic_half2_mean: -0.005232, icir: 0.135178,
+   ls_sharpe: 0.194197, ls_ann_return_pct: 2.852751, ls_tstat_nw: 0.817676, ls_maxdd_pct: -65.76994, ls_raw_ann_return_pct: 5.549078,
+   ls_raw_sharpe: 0.371329, ls_raw_maxdd_pct: -58.299838, turnover_d10_pct: 18.623238, turnover_d1_pct: 19.130875, coverage_pct: 65.912201,
+   avg_names_per_decile: 129.503623, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.006305, ic_decay_h6: 0.005262,
+   ic_decay_h12: 0.00837, tier_MEGA_ic_mean: 0.0113, tier_MID_ic_mean: 0.0093, tier_SMALL_ic_mean: 0.0143, ls_beta_mean: -0.079584,
+   ls_beta_fullwindow: -0.07665, ls_sharpe_ex_top_years: -0.12694, ls_top_years: "2001,2003,2021", ls_top_years_share_pct: 154.360008, ls_sharpe_bear: 0.873881,
+   ls_sharpe_bull: 0.029188, decile_avg_ret_pct: "0.882,0.923,0.980,0.920,1.045,1.087,1.051,1.158,1.287,1.345", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  Deciles rise almost monotonically from D1 0.882 to D10 1.345 %/mo; raw spread 5.55%/yr (Sharpe 0.371, MaxDD -58.3%). IC 0.0134 (NW t 1.96, ICIR 0.135) is a first-half signal: 0.0320 then -0.0052; 2001-2002 ICs 0.107 / 0.072, and 2015-2020 negative in 5 of 6 years. Tiers MEGA 0.0113, MID 0.0093, SMALL 0.0143 (raw LS Sharpe 0.293 / 0.288 / 0.313). IC 0.0134 at h0 falls to 0.0063 at h1 (0.0053 h6, 0.0084 h12); turnover 18.6% / 19.1%. Beta -0.08 (ex ante -0.08); hedged 2.85%/yr (Sharpe 0.194, below raw); ex-top-years Sharpe -0.127 (2001, 2003, 2021); bear 0.874 / bull 0.029. Coverage 65.9%.
+caveats:
+  - "second half negative (-0.0052): the IC rests on 1999-2006"
+  - "coverage 36.5% at the 1998-12 preflight probe (15-month lookback before the panel start)"
+  - "approx translation: ART TTM opinc + depamor vs OSAP annual oibdp at datadate + 6; debt includes ASC 842 lease liabilities from 2019; dc = 0; fxusd == 1 gate"
+  - "hedged headline (2.85%/yr) is below raw at beta -0.08 and is not a Stage 1 bar (D11)"
+  - "delisting_adjusted_pct 0.44% is the universe-wide forward-return mix, identical on all 12 blocks"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (1.96 < 2.5); ic_half_min (-0.0052) also fails. ic_mean 0.0134, raw spread 5.55%/yr, coverage 65.9%, 129.5 names per decile and 276 months pass: not inconclusive. A valuation ratio with a front-loaded IC: v0's blend (0.0275 / 0.0016) and CF (0.0331 / 0.0070) have the same shape, and here the second half is below zero.

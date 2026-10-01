@@ -1,0 +1,38 @@
+name: IdioVol3F
+osap_acronym: IdioVol3F
+status: stage2_pending
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b4
+declaration_order: 11
+date_tested: "2026-10-01"
+run: "006"
+stage2_run: null
+stage1_decision: PASS
+decided_by: "all bars"
+source: "Ang, Hodrick, Xing and Zhang 2006 (JF); SignalDoc sign -1, Cat.Economic volatility"
+orientation: "low one-month FF3 residual daily volatility = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/IdioVol3F/spec.md}
+dimension_override: null
+history_gate_months: 1
+preflight: {masspoint_max_pct: 0.111857, qcut_min_bins: 0, coverage_min_pct: 0}
+stage1:   # from the run 006 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.022882, ic_tstat_nw: 3.147216, ic_half1_mean: 0.022075, ic_half2_mean: 0.023682, icir: 0.189948,
+   ls_sharpe: 0.536103, ls_ann_return_pct: 10.095234, ls_tstat_nw: 2.608408, ls_maxdd_pct: -43.720698, ls_raw_ann_return_pct: 3.277295,
+   ls_raw_sharpe: 0.137521, ls_raw_maxdd_pct: -68.750493, turnover_d10_pct: 63.95576, turnover_d1_pct: 69.219387, coverage_pct: 96.727533,
+   avg_names_per_decile: 194.994796, n_months: 269, ls_n_months: 269, ic_decay_h1: 0.020397, ic_decay_h6: 0.016998,
+   ic_decay_h12: 0.016168, tier_MEGA_ic_mean: 0.0177, tier_MID_ic_mean: 0.0249, tier_SMALL_ic_mean: 0.0237, ls_beta_mean: -0.915961,
+   ls_beta_fullwindow: -0.975771, ls_sharpe_ex_top_years: 0.37356, ls_top_years: "2000,2007,2021", ls_top_years_share_pct: 53.608797, ls_sharpe_bear: -0.211565,
+   ls_sharpe_bull: 0.945965, decile_avg_ret_pct: "0.691,0.942,0.943,0.958,1.007,0.915,1.021,1.024,1.043,0.964", delisting_adjusted_pct: 0.436673}
+stage1_failed: []
+stage2_failed: []
+character: >
+  The spread is a D1 effect: D1 (highest residual volatility) 0.691 %/mo, D2-D10 flat at 0.92-1.04; raw spread 3.28%/yr at vol 23.8% (Sharpe 0.138, MaxDD -68.8%). IC 0.0229 (NW t 3.15, ICIR 0.190) is level across halves (0.0221 / 0.0237); tiers MEGA 0.0177, MID 0.0249, SMALL 0.0237 (raw LS Sharpe 0.079 / 0.171 / 0.095; MEGA raw MaxDD -87.0%). IC decays slowly (0.0204 h1, 0.0170 h6, 0.0162 h12) though the one-month measure turns over 64.0% / 69.2%. Beta -0.98 (ex ante -0.92): the hedge adds 6.82 pp, 68% of the hedged 10.10%/yr (Sharpe 0.536, LS NW t 2.61). Ex-top-years Sharpe 0.374 (2000, 2007, 2021); bear -0.212 / bull 0.946; hedged LS -23.1% (1999), -24.6% (2009), -23.5% (2020), +51.4% (2000). Coverage 96.7%, 95.1-97.9% by sector.
+caveats:
+  - "the hedged headline is mostly hedge: raw 3.28%/yr (Sharpe 0.138) vs hedged 10.10%/yr (Sharpe 0.536) at beta -0.98; not a Stage 1 bar (D11)"
+  - "269 of 276 months: smb / hml (harness FF3 rebuild) start June 1999, so signals before 1999-07-30 are NaN; the halves and the ls_n_months floor (242) run on the block's own 269 months; the 1998-12 preflight probe reads 0% coverage / 0 bins for the same reason"
+  - "approx translation: harness-built FF3 daily factors (not Ken French's), rf omitted, SEP closeadj returns with carried no-trade rows counted, at least 15 days"
+  - "near-duplicate of IdioVolAHT: same construct (residual daily volatility), same D1-driven shape, beta about -1, shared top years 2000 / 2021, annual IC of the same sign in 20 of 23 years (the other three |IC| <= 0.005); differs in window (one month vs 252 days) and turnover (64% vs 11%); overlap not measured at Stage 1"
+  - "Cat.Economic volatility: no v0 seed family covers it; no Stage 2 number exists"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Passes every Stage 1 bar: IC 0.0229 >= 0.010, NW t 3.15 >= 2.5, halves min 0.0221, raw spread 3.28%/yr > 0, coverage 96.7% >= 40, 195.0 names per decile, 269 LS months >= 242. Status stage2_pending; family to be assigned in Phase C. Second-highest mean IC of the five passers (IdioVolAHT 0.0238; CBOperProf 0.0209, CF 0.0201) the first passer whose second-half IC is at or above its first (IdioVolAHT 0.0249 / 0.0226; v0 0.0275 / 0.0016); its raw Sharpe (0.138) is the lowest of the five passers (CF 0.201).

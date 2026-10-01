@@ -1,0 +1,35 @@
+name: HerfBE
+osap_acronym: HerfBE
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b4
+declaration_order: 9
+date_tested: "2026-10-01"
+run: "006"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Hou and Robinson 2006 (JF); SignalDoc sign -1, Cat.Economic other"
+orientation: "low industry book-equity concentration = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/HerfBE/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 6.541607, qcut_min_bins: 10, coverage_min_pct: 89.478299}
+stage1:   # from the run 006 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: -0.003031, ic_tstat_nw: -1.214102, ic_half1_mean: -0.000484, ic_half2_mean: -0.005578, icir: -0.074346,
+   ls_sharpe: -0.061123, ls_ann_return_pct: -0.442399, ls_tstat_nw: -0.299272, ls_maxdd_pct: -39.917893, ls_raw_ann_return_pct: 0.277794,
+   ls_raw_sharpe: 0.039032, ls_raw_maxdd_pct: -33.926499, turnover_d10_pct: 7.043525, turnover_d1_pct: 5.786305, coverage_pct: 91.592382,
+   avg_names_per_decile: 179.959783, n_months: 276, ls_n_months: 276, ic_decay_h1: -0.003131, ic_decay_h6: -0.002171,
+   ic_decay_h12: -0.003106, tier_MEGA_ic_mean: -0.0079, tier_MID_ic_mean: -0.0054, tier_SMALL_ic_mean: -0, ls_beta_mean: -0.001814,
+   ls_beta_fullwindow: -0.030849, ls_sharpe_ex_top_years: -0.330449, ls_top_years: "2008,2014,2016", ls_top_years_share_pct: -352.719903, ls_sharpe_bear: 0.105001,
+   ls_sharpe_bull: -0.009475, decile_avg_ret_pct: "0.918,0.912,1.056,1.099,1.140,0.964,1.020,0.845,1.254,0.941", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  No graded shape: deciles 0.85-1.25 %/mo, a D8 hole at 0.845 beside D9 1.254; raw spread +0.28%/yr (Sharpe 0.039, MaxDD -33.9%). IC -0.0030 (NW t -1.21), halves -0.0005 / -0.0056; tiers MEGA -0.0079, MID -0.0054, SMALL -0.0000. Decay -0.0031 h1, -0.0031 h12; turnover 7.0% / 5.8%. Beta -0.03 (ex ante -0.00); hedged -0.44%/yr (Sharpe -0.061); ex-top-years Sharpe -0.330; bear 0.105 / bull -0.009. Coverage 91.6%, the same names as HerfAsset.
+caveats:
+  - "industry-level value with structural blocks (preflight mode share 5.0-6.5%): whole industries land in one decile"
+  - "approx translation: BE = equity + taxliabilities with preferred not removed; H > 1 tail about 2.3% of rows reproduced; market-scope SIC4, 36-month mean with at least 12; current SIC; 49xx NaN"
+  - "delisting_adjusted_pct 0.44% is universe-wide"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (-1.21 < 2.5); ic_mean and ic_half_min also fail; the raw spread (+0.28%/yr) passes. Coverage 91.6%, 180.0 names per decile, 276 months pass: not inconclusive. All three Herfindahl variants carry a small negative IC in the OSAP direction (Herf -0.0028, HerfAsset -0.0049, HerfBE -0.0030).

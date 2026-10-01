@@ -1,0 +1,35 @@
+name: GrSaleToGrOverhead
+osap_acronym: GrSaleToGrOverhead
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b4
+declaration_order: 6
+date_tested: "2026-10-01"
+run: "006"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Abarbanell and Bushee 1998 (AR); SignalDoc sign +1, Cat.Economic sales growth"
+orientation: "sales growth in excess of overhead (SG&A + R&D) growth = attractive (SignalDoc sign +1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/GrSaleToGrOverhead/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.135135, qcut_min_bins: 10, coverage_min_pct: 32.441911}
+stage1:   # from the run 006 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: -0.001996, ic_tstat_nw: -0.746032, ic_half1_mean: -0.00017, ic_half2_mean: -0.003822, icir: -0.046108,
+   ls_sharpe: -0.39407, ls_ann_return_pct: -2.728219, ls_tstat_nw: -1.865381, ls_maxdd_pct: -58.989457, ls_raw_ann_return_pct: -3.041779,
+   ls_raw_sharpe: -0.447479, ls_raw_maxdd_pct: -61.181971, turnover_d10_pct: 14.589758, turnover_d1_pct: 14.995761, coverage_pct: 85.133565,
+   avg_names_per_decile: 167.269565, n_months: 276, ls_n_months: 276, ic_decay_h1: -0.00295, ic_decay_h6: -0.001513,
+   ic_decay_h12: 0.000493, tier_MEGA_ic_mean: -0.0043, tier_MID_ic_mean: -0.0008, tier_SMALL_ic_mean: -0.0021, ls_beta_mean: 0.009493,
+   ls_beta_fullwindow: -0.044841, ls_sharpe_ex_top_years: -0.548763, ls_top_years: "2003,2007,2008", ls_top_years_share_pct: -20.909904, ls_sharpe_bear: -0.283271,
+   ls_sharpe_bull: -0.49834, decile_avg_ret_pct: "0.975,1.053,1.076,1.137,1.143,1.125,1.073,1.015,1.020,0.721", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min, ls_raw_ann_return_pct]
+stage2_failed: []
+character: >
+  Wrong-signed at the top only: D10 0.721 %/mo is the lowest decile, D4-D6 1.13-1.14 the highest, D1 0.975; raw spread -3.04%/yr (Sharpe -0.447, MaxDD -61.2%). IC -0.0020 (NW t -0.75), halves -0.0002 / -0.0038; tiers MEGA -0.0043, MID -0.0008, SMALL -0.0021 (SMALL raw LS Sharpe -0.475). Decay -0.0030 h1 to +0.0005 h12; turnover 14.6% / 15.0%. Beta -0.04 (ex ante 0.01); hedged -2.73%/yr (Sharpe -0.394); ex-top-years Sharpe -0.549; bear -0.283 / bull -0.498. Coverage 85.1%.
+caveats:
+  - "the negative raw spread comes from D10 alone, not a graded slope (IC -0.0020)"
+  - "approx translation: sales growth minus (sgna + rnd) growth against the two-year average base; sgna == 0 -> NaN; base > 0 guard (OSAP base != 0)"
+  - "delisting_adjusted_pct 0.44% is universe-wide"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (-0.75 < 2.5); ic_mean, ic_half_min and the raw spread also fail. Coverage 85.1%, 167.3 names per decile, 276 months pass: not inconclusive. |t| 0.75: no flip.

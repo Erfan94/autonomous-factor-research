@@ -1,0 +1,35 @@
+name: GrSaleToGrInv
+osap_acronym: GrSaleToGrInv
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b4
+declaration_order: 5
+date_tested: "2026-10-01"
+run: "006"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Abarbanell and Bushee 1998 (AR); SignalDoc sign +1, Cat.Economic sales growth"
+orientation: "sales growth in excess of inventory growth = attractive (SignalDoc sign +1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/GrSaleToGrInv/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.174825, qcut_min_bins: 10, coverage_min_pct: 25.076721}
+stage1:   # from the run 006 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.003509, ic_tstat_nw: 1.583365, ic_half1_mean: 0.006501, ic_half2_mean: 0.000517, icir: 0.094997,
+   ls_sharpe: 0.217079, ls_ann_return_pct: 1.585762, ls_tstat_nw: 0.948773, ls_maxdd_pct: -25.556642, ls_raw_ann_return_pct: 1.616412,
+   ls_raw_sharpe: 0.232732, ls_raw_maxdd_pct: -25.830746, turnover_d10_pct: 17.951761, turnover_d1_pct: 19.245947, coverage_pct: 57.051313,
+   avg_names_per_decile: 112.093841, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.001675, ic_decay_h6: -0.001702,
+   ic_decay_h12: 0.00082, tier_MEGA_ic_mean: 0.0019, tier_MID_ic_mean: 0.007, tier_SMALL_ic_mean: 0.0019, ls_beta_mean: 0.009838,
+   ls_beta_fullwindow: -0.009238, ls_sharpe_ex_top_years: -0.166861, ls_top_years: "1999,2003,2021", ls_top_years_share_pct: 158.999603, ls_sharpe_bear: 0.176154,
+   ls_sharpe_bull: 0.057435, decile_avg_ret_pct: "0.882,1.081,1.018,1.107,1.052,1.259,1.191,1.159,1.078,1.017", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw]
+stage2_failed: []
+character: >
+  Hump-shaped deciles: D1 0.882 the lowest, D6 1.259 the highest, D10 1.017 %/mo; raw spread 1.62%/yr (Sharpe 0.233, MaxDD -25.8%). IC 0.0035 (NW t 1.58), positive in both halves (0.0065 / 0.0005); tiers MEGA 0.0019, MID 0.0070, SMALL 0.0019. IC is gone after a month (0.0017 h1, -0.0017 h6, 0.0008 h12); turnover 18.0% / 19.2%. Beta -0.01 (ex ante 0.01); hedged 1.59%/yr (Sharpe 0.217); ex-top-years Sharpe -0.167 (1999, 2003, 2021); bear 0.176 / bull 0.057. Coverage 57.1%.
+caveats:
+  - "coverage 57.1% (25.1% at the 1998-12 probe): names without inventory are not scored"
+  - "approx translation: sales growth minus inventory growth against the two-prior-year average base (one-year fallback); inventory zero-filled only where assets are reported; ART, report-period yoy"
+  - "delisting_adjusted_pct 0.44% is universe-wide"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (1.58 < 2.5); ic_mean (0.0035) also fails. Halves, raw spread, coverage, 112.1 names per decile and 276 months pass: not inconclusive.

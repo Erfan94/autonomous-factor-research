@@ -1,0 +1,35 @@
+name: HerfAsset
+osap_acronym: HerfAsset
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b4
+declaration_order: 8
+date_tested: "2026-10-01"
+run: "006"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Hou and Robinson 2006 (JF); SignalDoc sign -1, Cat.Economic other"
+orientation: "low industry asset concentration = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/HerfAsset/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 6.541607, qcut_min_bins: 10, coverage_min_pct: 89.478299}
+stage1:   # from the run 006 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: -0.004929, ic_tstat_nw: -2.002662, ic_half1_mean: -0.003655, ic_half2_mean: -0.006203, icir: -0.119322,
+   ls_sharpe: -0.181719, ls_ann_return_pct: -1.446178, ls_tstat_nw: -0.915638, ls_maxdd_pct: -41.338416, ls_raw_ann_return_pct: -0.594575,
+   ls_raw_sharpe: -0.074807, ls_raw_maxdd_pct: -35.072822, turnover_d10_pct: 6.320103, turnover_d1_pct: 5.189089, coverage_pct: 91.592382,
+   avg_names_per_decile: 179.959783, n_months: 276, ls_n_months: 276, ic_decay_h1: -0.004964, ic_decay_h6: -0.003696,
+   ic_decay_h12: -0.004187, tier_MEGA_ic_mean: -0.0088, tier_MID_ic_mean: -0.0058, tier_SMALL_ic_mean: -0.0031, ls_beta_mean: 0.073685,
+   ls_beta_fullwindow: 0.059734, ls_sharpe_ex_top_years: -0.431802, ls_top_years: "1999,2008,2014", ls_top_years_share_pct: -92.585838, ls_sharpe_bear: -0.272804,
+   ls_sharpe_bull: -0.227958, decile_avg_ret_pct: "0.925,1.030,1.024,1.130,0.986,1.041,1.194,0.778,1.037,0.875", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min, ls_raw_ann_return_pct]
+stage2_failed: []
+character: >
+  No graded shape: deciles 0.78-1.19 %/mo, a D8 hole at 0.778 beside D7 1.194, D10 0.875; raw spread -0.59%/yr (Sharpe -0.075, MaxDD -35.1%). IC -0.0049 (NW t -2.00), halves -0.0037 / -0.0062, negative in 17 of 23 years; tiers MEGA -0.0088, MID -0.0058, SMALL -0.0031. Decay -0.0050 h1, -0.0042 h12; turnover 6.3% / 5.2%. Beta 0.06 (ex ante 0.07); hedged -1.45%/yr (Sharpe -0.182); ex-top-years Sharpe -0.432; bear -0.273 / bull -0.228. Coverage 91.6%.
+caveats:
+  - "industry-level value with structural blocks (preflight mode share 5.0-6.5%; Real Estate 82-86% SIC 6798, Energy 37-43% SIC 1311): whole industries land in one decile"
+  - "approx translation: market-scope SIC4 Herfindahl of assets / fxusd, 36-month mean with at least 12; current SIC; 49xx NaN"
+  - "delisting_adjusted_pct 0.44% is universe-wide"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (-2.00 < 2.5); ic_mean, ic_half_min and the raw spread also fail. Coverage 91.6%, 180.0 names per decile, 276 months pass: not inconclusive. |t| 2.00 is below the 2.74 flip bar: no flip.

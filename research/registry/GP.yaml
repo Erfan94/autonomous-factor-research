@@ -1,0 +1,38 @@
+name: GP
+osap_acronym: GP
+status: stage2_pending
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b4
+declaration_order: 3
+date_tested: "2026-10-01"
+run: "006"
+stage2_run: null
+stage1_decision: PASS
+decided_by: "all bars"
+source: "Novy-Marx 2013 (JFE); SignalDoc sign +1, Cat.Economic profitability"
+orientation: "high (revenue - cost of revenue) / assets = attractive"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/GP/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.095329, qcut_min_bins: 10, coverage_min_pct: 45.988601}
+stage1:   # from the run 006 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.015533, ic_tstat_nw: 3.520387, ic_half1_mean: 0.020558, ic_half2_mean: 0.010508, icir: 0.237106,
+   ls_sharpe: 1.090591, ls_ann_return_pct: 11.336916, ls_tstat_nw: 5.100748, ls_maxdd_pct: -17.363691, ls_raw_ann_return_pct: 8.640203,
+   ls_raw_sharpe: 0.687605, ls_raw_maxdd_pct: -22.114486, turnover_d10_pct: 9.028708, turnover_d1_pct: 10.381959, coverage_pct: 74.390446,
+   avg_names_per_decile: 146.161594, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.014102, ic_decay_h6: 0.013324,
+   ic_decay_h12: 0.012064, tier_MEGA_ic_mean: 0.021, tier_MID_ic_mean: 0.0115, tier_SMALL_ic_mean: 0.0153, ls_beta_mean: -0.396072,
+   ls_beta_fullwindow: -0.44573, ls_sharpe_ex_top_years: 0.921125, ls_top_years: "2000,2018,2021", ls_top_years_share_pct: 33.457251, ls_sharpe_bear: 1.256097,
+   ls_sharpe_bull: 1.059867, decile_avg_ret_pct: "0.419,0.790,1.061,1.081,1.138,1.058,1.123,1.139,1.157,1.139", delisting_adjusted_pct: 0.436673}
+stage1_failed: []
+stage2_failed: []
+character: >
+  The spread is a D1 effect: D1 0.419, D2 0.790, D3-D10 flat at 1.06-1.16 %/mo; raw spread 8.64%/yr (Sharpe 0.688, MaxDD -22.1%). IC 0.0155 (NW t 3.52, ICIR 0.237) is positive in both halves (0.0206 / 0.0105). Tiers MEGA 0.0210, MID 0.0115, SMALL 0.0153 (raw LS Sharpe 0.522 / 0.526 / 0.643): MEGA has the highest IC. IC holds across horizons (0.0141 h1, 0.0133 h6, 0.0121 h12); turnover 9.0% / 10.4%. Beta -0.45 (ex ante -0.40); the hedge adds 2.70 pp, 24% of the hedged 11.34%/yr (Sharpe 1.091, LS NW t 5.10, MaxDD -17.4%). Ex-top-years Sharpe 0.921 (2000, 2018, 2021); bear 1.256 / bull 1.060; the hedged annual LS is negative only in 2012 (-7.2%) and 2020 (-3.6%). Coverage 74.4%: Real Estate 2.0%, Financial Services 3.4%, Healthcare 76.2%, the rest 87-98%.
+caveats:
+  - "financials and real estate excluded by CURRENT SIC (coverage 3.4% / 2.0%), as for CBOperProf; Healthcare 76.2% from cor == 0 -> NaN"
+  - "approx translation: cor (as-reported cost of revenue) includes D&A for some filers; ART TTM at filing vs annual at datadate + 6; assets the latest filing's level"
+  - "shares the revenue - cost of revenue term with v0 Profitability (OSAP OperProf) and the profitability concept with CBOperProf (Stage 1 passer, run 003); overlap is a Stage 2 question and no Stage 2 number exists"
+  - "hedged headline 11.34%/yr is not a Stage 1 bar (D11); 2.70 pp of it is the hedge at beta -0.45"
+  - "coverage 46.0% at the 1998-12 preflight probe (15-month lookback before the panel start)"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%, merger 0.43%)"
+decision: >
+  Passes every Stage 1 bar: IC 0.0155 >= 0.010, NW t 3.52 >= 2.5, halves min 0.0105, raw spread 8.64%/yr > 0, coverage 74.4% >= 40, 146.2 names per decile, 276 LS months. Status stage2_pending; family to be assigned in Phase C. Second-highest NW t of the five passers (CBOperProf 3.74); lower IC than CBOperProf (0.0209) with a higher raw spread (8.64 vs 7.24%/yr) and ex-top-years Sharpe (0.921 vs 0.638). Against v0 (IC 0.0145, halves 0.0275 / 0.0016, ex-top-years Sharpe 0.159) its IC is less front-loaded.

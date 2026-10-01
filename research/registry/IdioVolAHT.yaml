@@ -1,0 +1,38 @@
+name: IdioVolAHT
+osap_acronym: IdioVolAHT
+status: stage2_pending
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b4
+declaration_order: 12
+date_tested: "2026-10-01"
+run: "006"
+stage2_run: null
+stage1_decision: PASS
+decided_by: "all bars"
+source: "Ali, Hwang and Trombley 2003 (JFE); SignalDoc sign -1, Cat.Economic volatility"
+orientation: "low 252-day CAPM residual daily volatility = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/IdioVolAHT/spec.md}
+dimension_override: null
+history_gate_months: 5
+preflight: {masspoint_max_pct: 0.112296, qcut_min_bins: 0, coverage_min_pct: 0}
+stage1:   # from the run 006 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.023776, ic_tstat_nw: 2.628065, ic_half1_mean: 0.024929, ic_half2_mean: 0.022623, icir: 0.164731,
+   ls_sharpe: 0.545177, ls_ann_return_pct: 11.675899, ls_tstat_nw: 2.58428, ls_maxdd_pct: -52.106043, ls_raw_ann_return_pct: 3.888869,
+   ls_raw_sharpe: 0.14351, ls_raw_maxdd_pct: -72.412122, turnover_d10_pct: 10.936395, turnover_d1_pct: 15.34281, coverage_pct: 96.7563,
+   avg_names_per_decile: 192.901471, n_months: 272, ls_n_months: 272, ic_decay_h1: 0.022996, ic_decay_h6: 0.018363,
+   ic_decay_h12: 0.018924, tier_MEGA_ic_mean: 0.0193, tier_MID_ic_mean: 0.0269, tier_SMALL_ic_mean: 0.0251, ls_beta_mean: -1.037882,
+   ls_beta_fullwindow: -1.072857, ls_sharpe_ex_top_years: 0.388836, ls_top_years: "2000,2014,2021", ls_top_years_share_pct: 53.398072, ls_sharpe_bear: -0.115022,
+   ls_sharpe_bull: 0.871932, decile_avg_ret_pct: "0.665,0.930,1.069,0.986,0.985,1.020,1.007,1.017,0.971,0.990", delisting_adjusted_pct: 0.436673}
+stage1_failed: []
+stage2_failed: []
+character: >
+  The spread is a D1 effect: D1 0.665 %/mo, D2-D10 0.93-1.07; raw spread 3.89%/yr at vol 27.1% (Sharpe 0.144, MaxDD -72.4%). IC 0.0238 (NW t 2.63, ICIR 0.165), halves 0.0249 / 0.0226; tiers MEGA 0.0193, MID 0.0269, SMALL 0.0251 (raw LS Sharpe 0.059 / 0.238 / 0.189; MEGA raw MaxDD -90.1%). IC decays slowly (0.0230 h1, 0.0184 h6, 0.0189 h12); turnover 10.9% / 15.3%. Beta -1.07 (ex ante -1.04): the hedge adds 7.79 pp, 67% of the hedged 11.68%/yr (Sharpe 0.545, LS NW t 2.58). Ex-top-years Sharpe 0.389 (2000, 2014, 2021); bear -0.115 / bull 0.872; hedged LS -20.2% (1999), -27.9% (2009), -27.9% (2020), +70.3% (2000). Coverage 96.8%, 94.4-97.7% by sector.
+caveats:
+  - "the hedged headline is mostly hedge: raw 3.89%/yr (Sharpe 0.144) vs hedged 11.68%/yr (Sharpe 0.545) at beta -1.07; not a Stage 1 bar (D11)"
+  - "272 of 276 months: market_daily starts 1998-12-02, so signals 1998-12 .. 1999-03 are NaN (100-pair minimum) and 1999-04 .. 1999-11 rest on 100-250 rows; the halves and the ls_n_months floor (244) run on the block's own 272 months; the 1998-12 preflight probe reads 0% coverage / 0 bins"
+  - "approx translation: harness market_daily value-weighted series (not CRSP VW minus rf), rf omitted, SEP closeadj returns, 420-calendar-day reach"
+  - "near-duplicate of IdioVol3F (see its row): same construct, shape, beta and top years; differs in window and turnover (11% vs 64%); overlap not measured at Stage 1"
+  - "NW t 2.63 clears 2.5 by 0.13, the thinnest margin of the five passers"
+  - "delisting_adjusted_pct 0.44% is universe-wide"
+decision: >
+  Passes every Stage 1 bar: IC 0.0238 >= 0.010, NW t 2.63 >= 2.5, halves min 0.0226, raw spread 3.89%/yr > 0, coverage 96.8% >= 40, 192.9 names per decile, 272 LS months >= 244. Status stage2_pending; family to be assigned in Phase C. Higher mean IC than IdioVol3F (0.0238 vs 0.0229) at a lower t (2.63 vs 3.15; ICIR 0.165 vs 0.190) and about a sixth of the turnover.

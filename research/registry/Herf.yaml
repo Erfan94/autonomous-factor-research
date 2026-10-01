@@ -1,0 +1,35 @@
+name: Herf
+osap_acronym: Herf
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b4
+declaration_order: 7
+date_tested: "2026-10-01"
+run: "006"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Hou and Robinson 2006 (JF); SignalDoc sign -1, Cat.Economic other"
+orientation: "low industry sales concentration (competitive industry) = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/Herf/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 6.547906, qcut_min_bins: 10, coverage_min_pct: 87.330118}
+stage1:   # from the run 006 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: -0.002774, ic_tstat_nw: -1.153503, ic_half1_mean: -0.002659, ic_half2_mean: -0.002889, icir: -0.069534,
+   ls_sharpe: -0.1056, ls_ann_return_pct: -0.792571, ls_tstat_nw: -0.50146, ls_maxdd_pct: -29.518114, ls_raw_ann_return_pct: 0.032264,
+   ls_raw_sharpe: 0.004335, ls_raw_maxdd_pct: -27.325634, turnover_d10_pct: 6.903021, turnover_d1_pct: 5.358588, coverage_pct: 91.516775,
+   avg_names_per_decile: 179.811232, n_months: 276, ls_n_months: 276, ic_decay_h1: -0.003217, ic_decay_h6: -0.001943,
+   ic_decay_h12: -0.002384, tier_MEGA_ic_mean: -0.0051, tier_MID_ic_mean: -0.0022, tier_SMALL_ic_mean: -0.0027, ls_beta_mean: 0.055371,
+   ls_beta_fullwindow: 0.036944, ls_sharpe_ex_top_years: -0.326293, ls_top_years: "2002,2013,2014", ls_top_years_share_pct: -173.293623, ls_sharpe_bear: -0.02976,
+   ls_sharpe_bull: -0.202741, decile_avg_ret_pct: "0.912,1.068,0.961,1.072,1.040,0.991,1.167,0.585,1.311,0.915", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  No graded shape: deciles 0.91-1.31 %/mo with a D8 hole at 0.585 next to D9 1.311; raw spread +0.03%/yr (Sharpe 0.004, MaxDD -27.3%). IC -0.0028 (NW t -1.15), halves -0.0027 / -0.0029; tiers MEGA -0.0051, MID -0.0022, SMALL -0.0027. Decay -0.0032 h1, -0.0024 h12; turnover 6.9% / 5.4%. Beta 0.04 (ex ante 0.06); hedged -0.79%/yr (Sharpe -0.106); ex-top-years Sharpe -0.326; bear -0.030 / bull -0.203. Coverage 91.5%; preflight mode share 5.2-6.5%.
+caveats:
+  - "industry-level value: every name in a SIC4 industry shares it, so whole industries land in one decile (the D8 hole); within Real Estate SIC 6798 is 84-93% of names"
+  - "approx translation: market-scope SIC4 Herfindahl of revenue / fxusd, 36-month mean with at least 12; current SIC; 49xx NaN"
+  - "delisting_adjusted_pct 0.44% is universe-wide"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (-1.15 < 2.5); ic_mean and ic_half_min also fail; the raw spread (+0.03%/yr) passes. Coverage 91.5%, 179.8 names per decile, 276 months pass: not inconclusive. The OSAP direction (competitive industries long) carries a small negative IC here; |t| 1.15, no flip.

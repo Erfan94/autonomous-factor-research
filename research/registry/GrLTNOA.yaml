@@ -1,0 +1,37 @@
+name: GrLTNOA
+osap_acronym: GrLTNOA
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b4
+declaration_order: 4
+date_tested: "2026-10-01"
+run: "006"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Fairfield, Whisenant and Yohn 2003 (AR); SignalDoc sign +1, Cat.Economic investment"
+orientation: "high growth in long-term net operating assets (OSAP construction) = attractive (SignalDoc sign +1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/GrLTNOA/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.117647, qcut_min_bins: 10, coverage_min_pct: 37.264358}
+stage1:   # from the run 006 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: -0.005898, ic_tstat_nw: -2.754583, ic_half1_mean: -0.004875, ic_half2_mean: -0.006921, icir: -0.166825,
+   ls_sharpe: -0.114469, ls_ann_return_pct: -0.761071, ls_tstat_nw: -0.482572, ls_maxdd_pct: -50.916751, ls_raw_ann_return_pct: -0.081859,
+   ls_raw_sharpe: -0.012641, ls_raw_maxdd_pct: -47.736899, turnover_d10_pct: 19.246511, turnover_d1_pct: 19.379581, coverage_pct: 76.789383,
+   avg_names_per_decile: 150.875, n_months: 276, ls_n_months: 276, ic_decay_h1: -0.004386, ic_decay_h6: -0.001066,
+   ic_decay_h12: -0.001538, tier_MEGA_ic_mean: -0.0096, tier_MID_ic_mean: -0.0095, tier_SMALL_ic_mean: -0.0027, ls_beta_mean: -0.01622,
+   ls_beta_fullwindow: 0.043696, ls_sharpe_ex_top_years: -0.490717, ls_top_years: "1999,2014,2016", ls_top_years_share_pct: -258.885319, ls_sharpe_bear: -0.064946,
+   ls_sharpe_bull: -0.332199, decile_avg_ret_pct: "0.871,1.064,1.230,1.127,1.106,1.164,1.018,1.009,1.017,0.864", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min, ls_raw_ann_return_pct]
+stage2_failed: []
+character: >
+  Wrong-signed in the OSAP direction and hump-shaped: D1 0.871 and D10 0.864 %/mo are the two lowest deciles, D3 1.230 the highest; raw spread -0.08%/yr (Sharpe -0.013, MaxDD -47.7%). IC -0.0059 (NW t -2.75, ICIR -0.167) is negative in both halves (-0.0049 / -0.0069) and in 17 of 23 years, never beyond |0.028| in a year. Tiers MEGA -0.0096, MID -0.0095, SMALL -0.0027. IC decays toward zero (-0.0044 h1, -0.0011 h6, -0.0015 h12); turnover 19.2% / 19.4%. Beta 0.04 (ex ante -0.02); hedged -0.76%/yr (Sharpe -0.114); ex-top-years Sharpe -0.491 (1999, 2014, 2016); bear -0.065 / bull -0.332. Coverage 76.8%.
+caveats:
+  - "FLIP QUALIFIED, NOT SCREENED: |NW t| 2.75 >= 2.74 qualifies GrLTNOAFlip; its sign-reversed run-006 mean IC (+0.0059) fails the 0.010 bar by 0.0041, so no flip screen is run (decision flip_not_screened_when_deterministic_fail)"
+  - "the reversal is this run's negation up to the D3 rank-reversal offset: rank(pct, ascending=False) = 1 + 1/n_s - r/n_s, a per-sector constant (<= 0.1 at the 10-name fallback, about 0.01 at typical sector sizes), plus decile-boundary ties; the raw spread is annualised arithmetically (mean x 12), so compounding plays no part; not measured"
+  - "the reversed NW t (2.7546) clears the flip's 2.74 bar by 0.015, inside that perturbation; the not-screened judgment rests on ic_mean alone"
+  - "a reversed spread would be about +0.08%/yr: D1 and D10 are both the lowest deciles"
+  - "approx translation: Route A (aco = lco = 0), ao / lo approximated, report-period yoy; ASC 842 lease assets inflate NOA across 2019-2020"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (-2.75 < 2.5); ic_mean, ic_half_min and the raw spread also fail. Coverage 76.8%, 150.9 names per decile, 276 months pass: not inconclusive. The second member after BidAskSpread (run 003, t -2.77) whose negative t reaches the 2.74 flip bar, and the first whose reversed magnitude fails a bar by a wide margin; the flip is recorded as qualified and not screened.

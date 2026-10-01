@@ -1,0 +1,36 @@
+name: High52
+osap_acronym: High52
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b4
+declaration_order: 10
+date_tested: "2026-10-01"
+run: "006"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "George and Hwang 2004 (JF); SignalDoc sign +1, Cat.Economic momentum"
+orientation: "price near its 52-week high = attractive (SignalDoc sign +1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/High52/spec.md}
+dimension_override: null
+history_gate_months: 12
+preflight: {masspoint_max_pct: 0.278164, qcut_min_bins: 10, coverage_min_pct: 92.776817}
+stage1:   # from the run 006 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.006546, ic_tstat_nw: 0.773446, ic_half1_mean: 0.001136, ic_half2_mean: 0.011956, icir: 0.044545,
+   ls_sharpe: 0.447704, ls_ann_return_pct: 9.383472, ls_tstat_nw: 2.230984, ls_maxdd_pct: -61.865627, ls_raw_ann_return_pct: -0.127991,
+   ls_raw_sharpe: -0.004976, ls_raw_maxdd_pct: -82.546972, turnover_d10_pct: 62.265863, turnover_d1_pct: 24.888903, coverage_pct: 96.106454,
+   avg_names_per_decile: 188.828986, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.013039, ic_decay_h6: 0.012005,
+   ic_decay_h12: 0.004817, tier_MEGA_ic_mean: 0.0092, tier_MID_ic_mean: 0.0129, tier_SMALL_ic_mean: 0.0021, ls_beta_mean: -0.856281,
+   ls_beta_fullwindow: -1.009021, ls_sharpe_ex_top_years: 0.254774, ls_top_years: "2000,2007,2021", ls_top_years_share_pct: 53.557885, ls_sharpe_bear: -0.622198,
+   ls_sharpe_bull: 1.076442, decile_avg_ret_pct: "1.057,0.974,1.004,1.040,0.923,1.052,0.959,0.982,0.965,1.047", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ls_raw_ann_return_pct]
+stage2_failed: []
+character: >
+  Flat to U-shaped: D1 1.057 and D10 1.047 %/mo, the middle 0.92-1.05; raw spread -0.13%/yr at vol 25.7% (Sharpe -0.005, MaxDD -82.5%). IC 0.0065 (NW t 0.77, ICIR 0.045) swings by year (2009 -0.122, 2007 +0.083); halves 0.0011 / 0.0120. IC 0.0065 at h0 sits below 0.0120-0.0130 at h1-h6 and falls to 0.0048 at h12. Tiers MEGA 0.0092, MID 0.0129, SMALL 0.0021 (raw LS Sharpe 0.260 / 0.099 / -0.136). Turnover 62.3% D10 vs 24.9% D1. Beta -1.01 (ex ante -0.86): the hedged 9.38%/yr (Sharpe 0.448, LS NW t 2.23) is all hedge against raw -0.13%/yr; hedged LS -51.5% in 2009. Ex-top-years Sharpe 0.255 (2000, 2007, 2021); bear -0.622 / bull 1.076. Coverage 96.1%.
+caveats:
+  - "the hedged headline (9.38%/yr) is the hedge on a beta -1.01 spread (raw -0.13%/yr); not a Stage 1 bar (D11)"
+  - "history gate 12 months; raw closeunadj as OSAP (a split-restated close is the declared alternative, not run)"
+  - "Cat.Economic momentum, nearest v0 Momentum by category; no Stage 2 number exists"
+  - "delisting_adjusted_pct 0.44% is universe-wide"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (0.77 < 2.5); ic_mean and the raw spread also fail. Halves positive, coverage 96.1%, 188.8 names per decile, 276 months pass: not inconclusive. Like BidAskSpread (beta 0.97) and the IdioVol pair (beta about -1), a price-based sort whose raw spread is mostly a market-beta position; unlike the IdioVol pair its rank IC does not reach the bars.
