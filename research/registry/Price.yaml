@@ -1,0 +1,38 @@
+name: Price
+osap_acronym: Price
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b7
+declaration_order: 6
+date_tested: "2026-10-01"
+run: "009"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Blume and Husic 1973 (JF); SignalDoc sign -1, Cat.Economic other"
+orientation: "low log share price (as traded, unadjusted) at the signal month-end = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/Price/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.569925, qcut_min_bins: 10, coverage_min_pct: 100.0}
+stage1:   # from the run 009 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: -0.010036, ic_tstat_nw: -1.413334, ic_half1_mean: -0.002654, ic_half2_mean: -0.017419, icir: -0.086812, ls_sharpe: -0.314643,
+   ls_ann_return_pct: -5.892456, ls_tstat_nw: -1.523045, ls_maxdd_pct: -86.458605, ls_raw_ann_return_pct: 2.979981, ls_raw_sharpe: 0.136744,
+   ls_raw_maxdd_pct: -49.35456, turnover_d10_pct: 16.3128, turnover_d1_pct: 10.397147, coverage_pct: 100.0, avg_names_per_decile: 196.478986,
+   n_months: 276, ls_n_months: 276, ic_decay_h1: -0.012989, ic_decay_h6: -0.009482, ic_decay_h12: -0.005103, tier_MEGA_ic_mean: -0.0143,
+   tier_MID_ic_mean: -0.0134, tier_SMALL_ic_mean: -0.0104, ls_beta_mean: 0.715035, ls_beta_fullwindow: 0.770015, ls_sharpe_ex_top_years: -0.765914,
+   ls_top_years: "2001,2009,2016", ls_top_years_share_pct: -76.894064, ls_sharpe_bear: 0.689251, ls_sharpe_bull: -0.97229,
+   decile_avg_ret_pct: "0.842,0.785,0.864,0.933,1.004,1.067,0.998,1.033,1.053,1.091", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  Mean decile returns rise toward low price (D1, the highest price, 0.842; D2 0.785; D10 1.091 %/mo) and the raw spread is 2.98%/yr (Sharpe 0.137, MaxDD -49.4%), yet the rank IC is negative: -0.0100 (NW t -1.41, ICIR -0.087), halves -0.0027 / -0.0174, positive in 9 of 23 years and 44.2% of months. Tiers MEGA -0.0143, MID -0.0134, SMALL -0.0104. Decay -0.0130 h1, -0.0095 h6, -0.0051 h12; turnover 16.3% / 10.4%. Beta 0.77 (ex ante 0.72): the low-price long leg is high-beta and the hedge removes 8.87 pp, hedged -5.89%/yr (Sharpe -0.315, MaxDD -86.5%, hit 37.7%). Hedged LS +51.6% in 2001 and +45.6% in 2009, negative in 16 of 23 years (2007 -31.8%, 2021 -30.2%); ex-top-years Sharpe -0.766; bear 0.689 / bull -0.972. Coverage 100.0%.
+caveats:
+  - "validate_results warning, verbatim: COVERAGE IS 100.000000% — implausibly complete for a lagged signal. Suspect a filled value (0.0) where a null belongs: that manufactures a mass point. Read: ln(closeunadj) exists for every universe member by construction (the universe's $1 floor reads the same price); preflight mode share 0.2-0.6% with 1,227-2,121 distinct values and 10 bins; no filled value, no mass point; not an inconclusive trigger"
+  - "the positive raw spread is the market premium of a beta-0.77 long leg, carried by the 2001 and 2009 rebounds, while the monthly rank IC is negative"
+  - "the $1 universe floor truncates the low-price tail OSAP keeps"
+  - "flip not qualified: |NW t| 1.41 < 2.74"
+  - "ls_top_years_share_pct -77% recorded as-is"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (-1.41 < 2.5); ic_mean (-0.0100) and ic_half_min (-0.0174) also fail; the raw spread (2.98%/yr), coverage 100.0%, 196.5 names and 276 LS months pass. Full sample: a rejection, not an inconclusive (stage1_decided_by_convention).

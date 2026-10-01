@@ -1,0 +1,36 @@
+name: OrgCap
+osap_acronym: OrgCap
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b7
+declaration_order: 3
+date_tested: "2026-10-01"
+run: "009"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Eisfeldt and Papanikolaou 2013 (JF); SignalDoc sign +1, Cat.Economic R&D"
+orientation: "high organizational capital (0.85-decay stock of SG&A + R&D) / assets, standardised within FF17 industry = attractive (SignalDoc sign +1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/OrgCap/spec.md}
+dimension_override: ARY
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.444444, qcut_min_bins: 10, coverage_min_pct: 45.769399}
+stage1:   # from the run 009 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.005429, ic_tstat_nw: 1.696826, ic_half1_mean: 0.004339, ic_half2_mean: 0.00652, icir: 0.102825, ls_sharpe: 0.401288,
+   ls_ann_return_pct: 4.363908, ls_tstat_nw: 2.016639, ls_maxdd_pct: -29.2294, ls_raw_ann_return_pct: 4.208207, ls_raw_sharpe: 0.399069,
+   ls_raw_maxdd_pct: -33.566508, turnover_d10_pct: 9.380311, turnover_d1_pct: 8.128433, coverage_pct: 50.358301, avg_names_per_decile: 98.943478,
+   n_months: 276, ls_n_months: 276, ic_decay_h1: 0.004676, ic_decay_h6: 0.006784, ic_decay_h12: 0.004934, tier_MEGA_ic_mean: 0.0097,
+   tier_MID_ic_mean: 0.004, tier_SMALL_ic_mean: 0.0047, ls_beta_mean: 0.100679, ls_beta_fullwindow: 0.084701, ls_sharpe_ex_top_years: 0.194383,
+   ls_top_years: "1999,2001,2010", ls_top_years_share_pct: 59.858176, ls_sharpe_bear: 0.796127, ls_sharpe_bull: 0.192132,
+   decile_avg_ret_pct: "0.605,0.858,0.748,0.965,1.005,1.020,0.959,1.090,1.149,0.956", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw]
+stage2_failed: []
+character: >
+  Deciles rise unevenly: D1 0.605, D2 0.858, D3 0.748, D4-D9 0.96-1.15, D10 0.956 %/mo; raw spread 4.21%/yr (Sharpe 0.399, MaxDD -33.6%). IC 0.0054 (NW t 1.70, ICIR 0.103), halves 0.0043 / 0.0065; annual IC positive in 15 of 23 years; tiers MEGA 0.0097, MID 0.0040, SMALL 0.0047. Decay 0.0047 h1, 0.0068 h6, 0.0049 h12; turnover 9.4% / 8.1%. Beta 0.08 (ex ante 0.10): hedged 4.36%/yr (Sharpe 0.401, LS NW t 2.02, MaxDD -29.2%); 1999, 2001, 2010 carry 60% of the summed LS; ex-top-years Sharpe 0.194; bear 0.796 / bull 0.192. Coverage 50.4%: Real Estate 1.4%, Financial Services 2.7%, Utilities 23.5%, the rest 47-85%.
+caveats:
+  - "dimension override ARY (stamped in the block header): an annual stock over consecutive December fiscal years, strict gap rule as OSAP"
+  - "the recursion starts at the snapshot's first fiscal year (truncated against OSAP's history; decision orgcap_construction)"
+  - "FF17 standardisation on CURRENT siccode; financials NaN; deflator omitted; read on the market scope"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (1.70 < 2.5); ic_mean 0.0054 also fails; halves (min 0.0043), raw spread 4.21%/yr, coverage 50.4%, 98.9 names and 276 LS months pass. Full sample: a rejection, not an inconclusive (stage1_decided_by_convention).

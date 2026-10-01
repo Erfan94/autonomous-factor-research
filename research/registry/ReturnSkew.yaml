@@ -1,0 +1,37 @@
+name: ReturnSkew
+osap_acronym: ReturnSkew
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b7
+declaration_order: 12
+date_tested: "2026-10-01"
+run: "009"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Bali, Engle and Murray 2015 (Empirical Asset Pricing, book); SignalDoc sign -1, Cat.Economic risk"
+orientation: "low skewness of daily total returns in the signal month = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/ReturnSkew/spec.md}
+dimension_override: null
+history_gate_months: 1
+preflight: {masspoint_max_pct: 0.111857, qcut_min_bins: 10, coverage_min_pct: 99.561596}
+stage1:   # from the run 009 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.005007, ic_tstat_nw: 2.217391, ic_half1_mean: 0.007395, ic_half2_mean: 0.002619, icir: 0.137536, ls_sharpe: 0.06585,
+   ls_ann_return_pct: 0.448145, ls_tstat_nw: 0.318352, ls_maxdd_pct: -32.616899, ls_raw_ann_return_pct: 0.400563, ls_raw_sharpe: 0.060899,
+   ls_raw_maxdd_pct: -36.63645, turnover_d10_pct: 90.334202, turnover_d1_pct: 89.943181, coverage_pct: 99.800657, avg_names_per_decile: 196.087319,
+   n_months: 276, ls_n_months: 276, ic_decay_h1: 0.003459, ic_decay_h6: 0.002864, ic_decay_h12: 0.005528, tier_MEGA_ic_mean: 0.0059,
+   tier_MID_ic_mean: 0.0023, tier_SMALL_ic_mean: 0.0062, ls_beta_mean: -0.010259, ls_beta_fullwindow: -0.025795, ls_sharpe_ex_top_years: -0.269033,
+   ls_top_years: "2000,2002,2021", ls_top_years_share_pct: 418.900573, ls_sharpe_bear: 0.393452, ls_sharpe_bull: 0.004454,
+   decile_avg_ret_pct: "0.961,0.883,0.956,0.916,1.003,0.979,0.953,0.995,1.036,0.995", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw]
+stage2_failed: []
+character: >
+  Deciles flat: D1 0.961, D2 0.883, D3-D10 0.92-1.04 %/mo; raw spread 0.40%/yr (Sharpe 0.061, MaxDD -36.6%). IC 0.0050 (NW t 2.22, plain t 2.28, ICIR 0.138), halves 0.0074 / 0.0026; positive in 16 of 23 years; tiers MEGA 0.0059, MID 0.0023, SMALL 0.0062 (raw LS Sharpe -0.039 / 0.003 / 0.099). Decay 0.0035 h1, 0.0029 h6, 0.0055 h12; turnover 90.3% / 89.9%. Beta -0.03 (ex ante -0.01): hedged 0.45%/yr (Sharpe 0.066, MaxDD -32.6%); 2021 +19.3%; ex-top-years Sharpe -0.269 (2000, 2002, 2021); bear 0.394 / bull 0.005. Coverage 99.8%.
+caveats:
+  - "an IC t of 2.22 on a flat decile spread: the rank signal does not reach the D10-D1 portfolio"
+  - "same daily panel and 15-observation rule as RealizedVol; annual IC correlation with RealizedVol 0.21"
+  - "population skewness (bias=True); history_months 1"
+  - "ls_top_years_share_pct 419% recorded as-is (near-zero summed LS)"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (2.22 < 2.5); ic_mean 0.0050 also fails; halves (min 0.0026), raw spread 0.40%/yr, coverage 99.8%, 196.1 names and 276 LS months pass. Full sample: a rejection, not an inconclusive (stage1_decided_by_convention).

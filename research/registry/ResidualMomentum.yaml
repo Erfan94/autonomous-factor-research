@@ -1,0 +1,36 @@
+name: ResidualMomentum
+osap_acronym: ResidualMomentum
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b7
+declaration_order: 11
+date_tested: "2026-10-01"
+run: "009"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Blitz, Huij and Martens 2011 (JEF); SignalDoc sign +1, Cat.Economic momentum"
+orientation: "high mean / sd of the FF3 residuals of months s-11..s-1 from rolling 36-month regressions = attractive (SignalDoc sign +1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/ResidualMomentum/spec.md}
+dimension_override: null
+history_gate_months: 47
+preflight: {masspoint_max_pct: 0.062112, qcut_min_bins: 0, coverage_min_pct: 0.0}
+stage1:   # from the run 009 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.003515, ic_tstat_nw: 0.715483, ic_half1_mean: 0.00615, ic_half2_mean: 0.000904, icir: 0.044238, ls_sharpe: 0.465613,
+   ls_ann_return_pct: 4.923061, ls_tstat_nw: 2.022717, ls_maxdd_pct: -35.732198, ls_raw_ann_return_pct: 1.75589, ls_raw_sharpe: 0.16186,
+   ls_raw_maxdd_pct: -35.332911, turnover_d10_pct: 33.882182, turnover_d1_pct: 32.820808, coverage_pct: 67.402754, avg_names_per_decile: 163.907175,
+   n_months: 223, ls_n_months: 223, ic_decay_h1: 0.002284, ic_decay_h6: 0.001628, ic_decay_h12: 0.005907, tier_MEGA_ic_mean: 0.0019,
+   tier_MID_ic_mean: 0.0083, tier_SMALL_ic_mean: 0.0007, ls_beta_mean: -0.20763, ls_beta_fullwindow: -0.240092, ls_sharpe_ex_top_years: 0.187424,
+   ls_top_years: "2013,2017,2021", ls_top_years_share_pct: 67.892355, ls_sharpe_bear: -0.441247, ls_sharpe_bull: 0.764886,
+   decile_avg_ret_pct: "1.034,1.035,1.049,1.075,1.084,1.064,1.180,1.125,1.158,1.180", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw]
+stage2_failed: []
+character: >
+  223 months, annual IC from 2003 (36-month regressions plus 11 residual months on the 1997-12 panel start). Deciles rise gently: D1 1.034, D2-D6 1.04-1.08, D7-D10 1.13-1.18 %/mo; raw spread 1.76%/yr (Sharpe 0.162, MaxDD -35.3%). IC 0.0035 (NW t 0.72, ICIR 0.044), halves 0.0062 / 0.0009; positive in 11 of 19 years; tiers MEGA 0.0019, MID 0.0083, SMALL 0.0007. Decay 0.0023 h1, 0.0016 h6, 0.0059 h12; turnover 33.9% / 32.8%. Beta -0.24 (ex ante -0.21): hedged 4.92%/yr (Sharpe 0.466, LS NW t 2.02), the hedge supplying 3.17 pp (64%); 2013, 2017, 2021 carry 68% (2008 -11.5%, 2009 -13.6%); ex-top-years Sharpe 0.187; bear -0.441 / bull 0.765. Coverage 67.4% pooled.
+caveats:
+  - "223 months >= 120 and LS floor 200; coverage 67.4% pooled over 276 months with the first 53 null"
+  - "a relative of the v0 Momentum leg (same t-11..t-1 window, FF3 residual instead of raw return); v0 Momentum has no standalone row to compare against"
+  - "residuals in-sample of the 36-month regression; rf omitted"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (0.72 < 2.5); ic_mean 0.0035 also fails; halves (min 0.0009), raw spread 1.76%/yr, coverage 67.4%, 163.9 names and 223 LS months (floor 200) pass. Not inconclusive (stage1_decided_by_convention).

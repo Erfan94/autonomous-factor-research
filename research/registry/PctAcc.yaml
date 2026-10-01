@@ -1,0 +1,41 @@
+name: PctAcc
+osap_acronym: PctAcc
+status: stage2_pending
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b7
+declaration_order: 4
+date_tested: "2026-10-01"
+run: "009"
+stage2_run: null
+stage1_decision: PASS
+decided_by: "all bars"
+source: "Hafzalla, Lundholm and Van Winkle 2011 (AR); SignalDoc sign -1, Cat.Economic accruals"
+orientation: "low (income before extraordinary items - operating cash flow) / |income| = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/PctAcc/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.085251, qcut_min_bins: 10, coverage_min_pct: 51.424814}
+stage1:   # from the run 009 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.011159, ic_tstat_nw: 4.032033, ic_half1_mean: 0.015194, ic_half2_mean: 0.007123, icir: 0.260551, ls_sharpe: 0.672279,
+   ls_ann_return_pct: 4.14746, ls_tstat_nw: 3.15584, ls_maxdd_pct: -11.013714, ls_raw_ann_return_pct: 4.739458, ls_raw_sharpe: 0.762483,
+   ls_raw_maxdd_pct: -12.393711, turnover_d10_pct: 17.557388, turnover_d1_pct: 16.624476, coverage_pct: 95.582557, avg_names_per_decile: 187.799638,
+   n_months: 276, ls_n_months: 276, ic_decay_h1: 0.008902, ic_decay_h6: 0.004461, ic_decay_h12: 0.003139, tier_MEGA_ic_mean: -0.0009,
+   tier_MID_ic_mean: 0.0122, tier_SMALL_ic_mean: 0.0156, ls_beta_mean: -0.051091, ls_beta_fullwindow: -0.038331, ls_sharpe_ex_top_years: 0.461902,
+   ls_top_years: "2000,2005,2021", ls_top_years_share_pct: 46.557188, ls_sharpe_bear: 0.90567, ls_sharpe_bull: 0.528236,
+   decile_avg_ret_pct: "0.732,0.870,0.919,0.957,1.015,1.025,0.997,1.153,1.156,1.127", delisting_adjusted_pct: 0.436673}
+stage1_failed: []
+stage2_failed: []
+character: >
+  Graded: D1 (highest percent accruals) 0.732 %/mo, D2-D7 0.87-1.03, D8-D10 1.13-1.16; raw spread 4.74%/yr at vol 6.2% (Sharpe 0.762, raw MaxDD -12.4%). IC 0.0112 (NW t 4.03, plain t 4.33, ICIR 0.261, 61.6% of months positive), halves 0.0152 / 0.0071; annual IC positive in 19 of 23 years. Tiers MEGA -0.0009, MID 0.0122, SMALL 0.0156 (raw LS Sharpe -0.015 / 0.467 / 0.907). IC decays: 0.0089 h1, 0.0078 h3, 0.0045 h6, 0.0031 h12; turnover 17.6% / 16.6%. Beta -0.04 (ex ante -0.05): the hedge subtracts 0.59 pp, hedged 4.15%/yr (Sharpe 0.672, LS NW t 3.16, MaxDD -11.0%). Summed hedged LS 79.3 pp over 1999-2006 against 18.1 pp over 2007-2021; 2000, 2005, 2021 carry 47% (2020 -9.7%); ex-top-years Sharpe 0.462; bear 0.906 / bull 0.528. Coverage 95.6% (51.4% at the 1998-12 probe), 92.3-97.4% by sector.
+caveats:
+  - "thin margin on ic_mean: 0.0112 vs 0.010; the lag-1 IC (0.0089) is below the bar; second-half IC 0.0071 is under half the first's 0.0152"
+  - "the IC is a SMALL / MID effect: MEGA IC -0.0009, MEGA raw LS Sharpe -0.015"
+  - "accruals relations (facts; no Stage 2 number exists): same |income| scaler as PctTotAcc (this batch, rejected, IC 0.0022, NW t 0.91) over an operating-accrual numerator (ib - ncfo) where PctTotAcc's is total accruals; annual IC correlation 0.15, same sign 15 / 23"
+  - "Accruals (b1, rejected, NW t 1.84) is Sloan's balance-sheet working-capital accrual over average assets: annual IC correlation 0.69, same sign 15 / 23; TotalAccruals (b8, pending) carries PctTotAcc's numerator over lagged assets (Spearman 0.87-0.90 with PctTotAcc at translation)"
+  - "vs CF (b2 passer, cash flow / market equity): annual IC correlation 0.53"
+  - "raw Sharpe 0.762 is the highest of the 11 passers (GP 0.688) and second of 84 screened rows (NOA 1.008, rejected)"
+  - "ib = netinc + netincdis (after NCI, extraordinary items not separable); ib == 0 -> NaN where OSAP divides by 0.01; the balance-sheet fallback for null ncfo not reproduced (median 0.3% of the universe NaN); ART as filed, no 6-month lag"
+  - "Cat.Economic accruals: no v0 seed family covers it"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Passes every Stage 1 bar: IC 0.0112 >= 0.010 (margin 0.0012), NW t 4.03 >= 2.5, halves min 0.0071, raw spread 4.74%/yr > 0, coverage 95.6% >= 40, 187.8 names per decile, 276 LS months >= 248. Status stage2_pending; family to be assigned in Phase C. Highest NW t of the 11 passers (CBOperProf 3.74); only ChNNCOA (4.15, rejected on ic_mean) is higher among screened rows; second-lowest IC of the 11 passers (NetPayoutYield 0.0145).

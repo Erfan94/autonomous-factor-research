@@ -1,0 +1,38 @@
+name: RealizedVol
+osap_acronym: RealizedVol
+status: stage2_pending
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b7
+declaration_order: 10
+date_tested: "2026-10-01"
+run: "009"
+stage2_run: null
+stage1_decision: PASS
+decided_by: "all bars"
+source: "Ang, Hodrick, Xing and Zhang 2006 (JF); SignalDoc sign -1, Cat.Economic volatility"
+orientation: "low standard deviation of daily total returns in the signal month = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/RealizedVol/spec.md}
+dimension_override: null
+history_gate_months: 1
+preflight: {masspoint_max_pct: 0.111857, qcut_min_bins: 10, coverage_min_pct: 99.561596}
+stage1:   # from the run 009 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.023399, ic_tstat_nw: 2.809589, ic_half1_mean: 0.027037, ic_half2_mean: 0.019762, icir: 0.161021, ls_sharpe: 0.607018,
+   ls_ann_return_pct: 12.132563, ls_tstat_nw: 2.930814, ls_maxdd_pct: -54.455139, ls_raw_ann_return_pct: 3.38691, ls_raw_sharpe: 0.127559,
+   ls_raw_maxdd_pct: -74.446159, turnover_d10_pct: 59.227965, turnover_d1_pct: 65.116967, coverage_pct: 99.800657, avg_names_per_decile: 196.087319,
+   n_months: 276, ls_n_months: 276, ic_decay_h1: 0.021599, ic_decay_h6: 0.014801, ic_decay_h12: 0.016727, tier_MEGA_ic_mean: 0.0208,
+   tier_MID_ic_mean: 0.0238, tier_SMALL_ic_mean: 0.0242, ls_beta_mean: -1.091126, ls_beta_fullwindow: -1.161412, ls_sharpe_ex_top_years: 0.479392,
+   ls_top_years: "2000,2007,2021", ls_top_years_share_pct: 45.247767, ls_sharpe_bear: -0.036527, ls_sharpe_bull: 1.039092,
+   decile_avg_ret_pct: "0.736,0.915,1.053,0.971,0.949,1.004,1.027,0.996,1.008,1.019", delisting_adjusted_pct: 0.436673}
+stage1_failed: []
+stage2_failed: []
+character: >
+  A D1 effect: D1 (highest volatility) 0.736 %/mo, D2-D10 flat at 0.92-1.05 (D3 1.053, D10 1.019); raw spread 3.39%/yr at vol 26.6% (Sharpe 0.128, raw MaxDD -74.4%). IC 0.0234 (NW t 2.81, plain t 2.68, ICIR 0.161), halves 0.0270 / 0.0198; annual IC positive in 15 of 23 years (2000 +0.106, 2021 +0.087; 2003 and 2009 -0.037). Tiers MEGA 0.0208, MID 0.0238, SMALL 0.0242 (raw LS Sharpe 0.122 / 0.143 / 0.096; MEGA raw MaxDD -83.5%). IC decays slowly (0.0216 h1, 0.0148 h6, 0.0167 h12) though turnover is 59.2% / 65.1%. Beta -1.16 (ex ante -1.09): the hedge adds 8.75 pp, 72% of the hedged 12.13%/yr (Sharpe 0.607, LS NW t 2.93, MaxDD -54.5%, hit 63.8%). Hedged LS -34.2% (1999), -30.1% (2009), -18.2% (2020), +50.3% (2000), +46.4% (2021); 2000, 2007, 2021 carry 45%; ex-top-years Sharpe 0.479; bear -0.037 / bull 1.039. Coverage 99.8%, 99.6-99.9% by sector.
+caveats:
+  - "the hedged headline is mostly hedge: raw 3.39%/yr (Sharpe 0.128) vs hedged 12.13%/yr (Sharpe 0.607) at beta -1.16, the most negative beta of the 11 passers (IdioVolAHT -1.07); not a Stage 1 bar (D11)"
+  - "likely overlap with IdioVol3F / IdioVolAHT (b4) and MaxRet (b5): annual IC correlation 0.97 with each, same sign in 19 / 18 / 22 of 23 years; the same D1-anchored shape and hedged loss years 1999 / 2009 / 2020; total volatility here, FF3-residual volatility in IdioVol3F on the same daily panel and 15-observation rule; vs ReturnSkew (this batch) 0.21; co-movement of annual IC, not a score correlation; no Stage 2 number exists"
+  - "thin margin: NW t 2.81 vs 2.5"
+  - "follows the OSAP code (total volatility), not SignalDoc's CAPM-residual wording; rf omitted; SEP no-trade rows count as zero returns; exactly-zero volatility NaN; history_months 1"
+  - "Cat.Economic volatility: no v0 seed family covers it; the fourth volatility passer"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Passes every Stage 1 bar: IC 0.0234 >= 0.010, NW t 2.81 >= 2.5, halves min 0.0198, raw spread 3.39%/yr > 0, coverage 99.8% >= 40, 196.1 names per decile, 276 LS months >= 248. Status stage2_pending; family to be assigned in Phase C. IC second of the 11 passers (IdioVolAHT 0.0238; MaxRet 0.0233); ex-top-years Sharpe 0.479 between MaxRet 0.544 and IdioVolAHT 0.389.

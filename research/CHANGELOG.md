@@ -61,3 +61,11 @@
 - The 06YrPlus pair are rejected, not inconclusive: 169 / 168 months >= 120, LS floors 152 / 151 met, coverage 40.62 / 40.27% >= 40. That coverage is pooled over 276 months with 107 / 108 leading null months.
 - NOA: raw Sharpe 1.01 on IC 0.0016. 67% of the D10-D1 spread lies in D1-D3 and the interior is flat; 1999-2001 carry 49% of the return. No flip qualifies (largest |t| 1.90).
 - Provenance verified on 12 blocks, 0 validation warnings, check_stage1 matches 12/12. Counters: 72 screened, 8 passed, 64 rejected; composite v0.
+
+## 2026-10-01 — Stage 1 batch 7 (run 009): OperProfRD, PctAcc and RealizedVol pass, 9 rejected, 0 inconclusive
+- PASS PctAcc (accruals; IC 0.0112 on a 0.0012 margin, NW t 4.03, the highest passer t; halves 0.0152 / 0.0071; raw 4.74%/yr, Sharpe 0.76, beta -0.04, so the hedge subtracts 0.59 pp). MEGA IC -0.0009: a SMALL/MID effect. Annual IC correlation 0.69 with Accruals (b1, rejected) and 0.15 with PctTotAcc. TotalAccruals (b8) shares PctTotAcc's numerator.
+- PASS OperProfRD (profitability; IC 0.0192, NW t 3.18, raw 6.44%/yr, beta -0.60, the hedge supplying 41% of 10.94%/yr). Annual IC correlation 0.97 with CBOperProf and 0.85 with GP; it shares the revenue - cor - sgna core with v0 Profitability. 2000 hedged +120.2%. Ex-top-years Sharpe 0.45.
+- PASS RealizedVol (volatility; IC 0.0234, NW t 2.81, raw 3.39%/yr, Sharpe 0.13). Its beta of -1.16 is the most negative of the passers; the hedge supplies 72% of 12.13%/yr. Annual IC correlation 0.97 with each of IdioVol3F, IdioVolAHT and MaxRet. All three passers are stage2_pending.
+- Rejected on ic_tstat_nw (each also fails ic_mean): OrgCap 1.70, PctTotAcc 0.91, Price -1.41, PriceDelayRsq -2.12, PriceDelaySlope -1.69, PriceDelayTstat -1.68, ResidualMomentum 0.72, ReturnSkew 2.22. OPLeverage fails on ic_mean alone (0.0087; NW t 2.89; fallback convention).
+- PriceDelaySlope and PriceDelayTstat are near-identical (annual IC correlation 1.00). Price has beta 0.77: raw +2.98%/yr becomes -5.89%/yr hedged on a negative IC. No flip qualifies (largest |t| 2.12 < 2.74).
+- Provenance verified on 12 blocks; check_stage1 matches 12/12. One validation warning: Price coverage is 100%, which follows from the universe's own price floor; there is no mass point. Counters: 84 screened, 11 passed, 73 rejected; composite v0.

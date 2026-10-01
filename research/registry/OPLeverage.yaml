@@ -1,0 +1,37 @@
+name: OPLeverage
+osap_acronym: OPLeverage
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b7
+declaration_order: 1
+date_tested: "2026-10-01"
+run: "009"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_mean"
+source: "Novy-Marx 2011 (Review of Finance); SignalDoc sign +1, Cat.Economic other"
+orientation: "high (SG&A + R&D + cost of revenue) / assets = attractive (SignalDoc sign +1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/OPLeverage/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.085324, qcut_min_bins: 10, coverage_min_pct: 51.380973}
+stage1:   # from the run 009 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.008704, ic_tstat_nw: 2.894936, ic_half1_mean: 0.01009, ic_half2_mean: 0.007317, icir: 0.174828, ls_sharpe: 0.42906,
+   ls_ann_return_pct: 3.459122, ls_tstat_nw: 1.917755, ls_maxdd_pct: -28.368582, ls_raw_ann_return_pct: 4.085851, ls_raw_sharpe: 0.505173,
+   ls_raw_maxdd_pct: -29.504495, turnover_d10_pct: 8.190056, turnover_d1_pct: 7.94252, coverage_pct: 85.406855, avg_names_per_decile: 167.806522,
+   n_months: 276, ls_n_months: 276, ic_decay_h1: 0.008855, ic_decay_h6: 0.009324, ic_decay_h12: 0.009962, tier_MEGA_ic_mean: 0.0155,
+   tier_MID_ic_mean: 0.0038, tier_SMALL_ic_mean: 0.0082, ls_beta_mean: -0.053499, ls_beta_fullwindow: -0.095843, ls_sharpe_ex_top_years: 0.153454,
+   ls_top_years: "2001,2020,2021", ls_top_years_share_pct: 72.804434, ls_sharpe_bear: 0.574695, ls_sharpe_bull: 0.551268,
+   decile_avg_ret_pct: "0.773,0.901,0.939,0.888,0.988,1.115,1.131,1.088,1.128,1.113", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean]
+stage2_failed: []
+character: >
+  Deciles step up from D1 0.773 to a D6-D10 plateau (1.09-1.13 %/mo): a D1 effect; raw spread 4.09%/yr (Sharpe 0.505, MaxDD -29.5%). IC 0.0087 (NW t 2.89, plain t 2.90, ICIR 0.175), halves 0.0101 / 0.0073; annual IC positive in 17 of 23 years; tiers MEGA 0.0155, MID 0.0038, SMALL 0.0082 (raw LS Sharpe 0.453 / 0.112 / 0.398). IC flat across horizons (0.0089 h1, 0.0093 h6, 0.0100 h12); turnover 8.2% / 7.9%. Beta -0.10 (ex ante -0.05): hedged 3.46%/yr (Sharpe 0.429, LS NW t 1.92, MaxDD -28.4%), 0.63 pp below raw. 2001, 2020, 2021 carry 73% of the summed LS (2001 +30.4%, 2021 +21.1%; 1999 -17.0%, 2000 -13.8%); ex-top-years Sharpe 0.154; bear 0.575 / bull 0.551. Coverage 85.4%: Financial Services 39.8%, Healthcare 80.5%, the rest 86-98%.
+caveats:
+  - "fails ic_mean alone, by 0.0013; NW t 2.89 passes (decided_by ic_mean under stage1_decided_by_convention_fallback, as ChNNCOA and EarningsConsistency)"
+  - "same inputs as OperProfRD (sgna, cor, assets) combined the other way (costs added, not subtracted from revenue); annual IC correlation 0.19 with OperProfRD, 0.36 with GP"
+  - "73% of the summed LS in three years; ex-top-years Sharpe 0.154"
+  - "cor == 0 -> NaN (vendor zero-fill); sgna and rnd zero-filled as OSAP's xsga"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_mean (0.0087 < 0.010), the only bar it fails: NW t 2.89, halves (min 0.0073), raw spread 4.09%/yr, coverage 85.4%, 167.8 names and 276 LS months pass. decided_by is ic_mean under stage1_decided_by_convention_fallback because ic_tstat_nw passes. Full sample: a rejection, not an inconclusive.

@@ -1,0 +1,36 @@
+name: PctTotAcc
+osap_acronym: PctTotAcc
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b7
+declaration_order: 5
+date_tested: "2026-10-01"
+run: "009"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Hafzalla, Lundholm and Van Winkle 2011 (AR); SignalDoc sign -1, Cat.Economic accruals"
+orientation: "low (net income - operating, investing and financing cash flows net of equity issuance and dividends) / |net income| = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/PctTotAcc/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.085397, qcut_min_bins: 10, coverage_min_pct: 51.337133}
+stage1:   # from the run 009 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.002157, ic_tstat_nw: 0.911144, ic_half1_mean: 0.001413, ic_half2_mean: 0.002901, icir: 0.056016, ls_sharpe: 0.3765,
+   ls_ann_return_pct: 2.162849, ls_tstat_nw: 1.706573, ls_maxdd_pct: -22.63835, ls_raw_ann_return_pct: 2.483644, ls_raw_sharpe: 0.434235,
+   ls_raw_maxdd_pct: -20.350229, turnover_d10_pct: 20.211932, turnover_d1_pct: 20.578562, coverage_pct: 95.574627, avg_names_per_decile: 187.784058,
+   n_months: 276, ls_n_months: 276, ic_decay_h1: 0.000794, ic_decay_h6: -0.00116, ic_decay_h12: 0.0009, tier_MEGA_ic_mean: 0.0052,
+   tier_MID_ic_mean: 0.0032, tier_SMALL_ic_mean: 0.0003, ls_beta_mean: -0.086111, ls_beta_fullwindow: -0.083317, ls_sharpe_ex_top_years: 0.186803,
+   ls_top_years: "2003,2018,2021", ls_top_years_share_pct: 55.689348, ls_sharpe_bear: 0.029235, ls_sharpe_bull: 0.521757,
+   decile_avg_ret_pct: "0.872,0.926,0.945,0.959,1.023,1.000,1.110,0.947,1.091,1.079", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw]
+stage2_failed: []
+character: >
+  Deciles nearly flat: D1 0.872, D2-D10 0.93-1.11 (D7 1.110, D8 0.947, D10 1.079 %/mo); raw spread 2.48%/yr (Sharpe 0.434, MaxDD -20.4%). IC 0.0022 (NW t 0.91, ICIR 0.056), halves 0.0014 / 0.0029; annual IC positive in 13 of 23 years; tiers MEGA 0.0052, MID 0.0032, SMALL 0.0003. Decay 0.0008 h1, -0.0012 h6, 0.0009 h12; turnover 20.2% / 20.6%. Beta -0.08 (ex ante -0.09): hedged 2.16%/yr (Sharpe 0.377, MaxDD -22.6%); 2003, 2018, 2021 carry 56% of the summed LS (2020 -18.2%); ex-top-years Sharpe 0.187; bear 0.029 / bull 0.522. Coverage 95.6%.
+caveats:
+  - "same |ni| scaler as PctAcc (passes, this batch) over a total-accrual numerator; annual IC correlation with PctAcc 0.15, with Accruals (b1) 0.49"
+  - "TotalAccruals (b8, pending) carries this numerator over lagged assets (Spearman 0.87-0.90 at translation)"
+  - "preferred flows un-netted in ncff; ni == 0 -> NaN; ART as filed"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (0.91 < 2.5); ic_mean 0.0022 also fails; halves (min 0.0014), raw spread 2.48%/yr, coverage 95.6%, 187.8 names and 276 LS months pass. Full sample: a rejection, not an inconclusive (stage1_decided_by_convention).

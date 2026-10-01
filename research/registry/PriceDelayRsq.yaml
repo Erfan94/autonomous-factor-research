@@ -1,0 +1,37 @@
+name: PriceDelayRsq
+osap_acronym: PriceDelayRsq
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b7
+declaration_order: 7
+date_tested: "2026-10-01"
+run: "009"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Hou and Moskowitz 2005 (RFS); SignalDoc sign +1, Cat.Economic lead lag"
+orientation: "high price delay 1 - R2(r on m) / R2(r on m and four market lags), daily, June-June window = attractive (SignalDoc sign +1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/PriceDelayRsq/spec.md}
+dimension_override: null
+history_gate_months: 13
+preflight: {masspoint_max_pct: 0.057143, qcut_min_bins: 0, coverage_min_pct: 0.0}
+stage1:   # from the run 009 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: -0.007025, ic_tstat_nw: -2.124084, ic_half1_mean: -0.000909, ic_half2_mean: -0.013093, icir: -0.124756, ls_sharpe: 0.001319,
+   ls_ann_return_pct: 0.011346, ls_tstat_nw: 0.006471, ls_maxdd_pct: -33.485172, ls_raw_ann_return_pct: -1.087262, ls_raw_sharpe: -0.121955,
+   ls_raw_maxdd_pct: -45.945147, turnover_d10_pct: 14.06299, turnover_d1_pct: 9.024739, coverage_pct: 87.79694, avg_names_per_decile: 185.255642,
+   n_months: 257, ls_n_months: 257, ic_decay_h1: -0.007462, ic_decay_h6: -0.006032, ic_decay_h12: -0.005056, tier_MEGA_ic_mean: -0.0062,
+   tier_MID_ic_mean: -0.0077, tier_SMALL_ic_mean: -0.0092, ls_beta_mean: -0.11661, ls_beta_fullwindow: -0.165909, ls_sharpe_ex_top_years: -0.23169,
+   ls_top_years: "2003,2004,2020", ls_top_years_share_pct: 15077.00268, ls_sharpe_bear: -0.019122, ls_sharpe_bull: 0.010348,
+   decile_avg_ret_pct: "0.965,0.997,0.946,0.947,0.873,1.048,0.958,0.999,0.965,0.874", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min, ls_raw_ann_return_pct]
+stage2_failed: []
+character: >
+  257 months, annual IC from 2000 (signals to 2000-06 NaN). Deciles flat with D10 low: D1 0.965, D2-D9 0.87-1.05, D10 0.874 %/mo; raw spread -1.09%/yr (Sharpe -0.122, MaxDD -45.9%). IC -0.0070 (NW t -2.12, ICIR -0.125), halves -0.0009 / -0.0131; positive in 7 of 22 years, negative every year 2005-2017; tiers MEGA -0.0062, MID -0.0077, SMALL -0.0092 (SMALL raw LS Sharpe -0.399). Decay -0.0075 h1, -0.0060 h6, -0.0051 h12; turnover 14.1% / 9.0%. Beta -0.17 (ex ante -0.12): hedged 0.01%/yr (Sharpe 0.001, MaxDD -33.5%); ex-top-years Sharpe -0.232 (2003, 2004, 2020); bear -0.019 / bull 0.010. Coverage 87.8%.
+caveats:
+  - "the batch's most negative NW t (-2.12): |t| < 2.74, no flip hypothesis"
+  - "annual IC correlation with PriceDelaySlope -0.01 (same sign 9 / 22): a different quantity from the slope / t-stat pair"
+  - "rf omitted; daily closeadj return on the raw VW market; n >= 26 daily observations"
+  - "ls_top_years_share_pct 15077% recorded as-is (near-zero summed LS)"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (-2.12 < 2.5); ic_mean, ic_half_min (-0.0131) and the raw spread (-1.09%/yr) also fail. Not inconclusive: 257 months >= 120, 257 LS months (floor 231), 185.3 names, coverage 87.8%.

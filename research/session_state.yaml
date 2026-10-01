@@ -1,11 +1,11 @@
 # The CURRENT state of the loop — replace, never append. History: session_history.md.
-updated: "2026-10-01T03:45:49Z"
-step: phase_B_batch7   # runs 003-008 evaluated (8 pass); run 009 (batch 7) running
+updated: "2026-10-01T04:17:49Z"
+step: phase_B_batch8   # runs 003-009 evaluated (11 pass); run 010 (batch 8) running
 phase: phase_B_stage1
 composite: {version: v0, legs: 5, families: 5, sha: f9d9d9d95731, legs_list: [Size, Value, Profitability, Investment, Momentum]}
 versions: {v0: "f9d9d9d95731 v0-baseline"}
 stamps: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0}
-counters: {osap: 212, inventoried: 212, infeasible: 73, translated: 106, preflight_failed: 28, screened: 72, passed: 8, families: 5, ratcheted: 0, accepted: 0, rejected: 64, inconclusive: 0}
+counters: {osap: 212, inventoried: 212, infeasible: 73, translated: 106, preflight_failed: 28, screened: 84, passed: 11, families: 5, ratcheted: 0, accepted: 0, rejected: 73, inconclusive: 0}
 holdout: unspent
 v0_baseline: {runs: "001,002", ic: 0.0145, ic_t_nw: 2.62, ls_sharpe_hedged: 0.600, ann_ret_hedged: 7.32, maxdd_hedged: -45.56, beta_fw: -0.140, turnover_d10: 28.0}
 open:
