@@ -241,3 +241,54 @@ versions:
       - "cfp joins value beside Value (0.083 each) and lifts IC 0.0215 -> 0.0249 (NW t 3.98 -> 4.51), hedged Sharpe 0.848 -> 0.996, ex-top-years Sharpe 0.46 -> 0.61, second-half IC 0.0095 -> 0.0124; portfolio-level spanning alpha t 0.40 (R2 0.26) against stock-level residual IC t 2.97 and paired dIC t 3.10: both reported, not reconciled."
       - "The hedge adds about 0.8 pp to the guard's delta (hedged +1.73 vs raw +0.92 pp/yr; raw agrees in sign) as beta moves -0.19 -> -0.26; hedged now exceeds raw (0.996 vs 0.913 Sharpe); MaxDD -41.9 -> -40.6; MEGA raw Sharpe 0.49 vs MID/SMALL 0.80/0.93."
       - "CF (stage2_order rank 14, value, Stage 1 annual-IC correlation 0.96 with cfp) will face a base holding cfp; tier_neutral is the first Stage 3 variant above 1.0 hedged (1.006, raw 0.834, beta -0.34)."
+  - version: v5
+    date: "2026-10-01"
+    git_tag: v5-add-XFIN  # owed; created by the coordinator after the commit
+    legs:
+      - {name: Size, family: size, osap_acronym: Size, weight: 1.0}
+      - {name: Value, family: value, osap_acronym: BM, weight: 1.0}
+      - {name: Profitability, family: profitability, osap_acronym: OperProf, weight: 1.0}
+      - {name: Investment, family: investment, osap_acronym: AssetGrowth, weight: 1.0}
+      - {name: Momentum, family: momentum, osap_acronym: Mom12m, weight: 1.0}
+      - {name: PctAcc, family: investment, osap_acronym: PctAcc, weight: 1.0}
+      - {name: CBOperProf, family: profitability, osap_acronym: CBOperProf, weight: 1.0}
+      - {name: ShareIss5Y, family: external_financing, osap_acronym: ShareIss5Y, weight: 1.0}
+      - {name: cfp, family: value, osap_acronym: cfp, weight: 1.0}
+      - {name: XFIN, family: external_financing, osap_acronym: XFIN, weight: 1.0}
+    families: "size:Size|value:Value,cfp|profitability:Profitability,CBOperProf|investment:Investment,PctAcc|momentum:Momentum|external_financing:ShareIss5Y,XFIN"
+    construction_rule: "two-level family blend (1/6 per family, equal within: Value/cfp, Profitability/CBOperProf, Investment/PctAcc, ShareIss5Y/XFIN 0.083 each; Size, Momentum 0.167; renormalised over available members, so XFIN carries external_financing alone before ShareIss5Y's 2003-06 start) of within-sector percentile ranks (fallback cross-section if <10 names); D10-D1 equal-weight, hedged by ex-ante 36m beta to the universe cap-weighted return"
+    stamps: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: d27916e567f2, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8}
+    window: {eval_start: "1999-01-01", eval_end: "2021-12-31", include_holdout: false}
+    ratchet:                             # run 012, ladder 1 rung 5 (stage2_order rank 5), base v4 (9 legs); last rung of ladder 1
+      run: "012"
+      rung: 5
+      base: v4
+      bars: {resid_ic_tstat_nw: 3.2735, resid_ic_bound: "> 2.0", paired_delta_ls_tstat: -0.6374, guard_bound: ">= -2.0"}
+      diagnostics: {resid_ic_mean: 0.0069, resid_ic_share: 0.41, paired_delta_ic_mean: -0.0005, paired_delta_ic_tstat: -0.62, paired_delta_ls_ann_pct: -0.46, raw_delta_ls_ann_pct: -0.41, spanning_alpha_ann_pct: 2.42, spanning_alpha_tstat_nw: 1.28, spanning_beta: 0.52, spanning_r2: 0.28, corr_to_composite: 0.53, delta_ls_sharpe: -0.082, maxdd_worsening_pct: 7.12}
+      beta_regime: {base_ls_beta_fullwindow: -0.263, cand_ls_beta_fullwindow: -0.344, base_ls_beta_mean: -0.230, cand_ls_beta_mean: -0.298, base_ls_raw_sharpe: 0.913, cand_ls_raw_sharpe: 0.808, base_ls_sharpe_ex_top_years: 0.614, cand_ls_sharpe_ex_top_years: 0.479}
+    baseline:                            # run 021, GROSS; LS figures hedged, raw and beta beside; equals run 012 rung 5 WITH arm to six places
+      run: "021"
+      ic: {ic_mean: 0.0245, ic_tstat_nw: 4.27, icir: 0.309, ic_half1_mean: 0.0380, ic_half2_mean: 0.0110}
+      ic_decay: {h1: 0.0183, h2: 0.0170, h3: 0.0185, h6: 0.0162, h12: 0.0178}
+      ls_hedged: {ls_sharpe: 0.914, ls_tstat_nw: 3.41, ls_ann_return_pct: 11.56, ls_ann_vol_pct: 12.64, ls_maxdd_pct: -47.75, ls_hit_rate_pct: 64.5}
+      breadth: {turnover_d10_pct: 25.0, turnover_d1_pct: 22.3, coverage_pct: 100.0, avg_names_per_decile: 196.5, n_months: 276}
+      decile_avg_ret_pct: "0.330,0.664,0.692,0.843,1.050,1.107,1.166,1.226,1.305,1.287"
+      ls_raw: {ls_raw_sharpe: 0.808, ls_raw_ann_return_pct: 11.49, ls_raw_maxdd_pct: -47.05}
+      beta: {ls_beta_mean: -0.298, ls_beta_fullwindow: -0.344, ls_hedged_months: 264}
+      ex_regime: {ls_sharpe_ex_top_years: 0.479, ls_top_years: "2000,2001,2021", ls_top_years_share_pct: 63.0}
+      bear_bull: {ls_sharpe_bear: 1.127, ls_sharpe_bull: 0.873, n_bear_months: 64, n_bull_months: 200}
+      tiers: {MEGA: {ic: 0.0259, raw_ls_sharpe: 0.348, n: 393}, MID: {ic: 0.0228, raw_ls_sharpe: 0.842, n: 589}, SMALL: {ic: 0.0239, raw_ls_sharpe: 0.763, n: 981}}
+      coverage: {leg_coverage_pct_full: 47.5, leg_coverage_worst: "f_shareiss5y 62.6%", delisting_adjusted_pct: 0.44}
+    construction:                        # run 022, Stage 3, GROSS, hedged; raw Sharpe and full-window beta beside; never a gate
+      run: "022"
+      columns: [sharpe, ls_t_nw, ann_ret_pct, vol_pct, maxdd_pct, worst_12m_pct, turnover_long_pct, turnover_short_pct, raw_sharpe, beta_fullwindow, sharpe_ex_top_years]
+      equal_rank_decile: [0.914, 3.41, 11.56, 12.64, -47.8, -36.6, 25.0, 22.3, 0.808, -0.34, 0.48]
+      tier_neutral:      [0.861, 3.31, 11.35, 13.19, -50.8, -41.7, 27.7, 24.2, 0.712, -0.39, 0.44]
+      icir_weighted:     [0.926, 3.87, 10.93, 11.81, -33.7, -28.9, 21.7, 21.8, 0.559, -0.55, 0.56]
+      buffered:          [0.830, 3.07, 9.30, 11.20, -44.5, -33.3, 13.2, 10.6, 0.711, -0.33, 0.41]
+      vol_targeted:      [0.653, 2.73, 7.67, 11.74, -47.3, -32.6, 25.0, 22.3, 0.640, -0.19, 0.40]
+      icir_weights_avg: "Size=0.015;Value=0.045;Profitability=0.134;Investment=0.045;Momentum=0.077;PctAcc=0.140;CBOperProf=0.132;ShareIss5Y=0.162;cfp=0.130;XFIN=0.120"
+    character:
+      - "XFIN was accepted on both bars (residual IC t 3.27 > 2.0; guard t -0.64 >= -2.0) while every diagnostic worsened: dIC -0.0005 (t -0.62), dSharpe -0.082 (0.996 -> 0.914), MaxDD 7.1 pts worse hedged (-40.6 -> -47.8) and 7.8 raw; raw dLS -0.41 pp/yr is also negative, so the hedge did not rescue it. The -2.0 guard admits it by design (decision ladder1_acceptance)."
+      - "It halves ShareIss5Y's family weight (0.167 -> 0.083 each in external_financing), and the rung does not separate XFIN's own effect from that dilution; residual IC 0.0069 is ladder 1's lowest (41% of its own IC; Stage 1 annual-IC correlation 0.84 with ShareIss5Y); beta -0.26 -> -0.34, raw vol 13.0 -> 14.2."
+      - "Every Stage 3 variant falls from v4 (equal_rank_decile 0.996 -> 0.914, tier_neutral 1.006 -> 0.861, icir_weighted 0.934 -> 0.926); ex-top-years Sharpe 0.61 -> 0.48, top-3 share 57 -> 63%; D10 (1.287) back below D9 (1.305); MEGA raw Sharpe 0.49 -> 0.35."

@@ -1,6 +1,6 @@
 name: XFIN
 osap_acronym: XFIN
-status: stage2_pending
+status: accepted
 family: external_financing
 batch: stage1_b9
 declaration_order: 2
@@ -51,4 +51,4 @@ caveats:
   - "Stage 2 (run 012): every diagnostic adverse while both bars pass: dIC -0.0005 (t -0.62), dSharpe -0.082, MaxDD 7.1 pts worse (raw 7.8), ex-top-years Sharpe -0.135, beta -0.26 -> -0.34, raw vol 13.0 -> 14.2"
   - "Stage 2: second external_financing leg; halves ShareIss5Y's weight 0.1667 -> 0.0833; the rung does not separate XFIN's effect from that dilution; Stage 1 annual IC correlation 0.84 with ShareIss5Y; residual IC 0.0069 the ladder's lowest"
 decision: >
-  Stage 1 (run 011): passes every bar (IC 0.0170, NW t 3.57, halves min 0.0105, raw spread 6.57%/yr, coverage 95.6%, 187.9 names per decile, 276 LS months). Stage 2 (run 012, rung 5, vs v0 + PctAcc, CBOperProf, ShareIss5Y, cfp): PASS on both bars, residual IC 0.0069 with NW t 3.27 > 2.0 (41% of its own 0.0170) and guard paired hedged dLS -0.46 pp/yr, t -0.64 >= -2.0 (raw -0.41, approximate t -0.57 on the hedged paired SE). Joins external_financing beside ShareIss5Y at 0.0833 each. Diagnostics (never bars): dIC -0.0005 (t -0.62), spanning alpha 2.42%/yr (t 1.28, R2 0.28, corr 0.53), dSharpe -0.082 (0.996 -> 0.914), MaxDD 7.1 pts worse (-40.6 -> -47.8); WITH beta -0.344 vs -0.263 (ex ante -0.298 / -0.230), raw Sharpe 0.808 / 0.913, ex-top-years 0.479 / 0.614. The rules decide on the residual IC and the guard only. Status stays stage2_pending pending application (v5).
+  Stage 1 (run 011): passes every bar (IC 0.0170, NW t 3.57, halves min 0.0105, raw spread 6.57%/yr, coverage 95.6%, 187.9 names per decile, 276 LS months). Stage 2 (run 012, rung 5, vs v0 + PctAcc, CBOperProf, ShareIss5Y, cfp): PASS on both bars, residual IC 0.0069 with NW t 3.27 > 2.0 (41% of its own 0.0170) and guard paired hedged dLS -0.46 pp/yr, t -0.64 >= -2.0 (raw -0.41, approximate t -0.57 on the hedged paired SE). Joins external_financing beside ShareIss5Y at 0.0833 each. Diagnostics (never bars): dIC -0.0005 (t -0.62), spanning alpha 2.42%/yr (t 1.28, R2 0.28, corr 0.53), dSharpe -0.082 (0.996 -> 0.914), MaxDD 7.1 pts worse (-40.6 -> -47.8); WITH beta -0.344 vs -0.263 (ex ante -0.298 / -0.230), raw Sharpe 0.808 / 0.913, ex-top-years 0.479 / 0.614. The rules decide on the residual IC and the guard only. Accepted as v5 (factors/accepted/XFIN.py, COMPOSITE_SHA d27916e567f2) under decision ladder1_acceptance: the -2.0 guard admits it by design and no diagnostic is a bar; run 021 baseline reproduces the rung 5 WITH arm to six places; tag v5-add-XFIN owed.

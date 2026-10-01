@@ -120,3 +120,10 @@
 - Run 019 reproduces the rung 4 WITH arm to six places: IC 0.024946 (NW t 4.51), hedged Sharpe 0.995998, 12.019142%/yr, MaxDD -40.63, beta -0.263, raw Sharpe 0.913, ex-top-years Sharpe 0.614.
 - Run 020 (Stage 3, never a gate): equal_rank_decile 0.996; tier_neutral 1.006 (raw 0.834, beta -0.34); icir_weighted 0.934 (raw 0.605, beta -0.47); buffered 0.904 at turnover 13.0%; vol_targeted 0.774.
 - Records: manifest block v4; provenance_verified (019, 020), construction_reported, composite_updated; cfp row accepted; index n_accepted 4. CF (rank 14, annual-IC correlation 0.96) will face a base holding cfp.
+
+## 2026-10-01 — v5 = v4 + XFIN (external_financing, 2nd leg): accepted and applied (runs 021, 022); ladder 1 closed 5/5; tag v5-add-XFIN owed
+- Accepted from run 012 rung 5 (base v4) on both bars: residual IC NW t 3.27 > 2.0; guard t -0.64 >= -2.0. Every diagnostic worsened: dIC -0.0005 (t -0.62), dSharpe -0.082, MaxDD 7.1 pts worse hedged and 7.8 raw. Raw dLS -0.41 pp/yr is also negative, so the hedge did not rescue it. The -2.0 guard admits it by design (decision ladder1_acceptance).
+- Applied: XFIN.py moved to factors/accepted/; COMPOSITE_VERSION v5; COMPOSITE_SHA 3329679c69fb -> d27916e567f2, the other stamps unchanged; pytest 434 passed. external_financing = ShareIss5Y, XFIN (0.083 each; ShareIss5Y halved).
+- Run 021 reproduces the rung 5 WITH arm to six places: IC 0.024477 (NW t 4.27), hedged Sharpe 0.91412, 11.558369%/yr, MaxDD -47.75, beta -0.344, raw Sharpe 0.808, ex-top-years Sharpe 0.479.
+- Run 022 (Stage 3, never a gate): every variant is below v4. equal_rank_decile 0.914; icir_weighted 0.926 (raw 0.559, beta -0.55); tier_neutral 0.861; buffered 0.830 at turnover 13.2%; vol_targeted 0.653.
+- Records: manifest block v5; provenance_verified (021, 022), construction_reported, composite_updated, batch_closed stage2_l1 (5 pass); XFIN row accepted; index n_accepted 5. Next ladder: ranks 6-10 (GP, ShareIss1Y, MaxRet, roaq, RoE) on v5.
