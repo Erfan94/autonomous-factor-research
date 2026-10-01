@@ -5,9 +5,9 @@ search_accounting:
   n_stage1_tested: 107
   n_stage1_passed: 24
   n_stage2_tested: 20
-  n_accepted: 13
+  n_accepted: 14
   n_inconclusive: 0
-  by_status: {"accepted": 13, "baseline": 5, "rejected": 89, "stage2_pending": 5}
+  by_status: {"accepted": 14, "baseline": 5, "rejected": 89, "stage2_pending": 4}
 factors:
   - {name: AM, status: rejected, batch: stage1_b1, ic: 0.0098, ic_t: 1.26, sharpe: -0.149, ret: -3.17, raw_ret: 4.72, cov: 99.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.34, sh_exreg: -0.449, family: null, decided_by: "ic_tstat_nw", run: "003"}
   - {name: Accruals, status: rejected, batch: stage1_b1, ic: 0.0048, ic_t: 1.84, sharpe: 0.329, ret: 2.49, raw_ret: 2.92, cov: 76.7, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.04, sh_exreg: 0.107, family: null, decided_by: "ic_tstat_nw", run: "003"}
@@ -106,7 +106,7 @@ factors:
   - {name: ShareIss5Y, status: accepted, batch: stage1_b8, ic: 0.0158, ic_t: 3.67, sharpe: 1.085, ret: 8.23, raw_ret: 4.88, cov: 62.6, resid_t: 3.61, dic_t: 3.03, dls_t: 2.83, span_t: 4.51, d_sharpe: 0.187, beta: -0.24, sh_exreg: 0.749, family: "external_financing", decided_by: "all bars", run: "010"}
   - {name: Size, status: baseline, batch: BASELINE, ic: null, ic_t: null, sharpe: null, ret: null, raw_ret: null, cov: null, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: null, sh_exreg: null, family: "size", decided_by: null, run: "001"}
   - {name: TotalAccruals, status: rejected, batch: stage1_b8, ic: -0.0000, ic_t: -0.01, sharpe: -0.093, ret: -0.70, raw_ret: 1.47, cov: 94.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.12, sh_exreg: -0.361, family: null, decided_by: "ic_tstat_nw", run: "010"}
-  - {name: TrendFactor, status: stage2_pending, batch: stage1_b8, ic: 0.0171, ic_t: 2.79, sharpe: 0.523, ret: 8.94, raw_ret: 10.12, cov: 68.7, resid_t: 2.14, dic_t: 1.36, dls_t: -0.01, span_t: 1.77, d_sharpe: 0.004, beta: 0.05, sh_exreg: 0.276, family: "momentum", decided_by: "all bars", run: "010"}
+  - {name: TrendFactor, status: accepted, batch: stage1_b8, ic: 0.0171, ic_t: 2.79, sharpe: 0.523, ret: 8.94, raw_ret: 10.12, cov: 68.7, resid_t: 2.14, dic_t: 1.36, dls_t: -0.01, span_t: 1.77, d_sharpe: 0.004, beta: 0.05, sh_exreg: 0.276, family: "momentum", decided_by: "all bars", run: "010"}
   - {name: Value, status: baseline, batch: BASELINE, ic: null, ic_t: null, sharpe: null, ret: null, raw_ret: null, cov: null, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: null, sh_exreg: null, family: "value", decided_by: null, run: "001"}
   - {name: VarCF, status: rejected, batch: stage1_b8, ic: 0.0064, ic_t: 0.76, sharpe: 0.406, ret: 5.59, raw_ret: -3.97, cov: 60.7, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.79, sh_exreg: 0.174, family: null, decided_by: "ic_tstat_nw", run: "010"}
   - {name: VolMkt, status: rejected, batch: stage1_b8, ic: 0.0161, ic_t: 2.25, sharpe: 0.551, ret: 9.55, raw_ret: 2.38, cov: 97.1, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.94, sh_exreg: 0.320, family: null, decided_by: "ic_tstat_nw", run: "010"}

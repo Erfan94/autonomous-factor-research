@@ -222,12 +222,13 @@ from factors.accepted.IdioVol3F import FACTOR as IDIOVOL3F  # v10, run 032 rung 
 from factors.accepted.STreversal import FACTOR as STREVERSAL  # v11, run 032 rung 5, family short_term_reversal
 from factors.accepted.zerotrade6M import FACTOR as ZEROTRADE6M  # v12, run 037 rung 1, family liquidity
 from factors.accepted.VolumeTrend import FACTOR as VOLUMETREND  # v13, run 037 rung 2, family liquidity
+from factors.accepted.TrendFactor import FACTOR as TRENDFACTOR  # v14, run 037 rung 5, family momentum
 
-COMPOSITE_FACTORS = [SIZE, VALUE, PROFITABILITY, INVESTMENT, MOMENTUM, PCTACC, CBOPERPROF, SHAREISS5Y, CFP, XFIN, GP, MAXRET, ROAQ, ROE, IDIOVOL3F, STREVERSAL, ZEROTRADE6M, VOLUMETREND]
+COMPOSITE_FACTORS = [SIZE, VALUE, PROFITABILITY, INVESTMENT, MOMENTUM, PCTACC, CBOPERPROF, SHAREISS5Y, CFP, XFIN, GP, MAXRET, ROAQ, ROE, IDIOVOL3F, STREVERSAL, ZEROTRADE6M, VOLUMETREND, TRENDFACTOR]
 
 # Model version this file currently represents. factor-evaluator bumps it when
 # a factor is accepted, and MODEL_MANIFEST.yaml must gain a matching block.
-COMPOSITE_VERSION = "v13"
+COMPOSITE_VERSION = "v14"
 
 
 def active_factors():

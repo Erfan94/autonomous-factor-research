@@ -736,3 +736,63 @@ versions:
       - "VolumeTrend is the second liquidity leg: it dilutes zerotrade6M to 1/18 and leaves the other eight families unchanged. Bars: residual IC t 2.0436 > 2.0, a margin of 0.0436, the second-thinnest pass after IdioVol3F (0.0307); residual IC 0.0047 (share 0.42) on 228 months, as VolumeTrend is scored from 2002-12 only."
       - "Guard t -0.09 and dIC -0.0001 (t -0.19): the RoE / XFIN pattern, admitted on residual information while the blend barely moves. Hedged Sharpe 0.985 -> 0.979, 16.16 -> 16.13%/yr, MaxDD -41.1 -> -41.6; raw Sharpe 0.708 -> 0.719, beta -0.635 -> -0.619; raw dLS +0.18 vs hedged -0.03 pp/yr, both negligible."
       - "Ex-top-years 0.646 -> 0.635; bear/bull 0.925/1.229 -> 0.962/1.204; IC NW t 5.15 -> 5.24. Stage 3 from v12: equal_rank_decile 0.985 -> 0.979, buffered 0.957 -> 0.945 (turnover 36.7%), vol_targeted 0.900 -> 0.909, icir_weighted 0.790 -> 0.800, tier_neutral 0.853 -> 0.826 (MaxDD -46.5)."
+  - version: v14
+    date: "2026-10-01"
+    git_tag: v14-add-TrendFactor  # owed; created by the coordinator after the commit
+    legs:
+      - {name: Size, family: size, osap_acronym: Size, weight: 1.0}
+      - {name: Value, family: value, osap_acronym: BM, weight: 1.0}
+      - {name: Profitability, family: profitability, osap_acronym: OperProf, weight: 1.0}
+      - {name: Investment, family: investment, osap_acronym: AssetGrowth, weight: 1.0}
+      - {name: Momentum, family: momentum, osap_acronym: Mom12m, weight: 1.0}
+      - {name: PctAcc, family: investment, osap_acronym: PctAcc, weight: 1.0}
+      - {name: CBOperProf, family: profitability, osap_acronym: CBOperProf, weight: 1.0}
+      - {name: ShareIss5Y, family: external_financing, osap_acronym: ShareIss5Y, weight: 1.0}
+      - {name: cfp, family: value, osap_acronym: cfp, weight: 1.0}
+      - {name: XFIN, family: external_financing, osap_acronym: XFIN, weight: 1.0}
+      - {name: GP, family: profitability, osap_acronym: GP, weight: 1.0}
+      - {name: MaxRet, family: volatility, osap_acronym: MaxRet, weight: 1.0}
+      - {name: roaq, family: profitability, osap_acronym: roaq, weight: 1.0}
+      - {name: RoE, family: profitability, osap_acronym: RoE, weight: 1.0}
+      - {name: IdioVol3F, family: volatility, osap_acronym: IdioVol3F, weight: 1.0}
+      - {name: STreversal, family: short_term_reversal, osap_acronym: STreversal, weight: 1.0}
+      - {name: zerotrade6M, family: liquidity, osap_acronym: zerotrade6M, weight: 1.0}
+      - {name: VolumeTrend, family: liquidity, osap_acronym: VolumeTrend, weight: 1.0}
+      - {name: TrendFactor, family: momentum, osap_acronym: TrendFactor, weight: 1.0}
+    families: "size:Size|value:Value,cfp|profitability:Profitability,CBOperProf,GP,roaq,RoE|investment:Investment,PctAcc|momentum:Momentum,TrendFactor|external_financing:ShareIss5Y,XFIN|volatility:MaxRet,IdioVol3F|short_term_reversal:STreversal|liquidity:zerotrade6M,VolumeTrend"
+    construction_rule: "two-level family blend (1/9 per family, equal within: Size, STreversal 0.111; Value/cfp, Investment/PctAcc, Momentum/TrendFactor, ShareIss5Y/XFIN, MaxRet/IdioVol3F, zerotrade6M/VolumeTrend 0.0556 each; Profitability/CBOperProf/GP/roaq/RoE 0.0222 each; renormalised over available members) of within-sector percentile ranks (fallback cross-section if <10 names); D10-D1 equal-weight, hedged by ex-ante 36m beta to the universe cap-weighted (total) return"
+    stamps: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: 7fe6f001e708, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8}
+    window: {eval_start: "1999-01-01", eval_end: "2021-12-31", include_holdout: false}
+    ratchet:                             # run 037, ladder 4 rung 5 (stage2_order rank 20), base v13 (18 legs = v11 + zerotrade6M + VolumeTrend); last rung of ladder 4
+      run: "037"
+      rung: 5
+      base: v13
+      bars: {resid_ic_tstat_nw: 2.1409, resid_ic_bound: "> 2.0", paired_delta_ls_tstat: -0.0051, guard_bound: ">= -2.0"}
+      diagnostics: {resid_ic_mean: 0.0078, resid_ic_share: 0.46, resid_ic_n: 228, paired_delta_ic_mean: 0.0017, paired_delta_ic_tstat: 1.36, paired_delta_ls_ann_pct: -0.004, raw_delta_ls_ann_pct: 0.77, raw_delta_ls_approx_t: 1.06, hedge_part_pp: -0.77, spanning_alpha_ann_pct: 10.44, spanning_alpha_tstat_nw: 1.77, spanning_beta: -0.13, spanning_r2: 0.010, corr_to_composite: -0.10, delta_ls_sharpe: 0.004, maxdd_worsening_pct: 1.61}
+      beta_regime: {base_ls_beta_fullwindow: -0.619, cand_ls_beta_fullwindow: -0.560, base_ls_beta_mean: -0.589, cand_ls_beta_mean: -0.544, base_ls_raw_sharpe: 0.719, cand_ls_raw_sharpe: 0.773, base_ls_sharpe_ex_top_years: 0.635, cand_ls_sharpe_ex_top_years: 0.650}
+    baseline:                            # run 042, GROSS; LS figures hedged, raw and beta beside; equals run 037 rung 5 WITH arm to six places
+      run: "042"
+      ic: {ic_mean: 0.0389, ic_tstat_nw: 5.68, icir: 0.387, ic_half1_mean: 0.0498, ic_half2_mean: 0.0281}
+      ic_decay: {h1: 0.0269, h2: 0.0226, h3: 0.0247, h6: 0.0197, h12: 0.0234}
+      ls_hedged: {ls_sharpe: 0.983, ls_tstat_nw: 3.91, ls_ann_return_pct: 16.12, ls_ann_vol_pct: 16.41, ls_maxdd_pct: -43.21, ls_hit_rate_pct: 63.8}
+      breadth: {turnover_d10_pct: 58.1, turnover_d1_pct: 54.4, coverage_pct: 100.0, avg_names_per_decile: 196.5, n_months: 276}
+      decile_avg_ret_pct: "0.275,0.539,0.757,0.802,1.006,1.061,1.132,1.249,1.355,1.493"
+      ls_raw: {ls_raw_sharpe: 0.773, ls_raw_ann_return_pct: 14.62, ls_raw_ann_vol_pct: 18.90, ls_raw_maxdd_pct: -45.20}
+      beta: {ls_beta_mean: -0.544, ls_beta_fullwindow: -0.560, ls_hedged_months: 264}
+      ex_regime: {ls_sharpe_ex_top_years: 0.650, ls_top_years: "2000,2001,2021", ls_top_years_share_pct: 54.0}
+      bear_bull: {ls_sharpe_bear: 1.219, ls_sharpe_bull: 1.115, n_bear_months: 64, n_bull_months: 200}
+      tiers: {MEGA: {ic: 0.0335, raw_ls_sharpe: 0.284, n: 393}, MID: {ic: 0.0348, raw_ls_sharpe: 0.637, n: 589}, SMALL: {ic: 0.0412, raw_ls_sharpe: 0.905, n: 981}}
+      coverage: {leg_coverage_pct_full: 45.4, leg_coverage_worst: "f_shareiss5y 62.6%", delisting_adjusted_pct: 0.44}
+    construction:                        # run 043, Stage 3, GROSS, hedged; raw Sharpe and full-window beta beside; never a gate
+      run: "043"
+      columns: [sharpe, ls_t_nw, ann_ret_pct, vol_pct, maxdd_pct, worst_12m_pct, turnover_long_pct, turnover_short_pct, raw_sharpe, beta_fullwindow, sharpe_ex_top_years]
+      equal_rank_decile: [0.983, 3.91, 16.12, 16.41, -43.2, -41.4, 58.1, 54.4, 0.773, -0.56, 0.65]
+      tier_neutral:      [0.858, 3.55, 14.59, 17.00, -44.0, -41.0, 59.5, 55.7, 0.617, -0.64, 0.54]
+      icir_weighted:     [0.902, 4.20, 15.54, 17.23, -33.1, -27.7, 39.1, 37.7, 0.464, -0.93, 0.64]
+      buffered:          [0.954, 3.81, 15.01, 15.73, -42.0, -38.6, 38.5, 32.6, 0.720, -0.57, 0.65]
+      vol_targeted:      [0.901, 3.95, 10.94, 12.14, -30.6, -29.2, 58.1, 54.4, 0.711, -0.31, 0.61]
+      icir_weights_avg: "Size=0.009;Value=0.027;Profitability=0.063;Investment=0.025;Momentum=0.037;PctAcc=0.073;CBOperProf=0.063;ShareIss5Y=0.066;cfp=0.072;XFIN=0.059;GP=0.060;MaxRet=0.055;roaq=0.060;RoE=0.054;IdioVol3F=0.054;STreversal=0.053;zerotrade6M=0.056;VolumeTrend=0.059;TrendFactor=0.056"
+    character:
+      - "TrendFactor is the first momentum addition (Momentum, TrendFactor at 1/18 each), from rung 5 whose base was v13 = v11 + the earlier ladder-4 passers zerotrade6M and VolumeTrend. Bars: residual IC t 2.14 > 2.0 (share 0.46, 228 months from 2002-12), guard t -0.005; Stage 1 annual IC negatively correlated with every leg (-0.09 to -0.37), spanning R2 0.010."
+      - "Raw dLS +0.77 vs hedged -0.004 pp/yr: hedge part -0.77 at dbeta_mean +0.045, STreversal's pattern; the implied ~17% market mean is partly the cov(beta_t, m_t) regime-lag term (identity in verification hedge_gap_check_before_phase_d; decision hedge_guard_negative_beta_property). Beta -0.62 -> -0.56, raw Sharpe 0.719 -> 0.773, bear/bull 0.962/1.204 -> 1.219/1.115; hedged MaxDD 1.6 pts worse (-41.6 -> -43.2)."
+      - "Front-loaded: dIC +0.0031 in half 1, +0.0004 in half 2. Composite IC NW t 5.24 -> 5.68 (plain t 6.43) nears the ~6 single-leg alpha-reviewer level: noted, not a trigger for a composite. Stage 3 from v13: icir_weighted 0.800 -> 0.902 (raw 0.464), equal_rank_decile 0.979 -> 0.983, buffered 0.945 -> 0.954, tier_neutral 0.826 -> 0.858, vol_targeted 0.909 -> 0.901."

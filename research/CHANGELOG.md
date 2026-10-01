@@ -210,3 +210,11 @@
 - Run 040 reproduces the rung 2 WITH arm on 66 of 66 fields to six places: IC 0.037197 (NW t 5.24, ICIR 0.362), hedged Sharpe 0.978584, 16.125905%/yr, MaxDD -41.60, beta -0.619, raw Sharpe 0.719, ex-top-years 0.635, turnover 56.6%.
 - Run 041 (Stage 3, never a gate): equal_rank_decile 0.979; buffered 0.945 at turnover 36.7%; vol_targeted 0.909; icir_weighted 0.800 (raw 0.367, beta -0.95); tier_neutral 0.826 (MaxDD -46.5).
 - Records: manifest block v13; logged run_started/run_completed (040, 041), provenance_verified (040, 041), construction_reported, composite_updated; VolumeTrend row set to accepted. Next: v14 = v13 + TrendFactor (target IC 0.038944 / Sharpe 0.982552 / 16.122152%).
+
+## 2026-10-01 — v14 = v13 + TrendFactor (momentum, 2nd leg): accepted and applied (runs 042, 043); ladder 4 closed 3/5; tag v14-add-TrendFactor owed
+- Accepted from run 037 rung 5 (base v13 = v11 + zerotrade6M + VolumeTrend) on both bars: residual IC NW t 2.140869 > 2.0 (share 0.46, 228 months); guard t -0.005 >= -2.0. Raw dLS +0.77 vs hedged -0.004 pp/yr (hedge part -0.77 at dbeta +0.045, STreversal's pattern; decision ladder4_acceptance).
+- Applied by the coordinator: TrendFactor.py moved to factors/accepted/; COMPOSITE_VERSION v14; COMPOSITE_SHA fa17bd1cd37e -> 7fe6f001e708, other stamps unchanged; pytest 434 passed. Momentum = Momentum, TrendFactor at 1/18 each; 9 families.
+- Run 042 reproduces the rung 5 WITH arm on 66 of 66 fields to six places: IC 0.038944 (NW t 5.68, plain 6.43, ICIR 0.387), hedged Sharpe 0.982552, 16.122152%/yr, MaxDD -43.21, beta -0.560, raw Sharpe 0.773, ex-top-years 0.650, turnover 58.1%.
+- Front-loaded (dIC +0.0031 half 1, +0.0004 half 2); MaxDD 1.6 pts worse; bear/bull 0.962/1.204 -> 1.219/1.115. Composite NW t nears the ~6 single-leg review level: noted, not a trigger.
+- Run 043 (Stage 3, never a gate): equal_rank_decile 0.983; buffered 0.954 at turnover 38.5%; icir_weighted 0.902 (from 0.800; raw 0.464, beta -0.93); vol_targeted 0.901; tier_neutral 0.858.
+- Records: manifest block v14; logged run_started/run_completed (042, 043), provenance_verified (042, 043), construction_reported, composite_updated, batch_closed stage2_l4 (3 pass, 2 fail); TrendFactor row set to accepted. Next ladder: ranks 21-24 on v14.
