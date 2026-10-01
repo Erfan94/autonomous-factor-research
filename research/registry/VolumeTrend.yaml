@@ -6,7 +6,7 @@ batch: stage1_b9
 declaration_order: 1
 date_tested: "2026-10-01"
 run: "011"
-stage2_run: null
+stage2_run: "037"
 stage1_decision: PASS
 decided_by: "all bars"
 source: "Haugen and Baker 1996 (JFE); SignalDoc sign -1, Cat.Economic volume"
@@ -25,6 +25,19 @@ stage1:   # from the run 011 block, verbatim; the beta / ex-regime rows are D5 d
    ls_sharpe_bull: 0.810562, decile_avg_ret_pct: "1.023,1.128,1.137,1.136,1.101,1.102,1.209,1.143,1.213,1.223",
    delisting_adjusted_pct: 0.436673}
 stage1_failed: []
+stage2:   # from the run 037 rung 2 block, verbatim; cand_* = WITH arm, base_* = WITHOUT arm; diagnostics never bars except the two named in stage2_checks
+  {ratchet_decision: "PASS", ratchet_order: 2, base_legs: "Size,Value,Profitability,Investment,Momentum,PctAcc,CBOperProf,ShareIss5Y,cfp,XFIN,GP,MaxRet,roaq,RoE,IdioVol3F,STreversal,zerotrade6M", family: "liquidity",
+   family_weight_with: 0.055556,
+   families_with: "size:Size|value:Value,cfp|profitability:Profitability,CBOperProf,GP,roaq,RoE|investment:Investment,PctAcc|momentum:Momentum|external_financing:ShareIss5Y,XFIN|volatility:MaxRet,IdioVol3F|short_term_reversal:STreversal|liquidity:zerotrade6M,VolumeTrend",
+   resid_ic_mean: 0.00473, resid_ic_tstat_nw: 2.043637, resid_ic_n: 228, solo_ic_mean: 0.011364, resid_ic_share: 0.416193, spanning_alpha_ann_pct: 1.155542,
+   spanning_alpha_tstat_nw: 0.674554, spanning_beta: 0.337854, spanning_r2: 0.318049, spanning_n: 228, corr_to_composite: 0.563958, paired_delta_ic_mean: -0.000112,
+   paired_delta_ic_tstat: -0.190628, delta_ls_sharpe: -0.006003, maxdd_worsening_pct: 0.495136, paired_delta_ls_mean: -0.000028, paired_delta_ls_tstat: -0.086624, base_ic_mean: 0.037309,
+   cand_ic_mean: 0.037197, base_ls_sharpe: 0.984587, cand_ls_sharpe: 0.978584, base_ls_ann_return_pct: 16.158936, cand_ls_ann_return_pct: 16.125905, base_ls_raw_ann_return_pct: 13.669196,
+   cand_ls_raw_ann_return_pct: 13.849518, base_ls_raw_ann_vol_pct: 19.294645, cand_ls_raw_ann_vol_pct: 19.267766, base_ls_maxdd_pct: -41.107934, cand_ls_maxdd_pct: -41.60307, base_ls_raw_maxdd_pct: -44.961814,
+   cand_ls_raw_maxdd_pct: -45.594145, base_ls_beta_fullwindow: -0.634781, cand_ls_beta_fullwindow: -0.619445, base_ls_beta_mean: -0.599063, cand_ls_beta_mean: -0.589091, base_ls_raw_sharpe: 0.708445,
+   cand_ls_raw_sharpe: 0.718792, base_ls_sharpe_ex_top_years: 0.645535, cand_ls_sharpe_ex_top_years: 0.634941, cand_ls_top_years: "2000,2001,2021", cand_ls_top_years_share_pct: 54.438979, base_ls_sharpe_bear: 0.925,
+   cand_ls_sharpe_bear: 0.961561, base_ls_sharpe_bull: 1.228996, cand_ls_sharpe_bull: 1.20441, cand_ic_half1_mean: 0.046682, cand_ic_half2_mean: 0.027712, base_turnover_d10_pct: 56.79682,
+   cand_turnover_d10_pct: 56.553319, cand_leg_coverage_pct_full: 45.38764}
 stage2_failed: []
 character: >
   D1-anchored with a top-half step, not a grade: D1 (steepest volume growth) 1.023, D2-D6 1.10-1.14, D7-D10 1.14-1.22 %/mo (D10 1.223); half of the 0.200 %/mo D10-D1 is D1 to D2. Raw spread 2.40%/yr at vol 8.1% (Sharpe 0.295, raw MaxDD -35.9%). IC 0.0114 (NW t 2.87, plain t 2.93, ICIR 0.194), halves 0.0091 / 0.0136; annual IC positive in 14 of 19 years (2021 +0.055, 2011 +0.052; 2003 -0.025, 2020 -0.023). Tiers MEGA 0.0047, MID 0.0170, SMALL 0.0075 (raw LS Sharpe -0.100 / 0.423 / 0.188): a MID effect. IC flat over horizons (0.0118 h1, 0.0131 h6, 0.0128 h12); turnover 10.2% / 9.4%. Beta -0.23 (ex ante -0.23): the hedge adds 2.65 pp, 52% of the hedged 5.05%/yr (Sharpe 0.661, LS NW t 2.66, MaxDD -32.7%, hit 61.0%). Hedged LS negative only in 2020 -26.1% and 2003 -10.1%; 2011, 2014, 2021 carry 62% (+22.7 / +18.5 / +22.6%); ex-top-years Sharpe 0.331; bear 0.0002 (40 months) / bull 0.811 (188). 228 months (first scored signal 2002-12). Coverage 66.3% pooled over 276 months with 48 leading null months (about 80% inside its 228); Communication Services 53.1%, Technology 56.6%, best Industrials 72.4%.
@@ -37,5 +50,9 @@ caveats:
   - "approx translation: as-traded volume (volume x close / closeunadj), full 60-month window; OSAP's min-30 floor and pooled 1/99 trim not reproduced (decision volume_windows)"
   - "Cat.Economic volume: no v0 seed family covers it"
   - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+  - "Stage 2 (run 037, rung 2, vs v11 + zerotrade6M): residual NW t 2.043637 clears the strict > 2.0 bar by 0.044, the second-thinnest pass after IdioVol3F (0.031); residual IC 0.0047 on 228 months (first scored 2002-12), 42% of its own 0.0114; before 2002-12 the liquidity family is zerotrade6M alone"
+  - "Stage 2: faced zerotrade6M, Stage 1 annual IC corr 0.862 (14 / 19 same sign); 0.906 IdioVolAHT, 0.870 IdioVol3F, 0.853 MaxRet, 0.820 ShareIss5Y; spanning R2 0.32, corr 0.56, alpha 1.16%/yr (t 0.67)"
+  - "Stage 2 diagnostics: the blend barely moves: dIC -0.0001 (t -0.19), dSharpe -0.006, MaxDD 0.5 pts worse; WITH beta -0.619 vs -0.635; raw Sharpe 0.708 -> 0.719; ex-top-years 0.646 -> 0.635; bear 0.925 -> 0.962 / bull 1.229 -> 1.204"
+  - "Stage 2: raw dLS +0.18 vs hedged -0.03 pp/yr (approx raw t 0.47, guard t -0.09); hedge part -0.21 at dbeta_mean +0.010, too small to read a market mean"
 decision: >
-  Passes every Stage 1 bar: IC 0.0114 >= 0.010, NW t 2.87 >= 2.5, halves min 0.0091, raw spread 2.40%/yr > 0, coverage 66.3% >= 40, 157.7 names per decile, 228 LS months >= 205. Not inconclusive: 228 months >= 120 and the floor. Status stage2_pending; family to be assigned in Phase C. The volume-window rows VolSD and VolMkt (b8) were rejected on NW t 2.36 / 2.25; this trend sort clears at 2.87 on the narrowest IC margin of the batch.
+  Passes every Stage 1 bar: IC 0.0114 >= 0.010, NW t 2.87 >= 2.5, halves min 0.0091, raw spread 2.40%/yr > 0, coverage 66.3% >= 40, 157.7 names per decile, 228 LS months >= 205. Not inconclusive: 228 months >= 120 and the floor. Status stage2_pending; family to be assigned in Phase C. The volume-window rows VolSD and VolMkt (b8) were rejected on NW t 2.36 / 2.25; this trend sort clears at 2.87 on the narrowest IC margin of the batch. Stage 2 (run 037, rung 2, vs v11 + zerotrade6M): PASS on both bars, residual IC 0.0047 with NW t 2.043637 > 2.0 (42% of its own 0.0114, 228 months) and guard paired hedged dLS -0.03 pp/yr, t -0.09 >= -2.0 (raw +0.18, approximate t 0.47). Second liquidity leg, with zerotrade6M, at 0.0556 each. Diagnostics (never bars): dIC -0.0001 (t -0.19), spanning alpha 1.16%/yr (t 0.67, R2 0.32, corr 0.56), dSharpe -0.006 (0.985 -> 0.979), MaxDD 0.5 pts worse (-41.1 -> -41.6); WITH beta -0.619 vs -0.635 (ex ante -0.589 / -0.599), raw Sharpe 0.719 / 0.708, ex-top-years 0.635 / 0.646. The rules decide on the residual IC and the guard, and both pass. Status stays stage2_pending; application (v13) pending the coordinator's advisor call.

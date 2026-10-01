@@ -6,7 +6,7 @@ batch: stage1_b8
 declaration_order: 9
 date_tested: "2026-10-01"
 run: "010"
-stage2_run: null
+stage2_run: "037"
 stage1_decision: PASS
 decided_by: "all bars"
 source: "Han, Zhou and Zhu 2016 (JFE); SignalDoc sign +1, Cat.Economic momentum"
@@ -25,6 +25,19 @@ stage1:   # from the run 010 block, verbatim; the beta / ex-regime rows are D5 d
    ls_sharpe_bear: 0.837433, ls_sharpe_bull: 0.446534, decile_avg_ret_pct: "0.786,0.879,0.965,1.067,1.103,1.137,1.276,1.258,1.345,1.629",
    delisting_adjusted_pct: 0.436673}
 stage1_failed: []
+stage2:   # from the run 037 rung 5 block, verbatim; cand_* = WITH arm, base_* = WITHOUT arm; diagnostics never bars except the two named in stage2_checks
+  {ratchet_decision: "PASS", ratchet_order: 5, base_legs: "Size,Value,Profitability,Investment,Momentum,PctAcc,CBOperProf,ShareIss5Y,cfp,XFIN,GP,MaxRet,roaq,RoE,IdioVol3F,STreversal,zerotrade6M,VolumeTrend", family: "momentum",
+   family_weight_with: 0.055556,
+   families_with: "size:Size|value:Value,cfp|profitability:Profitability,CBOperProf,GP,roaq,RoE|investment:Investment,PctAcc|momentum:Momentum,TrendFactor|external_financing:ShareIss5Y,XFIN|volatility:MaxRet,IdioVol3F|short_term_reversal:STreversal|liquidity:zerotrade6M,VolumeTrend",
+   resid_ic_mean: 0.007835, resid_ic_tstat_nw: 2.140869, resid_ic_n: 228, solo_ic_mean: 0.017142, resid_ic_share: 0.457057, spanning_alpha_ann_pct: 10.444761,
+   spanning_alpha_tstat_nw: 1.770871, spanning_beta: -0.131349, spanning_r2: 0.009763, spanning_n: 228, corr_to_composite: -0.098809, paired_delta_ic_mean: 0.001747,
+   paired_delta_ic_tstat: 1.364862, delta_ls_sharpe: 0.003968, maxdd_worsening_pct: 1.611251, paired_delta_ls_mean: -0.000003, paired_delta_ls_tstat: -0.005149, base_ic_mean: 0.037197,
+   cand_ic_mean: 0.038944, base_ls_sharpe: 0.978584, cand_ls_sharpe: 0.982552, base_ls_ann_return_pct: 16.125905, cand_ls_ann_return_pct: 16.122152, base_ls_raw_ann_return_pct: 13.849518,
+   cand_ls_raw_ann_return_pct: 14.619309, base_ls_raw_ann_vol_pct: 19.267766, cand_ls_raw_ann_vol_pct: 18.903011, base_ls_maxdd_pct: -41.60307, cand_ls_maxdd_pct: -43.214321, base_ls_raw_maxdd_pct: -45.594145,
+   cand_ls_raw_maxdd_pct: -45.196967, base_ls_beta_fullwindow: -0.619445, cand_ls_beta_fullwindow: -0.55956, base_ls_beta_mean: -0.589091, cand_ls_beta_mean: -0.543694, base_ls_raw_sharpe: 0.718792,
+   cand_ls_raw_sharpe: 0.773385, base_ls_sharpe_ex_top_years: 0.634941, cand_ls_sharpe_ex_top_years: 0.649801, cand_ls_top_years: "2000,2001,2021", cand_ls_top_years_share_pct: 54.011274, base_ls_sharpe_bear: 0.961561,
+   cand_ls_sharpe_bear: 1.219243, base_ls_sharpe_bull: 1.20441, cand_ls_sharpe_bull: 1.114622, cand_ic_half1_mean: 0.049774, cand_ic_half2_mean: 0.028114, base_turnover_d10_pct: 56.553319,
+   cand_turnover_d10_pct: 58.135039, cand_leg_coverage_pct_full: 45.38764}
 stage2_failed: []
 character: >
   Graded, long-leg heavy: D1 0.786 rising to D7-D8 1.26-1.28, D9 1.345, D10 1.629 %/mo; D10-D9 is 0.284 of the 0.843 %/mo spread. Raw 10.12%/yr at vol 16.5% (Sharpe 0.612, raw MaxDD -18.5%). IC 0.0171 (NW t 2.79, plain t 2.70, ICIR 0.179), halves 0.0290 / 0.0053 (114 months each): front-loaded (2009 +0.097, 2011 +0.048, 2007 +0.047); annual IC positive in 14 of 19 years. Tiers MEGA 0.0133, MID 0.0175, SMALL 0.0182 (raw LS Sharpe 0.590 / 0.493 / 0.584). Decay 0.0030 h1, 0.0076 h2, 0.0082 h3, -0.0050 h6, -0.0040 h12; turnover 63.4% / 64.9%. Beta +0.05 (ex ante +0.05): the hedge subtracts 1.19 pp, hedged 8.94%/yr (Sharpe 0.523, LS NW t 2.18, MaxDD -27.3%). 2009 hedged +91.6% is 51% of the 178 pp summed over 19 years; 2007, 2009, 2021 carry 68%; 2012 -10.1%, 2014 -9.9%, 2008 -6.9%; ex-top-years Sharpe 0.276; bear 0.837 (40 months) / bull 0.447 (188). 228 months (signals 2002-12..2021-11, decision trendfactor_windows). Coverage 68.7% pooled over 276 months with 48 null months; Communication Services 56.8%, Technology 59.2%, the rest 67.1-74.1%.
@@ -37,5 +50,11 @@ caveats:
   - "approx translation: coefficient sample on harness proxies for OSAP's filters (DAILY.marketcap NYSE 10th percentile, closeunadj >= 5, current share category); harness universe scores $1-5 names OSAP leaves blank; partial windows nulled by the 48-month gate"
   - "Cat.Economic momentum: the v0 momentum seed family's category"
   - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+  - "Stage 2 (run 037, rung 5, vs v11 + zerotrade6M + VolumeTrend): residual NW t 2.140869 > 2.0 (margin 0.141); residual IC 0.0078 on 228 months (signals from 2002-12), 46% of its own 0.0171; before 2002-12 the momentum family is Momentum alone"
+  - "Stage 2 overlap: spanning R2 0.0098, corr to composite -0.099; Stage 1 annual IC corr negative with every leg holding a Stage 1 row (-0.09 GP to -0.37 MaxRet; -0.35 zerotrade6M, -0.33 VolumeTrend); no standalone Momentum series, so overlap with the seed is unmeasured at annual-IC level; the residual t is thin on power (228 months), not on overlap"
+  - "Stage 2: spanning alpha 10.44%/yr (t 1.77) exceeds its standalone hedged 8.94%/yr because spanning beta is -0.13 against a positive-mean composite; not a trigger"
+  - "Stage 2 hedge reading: raw dLS +0.77 vs hedged -0.004 pp/yr (approx raw t 1.06, guard t -0.005); hedge part -0.77 at dbeta_mean +0.045, a positive-beta leg unwinding the hedge (STreversal's pattern); its implied universe mean 17.0%/yr does not reconcile with 7.6-11.0 elsewhere and is not read"
+  - "Stage 2 diagnostics: dIC +0.0017 (t 1.36), dSharpe +0.004, hedged MaxDD 1.6 pts worse (-41.6 -> -43.2); WITH beta -0.560 vs -0.619 (ex ante -0.544 / -0.589); raw Sharpe 0.719 -> 0.773; ex-top-years 0.635 -> 0.650; bear 0.962 -> 1.219 / bull 1.204 -> 1.115; SMALL tier LS Sharpe 0.787 -> 0.905"
+  - "Stage 2: WITH-arm first-half IC +0.0031 (0.0467 -> 0.0498), second +0.0004 (0.0277 -> 0.0281), in line with its front-loaded Stage 1 halves (0.0290 / 0.0053) and the 2009 concentration"
 decision: >
-  Passes every Stage 1 bar: IC 0.0171 >= 0.010, NW t 2.79 >= 2.5, halves min 0.0053, raw spread 10.12%/yr > 0, coverage 68.7% >= 40, 163.4 names per decile, 228 LS months >= 205. Not inconclusive: 228 months >= 120 and the floor. Status stage2_pending; family to be assigned in Phase C. Fourteenth NW t of the 16 passers; the highest raw spread of the passers (10.12%/yr; GP 8.64) and the third raw Sharpe (0.612; PctAcc 0.762, GP 0.688), with 2009 behind half the hedged sum; v0's halves are front-loaded too (0.0275 / 0.0016).
+  Passes every Stage 1 bar: IC 0.0171 >= 0.010, NW t 2.79 >= 2.5, halves min 0.0053, raw spread 10.12%/yr > 0, coverage 68.7% >= 40, 163.4 names per decile, 228 LS months >= 205. Not inconclusive: 228 months >= 120 and the floor. Status stage2_pending; family to be assigned in Phase C. Fourteenth NW t of the 16 passers; the highest raw spread of the passers (10.12%/yr; GP 8.64) and the third raw Sharpe (0.612; PctAcc 0.762, GP 0.688), with 2009 behind half the hedged sum; v0's halves are front-loaded too (0.0275 / 0.0016). Stage 2 (run 037, rung 5, vs v11 + zerotrade6M + VolumeTrend): PASS on both bars, residual IC 0.0078 with NW t 2.140869 > 2.0 (46% of its own 0.0171, 228 months) and guard paired hedged dLS -0.004 pp/yr, t -0.005 >= -2.0 (raw +0.77, approximate t 1.06). Second momentum leg, with Momentum, at 0.0556 each. Diagnostics (never bars): dIC +0.0017 (t 1.36), spanning alpha 10.44%/yr (t 1.77, R2 0.01, corr -0.10), dSharpe +0.004 (0.979 -> 0.983), MaxDD 1.6 pts worse (-41.6 -> -43.2); WITH beta -0.560 vs -0.619 (ex ante -0.544 / -0.589), raw Sharpe 0.773 / 0.719, ex-top-years 0.650 / 0.635. The rules decide on the residual IC and the guard, and both pass. Status stays stage2_pending; application (v14, base v13) pending the coordinator's advisor call.
