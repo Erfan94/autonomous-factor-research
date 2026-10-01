@@ -1,0 +1,35 @@
+name: Illiquidity
+osap_acronym: Illiquidity
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b5
+declaration_order: 1
+date_tested: "2026-10-01"
+run: "007"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Amihud 2002 (JFM); SignalDoc sign +1, Cat.Economic liquidity"
+orientation: "high 12-month mean daily |return| per dollar volume = attractive (SignalDoc sign +1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/Illiquidity/spec.md}
+dimension_override: null
+history_gate_months: 11
+preflight: {masspoint_max_pct: 0.05698, qcut_min_bins: 10, coverage_min_pct: 93.598616}
+stage1:   # from the run 007 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: -0.006385, ic_tstat_nw: -1.186124, ic_half1_mean: -3.1e-05, ic_half2_mean: -0.01274, icir: -0.065726,
+   ls_sharpe: 0.078314, ls_ann_return_pct: 1.130854, ls_tstat_nw: 0.391937, ls_maxdd_pct: -54.485376, ls_raw_ann_return_pct: 4.306521,
+   ls_raw_sharpe: 0.293831, ls_raw_maxdd_pct: -32.653288, turnover_d10_pct: 23.206147, turnover_d1_pct: 2.773626, coverage_pct: 96.419759,
+   avg_names_per_decile: 189.444565, n_months: 276, ls_n_months: 276, ic_decay_h1: -0.00581, ic_decay_h6: -0.00242,
+   ic_decay_h12: -0.003722, tier_MEGA_ic_mean: -0.0074, tier_MID_ic_mean: -0.0181, tier_SMALL_ic_mean: -0.009, ls_beta_mean: 0.329208,
+   ls_beta_fullwindow: 0.288588, ls_sharpe_ex_top_years: -0.13683, ls_top_years: "2001,2003,2008", ls_top_years_share_pct: 250.7303, ls_sharpe_bear: 0.755282,
+   ls_sharpe_bull: -0.176115, decile_avg_ret_pct: "0.843,0.902,0.936,0.957,0.971,0.957,1.009,1.041,1.132,1.201", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  The decile means and the rank IC disagree in sign: deciles rise monotonically from D1 0.843 to D10 1.201 %/mo (raw spread 4.31%/yr, Sharpe 0.294, raw MaxDD -32.7%) while the IC is -0.0064 (NW t -1.19, ICIR -0.066). Halves -0.0000 / -0.0127; tiers MEGA -0.0074, MID -0.0181, SMALL -0.0090; decay -0.0058 h1, -0.0024 h6, -0.0037 h12. Turnover D10 23.2% vs D1 2.8% (the liquid leg is sticky). Beta 0.29 (ex ante 0.33): hedged 1.13%/yr (Sharpe 0.078, MaxDD -54.5%); ex-top-years Sharpe -0.137 (2001, 2003, 2008); bear 0.755 / bull -0.176. Coverage 96.4%.
+caveats:
+  - "12-month all-finite rule (OSAP count == 12), history gate 11 months; trading calendar from the universe's own SEP print dates; x10^6 scaling omitted (rank-invariant)"
+  - "dollar volume scales with market cap: close to the v0 Size seed by construction, and the same long (illiquid) leg as DolVol (b3, sign -1; IC -0.0008, t -0.18); not measured"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (-1.19 < 2.5); ic_mean and ic_half_min also fail; the raw spread (+4.31%/yr) passes. Coverage 96.4%, 189.4 names per decile, 276 LS months >= 248: not inconclusive. No flip (|t| 1.19 < 2.74). The positive raw spread is market and tail exposure the rank IC does not carry.

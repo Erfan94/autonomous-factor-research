@@ -1,0 +1,35 @@
+name: IntMom
+osap_acronym: IntMom
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b5
+declaration_order: 2
+date_tested: "2026-10-01"
+run: "007"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Novy-Marx 2012 (JFE); SignalDoc sign +1, Cat.Economic momentum"
+orientation: "high t-12..t-7 return = attractive (SignalDoc sign +1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/IntMom/spec.md}
+dimension_override: null
+history_gate_months: 13
+preflight: {masspoint_max_pct: 0.114286, qcut_min_bins: 0, coverage_min_pct: 0}
+stage1:   # from the run 007 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.003113, ic_tstat_nw: 0.501044, ic_half1_mean: -0.001059, ic_half2_mean: 0.007254, icir: 0.032925,
+   ls_sharpe: 0.151184, ls_ann_return_pct: 2.237273, ls_tstat_nw: 0.670723, ls_maxdd_pct: -41.162239, ls_raw_ann_return_pct: -1.119027,
+   ls_raw_sharpe: -0.076969, ls_raw_maxdd_pct: -63.461652, turnover_d10_pct: 38.924208, turnover_d1_pct: 39.813121, coverage_pct: 95.370305,
+   avg_names_per_decile: 188.064, n_months: 275, ls_n_months: 275, ic_decay_h1: 0.001581, ic_decay_h6: 0.003239,
+   ic_decay_h12: 0.004756, tier_MEGA_ic_mean: 0.0019, tier_MID_ic_mean: 0.0012, tier_SMALL_ic_mean: 0.0043, ls_beta_mean: -0.095323,
+   ls_beta_fullwindow: -0.17761, ls_sharpe_ex_top_years: -0.116657, ls_top_years: "2002,2010,2015", ls_top_years_share_pct: 166.309306, ls_sharpe_bear: -0.248236,
+   ls_sharpe_bull: 0.292109, decile_avg_ret_pct: "0.997,0.990,1.104,1.001,1.034,1.046,1.031,0.938,1.011,0.904", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min, ls_raw_ann_return_pct]
+stage2_failed: []
+character: >
+  No graded shape and an inverted top: D10 0.904 %/mo is the lowest decile, D3 1.104 the highest; raw spread -1.12%/yr (Sharpe -0.077, raw MaxDD -63.5%). IC 0.0031 (NW t 0.50), halves -0.0011 / 0.0073; tiers MEGA 0.0019, MID 0.0012, SMALL 0.0043; decay 0.0016 h1, 0.0032 h6, 0.0048 h12. Turnover 38.9% / 39.8%. Beta -0.18 (ex ante -0.10): the hedged 2.24%/yr (Sharpe 0.151) is hedge; ex-top-years Sharpe -0.117 (2002, 2010, 2015); bear -0.248 / bull 0.292. Coverage 95.4%.
+caveats:
+  - "13-month history gate: the 1998-12 preflight probe reads 0% coverage / 0 bins (data start, not a defect); the halves and the ls_n_months floor (247) run on the block's own 275 months"
+  - "its t-12..t-7 window lies inside the v0 Momentum seed's 12-1 window; not measured"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (0.50 < 2.5); ic_mean, ic_half_min and the raw spread (-1.12%/yr) also fail. Coverage 95.4%, 188.1 names, 275 LS months >= 247: not inconclusive. No flip (|t| 0.50). The intermediate window adds nothing standalone over what the v0 12-1 seed already spans.

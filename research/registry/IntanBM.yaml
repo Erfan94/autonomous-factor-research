@@ -1,0 +1,36 @@
+name: IntanBM
+osap_acronym: IntanBM
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b5
+declaration_order: 3
+date_tested: "2026-10-01"
+run: "007"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Daniel and Titman 2006 (JF); SignalDoc sign -1, Cat.Economic long term reversal"
+orientation: "low intangible return (residual of Ret60 on lagged log BM and its change) = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/IntanBM/spec.md}
+dimension_override: null
+history_gate_months: 60
+preflight: {masspoint_max_pct: 0.069252, qcut_min_bins: 0, coverage_min_pct: 0}
+stage1:   # from the run 007 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: -0.000318, ic_tstat_nw: -0.040358, ic_half1_mean: 0.003395, ic_half2_mean: -0.004031, icir: -0.002791,
+   ls_sharpe: -0.22844, ls_ann_return_pct: -3.536004, ls_tstat_nw: -0.953402, ls_maxdd_pct: -72.299247, ls_raw_ann_return_pct: 4.335168,
+   ls_raw_sharpe: 0.258748, ls_raw_maxdd_pct: -42.074833, turnover_d10_pct: 18.979979, turnover_d1_pct: 19.063208, coverage_pct: 61.125761,
+   avg_names_per_decile: 145.383333, n_months: 228, ls_n_months: 228, ic_decay_h1: -0.003527, ic_decay_h6: -0.005005,
+   ic_decay_h12: -0.007671, tier_MEGA_ic_mean: -0.0105, tier_MID_ic_mean: -0.0063, tier_SMALL_ic_mean: 0.0079, ls_beta_mean: 0.456288,
+   ls_beta_fullwindow: 0.562504, ls_sharpe_ex_top_years: -0.836749, ls_top_years: "2003,2009,2016", ls_top_years_share_pct: -142.201285, ls_sharpe_bear: 0.634245,
+   ls_sharpe_bull: -0.72045, decile_avg_ret_pct: "0.991,1.085,1.131,1.096,1.078,1.104,1.143,1.153,1.182,1.352", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  Deciles rise into D10 (D1 0.991, D2-D9 1.08-1.18, D10 1.352): raw spread 4.34%/yr (Sharpe 0.259, raw MaxDD -42.1%) against IC -0.0003 (NW t -0.04). Beta 0.56 full-window (ex ante 0.46): the hedge turns it into -3.54%/yr (Sharpe -0.228, hit rate 41.2%, MaxDD -72.3%), so the raw spread is market exposure. Halves 0.0034 / -0.0040; tiers MEGA -0.0105, MID -0.0063, SMALL 0.0079 (raw SMALL LS Sharpe 0.34); turnover 19.0% / 19.1%. Ex-top-years Sharpe -0.837 (2003, 2009, 2016); bear 0.634 / bull -0.721. 228 months (2003-2021), coverage 61.1%, Communication Services 42.1%.
+caveats:
+  - "60-month return window: the 1998-12 preflight probe reads 0% coverage / 0 bins (data start, not a defect); the halves and the ls_n_months floor (205) run on the block's own 228 months; first scorable signal 2002-12"
+  - "near-duplicate of the other Intan residuals by construction: the four share the trimmed Ret60 dependent variable, the scored set and the top years 2003 / 2009 / 2016; LRreversal's t-36..t-13 window lies inside that 60-month window (batch13 alpha_review: near-duplicates by construction, a Phase C/D fact); overlap not measured at Stage 1"
+  - "ME = SEP.close x SF1.sharesbas at t and t-60 (decision intanbm_me_source); Ret60 trimmed 1/99 per month, not over the pooled panel"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (-0.04 < 2.5); ic_mean and ic_half_min also fail; the raw spread (4.34%/yr) passes. Coverage 61.1% >= 40, 145.4 names per decile, 228 LS months >= 205: not inconclusive. No flip (|t| 0.04). Every Cat.Economic long-term-reversal signal in this batch carries non-positive IC (Intan quartet -0.0003 to -0.0052, LRreversal -0.0080, MRreversal -0.0043).

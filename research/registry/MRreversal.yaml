@@ -1,0 +1,35 @@
+name: MRreversal
+osap_acronym: MRreversal
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b5
+declaration_order: 11
+date_tested: "2026-10-01"
+run: "007"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "De Bondt and Thaler 1985 (JF); SignalDoc sign -1, Cat.Economic long term reversal"
+orientation: "low t-18..t-13 compounded return = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/MRreversal/spec.md}
+dimension_override: null
+history_gate_months: 19
+preflight: {masspoint_max_pct: 0.114877, qcut_min_bins: 0, coverage_min_pct: 0}
+stage1:   # from the run 007 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: -0.004255, ic_tstat_nw: -0.959157, ic_half1_mean: -0.002775, ic_half2_mean: -0.005724, icir: -0.057233,
+   ls_sharpe: 0.051129, ls_ann_return_pct: 0.617667, ls_tstat_nw: 0.251838, ls_maxdd_pct: -42.297406, ls_raw_ann_return_pct: 3.689224,
+   ls_raw_sharpe: 0.313955, ls_raw_maxdd_pct: -25.850671, turnover_d10_pct: 39.863485, turnover_d1_pct: 38.893725, coverage_pct: 90.991587,
+   avg_names_per_decile: 183.431599, n_months: 269, ls_n_months: 269, ic_decay_h1: -0.002461, ic_decay_h6: -0.006012,
+   ic_decay_h12: 0.003199, tier_MEGA_ic_mean: 0.0012, tier_MID_ic_mean: -0.0025, tier_SMALL_ic_mean: -0.0065, ls_beta_mean: 0.046151,
+   ls_beta_fullwindow: 0.086398, ls_sharpe_ex_top_years: -0.200244, ls_top_years: "2000,2001,2016", ls_top_years_share_pct: 427.812912, ls_sharpe_bear: 0.345746,
+   ls_sharpe_bull: -0.120377, decile_avg_ret_pct: "0.770,0.994,1.111,0.981,0.959,1.079,1.020,0.990,1.100,1.077", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  D1 0.770 %/mo, then D2-D10 0.96-1.11 with no gradient (D10 1.077); raw spread 3.69%/yr (Sharpe 0.314, raw MaxDD -25.9%). IC -0.0043 (NW t -0.96), halves -0.0028 / -0.0057; tiers MEGA 0.0012, MID -0.0025, SMALL -0.0065; decay -0.0025 h1, -0.0060 h6, +0.0032 h12; turnover 39.9% / 38.9%. Beta 0.09 (ex ante 0.05): hedged 0.62%/yr (Sharpe 0.051, MaxDD -42.3%); ex-top-years Sharpe -0.200 (2000, 2001, 2016); bear 0.346 / bull -0.120. Coverage 91.0%; Communication Services 84.0%.
+caveats:
+  - "19-month return window: the 1998-12 preflight probe reads 0% coverage / 0 bins (data start, not a defect); the halves and the ls_n_months floor (242) run on the block's own 269 months"
+  - "its t-18..t-13 window is the front of LRreversal's t-36..t-13 window; overlap not measured"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (-0.96 < 2.5); ic_mean and ic_half_min also fail; the raw spread passes. Coverage 91.0%, 183.4 names, 269 LS months >= 242: not inconclusive. No flip (|t| 0.96).

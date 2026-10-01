@@ -1,0 +1,35 @@
+name: InvGrowth
+osap_acronym: InvGrowth
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b5
+declaration_order: 7
+date_tested: "2026-10-01"
+run: "007"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Belo and Lin 2012 (RFS); SignalDoc sign -1, Cat.Economic profitability (SignalDoc label)"
+orientation: "low year-over-year inventory growth = attractive (SignalDoc sign -1); non-utility, non-financial firms"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/InvGrowth/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.78125, qcut_min_bins: 10, coverage_min_pct: 28.057869}
+stage1:   # from the run 007 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.005499, ic_tstat_nw: 1.555096, ic_half1_mean: 0.009369, ic_half2_mean: 0.001629, icir: 0.099268,
+   ls_sharpe: 0.386031, ls_ann_return_pct: 3.815216, ls_tstat_nw: 1.741698, ls_maxdd_pct: -20.998642, ls_raw_ann_return_pct: 3.497493,
+   ls_raw_sharpe: 0.351923, ls_raw_maxdd_pct: -24.211137, turnover_d10_pct: 19.479026, turnover_d1_pct: 17.883383, coverage_pct: 51.701329,
+   avg_names_per_decile: 101.582246, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.004605, ic_decay_h6: 0.000456,
+   ic_decay_h12: 0.003558, tier_MEGA_ic_mean: 0.0019, tier_MID_ic_mean: 0.0071, tier_SMALL_ic_mean: 0.0056, ls_beta_mean: -0.129444,
+   ls_beta_fullwindow: -0.136125, ls_sharpe_ex_top_years: 0.009297, ls_top_years: "1999,2003,2021", ls_top_years_share_pct: 98.091143, ls_sharpe_bear: 0.071025,
+   ls_sharpe_bull: 0.327527, decile_avg_ret_pct: "0.863,0.985,1.018,1.153,1.064,1.203,1.160,1.239,1.356,1.154", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw]
+stage2_failed: []
+character: >
+  A hump, not a gradient: D1 0.863 %/mo, rising to D9 1.356, D10 1.154; raw spread 3.50%/yr (Sharpe 0.352, raw MaxDD -24.2%). IC 0.0055 (NW t 1.56, ICIR 0.099), halves 0.0094 / 0.0016; tiers MEGA 0.0019, MID 0.0071, SMALL 0.0056; decay 0.0046 h1, 0.0005 h6, 0.0036 h12; turnover 19.5% / 17.9%. Beta -0.14 (ex ante -0.13): hedged 3.82%/yr (Sharpe 0.386, LS NW t 1.74, MaxDD -21.0%); ex-top-years Sharpe 0.009 (1999, 2003, 2021); bear 0.071 / bull 0.328. Coverage 51.7%, 101.6 names per decile; financials and utilities excluded by construction (Real Estate 0.5%).
+caveats:
+  - "the 1998-12 preflight probe reads 28.1% coverage (< 40 at that probe only); the block's 51.7% passes, so not inconclusive"
+  - "inventory-carrying firms only; deflated year-over-year growth from ART filings"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (1.56 < 2.5); ic_mean (0.0055) also fails; both halves positive and the raw spread passes. Coverage 51.7% >= 40, 101.6 names, 276 LS months: not inconclusive. Second-half IC (0.0016) is a sixth of the first.

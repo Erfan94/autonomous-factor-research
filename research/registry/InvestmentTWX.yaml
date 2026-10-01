@@ -1,0 +1,36 @@
+name: InvestmentTWX
+osap_acronym: Investment
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b5
+declaration_order: 8
+date_tested: "2026-10-01"
+run: "007"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Titman, Wei and Xie 2004 (JFQA); OSAP acronym Investment; SignalDoc sign -1, Cat.Economic investment"
+orientation: "low capex/revenue relative to its own 3-year mean = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/Investment/spec.md}
+dimension_override: ARY
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.192184, qcut_min_bins: 10, coverage_min_pct: 23.235423}
+stage1:   # from the run 007 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.000273, ic_tstat_nw: 0.149742, ic_half1_mean: -1.1e-05, ic_half2_mean: 0.000557, icir: 0.009055,
+   ls_sharpe: 0.341945, ls_ann_return_pct: 1.979498, ls_tstat_nw: 1.623479, ls_maxdd_pct: -18.558527, ls_raw_ann_return_pct: 2.676149,
+   ls_raw_sharpe: 0.479783, ls_raw_maxdd_pct: -12.64953, turnover_d10_pct: 12.287785, turnover_d1_pct: 12.323701, coverage_pct: 78.712552,
+   avg_names_per_decile: 154.653623, n_months: 276, ls_n_months: 276, ic_decay_h1: -0.000503, ic_decay_h6: -0.000622,
+   ic_decay_h12: -0.000814, tier_MEGA_ic_mean: 0.0005, tier_MID_ic_mean: -0.002, tier_SMALL_ic_mean: -0.0, ls_beta_mean: 0.058503,
+   ls_beta_fullwindow: 0.02828, ls_sharpe_ex_top_years: 0.097307, ls_top_years: "1999,2001,2010", ls_top_years_share_pct: 77.427727, ls_sharpe_bear: 0.205181,
+   ls_sharpe_bull: 0.303379, decile_avg_ret_pct: "0.874,1.091,0.956,1.098,1.062,1.042,1.108,1.112,1.053,1.097", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  The spread is a D1 step with no gradient: D1 0.874 %/mo, D2-D10 0.96-1.11 (D9 1.053, D10 1.097); raw spread 2.68%/yr at low vol (raw Sharpe 0.480, raw MaxDD -12.6%). IC 0.0003 (NW t 0.15), halves -0.0000 / 0.0006; tiers MEGA 0.0005, MID -0.0020, SMALL -0.0000; decay -0.0005 h1 to -0.0008 h12; turnover 12.3% / 12.3%. Beta 0.03 (ex ante 0.06): hedged 1.98%/yr (Sharpe 0.342, vol 5.79%); ex-top-years Sharpe 0.097 (1999, 2001, 2010); bear 0.205 / bull 0.303. Coverage 78.7%; Real Estate 65.2%.
+caveats:
+  - "owed read (batch13 alpha_review): the ~1.9% negative-x0 names from positive Sharadar capex sit in the extreme long decile (D10 under sign -1): D10 1.097 vs D9 1.053, nothing visible at decile-mean resolution"
+  - "the 1998-12 preflight probe reads 23.2% coverage (< 40 at that probe only); the block's 78.7% passes"
+  - "naming: OSAP acronym Investment; the v0 leg named Investment is AssetGrowth (total assets), a different signal; ARY flows, three distinct consecutive fiscal years"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (0.15 < 2.5); ic_mean and ic_half_min (-0.000011) also fail; the raw spread passes. Coverage 78.7%, 154.7 names, 276 LS months: not inconclusive. No flip (|t| 0.15). The rank IC is zero; the small raw spread is D1 alone.

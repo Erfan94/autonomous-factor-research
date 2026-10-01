@@ -1,0 +1,38 @@
+name: MaxRet
+osap_acronym: MaxRet
+status: stage2_pending
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b5
+declaration_order: 12
+date_tested: "2026-10-01"
+run: "007"
+stage2_run: null
+stage1_decision: PASS
+decided_by: "all bars"
+source: "Bali, Cakici and Whitelaw 2011 (JFE); SignalDoc sign -1, Cat.Economic volatility"
+orientation: "low maximum daily return of the signal month = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/MaxRet/spec.md}
+dimension_override: null
+history_gate_months: 1
+preflight: {masspoint_max_pct: 0.176134, qcut_min_bins: 10, coverage_min_pct: 99.561596}
+stage1:   # from the run 007 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.023275, ic_tstat_nw: 3.42389, ic_half1_mean: 0.028709, ic_half2_mean: 0.017842, icir: 0.201449,
+   ls_sharpe: 0.610736, ls_ann_return_pct: 10.567233, ls_tstat_nw: 3.010687, ls_maxdd_pct: -43.004941, ls_raw_ann_return_pct: 4.172814,
+   ls_raw_sharpe: 0.192136, ls_raw_maxdd_pct: -62.465252, turnover_d10_pct: 70.814085, turnover_d1_pct: 77.489782, coverage_pct: 99.802686,
+   avg_names_per_decile: 196.091304, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.018878, ic_decay_h6: 0.013057,
+   ic_decay_h12: 0.017232, tier_MEGA_ic_mean: 0.0208, tier_MID_ic_mean: 0.0227, tier_SMALL_ic_mean: 0.0243, ls_beta_mean: -0.804474,
+   ls_beta_fullwindow: -0.862248, ls_sharpe_ex_top_years: 0.543847, ls_top_years: "2000,2014,2021", ls_top_years_share_pct: 40.387701, ls_sharpe_bear: 0.194464,
+   ls_sharpe_bull: 0.908068, decile_avg_ret_pct: "0.767,0.933,0.908,0.928,0.961,0.949,0.976,1.060,1.082,1.114", delisting_adjusted_pct: 0.436673}
+stage1_failed: []
+stage2_failed: []
+character: >
+  D1-anchored but graded at the top: D1 (highest max return) 0.767 %/mo, D2-D7 flat 0.91-0.98, D8-D10 1.06-1.11; raw spread 4.17%/yr (Sharpe 0.192, raw MaxDD -62.5%). IC 0.0233 (NW t 3.42, ICIR 0.201), halves 0.0287 / 0.0178; tiers MEGA 0.0208, MID 0.0227, SMALL 0.0243 (raw LS Sharpe 0.114 / 0.245 / 0.221; MEGA raw MaxDD -82.2%). IC decays slowly (0.0189 h1, 0.0131 h6, 0.0172 h12) though turnover is 70.8% / 77.5%. Beta -0.86 (ex ante -0.80): the hedge adds 6.40 pp, 61% of the hedged 10.57%/yr (Sharpe 0.611, LS NW t 3.01, hit 64.9%). Ex-top-years Sharpe 0.544 (2000, 2014, 2021); bear 0.195 / bull 0.908; hedged LS -20.9% (1999), -25.3% (2009), -16.0% (2020), +49.9% (2000). Coverage 99.8%; merger-delisted returns 0.43%, performance 0.00%.
+caveats:
+  - "the hedged headline is mostly hedge: raw 4.17%/yr (Sharpe 0.192) vs hedged 10.57%/yr (Sharpe 0.611) at beta -0.86; not a Stage 1 bar (D11)"
+  - "likely overlap with IdioVol3F / IdioVolAHT: same Cat.Economic volatility (lottery / volatility construct), beta near -1, D1-anchored, the same hedged loss years 1999 / 2009 / 2020; annual IC same sign in 20 / 23 years vs IdioVol3F and 19 / 23 vs IdioVolAHT, correlation of annual IC 0.94 / 0.97; no Stage 2 number exists"
+  - "OSAP's MaxRet portfolio is value-weighted deciles; the harness LS is equal-weighted D10-D1 of within-sector ranks"
+  - "trading calendar from the universe's own SEP print dates; history_months 1 nulls names listing mid-month"
+  - "Cat.Economic volatility: no v0 seed family covers it"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Passes every Stage 1 bar: IC 0.0233 >= 0.010, NW t 3.42 >= 2.5, halves min 0.0178, raw spread 4.17%/yr > 0, coverage 99.8% >= 40, 196.1 names per decile, 276 LS months >= 248. Status stage2_pending; family to be assigned in Phase C. Among the six passers its IC is second (IdioVolAHT 0.0238, IdioVol3F 0.0229) and its NW t third (CBOperProf 3.74, GP 3.52); its ex-top-years Sharpe (0.544) is the highest of the three volatility passers (IdioVol3F 0.374); v0 halves 0.0275 / 0.0016.

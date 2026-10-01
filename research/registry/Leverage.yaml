@@ -1,0 +1,36 @@
+name: Leverage
+osap_acronym: Leverage
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b5
+declaration_order: 10
+date_tested: "2026-10-01"
+run: "007"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Bhandari 1988 (JF); SignalDoc sign +1, Cat.Economic leverage"
+orientation: "high total liabilities / market equity = attractive (SignalDoc sign +1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/Leverage/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.088928, qcut_min_bins: 10, coverage_min_pct: 98.597107}
+stage1:   # from the run 007 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.012464, ic_tstat_nw: 1.708141, ic_half1_mean: 0.016761, ic_half2_mean: 0.008167, icir: 0.114886,
+   ls_sharpe: -0.025332, ls_ann_return_pct: -0.503814, ls_tstat_nw: -0.114037, ls_maxdd_pct: -69.214626, ls_raw_ann_return_pct: 7.092804,
+   ls_raw_sharpe: 0.343514, ls_raw_maxdd_pct: -50.789774, turnover_d10_pct: 11.394255, turnover_d1_pct: 11.991859, coverage_pct: 99.580661,
+   avg_names_per_decile: 195.655072, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.01025, ic_decay_h6: 0.008137,
+   ic_decay_h12: 0.00914, tier_MEGA_ic_mean: 0.009, tier_MID_ic_mean: 0.0088, tier_SMALL_ic_mean: 0.0152, ls_beta_mean: 0.226823,
+   ls_beta_fullwindow: 0.301433, ls_sharpe_ex_top_years: -0.342088, ls_top_years: "2003,2009,2021", ls_top_years_share_pct: -996.398138, ls_sharpe_bear: 0.250823,
+   ls_sharpe_bull: -0.034408, decile_avg_ret_pct: "0.652,0.819,0.897,0.991,0.867,0.983,1.020,1.055,1.140,1.243", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_tstat_nw]
+stage2_failed: []
+character: >
+  Deciles rise near-monotonically from D1 0.652 to D10 1.243 %/mo (raw spread 7.09%/yr, Sharpe 0.344, raw MaxDD -50.8%), but the rank IC is weaker: 0.0125, NW t 1.71, ICIR 0.115. Halves 0.0168 / 0.0082; tiers MEGA 0.0090, MID 0.0088, SMALL 0.0152; decay 0.0102 h1, 0.0081 h6, 0.0091 h12; turnover 11.4% / 12.0%. Annual IC from -0.059 (2007) to +0.091 (2021). Beta 0.30 (ex ante 0.23): hedged -0.50%/yr (Sharpe -0.025, MaxDD -69.2%); ex-top-years Sharpe -0.342 (2003, 2009, 2021); bear 0.251 / bull -0.034. Coverage 99.6%.
+caveats:
+  - "liabilities / ME carries 1/ME: value-like and size-like by construction (v0 Value and Size seeds); not measured"
+  - "BookLeverage (b1, book denominator) carried the opposite sign (IC -0.0096, t -2.59)"
+  - "SF1.liabilities at ART, the latest filing with datekey <= signal date (a level)"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (1.71 < 2.5), its only failed bar; ic_mean 0.0125 passes (decided_by convention: ic_tstat_nw first). Coverage 99.6%, 195.7 names, 276 LS months: not inconclusive. The batch's nearest miss among the FAILs; the raw spread is the largest in the batch (7.09%/yr) and is mostly beta.
