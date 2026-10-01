@@ -1,6 +1,6 @@
 name: PctAcc
 osap_acronym: PctAcc
-status: stage2_pending
+status: accepted
 family: investment
 batch: stage1_b7
 declaration_order: 4
@@ -53,4 +53,4 @@ caveats:
   - "Stage 2 (run 012): residual NW t 4.67 exceeds its own Stage 1 IC NW t 4.03 (residual IC 0.0098 vs 0.0112): projecting on the legs lowered the IC's monthly dispersion; share 88%, the ladder's highest, below the near-100% trigger"
   - "Stage 2: the composite IC rose 0.0023 (paired t 2.81) while its LS barely moved (hedged +0.06, raw -0.01 pp/yr): the information shows in IC, not in the D10-D1 spread"
 decision: >
-  Stage 1 (run 009): passes every bar (IC 0.0112, NW t 4.03, halves min 0.0071, raw spread 4.74%/yr, coverage 95.6%, 187.8 names per decile, 276 LS months). Stage 2 (run 012, ladder 1 rung 1, vs the five v0 legs): PASS on both bars, residual IC 0.0098 with NW t 4.67 > 2.0 and guard paired hedged dLS +0.06 pp/yr, t 0.09 >= -2.0 (raw dLS -0.01 pp/yr, approximate t -0.02 = raw mean delta over the hedged paired SE). Joins investment beside Investment at weight 0.10. Diagnostics: dIC +0.0023 (t 2.81), spanning alpha 2.69%/yr (t 2.47, R2 0.15), dSharpe +0.014, MaxDD 4.3 pts better; WITH-arm beta -0.121 vs base -0.140 (ex ante -0.074 / -0.085), raw Sharpe 0.737 / 0.719, ex-top-years Sharpe 0.202 / 0.159. Status stays stage2_pending: RECORDS has no pre-application status; the harness PASS awaits the composite update (v1).
+  Stage 1 (run 009): passes every bar (IC 0.0112, NW t 4.03, halves min 0.0071, raw spread 4.74%/yr, coverage 95.6%, 187.8 names per decile, 276 LS months). Stage 2 (run 012, ladder 1 rung 1, vs the five v0 legs): PASS on both bars, residual IC 0.0098 with NW t 4.67 > 2.0 and guard paired hedged dLS +0.06 pp/yr, t 0.09 >= -2.0 (raw dLS -0.01 pp/yr, approximate t -0.02 = raw mean delta over the hedged paired SE). Joins investment beside Investment at weight 0.10. Diagnostics: dIC +0.0023 (t 2.81), spanning alpha 2.69%/yr (t 2.47, R2 0.15), dSharpe +0.014, MaxDD 4.3 pts better; WITH-arm beta -0.121 vs base -0.140 (ex ante -0.074 / -0.085), raw Sharpe 0.737 / 0.719, ex-top-years Sharpe 0.202 / 0.159. Accepted as v1 (factors/accepted/PctAcc.py, COMPOSITE_SHA cbeb16455bf4); run 013 baseline reproduces the rung 1 WITH arm to six places; tag v1-add-PctAcc owed.

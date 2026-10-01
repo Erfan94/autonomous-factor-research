@@ -92,3 +92,10 @@
 - Raw dLS next to the guard: -0.01 / +0.31 / +1.46 / +0.92 / -0.41 pp/yr, with approximate t -0.02 / 0.67 / 1.67 / 1.16 / -0.57 (hedged paired SE). The hedge adds about 1 pp on rungs 3 and 4.
 - XFIN facts: dIC -0.0005 (t -0.62), dSharpe -0.082, MaxDD 7.1 pts worse, beta -0.26 -> -0.34. It halves ShareIss5Y's weight. Both bars pass, and the rules decide on those bars alone.
 - Records: five rows carry stage2 fields with status stage2_pending; provenance_verified, 5 factor_evaluated and registry_rows_written are logged. No composite edit, manifest block or tag yet (v1..v5 owed on application).
+
+## 2026-10-01 — v1 = v0 + PctAcc (investment family): accepted and applied (runs 013, 014); tag v1-add-PctAcc owed
+- Accepted from run 012 rung 1 on both bars: residual IC NW t 4.67 > 2.0; guard paired hedged dLS t 0.09 >= -2.0. Raw dLS -0.01 pp/yr against hedged +0.06: both about 0, so the raw series does not contradict the guard. Ladder 1 faced a 5-leg base, where residual IC is easiest to find.
+- Applied: PctAcc.py moved to factors/accepted/ and appended to COMPOSITE_FACTORS; COMPOSITE_VERSION v1; COMPOSITE_SHA f9d9d9d95731 -> cbeb16455bf4, the other stamps unchanged; pytest 434 passed. Families: investment = Investment, PctAcc (0.10 each).
+- Run 013 (--baseline --stage 2) reproduces the rung 1 WITH arm to six places: IC 0.016858 (NW t 3.02), hedged Sharpe 0.61395, 7.382577%/yr, MaxDD -41.28, beta -0.121, raw Sharpe 0.737, ex-top-years Sharpe 0.202, turnover 27.6%.
+- Run 014 (Stage 3, never a gate): equal_rank_decile 0.614; icir_weighted 0.709 hedged (raw 0.494, beta -0.39, PctAcc weight 0.29); tier_neutral 0.604; buffered 0.555 at turnover 14.7%; vol_targeted 0.339.
+- Records: manifest block v1; provenance_verified (013, 014), construction_reported, composite_updated; PctAcc row accepted; index n_accepted 1. Next: v2 (CBOperProf) on the coordinator's word.

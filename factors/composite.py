@@ -209,13 +209,13 @@ MOMENTUM = FactorDef(
 # ACCEPTED FROM THE SEARCH — appended below in acceptance order, never edited
 # =============================================================================
 
-# (none yet — the search starts from v0)
+from factors.accepted.PctAcc import FACTOR as PCTACC  # v1, run 012 rung 1, family investment
 
-COMPOSITE_FACTORS = [SIZE, VALUE, PROFITABILITY, INVESTMENT, MOMENTUM]
+COMPOSITE_FACTORS = [SIZE, VALUE, PROFITABILITY, INVESTMENT, MOMENTUM, PCTACC]
 
 # Model version this file currently represents. factor-evaluator bumps it when
 # a factor is accepted, and MODEL_MANIFEST.yaml must gain a matching block.
-COMPOSITE_VERSION = "v0"
+COMPOSITE_VERSION = "v1"
 
 
 def active_factors():

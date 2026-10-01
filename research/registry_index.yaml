@@ -5,9 +5,9 @@ search_accounting:
   n_stage1_tested: 107
   n_stage1_passed: 24
   n_stage2_tested: 5
-  n_accepted: 0
+  n_accepted: 1
   n_inconclusive: 0
-  by_status: {"baseline": 5, "rejected": 83, "stage2_pending": 24}
+  by_status: {"accepted": 1, "baseline": 5, "rejected": 83, "stage2_pending": 23}
 factors:
   - {name: AM, status: rejected, batch: stage1_b1, ic: 0.0098, ic_t: 1.26, sharpe: -0.149, ret: -3.17, raw_ret: 4.72, cov: 99.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.34, sh_exreg: -0.449, family: null, decided_by: "ic_tstat_nw", run: "003"}
   - {name: Accruals, status: rejected, batch: stage1_b1, ic: 0.0048, ic_t: 1.84, sharpe: 0.329, ret: 2.49, raw_ret: 2.92, cov: 76.7, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.04, sh_exreg: 0.107, family: null, decided_by: "ic_tstat_nw", run: "003"}
@@ -87,7 +87,7 @@ factors:
   - {name: OPLeverage, status: rejected, batch: stage1_b7, ic: 0.0087, ic_t: 2.89, sharpe: 0.429, ret: 3.46, raw_ret: 4.09, cov: 85.4, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.10, sh_exreg: 0.153, family: null, decided_by: "ic_mean", run: "009"}
   - {name: OperProfRD, status: stage2_pending, batch: stage1_b7, ic: 0.0192, ic_t: 3.18, sharpe: 0.733, ret: 10.94, raw_ret: 6.44, cov: 70.7, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.60, sh_exreg: 0.452, family: "profitability", decided_by: "all bars", run: "009"}
   - {name: OrgCap, status: rejected, batch: stage1_b7, ic: 0.0054, ic_t: 1.70, sharpe: 0.401, ret: 4.36, raw_ret: 4.21, cov: 50.4, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.08, sh_exreg: 0.194, family: null, decided_by: "ic_tstat_nw", run: "009"}
-  - {name: PctAcc, status: stage2_pending, batch: stage1_b7, ic: 0.0112, ic_t: 4.03, sharpe: 0.672, ret: 4.15, raw_ret: 4.74, cov: 95.6, resid_t: 4.67, dic_t: 2.81, dls_t: 0.09, span_t: 2.47, d_sharpe: 0.014, beta: -0.04, sh_exreg: 0.462, family: "investment", decided_by: "all bars", run: "009"}
+  - {name: PctAcc, status: accepted, batch: stage1_b7, ic: 0.0112, ic_t: 4.03, sharpe: 0.672, ret: 4.15, raw_ret: 4.74, cov: 95.6, resid_t: 4.67, dic_t: 2.81, dls_t: 0.09, span_t: 2.47, d_sharpe: 0.014, beta: -0.04, sh_exreg: 0.462, family: "investment", decided_by: "all bars", run: "009"}
   - {name: PctTotAcc, status: rejected, batch: stage1_b7, ic: 0.0022, ic_t: 0.91, sharpe: 0.377, ret: 2.16, raw_ret: 2.48, cov: 95.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.08, sh_exreg: 0.187, family: null, decided_by: "ic_tstat_nw", run: "009"}
   - {name: Price, status: rejected, batch: stage1_b7, ic: -0.0100, ic_t: -1.41, sharpe: -0.315, ret: -5.89, raw_ret: 2.98, cov: 100.0, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.77, sh_exreg: -0.766, family: null, decided_by: "ic_tstat_nw", run: "009"}
   - {name: PriceDelayRsq, status: rejected, batch: stage1_b7, ic: -0.0070, ic_t: -2.12, sharpe: 0.001, ret: 0.01, raw_ret: -1.09, cov: 87.8, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.17, sh_exreg: -0.232, family: null, decided_by: "ic_tstat_nw", run: "009"}

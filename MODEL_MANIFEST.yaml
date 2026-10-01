@@ -47,3 +47,50 @@ versions:
       - "Information is thin and front-loaded: NW t 2.62, second-half IC 0.0016, negative IC 2017-2020; 2000/2001/2003 carry 79% of the summed LS return (ex-top-years Sharpe 0.16); bear 1.07 vs bull 0.46."
       - "Early blend is thinner than 91.6% full-leg coverage says: Profitability 56.0% and Investment 47.8% at the 1998-12 probe, i.e. in the years that carry the return; decile spread is short-leg-led (D1-D2 0.26), economics small-cap (MEGA raw Sharpe 0.32)."
       - "Hedge cost 0.12 Sharpe (raw 0.72 -> 0.60, 1.9 pp/yr) on a negative-beta LS (-0.14): the ex-ante beta is small and noisy; on icir_weighted (beta -0.45) the same hedge adds 0.20 Sharpe by adding back market exposure."
+  - version: v1
+    date: "2026-10-01"
+    git_tag: v1-add-PctAcc               # owed; created by the coordinator after the commit (decision tag_naming)
+    legs:
+      - {name: Size, family: size, osap_acronym: Size, weight: 1.0}
+      - {name: Value, family: value, osap_acronym: BM, weight: 1.0}
+      - {name: Profitability, family: profitability, osap_acronym: OperProf, weight: 1.0}
+      - {name: Investment, family: investment, osap_acronym: AssetGrowth, weight: 1.0}
+      - {name: Momentum, family: momentum, osap_acronym: Mom12m, weight: 1.0}
+      - {name: PctAcc, family: investment, osap_acronym: PctAcc, weight: 1.0}
+    families: "size:Size|value:Value|profitability:Profitability|investment:Investment,PctAcc|momentum:Momentum"
+    construction_rule: "two-level family blend (1/5 per family, equal within: Investment and PctAcc 0.10 each, renormalised) of within-sector percentile ranks (fallback cross-section if <10 names); D10-D1 equal-weight, hedged by ex-ante 36m beta to the universe cap-weighted return"
+    stamps: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: cbeb16455bf4, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8}
+    window: {eval_start: "1999-01-01", eval_end: "2021-12-31", include_holdout: false}
+    ratchet:                             # run 012, ladder 1 rung 1 (stage2_order rank 1), base v0 (5 legs)
+      run: "012"
+      rung: 1
+      base: v0
+      bars: {resid_ic_tstat_nw: 4.6736, resid_ic_bound: "> 2.0", paired_delta_ls_tstat: 0.0874, guard_bound: ">= -2.0"}
+      diagnostics: {resid_ic_mean: 0.0098, resid_ic_share: 0.88, paired_delta_ic_mean: 0.0023, paired_delta_ic_tstat: 2.81, paired_delta_ls_ann_pct: 0.06, raw_delta_ls_ann_pct: -0.01, spanning_alpha_tstat_nw: 2.47, spanning_r2: 0.15, corr_to_composite: 0.39, delta_ls_sharpe: 0.014, maxdd_worsening_pct: -4.28}
+      beta_regime: {base_ls_beta_fullwindow: -0.140, cand_ls_beta_fullwindow: -0.121, base_ls_beta_mean: -0.085, cand_ls_beta_mean: -0.074, base_ls_raw_sharpe: 0.719, cand_ls_raw_sharpe: 0.737, base_ls_sharpe_ex_top_years: 0.159, cand_ls_sharpe_ex_top_years: 0.202}
+    baseline:                            # run 013, GROSS; LS figures hedged, raw and beta beside; equals run 012 rung 1 WITH arm to six places
+      run: "013"
+      ic: {ic_mean: 0.0169, ic_tstat_nw: 3.02, icir: 0.209, ic_half1_mean: 0.0304, ic_half2_mean: 0.0033}
+      ic_decay: {h1: 0.0113, h2: 0.0097, h3: 0.0116, h6: 0.0097, h12: 0.0120}
+      ls_hedged: {ls_sharpe: 0.614, ls_tstat_nw: 2.34, ls_ann_return_pct: 7.38, ls_ann_vol_pct: 12.02, ls_maxdd_pct: -41.28, ls_hit_rate_pct: 56.5}
+      breadth: {turnover_d10_pct: 27.6, turnover_d1_pct: 24.1, coverage_pct: 100.0, avg_names_per_decile: 196.5, n_months: 276}
+      decile_avg_ret_pct: "0.488,0.677,0.740,0.919,0.993,0.992,1.044,1.178,1.382,1.256"
+      ls_raw: {ls_raw_sharpe: 0.737, ls_raw_ann_return_pct: 9.22, ls_raw_maxdd_pct: -38.13}
+      beta: {ls_beta_mean: -0.074, ls_beta_fullwindow: -0.121, ls_hedged_months: 264}
+      ex_regime: {ls_sharpe_ex_top_years: 0.202, ls_top_years: "2000,2001,2003", ls_top_years_share_pct: 74.9}
+      bear_bull: {ls_sharpe_bear: 0.853, ls_sharpe_bull: 0.554, n_bear_months: 64, n_bull_months: 200}
+      tiers: {MEGA: {ic: 0.0159, raw_ls_sharpe: 0.276, n: 393}, MID: {ic: 0.0147, raw_ls_sharpe: 0.735, n: 589}, SMALL: {ic: 0.0193, raw_ls_sharpe: 0.706, n: 981}}
+      coverage: {leg_coverage_pct_full: 91.4, leg_coverage_worst: "f_prof 93.1%", delisting_adjusted_pct: 0.44}
+    construction:                        # run 014, Stage 3, GROSS, hedged; raw Sharpe and full-window beta beside; never a gate
+      run: "014"
+      columns: [sharpe, ls_t_nw, ann_ret_pct, vol_pct, maxdd_pct, worst_12m_pct, turnover_long_pct, turnover_short_pct, raw_sharpe, beta_fullwindow, sharpe_ex_top_years]
+      equal_rank_decile: [0.614, 2.34, 7.38, 12.02, -41.3, -30.3, 27.6, 24.1, 0.737, -0.12, 0.20]
+      tier_neutral:      [0.604, 2.35, 7.67, 12.69, -49.4, -32.3, 31.2, 28.9, 0.640, -0.20, 0.13]
+      icir_weighted:     [0.709, 3.15, 8.48, 11.97, -27.3, -26.9, 26.4, 27.2, 0.494, -0.39, 0.36]
+      buffered:          [0.555, 2.13, 6.07, 10.95, -43.5, -28.0, 14.7, 10.7, 0.665, -0.13, 0.14]
+      vol_targeted:      [0.339, 1.38, 4.04, 11.90, -45.0, -29.8, 27.6, 24.1, 0.511, -0.01, 0.13]
+      icir_weights_avg: "Size=0.030;Value=0.093;Profitability=0.322;Investment=0.098;Momentum=0.168;PctAcc=0.290"
+    character:
+      - "PctAcc adds IC, not spread: IC 0.0145 -> 0.0169 (NW t 2.62 -> 3.02, paired dIC t 2.81) while hedged LS return moves 7.32 -> 7.38%/yr (raw 9.23 -> 9.22); residual IC t 4.67 at 88% of its own IC, the near-orthogonal accrual signal it was expected to be."
+      - "Still front-loaded: second-half IC 0.0033, 2017-2020 annual IC negative; 2000/2001/2003 carry 75% of the summed LS (ex-top-years Sharpe 0.20); MaxDD improves 45.6 -> 41.3; MEGA raw Sharpe 0.28 vs MID/SMALL 0.74/0.71."
+      - "Beta -0.12 full-window; the hedge still costs 1.8 pp/yr (raw 0.74 -> hedged 0.61 Sharpe); icir_weighted puts 0.29 on PctAcc and reaches 0.709 hedged at beta -0.39 (raw 0.494)."
