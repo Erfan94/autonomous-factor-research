@@ -1,0 +1,34 @@
+name: CashProd
+osap_acronym: CashProd
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b2
+declaration_order: 3
+date_tested: "2026-09-30"
+run: "004"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Chandrashekar and Rao 2009 (WP); SignalDoc sign -1, Cat.Economic profitability alt"
+orientation: "low (market equity - total assets) / cash and short-term investments = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/CashProd/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.056148, qcut_min_bins: 10, coverage_min_pct: 97.720298}
+stage1:   # from the run 004 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.00297, ic_tstat_nw: 0.470505, ic_half1_mean: 0.009433, ic_half2_mean: -0.003493, icir: 0.032088,
+   ls_sharpe: -0.12706, ls_ann_return_pct: -1.748736, ls_tstat_nw: -0.56784, ls_maxdd_pct: -62.309488, ls_raw_ann_return_pct: 3.737874,
+   ls_raw_sharpe: 0.258938, ls_raw_maxdd_pct: -46.465796, turnover_d10_pct: 14.491716, turnover_d1_pct: 16.412088, coverage_pct: 99.193224,
+   avg_names_per_decile: 194.893841, n_months: 276, ls_n_months: 276, ic_decay_h1: -0.00017, ic_decay_h6: -0.000842,
+   ic_decay_h12: 0.00112, tier_MEGA_ic_mean: -0.0006, tier_MID_ic_mean: 0.0032, tier_SMALL_ic_mean: 0.0037, ls_beta_mean: 0.216205,
+   ls_beta_fullwindow: 0.260919, ls_sharpe_ex_top_years: -0.482998, ls_top_years: "2000,2001,2009", ls_top_years_share_pct: -172.279116, ls_sharpe_bear: 0.396189,
+   ls_sharpe_bull: -0.241733, decile_avg_ret_pct: "0.778,0.911,0.900,0.882,0.980,0.986,1.004,1.103,1.040,1.089", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  Deciles rise from D1 0.778 to D10 1.089 %/mo (peak D8 1.103) and the raw spread is 3.74%/yr (Sharpe 0.259, MaxDD -46.5%), but the rank IC is nil (0.0030, NW t 0.47) and changes sign across halves (0.0094 then -0.0035); tiers MEGA -0.0006, MID 0.0032, SMALL 0.0037. The spread is a D1 effect (names priced far above book assets per unit of cash). IC at lags 1-12 is about zero (-0.0008 to 0.0011); turnover 14.5% / 16.4%. Beta 0.26 (ex ante 0.22); hedged -1.75%/yr (Sharpe -0.127). Ex-top-years Sharpe -0.483 (2000, 2001, 2009); bear 0.396 / bull -0.242.
+caveats:
+  - "hedged minus raw -5.5 pp/yr at ex-ante beta 0.22: recorded as reported; a fact for the open hedge_gap_check_before_phase_d"
+  - "che <= 0 or null set NaN rather than OSAP's +/-inf; fxusd != 1 nulled"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (0.47 < 2.5); ic_mean (0.0030) and ic_half_min (-0.0035) also fail. Raw spread (3.74%/yr), coverage 99.2%, 194.9 names and 276 months pass. Not inconclusive.

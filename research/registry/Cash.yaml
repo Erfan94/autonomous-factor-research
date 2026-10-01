@@ -1,0 +1,34 @@
+name: Cash
+osap_acronym: Cash
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b2
+declaration_order: 2
+date_tested: "2026-09-30"
+run: "004"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Palazzo 2012 (JFE); SignalDoc sign +1, Cat.Economic asset composition"
+orientation: "high cash and short-term investments / total assets = attractive"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/Cash/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 1.065246, qcut_min_bins: 10, coverage_min_pct: 98.772468}
+stage1:   # from the run 004 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: -0.009145, ic_tstat_nw: -1.857391, ic_half1_mean: -0.009059, ic_half2_mean: -0.009232, icir: -0.121013,
+   ls_sharpe: -0.017131, ls_ann_return_pct: -0.242197, ls_tstat_nw: -0.076485, ls_maxdd_pct: -65.325919, ls_raw_ann_return_pct: -0.568822,
+   ls_raw_sharpe: -0.036437, ls_raw_maxdd_pct: -69.375433, turnover_d10_pct: 12.071168, turnover_d1_pct: 13.674313, coverage_pct: 99.622521,
+   avg_names_per_decile: 195.737319, n_months: 276, ls_n_months: 276, ic_decay_h1: -0.010374, ic_decay_h6: -0.008777,
+   ic_decay_h12: -0.007741, tier_MEGA_ic_mean: 0.0018, tier_MID_ic_mean: -0.0085, tier_SMALL_ic_mean: -0.0135, ls_beta_mean: 0.377188,
+   ls_beta_fullwindow: 0.329828, ls_sharpe_ex_top_years: -0.426414, ls_top_years: "1999,2002,2020", ls_top_years_share_pct: -1839.461179, ls_sharpe_bear: 0.217798,
+   ls_sharpe_bull: -0.380804, decile_avg_ret_pct: "0.973,0.950,0.914,0.970,0.964,1.045,1.054,0.998,0.867,0.926", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min, ls_raw_ann_return_pct]
+stage2_failed: []
+character: >
+  Wrong-signed in the OSAP direction: IC -0.0091 (NW t -1.86), negative in both halves (-0.0091 / -0.0092), in MID (-0.0085) and SMALL (-0.0135), near zero in MEGA (+0.0018). Deciles hump in the middle (D6-D7 1.045-1.054 %/mo) and D10 (0.926) sits below D1 (0.973); raw spread -0.57%/yr (Sharpe -0.036, MaxDD -69.4%) at beta 0.33 (ex ante 0.38): cash-rich names carry market beta. IC at lags 1-12 stays at -0.010 to -0.008; turnover 12.1% / 13.7%. Hedged -0.24%/yr (Sharpe -0.017); ex-top-years Sharpe -0.426 (1999, 2002, 2020); bear 0.218 / bull -0.381.
+caveats:
+  - "|NW t| 1.86 < 2.74: no flip hypothesis qualifies"
+  - "SignalDoc Cat.Economic asset composition; no v0 leg of that category"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (-1.86 < 2.5); ic_mean (-0.0091), ic_half_min (-0.0092) and the raw spread (-0.57%/yr) also fail. Coverage 99.6%, 195.7 names and 276 months pass. Not inconclusive: the sample is full.

@@ -1,0 +1,39 @@
+name: CF
+osap_acronym: CF
+status: stage2_pending
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b2
+declaration_order: 1
+date_tested: "2026-09-30"
+run: "004"
+stage2_run: null
+stage1_decision: PASS
+decided_by: "all bars"
+source: "Lakonishok, Shleifer, Vishny 1994 (JF); SignalDoc sign +1, Cat.Economic valuation"
+orientation: "high cash flow (income before extraordinary items + D&A) / market equity = attractive"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/CF/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.076628, qcut_min_bins: 10, coverage_min_pct: 57.211749}
+stage1:   # from the run 004 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.020063, ic_tstat_nw: 3.027856, ic_half1_mean: 0.03312, ic_half2_mean: 0.007006, icir: 0.212529,
+   ls_sharpe: 0.178679, ls_ann_return_pct: 2.746462, ls_tstat_nw: 0.754404, ls_maxdd_pct: -64.164345, ls_raw_ann_return_pct: 3.315823,
+   ls_raw_sharpe: 0.201422, ls_raw_maxdd_pct: -59.803396, turnover_d10_pct: 16.967822, turnover_d1_pct: 16.35893, coverage_pct: 96.058877,
+   avg_names_per_decile: 188.735507, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.015481, ic_decay_h6: 0.014281,
+   ic_decay_h12: 0.015534, tier_MEGA_ic_mean: 0.0178, tier_MID_ic_mean: 0.0157, tier_SMALL_ic_mean: 0.0223, ls_beta_mean: -0.275768,
+   ls_beta_fullwindow: -0.288963, ls_sharpe_ex_top_years: -0.168954, ls_top_years: "2000,2001,2002", ls_top_years_share_pct: 159.560684, ls_sharpe_bear: 0.517798,
+   ls_sharpe_bull: 0.176424, decile_avg_ret_pct: "0.944,0.862,0.821,0.912,0.799,0.967,1.011,1.106,1.238,1.220", delisting_adjusted_pct: 0.436673}
+stage1_failed: []
+stage2_failed: []
+character: >
+  The spread is a top-decile effect: D9/D10 earn 1.238/1.220 %/mo against a 0.799-0.967 middle, and D1 (0.944) beats D2-D5, so the short leg does not grade. IC 0.0201 (NW t 3.03), but the raw D10-D1 is 3.32%/yr at 16.5% vol (Sharpe 0.201, MaxDD -59.8%) and the hedged LS NW t is 0.75: the spread is not distinguishable from zero. Halves 0.0331 then 0.0070; 2000-2002 ICs are 0.085-0.095 and the 2011-2020 annual ICs average -0.0006, the second half resting on 2021 (+0.089). Tiers are uniform (IC MEGA 0.0178, MID 0.0157, SMALL 0.0223; raw LS Sharpe 0.157 / 0.284 / 0.189). IC is flat at lags 1-12 (0.0155 to 0.0155); turnover 17.0% / 16.4%. Beta -0.29 (ex ante -0.28), yet the hedged series earns 2.75%/yr (Sharpe 0.179), below raw. outside 2000-2002 the annual hedged LS sums to -29 pp (2020 -35.6%, 1999 -23.3%); ex-top-years Sharpe -0.169; bear 0.518 / bull 0.176. Coverage 96.1%, sector-uniform (92.7-97.7%); performance delistings 0.00%, merger 0.43%, universe-wide.
+caveats:
+  - "the spread rests on 2000-2002 (outside them the annual hedged LS sums to -29 pp; ex-top-years Sharpe -0.169); the 2011-2020 annual ICs average about zero and the second half (0.0070) is carried by 2021 (+0.089)"
+  - "IC NW t 3.03 but LS NW t 0.75, raw MaxDD -59.8% (MEGA bucket raw MaxDD -78.1%): the information is in the rank, not in a decile spread distinguishable from zero"
+  - "hedged below raw (2.75 vs 3.32%/yr) at a negative beta (-0.29): recorded as reported; a fact for the open hedge_gap_check_before_phase_d"
+  - "SignalDoc Cat.Economic valuation: (ib + dp) / ME is a price-scaled cash-earnings ratio, nearest v0 Value (B/M) by category and sharing the cash-earnings concept with CBOperProf; overlap is a Stage 2 question and no Stage 2 number exists"
+  - "approx translation: TTM to the latest filed quarter vs OSAP's fiscal-year figure with a 6-month lag; ib = netinc + netincdis; dp = depamor (incl. ROU amortisation from 2019); NASDAQ included against SignalDoc's exchcd (1,2) filter; fxusd != 1 nulled"
+  - "coverage 57.2% at the 1998-12 probe (ART TTM gap), about 92% from 1999-03 per the translation"
+  - "delisting_adjusted_pct 0.44% is the universe-wide forward-return mix, identical on all 12 blocks, not this factor's short leg"
+decision: >
+  Passes every Stage 1 bar: IC 0.0201 >= 0.010, NW t 3.03 >= 2.5, both halves positive (min 0.0070), raw spread 3.32%/yr > 0, coverage 96.1% >= 40, 188.7 names per decile, 276 LS months. Status stage2_pending; family to be assigned in Phase C. The second Stage 1 passer after CBOperProf (IC 0.0209, t 3.74, raw 7.24%/yr), weaker on t and on the spread. Standalone IC is above the v0 blend's 0.0145 / t 2.62, with the same front-loaded shape (v0 halves 0.0275 / 0.0016, top years 2000/2001/2003). The residual bar at Stage 2, not this screen, decides.

@@ -25,3 +25,10 @@
 - Flip: BidAskSpread |t| 2.77 >= 2.74 qualifies BidAskSpreadFlip as a second hypothesis (flipped LS beta about -0.97, raw Sharpe about 0.04). BookLeverage (2.59) and BPEBM (2.06) do not qualify.
 - Provenance verified on 12 blocks with 0 validation warnings. process_finding: docs/CONSTRUCTION.md already names f_bidaskspreadflip as the construction-layer spread source (bootstrap).
 - Hedge reading: for AM and BMdec, hedged return is 7.9 and 3.1 pp below raw at mean beta 0.25 and -0.05. That gap comes from ex-ante beta timing and matters for the hedged Stage 2 guard.
+
+## 2026-10-01 — Stage 1 batch 2 (run 004): CF passes, 11 rejected, 0 inconclusive
+- PASS CF (cash flow / market equity, Cat.Economic valuation): IC 0.0201, NW t 3.03, halves 0.0331 / 0.0070, raw LS 3.32%/yr (Sharpe 0.20, LS NW t 0.75), coverage 96.1%. The spread is in D9/D10; D1 beats D2-D5. Outside 2000-2002 the annual LS sums to -29 pp (ex-top-years Sharpe -0.17), and the 2011-2020 ICs average about zero. Beta -0.29. Status stage2_pending; family owed in Phase C.
+- Rejected on ic_tstat_nw: Cash -1.86, CashProd 0.47, ChAssetTurnover 2.24, ChEQ 1.40, ChInv 1.51, ChInvIA 0.36, ChNWC 2.04, ChTax 1.42, CompositeDebtIssuance 1.49 (each also fails ic_mean), CompEquIss 2.44 (its only failed bar; 2003-2021, 228 m).
+- Rejected on ic_mean alone: ChNNCOA 0.0094 < 0.010, with NW t 4.15, the highest of the 24 screened so far.
+- No flip qualifies (Cash |t| 1.86 < 2.74). CompositeDebtIssuance passes coverage (46.2%) and names (91.2), so it is not inconclusive. Its 1999-2000 cross-sections are thin (0.3% at the 1998-12 probe) and are its best LS years.
+- Provenance verified on 12 blocks, 0 validation warnings. Hedge-gap facts for the open check: CashProd hedged -5.5 pp vs raw at beta 0.22; ChEQ -2.5 pp at beta ~0; CF -0.6 pp at beta -0.29.

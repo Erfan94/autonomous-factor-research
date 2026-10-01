@@ -1,0 +1,35 @@
+name: ChNNCOA
+osap_acronym: ChNNCOA
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b2
+declaration_order: 8
+date_tested: "2026-09-30"
+run: "004"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_mean"
+source: "Soliman 2008 (AR); SignalDoc sign -1, Cat.Economic investment alt"
+orientation: "low 12-month change in net noncurrent operating assets / total assets = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/ChNNCOA/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.115473, qcut_min_bins: 10, coverage_min_pct: 37.965804}
+stage1:   # from the run 004 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.009373, ic_tstat_nw: 4.148633, ic_half1_mean: 0.014631, ic_half2_mean: 0.004114, icir: 0.270255,
+   ls_sharpe: 0.656155, ls_ann_return_pct: 4.489204, ls_tstat_nw: 2.631272, ls_maxdd_pct: -38.415386, ls_raw_ann_return_pct: 4.81117,
+   ls_raw_sharpe: 0.697101, ls_raw_maxdd_pct: -40.053808, turnover_d10_pct: 20.828589, turnover_d1_pct: 19.029069, coverage_pct: 77.170918,
+   avg_names_per_decile: 151.624638, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.006601, ic_decay_h6: 0.002843,
+   ic_decay_h12: 0.002617, tier_MEGA_ic_mean: 0.0104, tier_MID_ic_mean: 0.0063, tier_SMALL_ic_mean: 0.0108, ls_beta_mean: -0.012705,
+   ls_beta_fullwindow: -0.067729, ls_sharpe_ex_top_years: 0.233473, ls_top_years: "2000,2001,2003", ls_top_years_share_pct: 71.3407, ls_sharpe_bear: 1.253152,
+   ls_sharpe_bull: 0.406157, decile_avg_ret_pct: "0.762,0.856,0.973,1.034,1.121,1.116,1.155,1.180,1.117,1.163", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean]
+stage2_failed: []
+character: >
+  The most consistent member of the batch: IC 0.0094 with NW t 4.15 (ICIR 0.270), both halves positive (0.0146 / 0.0041), MEGA 0.0104, MID 0.0063, SMALL 0.0108; annual IC positive in 18 of 23 years, every year 1999-2008. Deciles rise from D1 0.762 to a D5-D10 plateau (1.12-1.18 %/mo); raw spread 4.81%/yr (Sharpe 0.697, MaxDD -40.1%). IC decays from 0.0066 (lag 1) to 0.0026 (lag 12); turnover 20.8% / 19.0%. Beta -0.07 (ex ante -0.01); hedged 4.49%/yr (Sharpe 0.656); ex-top-years Sharpe 0.233 (2000, 2001, 2003); bear 1.253 / bull 0.406.
+caveats:
+  - "fails ic_mean alone, by 0.0006; every other bar passes"
+  - "second-half IC 0.0041 is under a third of the first half's 0.0146; 2015-2016 and 2019-2020 negative"
+  - "coverage 77.2% (38.0% at the 1998-12 probe); Real Estate 12.2%; null assetsc / investmentsnc read as 0 where a filing exists"
+decision: >
+  Rejected at Stage 1 on ic_mean (0.0094 < 0.010), the only bar it fails: NW t 4.15, halves (min 0.0041), raw spread 4.81%/yr, coverage 77.2%, 151.6 names and 276 months pass. decided_by is ic_mean under stage1_decided_by_convention because ic_tstat_nw passes. Not inconclusive: the sample is full. Its NW t is the highest of the 24 screened so far (CBOperProf 3.74); the pre-registered magnitude bar decides.

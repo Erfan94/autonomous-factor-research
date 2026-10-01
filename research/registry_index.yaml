@@ -1,13 +1,13 @@
 # DERIVED — rebuilt by `python3 scripts/records.py index` from research/registry/*.yaml.
 # One line per factor; the full row is research/registry/<name>.yaml. Never edit by hand.
 search_accounting:
-  n_candidates_suggested: 12
-  n_stage1_tested: 12
-  n_stage1_passed: 1
+  n_candidates_suggested: 24
+  n_stage1_tested: 24
+  n_stage1_passed: 2
   n_stage2_tested: 0
   n_accepted: 0
   n_inconclusive: 0
-  by_status: {"baseline": 5, "rejected": 11, "stage2_pending": 1}
+  by_status: {"baseline": 5, "rejected": 22, "stage2_pending": 2}
 factors:
   - {name: AM, status: rejected, batch: stage1_b1, ic: 0.0098, ic_t: 1.26, sharpe: -0.149, ret: -3.17, raw_ret: 4.72, cov: 99.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.34, sh_exreg: -0.449, family: null, decided_by: "ic_tstat_nw", run: "003"}
   - {name: Accruals, status: rejected, batch: stage1_b1, ic: 0.0048, ic_t: 1.84, sharpe: 0.329, ret: 2.49, raw_ret: 2.92, cov: 76.7, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.04, sh_exreg: 0.107, family: null, decided_by: "ic_tstat_nw", run: "003"}
@@ -21,6 +21,18 @@ factors:
   - {name: BidAskSpread, status: rejected, batch: stage1_b1, ic: -0.0205, ic_t: -2.77, sharpe: -0.482, ret: -8.63, raw_ret: -0.94, cov: 99.1, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.97, sh_exreg: -0.889, family: null, decided_by: "ic_tstat_nw", run: "003"}
   - {name: BookLeverage, status: rejected, batch: stage1_b1, ic: -0.0096, ic_t: -2.59, sharpe: -0.130, ret: -1.29, raw_ret: -3.63, cov: 99.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.04, sh_exreg: -0.398, family: null, decided_by: "ic_tstat_nw", run: "003"}
   - {name: CBOperProf, status: stage2_pending, batch: stage1_b1, ic: 0.0209, ic_t: 3.74, sharpe: 0.901, ret: 11.24, raw_ret: 7.24, cov: 73.4, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.57, sh_exreg: 0.638, family: null, decided_by: "all bars", run: "003"}
+  - {name: CF, status: stage2_pending, batch: stage1_b2, ic: 0.0201, ic_t: 3.03, sharpe: 0.179, ret: 2.75, raw_ret: 3.32, cov: 96.1, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.29, sh_exreg: -0.169, family: null, decided_by: "all bars", run: "004"}
+  - {name: Cash, status: rejected, batch: stage1_b2, ic: -0.0091, ic_t: -1.86, sharpe: -0.017, ret: -0.24, raw_ret: -0.57, cov: 99.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.33, sh_exreg: -0.426, family: null, decided_by: "ic_tstat_nw", run: "004"}
+  - {name: CashProd, status: rejected, batch: stage1_b2, ic: 0.0030, ic_t: 0.47, sharpe: -0.127, ret: -1.75, raw_ret: 3.74, cov: 99.2, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.26, sh_exreg: -0.483, family: null, decided_by: "ic_tstat_nw", run: "004"}
+  - {name: ChAssetTurnover, status: rejected, batch: stage1_b2, ic: 0.0058, ic_t: 2.24, sharpe: 0.376, ret: 2.39, raw_ret: 2.37, cov: 83.4, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.06, sh_exreg: 0.136, family: null, decided_by: "ic_tstat_nw", run: "004"}
+  - {name: ChEQ, status: rejected, batch: stage1_b2, ic: 0.0057, ic_t: 1.40, sharpe: 0.455, ret: 5.17, raw_ret: 7.66, cov: 91.2, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.02, sh_exreg: 0.092, family: null, decided_by: "ic_tstat_nw", run: "004"}
+  - {name: ChInv, status: rejected, batch: stage1_b2, ic: 0.0052, ic_t: 1.51, sharpe: 0.649, ret: 5.65, raw_ret: 5.14, cov: 60.3, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.10, sh_exreg: 0.359, family: null, decided_by: "ic_tstat_nw", run: "004"}
+  - {name: ChInvIA, status: rejected, batch: stage1_b2, ic: 0.0009, ic_t: 0.36, sharpe: 0.564, ret: 3.69, raw_ret: 4.04, cov: 87.2, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.11, sh_exreg: 0.331, family: null, decided_by: "ic_tstat_nw", run: "004"}
+  - {name: ChNNCOA, status: rejected, batch: stage1_b2, ic: 0.0094, ic_t: 4.15, sharpe: 0.656, ret: 4.49, raw_ret: 4.81, cov: 77.2, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.07, sh_exreg: 0.233, family: null, decided_by: "ic_mean", run: "004"}
+  - {name: ChNWC, status: rejected, batch: stage1_b2, ic: 0.0042, ic_t: 2.04, sharpe: 0.221, ret: 1.35, raw_ret: 1.15, cov: 77.0, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.02, sh_exreg: 0.035, family: null, decided_by: "ic_tstat_nw", run: "004"}
+  - {name: ChTax, status: rejected, batch: stage1_b2, ic: 0.0048, ic_t: 1.42, sharpe: 0.128, ret: 1.02, raw_ret: 0.09, cov: 87.1, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.03, sh_exreg: -0.161, family: null, decided_by: "ic_tstat_nw", run: "004"}
+  - {name: CompEquIss, status: rejected, batch: stage1_b2, ic: 0.0119, ic_t: 2.44, sharpe: 0.614, ret: 5.25, raw_ret: 3.62, cov: 65.1, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.06, sh_exreg: 0.375, family: null, decided_by: "ic_tstat_nw", run: "004"}
+  - {name: CompositeDebtIssuance, status: rejected, batch: stage1_b2, ic: 0.0046, ic_t: 1.49, sharpe: 0.319, ret: 2.81, raw_ret: 1.33, cov: 46.2, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.11, sh_exreg: -0.018, family: null, decided_by: "ic_tstat_nw", run: "004"}
   - {name: Investment, status: baseline, batch: BASELINE, ic: null, ic_t: null, sharpe: null, ret: null, raw_ret: null, cov: null, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: null, sh_exreg: null, family: "investment", decided_by: null, run: "001"}
   - {name: Momentum, status: baseline, batch: BASELINE, ic: null, ic_t: null, sharpe: null, ret: null, raw_ret: null, cov: null, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: null, sh_exreg: null, family: "momentum", decided_by: null, run: "001"}
   - {name: Profitability, status: baseline, batch: BASELINE, ic: null, ic_t: null, sharpe: null, ret: null, raw_ret: null, cov: null, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: null, sh_exreg: null, family: "profitability", decided_by: null, run: "001"}

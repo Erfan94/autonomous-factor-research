@@ -1,0 +1,33 @@
+name: ChTax
+osap_acronym: ChTax
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b2
+declaration_order: 10
+date_tested: "2026-09-30"
+run: "004"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Thomas and Zhang 2011 (JAR); SignalDoc sign +1, Cat.Economic other"
+orientation: "high 4-quarter change in total tax expense / lagged total assets = attractive"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/ChTax/spec.md}
+dimension_override: ARQ
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.308483, qcut_min_bins: 10, coverage_min_pct: 43.445857}
+stage1:   # from the run 004 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.00484, ic_tstat_nw: 1.423278, ic_half1_mean: 0.004172, ic_half2_mean: 0.005508, icir: 0.093597,
+   ls_sharpe: 0.128085, ls_ann_return_pct: 1.021587, ls_tstat_nw: 0.571501, ls_maxdd_pct: -37.154627, ls_raw_ann_return_pct: 0.094563,
+   ls_raw_sharpe: 0.012186, ls_raw_maxdd_pct: -41.409673, turnover_d10_pct: 27.681691, turnover_d1_pct: 30.110507, coverage_pct: 87.10929,
+   avg_names_per_decile: 171.151449, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.000143, ic_decay_h6: 0.00346,
+   ic_decay_h12: 0.002613, tier_MEGA_ic_mean: 0.0041, tier_MID_ic_mean: 0.0066, tier_SMALL_ic_mean: 0.0046, ls_beta_mean: -0.000803,
+   ls_beta_fullwindow: -0.03012, ls_sharpe_ex_top_years: -0.160906, ls_top_years: "2000,2002,2007", ls_top_years_share_pct: 206.76469, ls_sharpe_bear: -0.302198,
+   ls_sharpe_bull: 0.348483, decile_avg_ret_pct: "1.047,1.075,1.013,1.005,1.020,0.992,1.041,1.068,1.066,1.055", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw]
+stage2_failed: []
+character: >
+  IC 0.0048 (NW t 1.42), halves 0.0042 / 0.0055, tiers 0.0041-0.0066. Deciles are flat (0.99-1.08 %/mo; D1 1.047, D10 1.055); raw spread 0.09%/yr (Sharpe 0.012, MaxDD -41.4%). IC rises with the lag (0.0001 at lag 1, 0.0035 at lag 6). Turnover 27.7% / 30.1%, the highest in the batch. Beta -0.03 (ex ante 0.00); hedged 1.02%/yr (Sharpe 0.128); ex-top-years Sharpe -0.161 (2000, 2002, 2007); bear -0.302 / bull 0.348.
+caveats:
+  - "ARQ dimension override (quarterly tax expense vs the year-ago quarter); taxexp zero in both quarters set NaN"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (1.42 < 2.5); ic_mean (0.0048) also fails. Halves (min 0.0042), raw spread 0.09%/yr, coverage 87.1%, 171.2 names and 276 months pass. Not inconclusive.

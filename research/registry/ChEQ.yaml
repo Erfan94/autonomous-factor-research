@@ -1,0 +1,35 @@
+name: ChEQ
+osap_acronym: ChEQ
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b2
+declaration_order: 5
+date_tested: "2026-09-30"
+run: "004"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Lockwood and Prombutr 2010 (JFR); SignalDoc sign -1, Cat.Economic investment"
+orientation: "low year-over-year book-equity growth = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/ChEQ/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.093197, qcut_min_bins: 10, coverage_min_pct: 47.040772}
+stage1:   # from the run 004 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.005744, ic_tstat_nw: 1.403739, ic_half1_mean: 0.006836, ic_half2_mean: 0.004653, icir: 0.089895,
+   ls_sharpe: 0.454652, ls_ann_return_pct: 5.168023, ls_tstat_nw: 1.98582, ls_maxdd_pct: -33.66558, ls_raw_ann_return_pct: 7.661655,
+   ls_raw_sharpe: 0.691786, ls_raw_maxdd_pct: -22.194423, turnover_d10_pct: 16.686522, turnover_d1_pct: 15.76509, coverage_pct: 91.206236,
+   avg_names_per_decile: 179.201087, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.007128, ic_decay_h6: 0.005097,
+   ic_decay_h12: 0.002866, tier_MEGA_ic_mean: 0.0081, tier_MID_ic_mean: 0.0065, tier_SMALL_ic_mean: 0.0027, ls_beta_mean: -0.010827,
+   ls_beta_fullwindow: 0.024379, ls_sharpe_ex_top_years: 0.092213, ls_top_years: "2000,2009,2021", ls_top_years_share_pct: 85.026879, ls_sharpe_bear: 0.431221,
+   ls_sharpe_bull: 0.434726, decile_avg_ret_pct: "0.567,0.958,0.965,1.074,0.933,1.008,1.125,1.146,1.150,1.205", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw]
+stage2_failed: []
+character: >
+  The raw spread is strong (7.66%/yr, Sharpe 0.692, MaxDD -22.2%) and sits almost entirely in D1: 0.567 %/mo for the fastest book-equity growers against 0.933-1.205 for D2-D10. The rank IC is weak (0.0057, NW t 1.40; halves 0.0068 / 0.0047), annual IC from -0.038 (2007) to +0.042 (2000). Tier IC MEGA 0.0081, MID 0.0065, SMALL 0.0027, but SMALL carries the raw LS (Sharpe 0.687). IC decays from 0.0071 (lag 1) to 0.0029 (lag 12); turnover 16.7% / 15.8%. Beta 0.02 (ex ante -0.01); hedged 5.17%/yr (Sharpe 0.455); ex-top-years Sharpe 0.092 (2000, 2009, 2021); bear 0.431 / bull 0.435.
+caveats:
+  - "LS strong while IC weak: a one-decile (D1) effect that the rank IC dilutes"
+  - "hedged minus raw -2.5 pp/yr at a beta near zero: recorded as reported; a fact for the open hedge_gap_check_before_phase_d"
+  - "SignalDoc Cat.Economic investment, the category of v0 Investment (asset growth); overlap would only be measured at Stage 2, which it does not reach"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (1.40 < 2.5); ic_mean (0.0057) also fails. Halves (min 0.0047), raw spread 7.66%/yr, coverage 91.2%, 179.2 names and 276 months pass. Not inconclusive.

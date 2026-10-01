@@ -1,0 +1,33 @@
+name: ChInvIA
+osap_acronym: ChInvIA
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b2
+declaration_order: 7
+date_tested: "2026-09-30"
+run: "004"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Abarbanell and Bushee 1998 (AR); SignalDoc sign -1, Cat.Economic investment growth"
+orientation: "low industry-adjusted capex growth = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/ChInvIA/spec.md}
+dimension_override: ARY
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.158228, qcut_min_bins: 10, coverage_min_pct: 42.525208}
+stage1:   # from the run 004 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.000936, ic_tstat_nw: 0.357518, ic_half1_mean: 0.004478, ic_half2_mean: -0.002606, icir: 0.022765,
+   ls_sharpe: 0.564291, ls_ann_return_pct: 3.68759, ls_tstat_nw: 2.529885, ls_maxdd_pct: -21.20307, ls_raw_ann_return_pct: 4.041856,
+   ls_raw_sharpe: 0.590865, ls_raw_maxdd_pct: -21.755727, turnover_d10_pct: 15.735341, turnover_d1_pct: 14.347778, coverage_pct: 87.215508,
+   avg_names_per_decile: 171.360145, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.001585, ic_decay_h6: 0.00146,
+   ic_decay_h12: 0.000573, tier_MEGA_ic_mean: 0.0052, tier_MID_ic_mean: -0.0027, tier_SMALL_ic_mean: 0.0003, ls_beta_mean: -0.090502,
+   ls_beta_fullwindow: -0.106784, ls_sharpe_ex_top_years: 0.33078, ls_top_years: "2000,2003,2016", ls_top_years_share_pct: 50.763897, ls_sharpe_bear: 0.778106,
+   ls_sharpe_bull: 0.510186, decile_avg_ret_pct: "0.800,1.000,1.073,1.041,1.036,1.100,1.010,1.055,1.032,1.136", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  No rank information: IC 0.0009 (NW t 0.36), halves 0.0045 / -0.0026, MEGA 0.0052, MID -0.0027, SMALL 0.0003. Deciles: D1 0.800 %/mo, D2-D10 flat at 1.00-1.14, so the raw spread (4.04%/yr, Sharpe 0.591, MaxDD -21.8%) is a D1 effect (the largest industry-adjusted capex growers). IC at lags 1-12 stays at or below 0.0017; turnover 15.7% / 14.3%. Beta -0.11 (ex ante -0.09); hedged 3.69%/yr (Sharpe 0.564); ex-top-years Sharpe 0.331 (2000, 2003, 2016); bear 0.778 / bull 0.510.
+caveats:
+  - "ARY dimension override (annual capex); growth vs the mean of the two prior years (one-year fallback), minus the market-wide SIC2 mean"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (0.36 < 2.5); ic_mean (0.0009) and ic_half_min (-0.0026) also fail. Raw spread 4.04%/yr, coverage 87.2%, 171.4 names and 276 months pass. Not inconclusive.

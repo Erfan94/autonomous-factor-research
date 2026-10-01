@@ -1,0 +1,36 @@
+name: CompEquIss
+osap_acronym: CompEquIss
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b2
+declaration_order: 11
+date_tested: "2026-09-30"
+run: "004"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Daniel and Titman 2006 (JF); SignalDoc sign -1, Cat.Economic external financing"
+orientation: "low 5-year composite equity issuance (log ME growth minus 5-year return) = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/CompEquIss/spec.md}
+dimension_override: ARQ
+history_gate_months: 60
+preflight: {masspoint_max_pct: 0.065531, qcut_min_bins: 0, coverage_min_pct: 0.0}
+stage1:   # from the run 004 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.011917, ic_tstat_nw: 2.441489, ic_half1_mean: 0.013407, ic_half2_mean: 0.010426, icir: 0.168596,
+   ls_sharpe: 0.614296, ls_ann_return_pct: 5.251771, ls_tstat_nw: 2.895482, ls_maxdd_pct: -15.662556, ls_raw_ann_return_pct: 3.622306,
+   ls_raw_sharpe: 0.428336, ls_raw_maxdd_pct: -20.66883, turnover_d10_pct: 17.640204, turnover_d1_pct: 16.797137, coverage_pct: 65.082005,
+   avg_names_per_decile: 154.792982, n_months: 228, ls_n_months: 228, ic_decay_h1: 0.01298, ic_decay_h6: 0.010305,
+   ic_decay_h12: 0.009606, tier_MEGA_ic_mean: 0.0242, tier_MID_ic_mean: 0.0071, tier_SMALL_ic_mean: 0.0108, ls_beta_mean: -0.092478,
+   ls_beta_fullwindow: -0.063507, ls_sharpe_ex_top_years: 0.375187, ls_top_years: "2007,2015,2017", ls_top_years_share_pct: 47.410408, ls_sharpe_bear: 0.534241,
+   ls_sharpe_bull: 0.647322, decile_avg_ret_pct: "0.991,1.095,1.111,1.085,1.137,1.084,1.140,1.201,1.283,1.293", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_tstat_nw]
+stage2_failed: []
+character: >
+  Window 2003-01..2021-12 (228 months: the 60-month gate on a 1997-12 panel), so it never sees 1999-2002 and its halves split at mid-2012 (114 months each): 0.0134 / 0.0104. IC 0.0119 (NW t 2.44). Deciles rise steadily from D1 0.991 to D10 1.293 %/mo; raw spread 3.62%/yr (Sharpe 0.428, MaxDD -20.7%). MEGA carries the IC (0.0242, raw LS Sharpe 0.468), MID 0.0071, SMALL 0.0108. IC decays slowly (0.0130 at lag 1, 0.0096 at lag 12); turnover 17.6% / 16.8%. Beta -0.06 (ex ante -0.09); hedged 5.25%/yr (Sharpe 0.614; 216 of 228 months hedged); ex-top-years Sharpe 0.375 (2007, 2015, 2017); bear 0.534 / bull 0.647.
+caveats:
+  - "fails ic_tstat_nw alone (2.44 < 2.5); ic_mean 0.0119 and both halves pass"
+  - "covers 2003-2021 only: 228 LS months against the n_months-scaled floor of 205; the 1998-12 preflight probe read 0% coverage (data start)"
+  - "ME = SEP close x ARQ sharesbas; the 60-month return is the simple closeadj return"
+  - "SignalDoc Cat.Economic external financing; no v0 leg of that category"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (2.44 < 2.5), the only bar it fails: IC 0.0119, halves (min 0.0104), raw spread 3.62%/yr, coverage 65.1%, 154.8 names and 228 LS months (floor 205) pass. Not inconclusive: 228 months exceed both the floor and min_months 120.

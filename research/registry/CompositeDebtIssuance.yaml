@@ -1,0 +1,36 @@
+name: CompositeDebtIssuance
+osap_acronym: CompositeDebtIssuance
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b2
+declaration_order: 12
+date_tested: "2026-09-30"
+run: "004"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Lyandres, Sun and Zhang 2008 (RFS); SignalDoc sign -1, Cat.Economic external financing"
+orientation: "low 5-year log growth in total debt = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/CompositeDebtIssuance/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 16.666667, qcut_min_bins: 10, coverage_min_pct: 0.263043}
+stage1:   # from the run 004 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.00465, ic_tstat_nw: 1.490294, ic_half1_mean: 0.010152, ic_half2_mean: -0.000811, icir: 0.090118,
+   ls_sharpe: 0.31879, ls_ann_return_pct: 2.808227, ls_tstat_nw: 1.386919, ls_maxdd_pct: -27.85521, ls_raw_ann_return_pct: 1.333961,
+   ls_raw_sharpe: 0.152753, ls_raw_maxdd_pct: -38.640879, turnover_d10_pct: 13.12266, turnover_d1_pct: 12.701762, coverage_pct: 46.242545,
+   avg_names_per_decile: 91.185091, n_months: 275, ls_n_months: 275, ic_decay_h1: 0.00397, ic_decay_h6: 6.2e-05,
+   ic_decay_h12: 0.002268, tier_MEGA_ic_mean: 0.006, tier_MID_ic_mean: 0.0064, tier_SMALL_ic_mean: -0.0027, ls_beta_mean: -0.069556,
+   ls_beta_fullwindow: -0.110067, ls_sharpe_ex_top_years: -0.01776, ls_top_years: "1999,2000,2014", ls_top_years_share_pct: 103.675728, ls_sharpe_bear: -0.718366,
+   ls_sharpe_bull: 0.510925, decile_avg_ret_pct: "1.023,0.923,1.079,1.152,1.134,1.096,1.053,1.068,1.113,1.135", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  IC 0.0047 (NW t 1.49), gone in the second half (0.0102 then -0.0008); annual IC 2016-2020 all negative. Deciles are flat-to-humped (D1 1.023, D2 0.923, D4 1.152, D10 1.135 %/mo); raw spread 1.33%/yr (Sharpe 0.153, MaxDD -38.6%). Tier IC MEGA 0.0060, MID 0.0064, SMALL -0.0027. IC at lags 1-12 between 0.0001 and 0.0040; turnover 13.1% / 12.7%. Beta -0.11 (ex ante -0.07); hedged 2.81%/yr (Sharpe 0.319). its best LS years are 1999 (+32.4%), 2000 (+26.9%) and 2014 (+11.2%), outside which the annual hedged LS sums to -2.0 pp; ex-top-years Sharpe -0.018; bear -0.718 / bull 0.511.
+caveats:
+  - "coverage 46.2% passes the 40% bar, but the 1998-12 probe read 0.3% (6 names; 80-month lookback on a 1997-12 panel): the 1999-2000 cross-sections, its two best LS years, are thin, and avg_names_per_decile (91.2, a whole-window mean) cannot see it"
+  - "Financial Services 6.6%, Real Estate 9.2%, Technology 36.9% coverage"
+  - "275 IC months (one early month dropped); the tier table's ALL row (IC 0.0039, 274 months, bucket minimum 30 names) differs from the headline, consistent with the bucket minimum of 30 names"
+  - "hedged above raw (2.81 vs 1.33%/yr) at beta -0.07 to -0.11: recorded as reported"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (1.49 < 2.5); ic_mean (0.0047) and ic_half_min (-0.0008) also fail. Raw spread 1.33%/yr, coverage 46.2% >= 40, 91.2 names >= 30 and 275 LS months >= 247 pass, so it is not inconclusive under the pre-registered sample bars. The thin early years flatter rather than depress its numbers (1999 IC +0.058), so the rejection does not rest on them.

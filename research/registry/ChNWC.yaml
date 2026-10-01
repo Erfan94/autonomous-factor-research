@@ -1,0 +1,33 @@
+name: ChNWC
+osap_acronym: ChNWC
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b2
+declaration_order: 9
+date_tested: "2026-09-30"
+run: "004"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Soliman 2008 (AR); SignalDoc sign -1, Cat.Economic investment alt"
+orientation: "low 12-month change in non-cash, non-debt net working capital / total assets = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/ChNWC/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.116279, qcut_min_bins: 10, coverage_min_pct: 37.702762}
+stage1:   # from the run 004 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.004199, ic_tstat_nw: 2.040104, ic_half1_mean: 0.004886, ic_half2_mean: 0.003511, icir: 0.124166,
+   ls_sharpe: 0.220663, ls_ann_return_pct: 1.345175, ls_tstat_nw: 0.985137, ls_maxdd_pct: -21.271208, ls_raw_ann_return_pct: 1.14919,
+   ls_raw_sharpe: 0.19424, ls_raw_maxdd_pct: -19.410012, turnover_d10_pct: 22.518058, turnover_d1_pct: 23.032208, coverage_pct: 77.036855,
+   avg_names_per_decile: 151.361232, n_months: 276, ls_n_months: 276, ic_decay_h1: -0.000903, ic_decay_h6: -0.002348,
+   ic_decay_h12: 0.002184, tier_MEGA_ic_mean: 0.0036, tier_MID_ic_mean: 0.0077, tier_SMALL_ic_mean: 0.0024, ls_beta_mean: -0.043503,
+   ls_beta_fullwindow: -0.017978, ls_sharpe_ex_top_years: 0.035229, ls_top_years: "2000,2002,2015", ls_top_years_share_pct: 86.849819, ls_sharpe_bear: 0.101011,
+   ls_sharpe_bull: 0.208478, decile_avg_ret_pct: "0.912,0.906,1.038,1.076,1.068,1.012,1.027,1.229,1.184,1.008", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw]
+stage2_failed: []
+character: >
+  IC 0.0042 (NW t 2.04), halves 0.0049 / 0.0035, MEGA 0.0036, MID 0.0077, SMALL 0.0024. Deciles are humped (D8 1.229, D10 1.008, D1 0.912 %/mo); raw spread 1.15%/yr (Sharpe 0.194, MaxDD -19.4%). IC at lags 1-12 between -0.0023 and 0.0022; turnover 22.5% / 23.0%. Beta -0.02 (ex ante -0.04); hedged 1.35%/yr (Sharpe 0.221); ex-top-years Sharpe 0.035 (2000, 2002, 2015); bear 0.101 / bull 0.208.
+caveats:
+  - "coverage 77.0% (37.7% at the 1998-12 probe); Real Estate 12.1%; names without a current/noncurrent split are NaN"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (2.04 < 2.5); ic_mean (0.0042) also fails. Halves (min 0.0035), raw spread 1.15%/yr, coverage 77.0%, 151.4 names and 276 months pass. Not inconclusive.

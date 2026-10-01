@@ -1,0 +1,34 @@
+name: ChInv
+osap_acronym: ChInv
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b2
+declaration_order: 6
+date_tested: "2026-09-30"
+run: "004"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Thomas and Zhang 2002 (RAS); SignalDoc sign -1, Cat.Economic investment alt"
+orientation: "low 12-month inventory change / average total assets = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/ChInv/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.245298, qcut_min_bins: 10, coverage_min_pct: 33.581762}
+stage1:   # from the run 004 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.005165, ic_tstat_nw: 1.51058, ic_half1_mean: 0.00934, ic_half2_mean: 0.00099, icir: 0.096997,
+   ls_sharpe: 0.649175, ls_ann_return_pct: 5.646299, ls_tstat_nw: 2.591681, ls_maxdd_pct: -25.278723, ls_raw_ann_return_pct: 5.141135,
+   ls_raw_sharpe: 0.602484, ls_raw_maxdd_pct: -27.243127, turnover_d10_pct: 19.213515, turnover_d1_pct: 16.526749, coverage_pct: 60.290771,
+   avg_names_per_decile: 118.458696, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.003715, ic_decay_h6: -0.003123,
+   ic_decay_h12: 0.000237, tier_MEGA_ic_mean: -0.0006, tier_MID_ic_mean: 0.0055, tier_SMALL_ic_mean: 0.007, ls_beta_mean: -0.08639,
+   ls_beta_fullwindow: -0.102762, ls_sharpe_ex_top_years: 0.358837, ls_top_years: "1999,2001,2021", ls_top_years_share_pct: 57.762087, ls_sharpe_bear: 0.703871,
+   ls_sharpe_bull: 0.467987, decile_avg_ret_pct: "0.882,0.941,0.964,1.077,0.998,1.048,1.111,1.093,1.217,1.310", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw]
+stage2_failed: []
+character: >
+  Deciles rise fairly steadily from D1 0.882 to D10 1.310 %/mo; raw spread 5.14%/yr (Sharpe 0.603, MaxDD -27.2%), but the rank IC is weak (0.0052, NW t 1.51) and fades (halves 0.0093 / 0.0010). MEGA carries nothing (IC -0.0006, raw LS Sharpe 0.050); MID 0.0055, SMALL 0.0070. IC at lags 1-12: 0.0037, 0.0041, 0.0011, -0.0031, 0.0002; turnover 19.2% / 16.5%. Beta -0.10 (ex ante -0.09); hedged 5.65%/yr (Sharpe 0.649); ex-top-years Sharpe 0.359 (1999, 2001, 2021); bear 0.704 / bull 0.468.
+caveats:
+  - "coverage 60.3% (33.6% at the 1998-12 probe); Financial Services 2.2% (no inventory line)"
+  - "names with zero or null inventory in both periods are NaN"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (1.51 < 2.5); ic_mean (0.0052) also fails. Halves (min 0.0010), raw spread 5.14%/yr, coverage 60.3%, 118.5 names and 276 months pass. Not inconclusive.
