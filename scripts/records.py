@@ -214,6 +214,7 @@ def osap_frontier(rows):
     # A registry row accounts for its osap_acronym, not its file name: the leg
     # row Investment.yaml is OSAP's AssetGrowth, and must not hide OSAP's own
     # `Investment` predictor (Titman-Wei-Xie). A row without one counts by name.
+    row_names = set(rows)                           # phase_gate compares FILE names, not acronyms
     row_acr = set()
     for _n in rows:
         _p = REG / f"{_n}.yaml"
@@ -230,7 +231,7 @@ def osap_frontier(rows):
         print("  open frontier: " + ", ".join(open_names[:n]) +
               (f" ... (+{len(open_names) - n})" if len(open_names) > n else ""))
         print("  -> screen them, or log each with a reason in osap_source/osap_frontier.yaml")
-    ok_src = phase_gate(rows)
+    ok_src = phase_gate(row_names)
     stale = sorted(set(excl) - acr)
     if stale:
         print(f"  osap_frontier.yaml names that are not OSAP predictors: {stale}")
