@@ -49,7 +49,7 @@ versions:
       - "Hedge cost 0.12 Sharpe (raw 0.72 -> 0.60, 1.9 pp/yr) on a negative-beta LS (-0.14): the ex-ante beta is small and noisy; on icir_weighted (beta -0.45) the same hedge adds 0.20 Sharpe by adding back market exposure."
   - version: v1
     date: "2026-10-01"
-    git_tag: v1-add-PctAcc               # owed; created by the coordinator after the commit (decision tag_naming)
+    git_tag: v1-add-PctAcc               # MIS-POINTED: tag sits on 2e37d4b (pre-v1); v1 is commit 0d52a33. Not moved (tags are never moved); owner to decide (process_finding tag_v1_mispointed)
     legs:
       - {name: Size, family: size, osap_acronym: Size, weight: 1.0}
       - {name: Value, family: value, osap_acronym: BM, weight: 1.0}
