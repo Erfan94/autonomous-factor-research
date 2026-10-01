@@ -1,25 +1,27 @@
 # Phase E — the institutional construction layer (carried design; re-declared at Phase E)
 
-Status: TEMPLATE, carried from the predecessor's final design (its r2), with
-its parameters in `config/construction_layer.yaml`. It is re-frozen at
-Phase E, before the first layer number, with the three changes
-`docs/DECISIONS.md` D7 owes it:
+Status: RE-FROZEN 2026-10-01 at Phase E, before the first layer number, on
+the finished composite (v14, COMPOSITE_SHA 7fe6f001e708). Carried from the
+predecessor's final design (its r2), with its parameters in
+`config/construction_layer.yaml`, plus the three changes `docs/DECISIONS.md`
+D7 owed it (§9, items 24–29):
 
-1. **A market-beta constraint.** The predecessor's book was sector- and
-   dollar-neutral but not beta-neutral; its holdout loss sat in the beta the
-   optimiser never saw. Phase E adds a market factor (the universe's
-   cap-weighted return, `analytics.universe_market_return`) to the risk
-   model and a zero-beta constraint to the projection (§5), or an
-   equivalent ex-ante hedge of the book.
-2. **A spread source that is not a composite leg.** §6 reads the measured
-   half-spread from a column a composite leg happens to carry; the layer
-   refuses to run without that leg. Phase E builds the spread series in the
-   harness (`data_layer`, cached like the market series) so the cost model
-   does not depend on which factors were accepted.
-3. **Regime cuts from the D5 rule.** `report.regime_cuts.ex_years` is empty
-   until Phase E sets it to the finished composite's top-3 long-short
-   calendar years in the decision window (config `diagnostics`), never to a
-   year learned on another window.
+1. **A market-beta constraint (done).** The predecessor's book was sector-
+   and dollar-neutral but not beta-neutral; its holdout loss sat in the beta
+   the optimiser never saw. The layer's default constraint is now
+   `sector_beta_neutral`: [S | β]'w = 0, the sector groups plus each name's
+   trailing beta on D4's market M (§5). The sector-only book is kept as the
+   reference row `layer_no_beta_constraint`, and every row reports the
+   realised beta of its net return on M.
+2. **A spread source that is not a composite leg (done).** The half-spread
+   is read from a Corwin–Schultz series the harness builds from SEP daily
+   high/low (`data_layer.load_or_build_cs_spread`, cached on DATA_SHA), so
+   the cost model does not depend on which factors were accepted (§6). The
+   runner no longer refuses a composite without a spread leg.
+3. **Regime cuts from the D5 rule (done).** `report.regime_cuts.ex_years` =
+   [2000, 2001, 2021]: v14's k = 3 calendar years with the highest
+   compounded hedged long-short return in the decision window (config
+   `diagnostics.ex_regime_top_years`; run 042 `ls_top_years`).
 
 Every dated declaration below is the predecessor's; the dates say when its
 design was fixed, not when this project's is. §9's resolutions carry over
@@ -60,8 +62,12 @@ Per (ID, month t):
 - RET_END and SIGNAL_ASOF
 - liq_tier, sector, industry_group
 - mkt_cap_usd and adv_usd, as of the signal date
-- `f_bidaskspreadflip`: the raw Corwin-Schultz spread, the signal-month mean,
-  with ≥ 12 valid days
+- `cs_spread` (2026-10-01): the raw Corwin-Schultz spread, the signal-month
+  mean of the daily two-day estimates, with ≥ 12 valid days. Built by the
+  harness from SEP (`data_layer.cs_spread_monthly`), not by any leg, and
+  attached to the frame on (ID, SIGNAL_ASOF) by `attach_spread` (§6).
+- M_t, D4's market: the universe's cap-weighted monthly_ret
+  (`analytics.universe_market_return` of the frame), for the betas (§5)
 
 Point-in-time rule: every estimate used at month t is built from months s
 whose RET_END(s) ≤ SIGNAL_ASOF(t), in practice s ≤ t−1. The spread is as of
@@ -130,24 +136,35 @@ volatility of 10% × clip(IC_t/IC_ref, 0, 1), with the gross capped at 2.0.
 
 ## 5. Optimiser (closed form, then constraints by projection; no QP solver)
 
-**Target:** w* = argmax α'w − (λ/2) w'Σw s.t. S'w = 0, where S holds the 12
-sector-group columns.
+**Target:** w* = argmax α'w − (λ/2) w'Σw s.t. A'w = 0, A = [S | β] (the
+default `optimiser.constraints: sector_beta_neutral`, 2026-10-01), where S
+holds the 12 sector-group columns and β each name's market beta.
 - Every name belongs to exactly one group, so S'w = 0 implies 1'w = 0
   (dollar neutrality). There is no separate dollar row, which keeps the KKT
   system non-singular (the r1 defect).
+- **β_i,t** is the OLS slope of the name's monthly_ret on M (D4's market:
+  the universe's cap-weighted total return) over months t−36..t−1 only
+  (RET_END(s) ≤ SIGNAL_ASOF(t)), on the months both exist, needing ≥ 12 —
+  `analytics.trailing_beta`'s estimate, vectorised over names (tested
+  equal). A name with no estimate takes its sector-month median, then the
+  month's median. A month in which no name has one (only the panel's first
+  year, before the book starts) drops the β column and is counted.
+- β is a constraint, not a risk factor: the sector dummies already span the
+  market's level in the risk model, and the D7 requirement is a zero
+  ex-ante beta.
 - Σ = XFX' + D, inverted by Woodbury.
 - w* is then scaled to the month's gross budget G_t (§3), so λ drops out.
 
 **Pipeline, in this order, every month:**
 1. **Target** w* (above).
-2. **Name cap:** |w_i| ≤ max(1%, 5/N_side). Clip, re-project onto S'w = 0,
+2. **Name cap:** |w_i| ≤ max(1%, 5/N_side). Clip, re-project onto A'w = 0,
    iterate to 1e-10 (at most 50 iterations).
 3. **Buffer (no-trade region)** against the HELD book w_held. For
    |w*_i − w_held,i| ≤ 0.25·|w*_i| + 2 bp, keep w_held,i. Otherwise move a
    fraction κ = 0.5 toward w*_i.
 4. **Participation cap:** |Δw_i| × AUM ≤ 5% × adv_usd_i × 21. A trade above
    the cap is cut to it.
-5. **Final re-projection** onto S'w = 0 and the gross budget G_t. This step changes
+5. **Final re-projection** onto A'w = 0 and the gross budget G_t. This step changes
    other names' trades. Those trades are counted and charged like any other,
    and the block reports the share of turnover the re-projection causes.
 
@@ -157,9 +174,19 @@ final book earns monthly_ret(t). This is optimistic for a book whose
 participation cap assumes about 21 days of trading, so a sensitivity row
 (`layer_exec_half_month`, §6) lets the traded Δw earn only half of the month.
 
+**The projection (2026-10-01).** Every step that imposes the constraint
+(1, 2, 5) projects through one operator (`construction_layer.Constraint`):
+the orthogonal projection onto {A'w = 0} moving only the free names,
+w_f −= A_f (A_f'A_f)⁺ A'w. With S alone it is the equal shift within each
+group, the same arithmetic as before, and a test holds the sector-only book
+bit-identical to the pre-D7 code. Step 5's water-fill moves names only
+within their participation headroom in the direction the projection moves
+them; a residual no name can absorb is projected anyway and counted as
+overrides.
+
 **The gross budget is a hard bound (declared 2026-09-27).** After step 5's last
 re-projection, a uniform scale brings the gross to at most G_t. A uniform
-scale keeps every group sum at zero. The block reports
+scale keeps every linear constraint (group sums and the beta) at zero. The block reports
 `gross_budget_max_excess` and `months_gross_exceeds_budget`, and both must
 be 0.
 
@@ -178,8 +205,19 @@ close at the Shumway return with no trading cost.
 
 One-way cost of trading $Q in name i is c_i(Q) = hs_i + η σ_d,i √(Q / ADV_i).
 
-- **hs_i:** HALF the measured Corwin-Schultz spread, `f_bidaskspreadflip`/2,
-  floored at 1 bp.
+- **hs_i:** HALF the measured Corwin-Schultz spread, `cs_spread`/2, floored
+  at 1 bp. `cs_spread` (2026-10-01, D7 item 2) is built by the harness, not
+  read from a leg: `data_layer.cs_spread_monthly` runs OSAP's BidAskSpread
+  program (the translation in `factors/candidates/BidAskSpread.py`,
+  reproduced line for line; the harness imports no factor) on the SEP rows
+  of the 125 calendar days ending at the signal date — screen, retained
+  range, high/low > 8 dropped, overnight adjustment, the two-day estimator,
+  negative daily estimates set to 0 — and averages the signal month's daily
+  estimates, NaN below 12. It equals the candidate's raw value bit for bit
+  (a synthetic test, and 1,984 real name-months in five months spot-checked
+  on DATA_SHA 198b281de1a0); the factor's history gate is a scoring gate and
+  is not applied. Cached as `cs_spread_monthly_<key>.parquet`, the key on
+  DATA_SHA and the builder's source.
   - A name without a valid spread (fewer than 12 valid days) takes that
     month's median hs of its liquidity tier.
   - This is measured per name and per month, so it carries the 1999–2002
@@ -226,8 +264,11 @@ One-way cost of trading $Q in name i is c_i(Q) = hs_i + η σ_d,i √(Q / ADV_i)
   - the Stage 3 equal_rank_decile and buffered variants, gross and with the
     same cost model applied to their trades;
   - the layer book with the buffer off;
-  - the layer book with sector neutrality off (dollar-neutral only), so the
-    paper can show what the constraint costs;
+  - the layer book without the beta constraint (`layer_no_beta_constraint`,
+    sector-neutral only, 2026-10-01), so the paper can show what the beta
+    constraint does;
+  - the layer book with sector and beta neutrality off (dollar-neutral only),
+    so the paper can show what the constraints cost;
   - the sensitivity rows in §6 (η, fixed tier spread, execution fraction,
     tiered borrow), at every AUM.
 - **Diagnostics added 2026-09-27, before any real number** (config
@@ -241,8 +282,13 @@ One-way cost of trading $Q in name i is c_i(Q) = hs_i + η σ_d,i √(Q / ADV_i)
     name-months inside against outside Unclassified. This is reported in
     every block.
   - `gross_budget_max_excess` and `months_gross_exceeds_budget` (§5).
-- **The regime cut on every row:** ex the D5 top-3 LS years and 2011–2020. The finished composite's
-  decile LS is negative there, and that is the paper's headline caveat.
+- **The realised beta on every row (2026-10-01):** `net_beta_on_market` and
+  `gross_beta_on_market` (the OLS slope of the monthly return on M over the
+  book months), `net_beta_on_market_live`, `exp_beta_mean` (the book's mean
+  ex-ante beta, Σ w_i β_i), and `net_beta_on_market` on every cut. Also
+  `max_beta_residual` and `beta_constraint_dropped_months`.
+- **The regime cut on every row:** ex the D5 top-3 LS years (v14: 2000,
+  2001, 2021) and 2011–2020.
 
 ## 8. Order of work (one logical change per commit)
 
@@ -346,9 +392,11 @@ tested or stated in the layer block.
     the future. The layer reports the group's size and its delisting share
     against the classified names'. A large gap is read as a leak in the
     neutrality constraint and the risk model, not as alpha.
-19. **Spread column.** A composite without the `f_bidaskspreadflip` leg is
-    refused, both by the runner before any result file exists and by the
-    layer itself. There is no whole-panel fallback to the 1 bp floor.
+19. **Spread column.** *Superseded 2026-10-01 (item 26).* As first
+    declared, a composite without the `f_bidaskspreadflip` leg was refused;
+    that leg was rejected at Stage 2, so the series is now harness-built.
+    The layer still refuses a frame without the spread column; there is no
+    whole-panel fallback to the 1 bp floor.
 20. **`--holdout-only` is refused** with `--construction-layer`. The holdout
     is spent with `--include-holdout` (§8).
 
@@ -381,3 +429,30 @@ tested or stated in the layer block.
     beside the .txt, with one row per (row, AUM, month). Floats are written at
     %.17g, so they round-trip exactly. Its sha256[:12] is `paths_sha` in every
     block and in the .meta.json.
+
+**Declared 2026-10-01, before any layer number (D7; the Phase E re-freeze)**
+
+24. **Pin.** `composite.version: v14`, `composite.composite_sha:
+    "7fe6f001e708"` (the 12-hex COMPOSITE_SHA stamp `check_composite`
+    compares).
+25. **Beta constraint.** Default `optimiser.constraints: sector_beta_neutral`
+    (`optimiser.market_beta`: M = the universe's cap-weighted total return,
+    36-month window, 12 obs, sector-month-median fill). Asserted to 1e-10
+    after steps 1, 2 and 5 on every live month, like the sector sums. The
+    buffer (3) and the participation cap (4) move names one at a time by
+    design and do not hold it; step 5 restores it. Reference row
+    `layer_no_beta_constraint` = the pre-D7 sector-only layer.
+26. **Spread.** `costs.half_spread: corwin_schultz_half` reads `cs_spread`,
+    the harness-built series (§6). Name-months without an estimate take the
+    tier-month median (§9.12). The block reports `spread_measured_pct`.
+27. **Ex years.** `report.regime_cuts.ex_years: [2000, 2001, 2021]` from
+    the D5 rule (k = 3, compounded calendar-year hedged LS, 1999–2021) on
+    v14's baseline (run 042, reproduced under the new HARNESS_SHA).
+28. **Reporting.** Realised beta of each row's net (and gross) return on M,
+    overall, live-only and per cut; the mean ex-ante book beta; the max beta
+    residual; months the beta column was dropped; the share of book
+    name-months with an own beta estimate. `exp_beta` and `mkt` join the
+    monthly paths CSV.
+29. **No measuring path moved.** The series and the constraint are read
+    only under `--construction-layer`; `--baseline --stage 2` under the new
+    HARNESS_SHA reproduces run 042.

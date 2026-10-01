@@ -3,12 +3,15 @@ Phase E — the institutional construction layer (docs/CONSTRUCTION.md r2, D15).
 
 It takes the FINISHED composite's audit frame (the exact Stage 2 family blend,
 scored by run_test.score_arm) and describes how a desk would trade it: a
-monthly fundamental factor risk model, a closed-form sector-neutral
-mean-variance target sized by an ex-ante volatility budget, a pipeline of name
-caps, a no-trade buffer against the drifted held book, participation caps and
-a final re-projection, and a cost model charged ex post on the realised
-trades. It judges nothing: no leg is added, dropped or reweighted by a number
-this module produces (D8).
+monthly fundamental factor risk model, a closed-form mean-variance target
+that is sector-neutral AND market-beta-neutral (D7 item 1; the constraint set
+is config `optimiser.constraints`), sized by a confidence-scaled gross budget,
+a pipeline of name caps, a no-trade buffer against the drifted held book,
+participation caps and a final re-projection, and a cost model charged ex
+post on the realised trades, its half-spread read from a harness-built
+Corwin-Schultz series (data_layer.load_or_build_cs_spread, D7 item 2), never
+from a composite leg. It judges nothing: no leg is added, dropped or
+reweighted by a number this module produces (D8).
 
 Every parameter comes from config/construction_layer.yaml (LAYER_CONFIG_PATH)
 and nothing is hard-coded here except the names of the audit columns. The
@@ -41,8 +44,9 @@ import pandas as pd
 import yaml
 from scipy.stats import norm, rankdata
 
-from harness.analytics import (DEFAULT_NW_LAGS, _safe_ratio, compute_factor_ranks, compute_ic, rank_group_col,
-                               family_members, nw_tstat)
+from harness.analytics import (_EPS, DEFAULT_NW_LAGS, _safe_ratio, compute_factor_ranks, compute_ic,
+                               family_members, fullwindow_beta, nw_tstat, rank_group_col,
+                               universe_market_return)
 
 ROOT = Path(__file__).resolve().parent.parent
 LAYER_CONFIG_PATH = ROOT / "config" / "construction_layer.yaml"
@@ -51,8 +55,13 @@ UNCLASSIFIED = "Unclassified"
 _MISSING_SECTOR = {"", "nan", "none", "null", "unknown", "<na>"}
 TIERS = ("MEGA", "MID", "SMALL")
 # The audit column each declared half-spread source reads (CONSTRUCTION.md §2).
-SPREAD_COLUMNS = {"corwin_schultz_half": "f_bidaskspreadflip"}
+# `cs_spread` is the harness-built Corwin-Schultz series
+# (data_layer.load_or_build_cs_spread), attached to the audit frame by
+# attach_spread; it is no composite leg's column (D7 item 2).
+SPREAD_COLUMNS = {"corwin_schultz_half": "cs_spread"}
 DELISTED_PREFIX = "partial_delisted"
+# optimiser.constraints: the declared constraint sets (§5).
+CONSTRAINTS = ("sector_beta_neutral", "sector_neutral", "dollar_neutral")
 
 
 class LayerRefused(RuntimeError):
@@ -80,6 +89,24 @@ def check_composite(lcfg, composite_sha):
         raise LayerRefused(f"construction layer refused: COMPOSITE_SHA {composite_sha} != the frozen "
                            f"composite_sha {want or '(none)'} in config/construction_layer.yaml. "
                            "The layer runs on the finished composite only (D15).")
+
+
+def attach_spread(audit, cs, col="cs_spread"):
+    """The audit frame with the harness-built Corwin-Schultz spread
+    (data_layer.load_or_build_cs_spread: me, ID, cs_spread) on every row,
+    matched on (ID, SIGNAL_ASOF == me): the signal month's estimate, known at
+    the signal date. A name-month without an estimate stays NaN; half_spreads
+    fills it from its tier-month median."""
+    key = pd.DataFrame({"ID": cs["ID"].astype(str).to_numpy(), "me": pd.to_datetime(cs["me"]).to_numpy(),
+                        col: pd.to_numeric(cs[col], errors="coerce").to_numpy()})
+    if key.duplicated(["ID", "me"]).any():
+        raise LayerRefused("the spread series has more than one row for an (ID, month)")
+    left = pd.DataFrame({"ID": audit["ID"].astype(str).to_numpy(),
+                         "me": pd.to_datetime(audit["SIGNAL_ASOF"]).to_numpy()})
+    got = left.merge(key, on=["ID", "me"], how="left")[col].to_numpy()
+    out = audit.drop(columns=[col], errors="ignore").copy()
+    out[col] = got
+    return out
 
 
 # =============================================================================
@@ -160,8 +187,9 @@ class LayerPanel:
             raise LayerRefused(f"audit frame lacks {missing}")
         if spread_col not in audit.columns:
             raise LayerRefused(f"audit frame lacks the spread column {spread_col!r} (costs.half_spread="
-                               f"{lcfg['costs']['half_spread']!r}): the composite must carry that leg; the "
-                               "layer never falls back to the half-spread floor for a whole panel")
+                               f"{lcfg['costs']['half_spread']!r}): attach the harness-built series "
+                               "(attach_spread / run_layer(spread=...)); the layer never falls back to the "
+                               "half-spread floor for a whole panel")
         cols = need + [spread_col]
         leg_cols = [m["col"] for m in (metas or []) if m["col"] in audit.columns and m["col"] not in cols]
         df = audit[cols + leg_cols].copy()
@@ -208,6 +236,30 @@ class LayerPanel:
         self.mcode = mcode
         self.metas = [m for m in (metas or []) if m["col"] in df.columns]
         self._fam = None
+        # D4's market M: the universe's cap-weighted total monthly_ret (Shumway
+        # delisting returns included), one value per panel month.
+        self.mkt = universe_market_return(df[["DATE", "monthly_ret", "mkt_cap_usd"]]).reindex(self.dates).to_numpy(float)
+        mb = (lcfg.get("optimiser") or {}).get("market_beta") or {}
+        self.beta_window = int(mb.get("window_months", 36))
+        self.beta_min_obs = int(mb.get("min_obs", 12))
+        self._betas = {}
+
+    def market_betas(self, m):
+        """(beta, n_own) for month m's universe rows: market_beta_raw filled
+        from the name's sector-month median, then the month's median; (None, 0)
+        when no name has an estimate (the beta constraint is then dropped that
+        month and counted). Memoised."""
+        if m not in self._betas:
+            raw = market_beta_raw(self, m)
+            valid = np.isfinite(raw)
+            if not valid.any():
+                self._betas[m] = (None, 0)
+            else:
+                g = self.sector[self.sl(m)]
+                med_g = _group_median(raw, g, self.G, valid)
+                fill = np.where(np.isfinite(med_g[g]), med_g[g], float(np.median(raw[valid])))
+                self._betas[m] = (np.where(valid, raw, fill), int(valid.sum()))
+        return self._betas[m]
 
     def sl(self, m):
         return slice(self.offsets[m], self.offsets[m + 1])
@@ -277,6 +329,38 @@ def trailing_vol_raw(P, m, rm):
     overall = float(np.median(sd[valid]))
     fill = np.where(np.isfinite(med_g[g]), med_g[g], overall)
     return np.where(valid, sd, fill)
+
+
+def market_beta_raw(P, m):
+    """Each universe name's trailing market beta at month m: the OLS slope of
+    its monthly_ret on M (P.mkt, D4's market: the universe's cap-weighted
+    total return) over months s with RET_END(s) <= SIGNAL_ASOF(t), the last
+    `optimiser.market_beta.window_months` (36) of them, i.e. t-36..t-1, on the
+    months where both exist, needing `min_obs` (12) of them; NaN otherwise.
+    This is analytics.trailing_beta's estimate (pairwise-complete covariance
+    over variance, variance > 1e-12) vectorised over names; a test holds the
+    two equal. Missing estimates are filled by LayerPanel.market_betas."""
+    sl = P.sl(m)
+    ids = P.id_code[sl]
+    n = sl.stop - sl.start
+    a = int(P.avail_end[m])
+    if a <= 0:
+        return np.full(n, np.nan)
+    lo = max(0, a - P.beta_window)
+    R = P.RET[ids, lo:a]
+    x = P.mkt[lo:a]
+    ok = np.isfinite(R) & np.isfinite(x)[None, :]
+    cnt = ok.sum(axis=1)
+    den = np.maximum(cnt, 1)
+    mx = np.where(ok, x[None, :], 0.0).sum(axis=1) / den
+    my = np.where(ok, R, 0.0).sum(axis=1) / den
+    dx = np.where(ok, x[None, :] - mx[:, None], 0.0)
+    dy = np.where(ok, R - my[:, None], 0.0)
+    dof = np.maximum(cnt - 1, 1)
+    cov = (dx * dy).sum(axis=1) / dof
+    var = (dx * dx).sum(axis=1) / dof
+    good = (cnt >= P.beta_min_obs) & (var > _EPS)
+    return np.where(good, cov / np.where(good, var, 1.0), np.nan)
 
 
 def exposures(P, m, rm):
@@ -363,7 +447,7 @@ def ex_ante_var(w, X, F, D):
 
 
 # =============================================================================
-# §5 Optimiser: closed form, sector-neutral, Woodbury
+# §5 Optimiser: closed form, sector- and beta-neutral, Woodbury
 # =============================================================================
 
 def sigma_inv(V, X, F, D):
@@ -380,10 +464,16 @@ def sigma_inv(V, X, F, D):
 
 def solve_neutral_mv(alpha, X, F, D, C, lam=1.0):
     """argmax alpha'w - (lam/2) w'Sigma w  s.t. C'w = 0, closed form from the KKT
-    conditions: w = Sigma^-1 (alpha - C mu) / lam, mu = (C'Sigma^-1 C)^-1 C'Sigma^-1 alpha."""
+    conditions: w = Sigma^-1 (alpha - C mu) / lam, mu = (C'Sigma^-1 C)^-1 C'Sigma^-1 alpha.
+    C is any n x k constraint matrix (sector dummies, plus the beta column).
+    A redundant column (beta collinear with the dummies) is solved by least
+    squares: the constraints are consistent, so the optimum is the same."""
     y = sigma_inv(alpha, X, F, D)
     Z = sigma_inv(C, X, F, D)
-    mu = np.linalg.solve(C.T @ Z, C.T @ y)
+    try:
+        mu = np.linalg.solve(C.T @ Z, C.T @ y)
+    except np.linalg.LinAlgError:
+        mu = np.linalg.lstsq(C.T @ Z, C.T @ y, rcond=None)[0]
     return (y - Z @ mu) / float(lam)
 
 
@@ -399,11 +489,97 @@ def project_neutral(w, groups, n_groups, free=None):
     return w
 
 
-def apply_name_cap(w, groups, n_groups, floor, mult, tol, max_iter):
+class Constraint:
+    """The linear constraint A'w = 0 on one month's rows, A = [group dummies |
+    extra columns]. `groups` / `n_groups` are the sector groups (one group:
+    dollar neutral); `extra` is n x q, q = 1 for the market-beta column
+    (optimiser.constraints = sector_beta_neutral), else absent.
+
+    Every step of §5 that imposes the constraint goes through `project`: the
+    orthogonal projection onto {A'w = 0} moving only the `free` rows, i.e. the
+    minimum-norm change w_f -= A_f (A_f'A_f)^+ A'w. With no extra column it
+    is exactly project_neutral's equal shift within each group (the same
+    arithmetic, so a sector-only book is unchanged by the generalisation)."""
+
+    def __init__(self, groups, n_groups, extra=None):
+        self.groups = np.asarray(groups, dtype=np.int64)
+        self.n_groups = int(n_groups)
+        E = None if extra is None else np.asarray(extra, dtype=float).reshape(len(self.groups), -1)
+        self.extra = E if (E is not None and E.shape[1] > 0) else None
+
+    def subset(self, mask):
+        return Constraint(self.groups[mask], self.n_groups, None if self.extra is None else self.extra[mask])
+
+    def residual(self, w):
+        """A'w: the group sums, then each extra column's exposure."""
+        r = _group_sums(w, self.groups, self.n_groups)
+        return r if self.extra is None else np.concatenate([r, self.extra.T @ w])
+
+    def max_resid(self, w):
+        return float(np.max(np.abs(self.residual(w)))) if len(w) else 0.0
+
+    def extra_resid(self, w):
+        """max |extra'w| (the book's beta exposure under the beta constraint); 0 without one."""
+        return float(np.max(np.abs(self.extra.T @ w))) if (self.extra is not None and len(w)) else 0.0
+
+    def matrix(self):
+        """Dense A over the groups present in these rows (an empty group is no
+        constraint, §9.8), then the extra columns."""
+        present = np.unique(self.groups)
+        S = (self.groups[:, None] == present[None, :]).astype(float)
+        return S if self.extra is None else np.hstack([S, self.extra])
+
+    def bad_rows(self, w, tol):
+        """Rows a violated constraint involves: members of a group whose sum
+        exceeds tol, and every row when an extra row does."""
+        r = self.residual(w)
+        if self.extra is not None and np.any(np.abs(r[self.n_groups:]) > tol):
+            return np.ones(len(w), bool)
+        return (np.abs(r[:self.n_groups]) > tol)[self.groups]
+
+    def with_group_fallback(self, mask):
+        """`mask`, except that a group with no row in it takes all its members."""
+        n = np.bincount(self.groups[mask], minlength=self.n_groups)
+        return np.where(n[self.groups] > 0, mask, True)
+
+    def step(self, w, free):
+        """The projection's change of the free rows (zero elsewhere)."""
+        free = np.asarray(free, bool)
+        G, g = self.n_groups, self.groups
+        r = self.residual(w)
+        nf = np.bincount(g[free], minlength=G)
+        d = np.zeros(len(w))
+        if self.extra is None:
+            shift = np.where(nf > 0, -r / np.maximum(nf, 1), 0.0)
+            d[free] = shift[g[free]]
+            return d
+        if not free.any():
+            return d
+        Ef = self.extra[free]
+        q = Ef.shape[1]
+        SE = np.stack([np.bincount(g[free], weights=Ef[:, j], minlength=G) for j in range(q)], axis=1)
+        M = np.zeros((G + q, G + q))
+        M[np.arange(G), np.arange(G)] = nf
+        M[:G, G:] = SE
+        M[G:, :G] = SE.T
+        M[G:, G:] = Ef.T @ Ef
+        lam = np.linalg.lstsq(M, r, rcond=None)[0]
+        d[free] = -(lam[g[free]] + Ef @ lam[G:])
+        return d
+
+    def project(self, w, free=None):
+        free = np.ones(len(w), bool) if free is None else np.asarray(free, bool)
+        if self.extra is None:
+            return project_neutral(w, self.groups, self.n_groups, free)
+        w = w + self.step(w, free)
+        return w + self.step(w, free)          # one refinement pass absorbs the rounding
+
+
+def apply_name_cap(w, cons, floor, mult, tol, max_iter):
     """Step 2: |w_i| <= max(floor, mult / N_side), N_side the count of names on
-    w_i's side of the target. Clip, re-project onto the group constraint over
-    the names strictly inside their cap, iterate to tol. Returns (w, iters,
-    max cap excess, max group residual)."""
+    w_i's side of the target. Clip, re-project onto the constraint (a
+    Constraint) over the names strictly inside their cap, iterate to tol.
+    Returns (w, iters, max cap excess, max constraint residual)."""
     w = np.asarray(w, dtype=float).copy()
     nL, nS = int((w > 0).sum()), int((w < 0).sum())
     capL = max(floor, mult / nL) if nL else floor
@@ -416,21 +592,18 @@ def apply_name_cap(w, groups, n_groups, floor, mult, tol, max_iter):
     for it in range(1, int(max_iter) + 1):
         c = caps(w)
         w = np.clip(w, -c, c)
-        r = _group_sums(w, groups, n_groups)
-        if np.max(np.abs(r)) <= tol:
+        if cons.max_resid(w) <= tol:
             break
         free = np.abs(w) < caps(w) - tol
-        w = project_neutral(w, groups, n_groups, free)
-        still = np.abs(_group_sums(w, groups, n_groups)) > tol
-        if still.any():                           # a group with every name at its cap
-            w = project_neutral(w, groups, n_groups, still[groups])
+        w = cons.project(w, free)
+        if cons.max_resid(w) > tol:               # a group with every name at its cap
+            w = cons.project(w, cons.bad_rows(w, tol))
         if np.max(np.abs(w) - caps(w)) <= tol:
             break
     free = np.abs(w) < caps(w)
-    w = project_neutral(w, groups, n_groups, np.where(np.bincount(groups[free], minlength=n_groups)[groups] > 0,
-                                                      free, True))
+    w = cons.project(w, cons.with_group_fallback(free))
     excess = float(max(0.0, np.max(np.abs(w) - caps(w)))) if len(w) else 0.0
-    return w, it, excess, float(np.max(np.abs(_group_sums(w, groups, n_groups)))) if len(w) else 0.0
+    return w, it, excess, cons.max_resid(w)
 
 
 def buffer_step(target, held, rel, abs_, kappa):
@@ -448,71 +621,78 @@ def participation_cap(w, held, capd):
     return held + np.clip(d, -capd, capd), hit
 
 
-def _exact(w, groups, n_groups, eligible, held=None, capd=None):
-    """Remove a residual already inside tolerance exactly (to rounding): an equal
-    shift of at most tol/n over the eligible names of each group that still
-    have participation headroom (else all eligible, else all members)."""
+def _exact(w, cons, eligible, held=None, capd=None):
+    """Remove a residual already inside tolerance exactly (to rounding): a
+    projection over the eligible names of each group that still have
+    participation headroom (else all eligible, else all members)."""
+    g, G = cons.groups, cons.n_groups
     pref = eligible if held is None else eligible & (np.abs(w - held) < capd * (1 - 1e-6))
-    n_pref = np.bincount(groups[pref], minlength=n_groups)
-    n_elig = np.bincount(groups[eligible], minlength=n_groups)
-    members = np.where(n_pref[groups] > 0, pref, np.where(n_elig[groups] > 0, eligible, True))
-    return project_neutral(w, groups, n_groups, members)
+    n_pref = np.bincount(g[pref], minlength=G)
+    n_elig = np.bincount(g[eligible], minlength=G)
+    members = np.where(n_pref[g] > 0, pref, np.where(n_elig[g] > 0, eligible, True))
+    return cons.project(w, members)
 
 
-def _neutralise_with_headroom(w, held, capd, groups, n_groups, eligible, tol, max_iter):
-    """Restore the group constraint moving eligible names only, and only as far
-    as their participation headroom allows (water-filling). A residual no
-    eligible name can absorb is spread over the group anyway (neutrality
-    first); those names are counted as overrides."""
+def _neutralise_with_headroom(w, held, capd, cons, eligible, tol, max_iter):
+    """Restore the constraint moving eligible names only, and only as far as
+    their participation headroom allows (water-filling): project over the
+    names with headroom in the direction the projection moves them, clip each
+    move to its headroom, repeat. With group constraints only, every name in
+    a group moves the same way and this is the equal-shift water-fill. A
+    residual no eligible name can absorb is projected over the eligible
+    members anyway (the constraint first); those names are counted as
+    overrides."""
     w = w.copy()
     for _ in range(int(max_iter)):
-        r = _group_sums(w, groups, n_groups)
-        bad = np.abs(r) > tol
-        if not bad.any():
-            return _exact(w, groups, n_groups, eligible, held, capd), 0
-        need = -r[groups]
+        if cons.max_resid(w) <= tol:
+            return _exact(w, cons, eligible, held, capd), 0
         d = w - held
-        room = np.where(need > 0, capd - d, capd + d)
-        room = np.where(eligible & bad[groups], np.maximum(room, 0.0), 0.0)
-        free = room > 0
-        nf = np.bincount(groups[free], minlength=n_groups)
-        if not (nf[bad] > 0).any():
+        up, dn = capd - d, capd + d
+        free = eligible & cons.bad_rows(w, tol) & ((up > 0) | (dn > 0))
+        s = np.zeros(len(w))
+        for _k in range(4):                       # settle the set of names that can move the needed way
+            if not free.any():
+                break
+            s = cons.step(w, free)
+            room = np.where(s > 0, up, dn)
+            drop = free & (s != 0) & (room <= 0)
+            if not drop.any():
+                break
+            free = free & ~drop
+        room = np.maximum(np.where(s > 0, up, dn), 0.0)
+        move = np.where(free, np.sign(s) * np.minimum(np.abs(s), room), 0.0)
+        if not np.any(move):
             break
-        share = np.abs(r) / np.maximum(nf, 1)
-        step = np.where(free, np.sign(need) * np.minimum(share[groups], room), 0.0)
-        w = w + step
-    r = _group_sums(w, groups, n_groups)
-    bad = np.abs(r) > tol
-    if not bad.any():
-        return _exact(w, groups, n_groups, eligible, held, capd), 0
-    ne = np.bincount(groups[eligible], minlength=n_groups)
-    members = np.where(ne[groups] > 0, eligible, True) & bad[groups]
-    w = project_neutral(w, groups, n_groups, members)
+        w = w + move
+    if cons.max_resid(w) <= tol:
+        return _exact(w, cons, eligible, held, capd), 0
+    members = cons.with_group_fallback(eligible) & cons.bad_rows(w, tol)
+    w = cons.project(w, members)
     return w, int(members.sum())
 
 
-def final_reproject(w, held, capd, groups, n_groups, eligible, gross_cap, tol, max_iter):
-    """Step 5: re-project onto the group constraint and the gross cap. The
-    names moved here have their trades changed; those trades are counted and
+def final_reproject(w, held, capd, cons, eligible, gross_cap, tol, max_iter):
+    """Step 5: re-project onto the constraint and the gross cap. The names
+    moved here have their trades changed; those trades are counted and
     charged like any other. Participation headroom is respected where it can
     be; the constraint wins where it cannot (overrides counted)."""
     for _ in range(int(max_iter)):
-        w, _ov = _neutralise_with_headroom(w, held, capd, groups, n_groups, eligible, tol, max_iter)
+        w, _ov = _neutralise_with_headroom(w, held, capd, cons, eligible, tol, max_iter)
         g = float(np.abs(w).sum())
         if g > gross_cap * (1 + 1e-12):
             w = w * (gross_cap / g)
         w, _ = participation_cap(w, held, capd)
-        ok_n = np.max(np.abs(_group_sums(w, groups, n_groups))) <= tol
+        ok_n = cons.max_resid(w) <= tol
         ok_g = float(np.abs(w).sum()) <= gross_cap * (1 + 1e-9)
         if ok_n and ok_g:
             break
-    w, _ov = _neutralise_with_headroom(w, held, capd, groups, n_groups, eligible, tol, max_iter)
-    # the budget is a hard bound: a uniform scale keeps every group sum at zero
+    w, _ov = _neutralise_with_headroom(w, held, capd, cons, eligible, tol, max_iter)
+    # the budget is a hard bound: a uniform scale keeps every linear constraint at zero
     g = float(np.abs(w).sum())
     if g > gross_cap:
         w = w * (gross_cap / g)
     # names whose FINAL trade exceeds its participation cap because the
-    # constraint could not be met otherwise (neutrality first)
+    # constraint could not be met otherwise (the constraint first)
     over = np.abs(w - held) > capd * (1 + 1e-9) + 1e-15
     part_excess = float(np.max(np.abs(w - held) - capd)) if len(w) else 0.0
     return w, {"overrides": int(over.sum()), "participation_excess": max(0.0, part_excess),
@@ -544,18 +724,39 @@ def ic_forecast(P, lcfg):
     return out, arr
 
 
-def build_target(P, R, m, ic_t, lcfg, constraint="sector_neutral"):
-    """Steps 1-2 for month m, on the month's universe rows. Returns a dict with
-    `t` (target, 0 on unscored names), `flat` and its reason, the gross budget G_t, the
-    budget-scaled flag and the per-step constraint residuals (for tests and the report)."""
+def month_constraint(P, m, constraint):
+    """(Constraint, beta, beta_dropped) on month m's universe rows for a
+    declared constraint set: `sector_beta_neutral` = the sector groups plus the
+    market-beta column (LayerPanel.market_betas, filled), `sector_neutral` =
+    the sector groups, `dollar_neutral` = one group. beta is None, and
+    beta_dropped True, when the beta constraint is declared but no name has an
+    estimate that month (the sector constraint alone then applies)."""
+    if constraint not in CONSTRAINTS:
+        raise LayerRefused(f"unknown optimiser constraint {constraint!r}; declared: {', '.join(CONSTRAINTS)}")
+    sl = P.sl(m)
+    n = sl.stop - sl.start
+    if constraint == "dollar_neutral":
+        return Constraint(np.zeros(n, dtype=np.int64), 1), None, False
+    beta = P.market_betas(m)[0] if constraint == "sector_beta_neutral" else None
+    dropped = constraint == "sector_beta_neutral" and beta is None
+    return Constraint(P.sector[sl], P.G, None if beta is None else beta[:, None]), beta, dropped
+
+
+def build_target(P, R, m, ic_t, lcfg, constraint=None):
+    """Steps 1-2 for month m, on the month's universe rows, under `constraint`
+    (default: config optimiser.constraints). Returns a dict with `t` (target, 0
+    on unscored names), `flat` and its reason, the gross budget G_t, the
+    budget-scaled flag, the month's Constraint (`cons`) and the per-step
+    constraint residuals (for tests and the report)."""
     a_cfg, o = lcfg["alpha"], lcfg["optimiser"]
+    constraint = str(o["constraints"]) if constraint is None else str(constraint)
     sl = P.sl(m)
     n = sl.stop - sl.start
     rmo = R[m]
-    groups = P.sector[sl] if constraint == "sector_neutral" else np.zeros(n, dtype=np.int64)
-    n_groups = P.G if constraint == "sector_neutral" else 1
+    cons, beta, dropped = month_constraint(P, m, constraint)
     res = {"t": np.zeros(n), "flat": True, "reason": "", "G_t": 0.0, "ic_t": ic_t,
-           "budget_scaled": False, "groups": groups, "n_groups": n_groups,
+           "budget_scaled": False, "groups": cons.groups, "n_groups": cons.n_groups, "cons": cons,
+           "beta": beta, "beta_dropped": dropped, "constraint": constraint,
            "eligible": np.zeros(n, bool), "exante_ann_vol": 0.0}
     if not rmo.ready:
         res["reason"] = "no_history_risk"
@@ -576,11 +777,9 @@ def build_target(P, R, m, ic_t, lcfg, constraint="sector_neutral"):
         return res
     z = normal_scores(P.score[sl][I])
     alpha = z * rmo.sigma[I]
-    gI = groups[I]
-    present = np.unique(gI)
-    C = (gI[:, None] == present[None, :]).astype(float)
+    cI = cons.subset(I)
     X, D = rmo.X[I], rmo.D[I]
-    d = solve_neutral_mv(alpha, X, rmo.F, D, C)
+    d = solve_neutral_mv(alpha, X, rmo.F, D, cI.matrix())
     var_d = ex_ante_var(d, X, rmo.F, D)
     if not (var_d > 0):
         res["reason"] = "degenerate"
@@ -590,9 +789,9 @@ def build_target(P, R, m, ic_t, lcfg, constraint="sector_neutral"):
         res["reason"] = "degenerate"
         return res
     w1 = d * (G / g1)                                  # scaled to the month's gross budget
-    w1 = project_neutral(w1, gI, n_groups)          # exact to rounding
-    res["resid_step1"] = float(np.max(np.abs(_group_sums(w1, gI, n_groups))))
-    w2, it, excess, resid2 = apply_name_cap(w1, gI, n_groups, float(o["name_cap_floor"]),
+    w1 = cI.project(w1)                                # exact to rounding
+    res["resid_step1"] = cI.max_resid(w1)
+    w2, it, excess, resid2 = apply_name_cap(w1, cI, float(o["name_cap_floor"]),
                                             float(o["name_cap_mult"]), float(o["cap_tol"]),
                                             int(o["cap_max_iter"]))
     res.update({"w_step1": w1, "resid_step2": resid2, "name_cap_iters": it, "name_cap_excess": excess,
@@ -759,6 +958,11 @@ def run_book(P, R, lcfg, book_months, aum, decide, eta, hs_mode="measured", fam_
             row["exp_vol"] = float(w @ rmo.X[:, P.G + 1])
         else:
             row["exante_sd"], row["exp_size"], row["exp_vol"] = np.nan, np.nan, np.nan
+        # the book's ex-ante market beta (every row, constrained or not) and M,
+        # for the realised beta of the book on the market (summarise)
+        bm = P.market_betas(m)[0]
+        row["exp_beta"] = float(w @ bm) if (bm is not None and np.any(w)) else np.nan
+        row["mkt"] = float(P.mkt[m])
         if fam_cache is not None and np.any(w):
             for fam, z in fam_cache(m).items():
                 row[f"exp_family_{fam}"] = float(np.nansum(w * np.nan_to_num(z, nan=0.0)))
@@ -779,23 +983,23 @@ def layer_decider(P, targets, lcfg, aum, use_buffer=True):
     def decide(m, hU):
         T = targets[m]
         base = {"flat": bool(T["flat"]), "flat_reason": T["reason"], "budget_scaled": bool(T["budget_scaled"]),
-                "G_t": T["G_t"], "ic_t": T["ic_t"]}
+                "G_t": T["G_t"], "ic_t": T["ic_t"], "beta_dropped": bool(T.get("beta_dropped", False))}
         if T["flat"]:
             base.update({"n_participation_hit": 0, "n_traded_pre_cap": 0, "reproj_traded": 0.0,
-                         "overrides": 0, "resid_final": 0.0, "gross_excess": 0.0})
+                         "overrides": 0, "resid_final": 0.0, "resid_beta_final": 0.0, "gross_excess": 0.0})
             return np.zeros(len(hU)), base
-        t, groups, G, elig = T["t"], T["groups"], T["n_groups"], T["eligible"]
+        t, cons, elig = T["t"], T["cons"], T["eligible"]
         w3 = buffer_step(t, hU, rel, abs_, kappa)[0] if use_buffer else t.copy()
         sl = P.sl(m)
         adv = P.adv[sl]
         capd = np.where(np.isfinite(adv) & (adv > 0), pct * adv * days / aum, 0.0)
         traded = np.abs(w3 - hU) > 0
         w4, hit = participation_cap(w3, hU, capd)
-        w5, info = final_reproject(w4, hU, capd, groups, G, elig, min(gross_cap, T["G_t"]), tol, max_iter)
+        w5, info = final_reproject(w4, hU, capd, cons, elig, min(gross_cap, T["G_t"]), tol, max_iter)
         base.update({"n_participation_hit": int((hit & traded).sum()), "n_traded_pre_cap": int(traded.sum()),
                      "reproj_traded": float(np.abs(w5 - w4).sum()), "overrides": info["overrides"],
                      "participation_excess": info["participation_excess"],
-                     "resid_final": float(np.max(np.abs(_group_sums(w5, groups, G)))),
+                     "resid_final": cons.max_resid(w5), "resid_beta_final": cons.extra_resid(w5),
                      "gross_excess": max(0.0, float(np.abs(w5).sum()) - float(T["G_t"]))})
         return w5, base
     return decide
@@ -883,6 +1087,8 @@ def cut_metrics(d, lags, pre, pipeline=True, newpos=True):
     for kind in ("gross", "net"):
         out.update(_series_block(d[kind], lags, f"{pre}{kind}_"))
     out.update({f"{pre}net_{k}": v for k, v in _drawdown(d["net"]).items()})
+    if "mkt" in d.columns:
+        out[f"{pre}net_beta_on_market"] = float(fullwindow_beta(d["net"], d["mkt"])) if n else float("nan")
     nanmean = (lambda x: float(x.mean())) if n else (lambda x: float("nan"))
     out[f"{pre}turnover_oneway_pct"] = nanmean(d["turnover"]) * 100
     for k in ("spread", "impact", "borrow"):
@@ -945,6 +1151,12 @@ def summarise(rec, lcfg, lags=DEFAULT_NW_LAGS, oos_start=None, pipeline=True):
     out["avg_n_long"] = float(df.loc[live, "n_long"].mean()) if live.any() else 0.0
     out["avg_n_short"] = float(df.loc[live, "n_short"].mean()) if live.any() else 0.0
     out["ret_missing_positions"] = int(df["n_ret_missing"].sum())
+    # the realised (ex-post) beta of the book on D4's market M: the OLS slope of
+    # the monthly return on M over the book months (and over live months only)
+    if "mkt" in df.columns:
+        for kind in ("gross", "net"):
+            out[f"{kind}_beta_on_market"] = float(fullwindow_beta(df[kind], df["mkt"]))
+        out["net_beta_on_market_live"] = float(fullwindow_beta(df.loc[live, "net"], df.loc[live, "mkt"]))
     out["impact_sigma_missing_trades"] = int(df["impact_sigma_missing_trades"].sum())
     if "new_positions_delisting" in (rep.get("diagnostics") or []):
         out["new_positions_delisting_n"] = int(df["new_pos_delisting_n"].sum())
@@ -965,12 +1177,15 @@ def summarise(rec, lcfg, lags=DEFAULT_NW_LAGS, oos_start=None, pipeline=True):
         out["budget_scaled_months_live"] = int((df["budget_scaled"].astype(bool) & live).sum())
         out["budget_scaled_months_flat"] = int((df["budget_scaled"].astype(bool) & ~live).sum())
         out["max_neutrality_residual"] = float(df["resid_final"].max())
+        out["max_beta_residual"] = float(df["resid_beta_final"].max()) if "resid_beta_final" in df else 0.0
+        out["beta_constraint_dropped_months"] = (int(df["beta_dropped"].astype(bool).sum())
+                                                 if "beta_dropped" in df else 0)
         out["gross_budget_max_excess"] = float(df["gross_excess"].max())
         out["months_gross_exceeds_budget"] = int((df["gross_excess"] > 1e-9).sum())
     else:
         out["months_skipped_by_variant"] = int(df.get("skipped", pd.Series(0)).sum())
     # realised exposures (live months)
-    for col in [c for c in df.columns if c in ("exp_size", "exp_vol") or c.startswith("exp_family_")]:
+    for col in [c for c in df.columns if c in ("exp_size", "exp_vol", "exp_beta") or c.startswith("exp_family_")]:
         out[f"{col}_mean"] = float(pd.to_numeric(df.loc[live, col], errors="coerce").mean())
     # risk model: bias statistic and ex-ante vs realised
     T = int(rep["bias_stat_window_months"])
@@ -1003,7 +1218,7 @@ def summarise(rec, lcfg, lags=DEFAULT_NW_LAGS, oos_start=None, pipeline=True):
 
 
 PATH_COLUMNS = ["gross", "net", "spread", "impact", "borrow", "turnover", "book_gross", "G_t", "flat",
-                "flat_reason", "budget_scaled", "n_long", "n_short", "exante_sd"]
+                "flat_reason", "budget_scaled", "n_long", "n_short", "exante_sd", "exp_beta", "mkt"]
 
 
 def write_paths_csv(paths, path):
@@ -1033,7 +1248,10 @@ def row_specs(lcfg):
     c, rep = lcfg["costs"], lcfg["report"]
     eta0 = float(c["impact_eta"])
     fixed = c["sensitivity"]["fixed_half_spread_bp"]
-    lay = dict(kind="layer", constraint="sector_neutral", buffer=True, eta=eta0, hs="measured", note="",
+    con = str(lcfg["optimiser"]["constraints"])
+    if con not in CONSTRAINTS:
+        raise LayerRefused(f"unknown optimiser.constraints {con!r}; declared: {', '.join(CONSTRAINTS)}")
+    lay = dict(kind="layer", constraint=con, buffer=True, eta=eta0, hs="measured", note="",
                borrow="flat", trade_frac=1.0)
     spec = {"layer": dict(lay)}
     for e in c["sensitivity"]["impact_eta"]:
@@ -1050,8 +1268,10 @@ def row_specs(lcfg):
                                        + "/".join(f"{t} {float(v):g}" for t, v in tb.items())
                                        + " bp/yr by liq_tier, other tiers at the largest")
     known = {"layer_no_buffer": dict(lay, buffer=False, note="the layer book with the buffer off"),
+             "layer_no_beta_constraint": dict(lay, constraint="sector_neutral",
+                                              note="the market-beta constraint off (sector-neutral only)"),
              "layer_dollar_neutral_only": dict(lay, constraint="dollar_neutral",
-                                               note="sector neutrality off (dollar-neutral only)"),
+                                               note="sector and beta neutrality off (dollar-neutral only)"),
              "equal_rank_decile": dict(kind="ref", eta=eta0, hs="measured", borrow="flat", trade_frac=1.0,
                                        note="Stage 3 reference book (D10-D1 equal weight), same cost model"),
              "buffered": dict(kind="ref", eta=eta0, hs="measured", borrow="flat", trade_frac=1.0,
@@ -1067,24 +1287,34 @@ def aum_tag(aum):
     return f"{aum / 1e6:g}M"
 
 
-def run_layer(audit, metas, cfg, lcfg, composite_sha, oos_start=None, log=print, rows=None):
+def run_layer(audit, metas, cfg, lcfg, composite_sha, oos_start=None, log=print, rows=None, spread=None):
     """Every row at every AUM. Returns [(row, aum, stats)] in AUM x row_specs()
-    order, plus a `meta` dict (layer-level diagnostics)."""
+    order, plus a `meta` dict (layer-level diagnostics). `spread`: the
+    harness-built Corwin-Schultz series (data_layer.load_or_build_cs_spread),
+    attached to the audit frame here; without it the frame must already carry
+    the spread column."""
     from harness import portfolio as PF
 
     check_composite(lcfg, composite_sha)
     lags = int(cfg["statistics"]["newey_west_lags"])
     c, rep = lcfg["costs"], lcfg["report"]
+    if spread is not None:
+        audit = attach_spread(audit, spread, SPREAD_COLUMNS[str(c["half_spread"])])
     P = LayerPanel(audit, lcfg, metas, group_col=rank_group_col(cfg))
-    log(f"    panel: {P.M} months, {P.N} IDs, {len(P.df)} ID-months; spread column {P.spread_col}")
+    log(f"    panel: {P.M} months, {P.N} IDs, {len(P.df)} ID-months; spread column {P.spread_col} "
+        f"({100 * float(np.isfinite(P.spread).mean()):.1f}% of ID-months measured)")
     R = build_risk_model(P, lcfg, log=log)
     ic_t, _ = ic_forecast(P, lcfg)
     start = pd.Timestamp(str(lcfg["window"]["book_start"]) + "-01")
     ref_start = pd.Timestamp(str(lcfg["window"]["reference_rows_start"]) + "-01")
     book_months = [m for m in range(P.M) if P.dates[m] >= start]
     ref_months = [m for m in range(P.M) if P.dates[m] >= ref_start]
+    spec = row_specs(lcfg)
+    run_rows = rows or list(spec)
+    default_con = str(lcfg["optimiser"]["constraints"])
+    cons_used = {default_con} | {spec[r]["constraint"] for r in run_rows if spec[r]["kind"] == "layer"}
     targets = {k: {m: build_target(P, R, m, ic_t[m], lcfg, k) for m in book_months}
-               for k in ("sector_neutral", "dollar_neutral")}
+               for k in sorted(cons_used)}
     fam_memo = {}
 
     def fam_cache(m):
@@ -1100,12 +1330,11 @@ def run_layer(audit, metas, cfg, lcfg, composite_sha, oos_start=None, log=print,
             bk = []
             getattr(PF, name)(audit, metas, cfg, books=bk)
             books[name] = bk
-    spec = row_specs(lcfg)
     leak = P.sector_leak() if "sector_leak" in (rep.get("diagnostics") or []) else {}
     labels = {k: v.pop("note") for k, v in spec.items()}
     out, paths = [], {}
     for aum in [float(a) for a in rep["aum_usd"]]:
-        for row in (rows or list(spec)):
+        for row in run_rows:
             s = spec[row]
             if s["kind"] == "layer":
                 dec = layer_decider(P, targets[s["constraint"]], lcfg, aum, use_buffer=s["buffer"])
@@ -1123,12 +1352,18 @@ def run_layer(audit, metas, cfg, lcfg, composite_sha, oos_start=None, log=print,
             st.update(leak)
             out.append((row, aum, st))
             paths[(row, aum)] = df
-    first_live = next((m for m in book_months if not targets["sector_neutral"][m]["flat"]), None)
+    first_live = next((m for m in book_months if not targets[default_con][m]["flat"]), None)
+    own = [P.market_betas(m)[1] / max(P.offsets[m + 1] - P.offsets[m], 1) for m in book_months]
     meta = {"panel_months": P.M, "panel_ids": P.N, "sector_groups": P.G,
             "sector_group_labels": "|".join(P.sector_labels),
             "first_live_month": str(P.dates[first_live].date()) if first_live is not None else "none",
             "risk_first_ready": next((str(P.dates[m].date()) for m in range(P.M) if R[m].ready), "never"),
             "vol_factor_first_month": next((str(P.dates[m].date()) for m in range(P.M) if R[m].vol_ok), "never"),
+            "constraints": default_con,
+            "market_beta_first_month": next((str(P.dates[m].date()) for m in range(P.M)
+                                             if P.market_betas(m)[0] is not None), "never"),
+            "market_beta_own_estimate_pct": float(100 * np.mean(own)) if own else float("nan"),
+            "spread_measured_pct": float(100 * np.isfinite(P.spread).mean()) if len(P.spread) else float("nan"),
             "paths": paths, **leak}
     return out, meta
 
@@ -1139,7 +1374,8 @@ def print_layer_table(results, log=print):
     for aum in aums:
         log(f"\n  --- Construction layer at AUM ${aum / 1e9:g}B (net of the cost model; gross in brackets) ---")
         log(f"  {'row':<27}{'net ann%':>9}{'(gross)':>9}{'net SR':>8}{'net t':>7}{'netMaxDD':>9}"
-            f"{'turn%':>7}{'cost%':>7}{'nL/nS':>11}{'flat':>5}{'budScl':>7}{'partHit%':>9}{'exAvol':>7}{'bias':>6}")
+            f"{'turn%':>7}{'cost%':>7}{'nL/nS':>11}{'flat':>5}{'budScl':>7}{'partHit%':>9}{'exAvol':>7}{'bias':>6}"
+            f"{'betaPost':>9}")
         for row, a, st in results:
             if a != aum:
                 continue
@@ -1150,6 +1386,7 @@ def print_layer_table(results, log=print):
                 f"{g('avg_n_long'):>5.0f}/{g('avg_n_short'):<5.0f}{st.get('flat_months', 0):>5}"
                 f"{st.get('budget_scaled_months_live', 0):>7}{g('participation_hit_share_pct'):>9.1f}"
                 f"{g('exante_vol_ann_pct_mean'):>7.2f}"
-                f"{g('bias_stat_mean'):>6.2f}")
+                f"{g('bias_stat_mean'):>6.2f}{g('net_beta_on_market'):>9.3f}")
     log("  budScl = live months with the gross budget G_t below the cap; partHit% = share of traded "
-        "names whose trade the participation cap cut (layer rows only)")
+        "names whose trade the participation cap cut (layer rows only); betaPost = realised beta of the "
+        "net monthly return on the universe's cap-weighted return (D4's M)")

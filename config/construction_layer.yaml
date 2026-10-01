@@ -7,16 +7,24 @@
 # pre-registers how a factor is judged). Every layer block stamps this file's
 # hash as LAYER_SHA. Editing it after the first LAYER run is logged as a
 # process_finding, and the prior blocks stay as they are.
+#
+# 2026-10-01 — the Phase E re-freeze (docs/DECISIONS.md D7), set BEFORE any
+# construction-layer number exists on this project: (1) the market-beta
+# constraint (optimiser.constraints: sector_beta_neutral, optimiser.market_beta;
+# reference row layer_no_beta_constraint); (2) the half-spread from the
+# harness-built Corwin-Schultz series (costs.half_spread), no composite leg;
+# (3) report.regime_cuts.ex_years from the D5 rule on v14's in-window LS; and
+# the composite pin (v14, COMPOSITE_SHA 7fe6f001e708).
 # =============================================================================
 
 schema_version: 1
 
 composite:
-  # Pinned at Phase E to the FINISHED composite (its COMPOSITE_SHA); the layer
-  # refuses any other. The placeholder matches no composite, so no layer run can
-  # start before the pin is set. Setting it is part of the Phase E declaration.
-  version: none
-  composite_sha: "unpinned-until-phase-E"   # no composite hashes to this; Phase E replaces it
+  # Pinned at Phase E to the FINISHED composite (its COMPOSITE_SHA, the 12-hex
+  # stamp check_composite compares); the layer refuses any other. Set 2026-10-01
+  # (D7 item 3): v14, 19 legs, 9 families, Phase D closed.
+  version: v14
+  composite_sha: "7fe6f001e708"
 
 window:
   book_start: "2001-01"              # 24 months of factor returns (1999-01..2000-12) first
@@ -47,7 +55,15 @@ risk_model:
   specific_min_obs: 12
 
 optimiser:
-  constraints: "sector_neutral"      # S'w = 0 over the 12 groups (implies dollar neutral)
+  # 2026-10-01 (D7 item 1): [S | beta]'w = 0 — the 12 sector groups (implies dollar
+  # neutral) AND zero ex-ante market beta. Declared sets: sector_beta_neutral,
+  # sector_neutral (reference row layer_no_beta_constraint), dollar_neutral.
+  constraints: "sector_beta_neutral"
+  market_beta:
+    market: "universe_cap_weighted_total_return"   # D4's M: analytics.universe_market_return of the audit frame
+    window_months: 36                # beta_i,t on months t-36..t-1 only (RET_END(s) <= SIGNAL_ASOF(t))
+    min_obs: 12                      # fewer -> no own estimate
+    missing: "sector_month_median"   # then the month's median; no estimate at all -> constraint dropped, counted
   name_cap_floor: 0.01               # |w_i| <= max(name_cap_floor, name_cap_mult / N_side)
   name_cap_mult: 5.0
   cap_tol: 1.0e-10
@@ -59,7 +75,10 @@ optimiser:
   participation_days: 21
 
 costs:
-  half_spread: "corwin_schultz_half"  # f_bidaskspreadflip / 2, per name per month, as of the signal date
+  # 2026-10-01 (D7 item 2): the harness-built Corwin-Schultz series
+  # (data_layer.load_or_build_cs_spread, column cs_spread) / 2, per name per month,
+  # as of the signal date; no composite leg is read.
+  half_spread: "corwin_schultz_half"
   half_spread_floor_bp: 1.0
   half_spread_missing: "tier_month_median"
   impact_eta: 0.5                    # c = hs + eta * sigma_daily * sqrt(Q / ADV)
@@ -77,13 +96,16 @@ costs:
 
 report:
   aum_usd: [1.0e8, 1.0e9, 5.0e9]
-  reference_rows: ["equal_rank_decile", "buffered", "layer_no_buffer", "layer_dollar_neutral_only"]
-  # ex_years is EMPTY until Phase E: it is then set by the date-free rule in
-  # config/test_config.yaml `diagnostics` (the finished composite's top-k
-  # long-short years in the decision window), never by hand and never from a
-  # year learned on another project's window. The second cut is a fixed
-  # mid-window decade, declared here before any number.
-  regime_cuts: {ex_years: [], window_2011_2020: [2011, 2020]}
+  reference_rows: ["equal_rank_decile", "buffered", "layer_no_buffer", "layer_no_beta_constraint",
+                   "layer_dollar_neutral_only"]
+  # ex_years is set by the date-free rule in config/test_config.yaml
+  # `diagnostics` (ex_regime_top_years: 3): the finished composite's k = 3
+  # calendar years with the highest compounded hedged long-short return in the
+  # decision window, never by hand and never from a year learned on another
+  # project's window. 2026-10-01 (D7 item 3): v14's in-window baseline (run 042,
+  # 1999-01..2021-12) prints ls_top_years = 2000,2001,2021. The second cut is a
+  # fixed mid-window decade, declared before any number.
+  regime_cuts: {ex_years: [2000, 2001, 2021], window_2011_2020: [2011, 2020]}
   bias_stat_window_months: 12
   # 2026-09-27 additions, before any real layer number (alpha-review of bd5c486); reported, never a gate:
   #   new_positions_delisting: names opened/increased (|w| > |h|) in a month whose ret_kind is

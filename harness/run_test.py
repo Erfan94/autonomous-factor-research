@@ -52,7 +52,7 @@ from harness.analytics import (SERIES_KEYS, align_arms, assign_composite_decile,
                                stage2_checks, survivorship_check, tier_scalars, nw_tstat)
 from harness.data_layer import (PanelIndex, build_rebalance_schedule,      # noqa: E402
                                 compute_month_frame, last_completed_month_end,
-                                load_or_build_ff3, load_or_build_market,
+                                load_or_build_cs_spread, load_or_build_ff3, load_or_build_market,
                                 load_or_build_panel, load_or_build_ps,
                                 load_or_build_tailex, load_or_build_trend, load_snapshot)
 from harness import construction_layer as CL                                # noqa: E402
@@ -413,11 +413,13 @@ def drive_stage3(frames, legs, cfg, stamps, eval_start, eval_end, include_holdou
 
 
 def drive_layer(frames, legs, cfg, stamps, eval_start, eval_end, include_holdout, holdout_only, C,
-                lcfg, layer_sha, paths_path=None, info=None):
+                lcfg, layer_sha, paths_path=None, info=None, spread=None):
     """Phase E: the construction layer on the live composite, scored exactly as
     `--baseline --stage 2` scores it. One block per (row, AUM). Reports, never
     decides (D8, D15). The monthly path of every (row, AUM) is written to
-    `paths_path` (…paths.csv beside the .txt); its hash is each block's paths_sha."""
+    `paths_path` (…paths.csv beside the .txt); its hash is each block's paths_sha.
+    `spread`: the harness-built Corwin-Schultz series the cost model reads
+    (data_layer.load_or_build_cs_spread; D7 item 2)."""
     n_dec = int(cfg["rebalance"]["n_deciles"])
     metas = [f.meta() for f in legs]
     _print_families(metas)
@@ -428,10 +430,13 @@ def drive_layer(frames, legs, cfg, stamps, eval_start, eval_end, include_holdout
     print("\n\n" + "#" * 72 + f"\n#  CONSTRUCTION LAYER : {C.COMPOSITE_VERSION} "
           f"(LAYER_SHA {layer_sha}, book from {lcfg['window']['book_start']})\n" + "#" * 72)
     oos = cfg["dates"]["out_of_sample_start"] if (include_holdout or holdout_only) else None
-    results, meta = CL.run_layer(audit, metas, cfg, lcfg, stamps["composite_sha"], oos_start=oos)
+    results, meta = CL.run_layer(audit, metas, cfg, lcfg, stamps["composite_sha"], oos_start=oos, spread=spread)
     CL.print_layer_table(results)
     print(f"\n  first live month {meta['first_live_month']}; risk model first ready {meta['risk_first_ready']}; "
           f"vol factor first estimable {meta['vol_factor_first_month']}; {meta['sector_groups']} sector groups")
+    print(f"  constraints {meta['constraints']}; market beta first estimable {meta['market_beta_first_month']}, "
+          f"own estimate for {_f(meta['market_beta_own_estimate_pct'])}% of book name-months (rest: "
+          f"sector-month median); CS spread measured on {_f(meta['spread_measured_pct'])}% of ID-months")
     print("  In-window figures describe TRADABILITY of a composite selected on this window, not an "
           "expected return (CONSTRUCTION.md §1).")
     paths_sha = "none"
@@ -452,10 +457,14 @@ def drive_layer(frames, legs, cfg, stamps, eval_start, eval_end, include_holdout
                        "first_live_month": meta["first_live_month"], "risk_first_ready": meta["risk_first_ready"],
                        "vol_factor_first_month": meta["vol_factor_first_month"],
                        "sector_groups": meta["sector_groups"], "sector_group_labels": meta["sector_group_labels"],
+                       "constraints": meta["constraints"], "market_beta_first_month": meta["market_beta_first_month"],
+                       "market_beta_own_estimate_pct": meta["market_beta_own_estimate_pct"],
+                       "spread_measured_pct": meta["spread_measured_pct"],
                        "paths_sha": paths_sha})
         fields.update({k: v for k, v in st.items() if k not in SERIES_KEYS})
         blocks.append(emit_result_block(fields))
-        keys = ["gross_ann_return_pct", "net_ann_return_pct", "net_sharpe", "net_tstat_nw", "net_maxdd_pct",
+        keys = ["gross_ann_return_pct", "net_ann_return_pct", "net_sharpe", "net_tstat_nw", "net_beta_on_market",
+                "exp_beta_mean", "net_maxdd_pct",
                 "net_maxdd_peak", "net_maxdd_trough", "net_worst_12m_pct", "turnover_oneway_pct",
                 "reproj_share_of_turnover_pct", "cost_spread_ann_pct", "cost_impact_ann_pct", "cost_borrow_ann_pct",
                 "participation_hit_share_pct", "budget_scaled_months", "flat_months", "avg_n_long",
@@ -465,6 +474,7 @@ def drive_layer(frames, legs, cfg, stamps, eval_start, eval_end, include_holdout
         tiers = "; ".join(f"{t} net {_f(st.get(f'tier_{t}_net_ann_return_pct'))}% cost {_f(st.get(f'tier_{t}_cost_ann_pct'))}%"
                           for t in CL.TIERS)
         cut_keys = ["net_n_months", "gross_ann_return_pct", "net_ann_return_pct", "net_sharpe", "net_tstat_nw",
+                    "net_beta_on_market",
                     "net_maxdd_pct", "net_maxdd_peak", "net_maxdd_trough", "net_worst_12m_pct",
                     "turnover_oneway_pct", "cost_spread_ann_pct", "cost_impact_ann_pct", "cost_borrow_ann_pct",
                     "flat_months", "budget_scaled_months_live", "gross_budget_mean_live",
@@ -927,12 +937,12 @@ def run(args, C=None, cfg=None, runtime=None, stamps=None, snap=None, root=ROOT,
         layer_sha = CL.layer_sha(layer_cfg_path) if layer_cfg_path else CL.layer_sha()
         try:
             CL.check_composite(lcfg, stamps["composite_sha"])
+            CL.row_specs(lcfg)
         except CL.LayerRefused as e:
             raise SystemExit(str(e))
-        spread_col = CL.SPREAD_COLUMNS.get(str(lcfg["costs"]["half_spread"]))
-        if not any(f.col == spread_col for f in legs):
-            raise SystemExit(f"construction layer refused: no composite leg carries {spread_col!r}, the "
-                             "measured half-spread the cost model reads (CONSTRUCTION.md §6)")
+        if str(lcfg["costs"]["half_spread"]) not in CL.SPREAD_COLUMNS:
+            raise SystemExit(f"construction layer refused: unknown costs.half_spread "
+                             f"{lcfg['costs']['half_spread']!r}")
     factors_needed = (legs + cands) if (stage in (2, 3) or args.baseline) else cands
 
     eval_start, eval_end = resolve_window(cfg, args.include_holdout, holdout_only)
@@ -1020,10 +1030,11 @@ def run(args, C=None, cfg=None, runtime=None, stamps=None, snap=None, root=ROOT,
         print("\nScoring and reporting")
         print("=" * 72)
         if layer:
+            spread = load_or_build_cs_spread(snap, runtime, stamps["data_sha"], root=root)
             blocks, summaries = drive_layer(frames, legs, cfg, stamps, eval_start, eval_end,
                                             oos_flag, holdout_only, C, lcfg, layer_sha,
                                             out_path.with_suffix(".paths.csv") if out_path else None,
-                                            layer_info)
+                                            layer_info, spread=spread)
         elif args.baseline and stage == 3:
             blocks, summaries = drive_stage3(frames, legs, cfg, stamps, eval_start, eval_end,
                                              oos_flag, C)

@@ -1,8 +1,10 @@
 """
 The Phase E construction layer (docs/CONSTRUCTION.md r2, harness/construction_layer.py).
 
-Asserted: the closed-form KKT solution equals a dense solve; the group
-constraint holds to 1e-10 after the steps that impose it (1, 2 and 5; the
+Asserted: the closed-form KKT solution equals a dense solve (with and
+without the market-beta column); the constraint (sector groups, plus the
+market beta under sector_beta_neutral) holds to 1e-10 after the steps that
+impose it (1, 2 and 5; the
 buffer and the participation cap move names one at a time by design, and
 step 5 exists to re-project after them); name caps hold on the target and
 participation caps on the final trades; the drift accounting on a hand-built
@@ -10,7 +12,10 @@ three-month, four-name book; point-in-time: poisoning monthly_ret for months
 >= t leaves every input at t unchanged; the cost formula; a flat book when
 IC_t <= 0; the LAYER_SHA / composite refusal; the LAYER block parses and
 validates; records.py does not DRIFT on a LAYER run; the Stage 3 books the
-layer re-costs reproduce Stage 3's own series.
+layer re-costs reproduce Stage 3's own series; the per-name market beta is
+analytics.trailing_beta's; the harness-built Corwin-Schultz series equals the
+BidAskSpread candidate's raw value and the cost model charges half of it; the
+runner runs the layer on a composite with no spread leg.
 """
 import argparse
 import copy
@@ -88,7 +93,7 @@ def test_name_cap_holds_and_keeps_groups_neutral():
     g = rng.integers(0, G, n)
     w = rng.standard_t(2, n) * 0.01
     w = CL.project_neutral(w, g, G)
-    w2, it, excess, resid = CL.apply_name_cap(w, g, G, 0.01, 5.0, 1e-10, 50)
+    w2, it, excess, resid = CL.apply_name_cap(w, CL.Constraint(g, G), 0.01, 5.0, 1e-10, 50)
     nL, nS = (w > 0).sum(), (w < 0).sum()
     cap = np.where(w2 > 0, max(0.01, 5 / nL), max(0.01, 5 / nS))
     assert np.all(np.abs(w2) <= cap + 1e-10) and excess <= 1e-10
@@ -112,14 +117,21 @@ def test_buffer_and_participation_arithmetic():
 def test_constraints_after_each_pipeline_step(panel):
     audit, P, R, ic_t = panel
     m = _book_month(P)
-    for constraint, check in (("sector_neutral", "sector"), ("dollar_neutral", "dollar")):
+    for constraint, check in (("sector_beta_neutral", "beta"), ("sector_neutral", "sector"),
+                              ("dollar_neutral", "dollar")):
         T = CL.build_target(P, R, m, abs(ic_t[m]) + 0.05, LCFG, constraint)
         assert not T["flat"]
         I, groups, G = T["eligible"], T["groups"], T["n_groups"]
-        # step 1 (target) and step 2 (name cap): the group constraint to 1e-10
+        beta = P.market_betas(m)[0]
+        assert (T["beta"] is not None) == (check == "beta") and not T["beta_dropped"]
+        # step 1 (target) and step 2 (name cap): the constraint to 1e-10
         assert T["resid_step1"] <= 1e-10 and T["resid_step2"] <= 1e-10
         assert np.max(np.abs(np.bincount(groups[I], T["w_step1"], G))) <= 1e-10
         assert np.max(np.abs(np.bincount(groups, T["t"], G))) <= 1e-10
+        if check == "beta":
+            assert abs(T["w_step1"] @ beta[I]) <= 1e-10 and abs(T["t"] @ beta) <= 1e-10
+        else:                                                  # the unconstrained books carry beta
+            assert abs(T["t"] @ beta) > 1e-6
         assert abs(T["t"].sum()) <= 1e-10                      # sector-neutral implies dollar-neutral
         assert np.abs(T["t"]).sum() <= LCFG["alpha"]["gross_cap"] + 1e-12
         w = T["t"][I]
@@ -131,15 +143,18 @@ def test_constraints_after_each_pipeline_step(panel):
         # steps 3-5 against a held book far from the target, at an AUM where
         # the participation cap binds on many names
         rng = np.random.default_rng(5)
-        hU = CL.project_neutral(T["t"] * 0.3 + rng.normal(0, 0.002, len(T["t"])) * I, groups, G)
+        hU = T["cons"].project(T["t"] * 0.3 + rng.normal(0, 0.002, len(T["t"])) * I)
         aum = 5e10
         dec = CL.layer_decider(P, {m: T}, LCFG, aum)
         w5, diag = dec(m, hU)
         assert diag["n_participation_hit"] > 0
         assert np.max(np.abs(np.bincount(groups, w5, G))) <= 1e-10
         assert abs(w5.sum()) <= 1e-10
-        if check == "sector":
+        if check in ("sector", "beta"):
             assert np.max(np.abs(np.bincount(P.sector[P.sl(m)], w5, P.G))) <= 1e-10
+        if check == "beta":
+            assert abs(w5 @ beta) <= 1e-10 and diag["resid_beta_final"] <= 1e-10
+            assert diag["reproj_traded"] > 0                   # step 5 had work to do
         capd = o["participation_pct"] / 100 * P.adv[P.sl(m)] * o["participation_days"] / aum
         assert np.all(np.abs(w5 - hU) <= capd * (1 + 1e-9) + 1e-15)
         assert diag["overrides"] == 0
@@ -149,7 +164,10 @@ def test_constraints_after_each_pipeline_step(panel):
 def test_full_path_neutral_every_month_and_first_book_2001_01(panel):
     audit, P, R, ic_t = panel
     res, meta = CL.run_layer(audit, METAS, CFG, LCFG, SHA, log=lambda *a: None,
-                             rows=["layer", "layer_dollar_neutral_only"])
+                             rows=["layer", "layer_no_beta_constraint", "layer_dollar_neutral_only"])
+    assert meta["constraints"] == "sector_beta_neutral"
+    assert meta["market_beta_first_month"].startswith("2000-01")    # 12 months of M (1999-01..12) behind it
+    assert meta["market_beta_own_estimate_pct"] > 60
     assert meta["first_live_month"].startswith("2001-01")
     assert meta["risk_first_ready"].startswith("2001-01")
     assert meta["vol_factor_first_month"].startswith("1999-07")     # 6 obs of history
@@ -158,10 +176,19 @@ def test_full_path_neutral_every_month_and_first_book_2001_01(panel):
         assert st["book_start"].startswith("2001-01")
         assert st["max_neutrality_residual"] <= 1e-10, (row, aum)
         assert st["participation_overrides"] == 0
+        assert st["constraint"] == {"layer": "sector_beta_neutral", "layer_no_beta_constraint": "sector_neutral",
+                                    "layer_dollar_neutral_only": "dollar_neutral"}[row]
+        if row == "layer":
+            assert st["max_beta_residual"] <= 1e-10 and st["beta_constraint_dropped_months"] == 0
+            assert abs(st["exp_beta_mean"]) <= 1e-10
+        else:
+            assert st["max_beta_residual"] == 0.0
         assert st["budget_scaled_months"] >= 0 and st["flat_months"] == 0
         for k in ("cut_exyears_net_n_months", "cut_2011_2020_net_n_months", "tier_MEGA_net_ann_return_pct",
                   "cost_spread_ann_pct", "cost_impact_ann_pct", "cost_borrow_ann_pct", "bias_stat_mean",
-                  "net_maxdd_trough", "exp_size_mean", "exp_family_fa_mean", "reproj_share_of_turnover_pct"):
+                  "net_maxdd_trough", "exp_size_mean", "exp_family_fa_mean", "reproj_share_of_turnover_pct",
+                  "net_beta_on_market", "gross_beta_on_market", "net_beta_on_market_live", "exp_beta_mean",
+                  "cut_exyears_net_beta_on_market"):
             assert k in st, k
 
 
@@ -181,7 +208,7 @@ def _tiny_panel():
             rows.append({"ID": i, "DATE": d[t], "RET_END": d[t], "SIGNAL_ASOF": sig[t], "monthly_ret": r,
                          "ret_kind": "partial_delisted_performance" if (t == 1 and i == "D") else "full",
                          "liq_tier": "MID", "sector": "Energy", "mkt_cap_usd": 1e9, "adv_usd": 1e7,
-                         "COMPOSITE_SCORE": 0.5, "f_bidaskspreadflip": 0.002})
+                         "COMPOSITE_SCORE": 0.5, "cs_spread": 0.002})
     return pd.DataFrame(rows), d
 
 
@@ -355,7 +382,9 @@ def test_layer_blocks_parse_and_validate(panel):
     audit, *_ = panel
     res, blocks = _layer_blocks(audit)
     rows = list(CL.row_specs(LCFG))
-    assert len(blocks) == len(rows) * len(LCFG["report"]["aum_usd"]) == 30
+    assert len(blocks) == len(rows) * len(LCFG["report"]["aum_usd"]) == 33
+    assert rows[6:] == ["equal_rank_decile", "buffered", "layer_no_buffer", "layer_no_beta_constraint",
+                        "layer_dollar_neutral_only"]
     assert rows[:6] == ["layer", "layer_eta_0.25", "layer_eta_1", "layer_fixed_tier_spread",
                         "layer_exec_half_month", "layer_tiered_borrow"]
     parsed = parse_result_blocks("\n".join(blocks))
@@ -407,53 +436,16 @@ def test_records_check_does_not_drift_on_a_layer_run(tmp_path, monkeypatch):
 
 # ---- the runner, end to end on the synthetic snapshot -----------------------------
 
-def _v0_with_spread_leg():
-    """The pinned v0 composite plus a synthetic spread leg carrying the column
-    the layer's cost model reads (f_bidaskspreadflip, a full proportional
-    spread), computable on the fixture's SEP high/low. The predecessor took
-    this leg from its accepted pool; this project has no accepted leg at
-    bootstrap, and the layer's dependence on a composite leg for its spread
-    is a Phase E redesign item (docs/CONSTRUCTION.md)."""
-    from factors import composite as C
-    from harness.factor_def import FactorDef
-    from tests.test_run_end_to_end import _pinned_v0
-
-    def _spread(ctx):
-        # The fixture's high/low are a fixed 1% band around the close, so a
-        # range proxy would be one mass point; the daily close-to-close
-        # dispersion varies by name and stands in for a spread here.
-        d = ctx.daily("SEP", ["close"], 31)
-        if d.empty:
-            return pd.Series(dtype=float)
-        d = d.sort_values(["ID", "date"], kind="mergesort")
-        close = d["close"].astype(float).where(d["close"] > 0)
-        r = close / close.groupby(d["ID"]).shift(1) - 1.0
-        return (r.groupby(d["ID"]).std() * 0.5).clip(lower=1e-4)
-
-    bas = FactorDef(name="SpreadProxy", col="f_bidaskspreadflip", compute=_spread, ascending=False,
-                    weight=1.0, inputs=("SEP.close",), history_months=1,
-                    lookback_months=1, family="trading_activity")
-    comp = _pinned_v0(C)
-    comp.COMPOSITE_FACTORS = list(comp.COMPOSITE_FACTORS) + [bas]
-    return comp
-
-
-def test_runner_refuses_the_layer_without_the_spread_leg(synthetic, cfg, runtime, snap):
-    from harness import run_test as RT
-    from tests.test_run_end_to_end import C_V0, STAMPS
-    lcfg = copy.deepcopy(LCFG)
-    lcfg["composite"]["composite_sha"] = STAMPS["composite_sha"]
-    ns = argparse.Namespace(factor=None, factors=None, baseline=True, stage=None, include_holdout=False,
-                            holdout_only=False, dry_run=False, frozen=True, schema_only=False,
-                            construction_layer=True)
-    before = set((synthetic["root"] / "results").glob("*")) if (synthetic["root"] / "results").exists() else set()
-    with pytest.raises(SystemExit, match="f_bidaskspreadflip"):
-        RT.run(ns, C=C_V0, cfg=cfg, runtime=runtime, stamps=STAMPS, snap=snap, root=synthetic["root"],
-               out_stream=io.StringIO(), layer_cfg=lcfg)
-    after = set((synthetic["root"] / "results").glob("*")) if (synthetic["root"] / "results").exists() else set()
-    assert after == before, "a refused layer run writes no result file"
+def test_layer_panel_refuses_a_frame_without_the_harness_spread():
+    """The cost model reads the harness-built series (attach_spread), never a
+    leg; a frame without it is refused rather than charged the floor."""
     with pytest.raises(CL.LayerRefused, match="spread column"):
-        CL.LayerPanel(make_audit(50, 6).drop(columns=["f_bidaskspreadflip"]), LCFG)
+        CL.LayerPanel(make_audit(50, 6).drop(columns=["cs_spread"]), LCFG)
+    # a frame without any spread-like leg runs once the series is attached
+    audit = make_audit(60, 6).drop(columns=["cs_spread", "f_bidaskspreadflip"])
+    cs = pd.DataFrame({"me": audit["SIGNAL_ASOF"], "ID": audit["ID"], "cs_spread": 0.01})
+    P = CL.LayerPanel(CL.attach_spread(audit, cs), LCFG)
+    assert np.all(P.spread == 0.01)
 
 
 def test_runner_refuses_holdout_only_with_the_layer(tmp_path):
@@ -472,8 +464,9 @@ def test_runner_refuses_holdout_only_with_the_layer(tmp_path):
 @pytest.mark.parametrize("holdout", [False, True])
 def test_runner_layer_end_to_end_on_the_synthetic_snapshot(synthetic, cfg, runtime, snap, holdout):
     from harness import run_test as RT
-    from tests.test_run_end_to_end import STAMPS
-    C_V0 = _v0_with_spread_leg()
+    from tests.test_run_end_to_end import C_V0, STAMPS
+    # the plain pinned v0 composite: no leg carries a spread (D7 item 2)
+    assert not any("spread" in f.col for f in C_V0.active_factors())
     lcfg = copy.deepcopy(LCFG)
     lcfg["composite"]["composite_sha"] = STAMPS["composite_sha"]
     ns = argparse.Namespace(factor=None, factors=None, baseline=True, stage=None, include_holdout=holdout,
@@ -491,7 +484,8 @@ def test_runner_layer_end_to_end_on_the_synthetic_snapshot(synthetic, cfg, runti
         warns = validate_results(b, STAMPS["harness_sha"], STAMPS["config_sha"], cfg, STAMPS["data_sha"])
         assert all(w.startswith("OUT-OF-SAMPLE") or w.startswith("Only") for w in warns), warns
         assert ("cut_holdout_net_n_months" in b) == holdout
-        assert b["composite_legs"].endswith("SpreadProxy")
+        assert "Spread" not in b["composite_legs"] and b["constraints"] == "sector_beta_neutral"
+        assert b["spread_measured_pct"] > 50
         for k in ("unclassified_share_pct", "delisted_share_unclassified_pct", "new_positions_delisting_n"):
             assert k in b, k
     txt = sorted((synthetic["root"] / "results").glob("*_LAYER_stageE_*.txt"))[-1]
@@ -544,7 +538,7 @@ def test_gross_never_exceeds_the_budget_in_budget_scaled_months():
     R = CL.build_risk_model(P, lcfg)
     ic, _ = CL.ic_forecast(P, lcfg)
     book = [m for m in range(P.M) if P.dates[m] >= pd.Timestamp("2001-01-01")]
-    for constraint in ("sector_neutral", "dollar_neutral"):
+    for constraint in ("sector_beta_neutral", "sector_neutral", "dollar_neutral"):
         T = {m: CL.build_target(P, R, m, ic[m], lcfg, constraint) for m in book}
         for aum in (1e8, 5e10):
             seen = {}
@@ -562,6 +556,8 @@ def test_gross_never_exceeds_the_budget_in_budget_scaled_months():
                 assert np.abs(w).sum() <= T[m]["G_t"] + 1e-9, (constraint, aum, m)
                 assert np.max(np.abs(np.bincount(T[m]["groups"], w, T[m]["n_groups"]))) <= 1e-10
                 assert abs(w.sum()) <= 1e-10
+                if constraint == "sector_beta_neutral":
+                    assert abs(w @ T[m]["beta"]) <= 1e-10
             st, _ = CL.summarise(rec, lcfg)
             assert st["gross_budget_max_excess"] == 0.0 and st["months_gross_exceeds_budget"] == 0
 
@@ -639,10 +635,10 @@ def test_sigma_falls_back_to_tier_median_then_trailing_vol(panel):
 
 @pytest.mark.parametrize("fill", ["finite", "nan"])
 def test_poisoning_every_input_after_t_leaves_t_unchanged(fill):
-    """f_bidaskspreadflip, adv_usd, mkt_cap_usd, ret_kind and monthly_ret for
-    months strictly after t, poisoned with finite garbage or NaN: the targets
-    (both constraints), the final weights, the costs and the Stage 3 books at
-    t are unchanged."""
+    """cs_spread, adv_usd, mkt_cap_usd, ret_kind and monthly_ret for months
+    strictly after t, poisoned with finite garbage or NaN: the market betas,
+    the targets (every constraint set), the final weights, the costs and the
+    Stage 3 books at t are unchanged."""
     audit = make_audit(n_names=200, n_months=34, seed=8)
     dates = sorted(audit["DATE"].unique())
     t_date = dates[27]
@@ -650,7 +646,7 @@ def test_poisoning_every_input_after_t_leaves_t_unchanged(fill):
     fut = bad["DATE"] > t_date
     rng = np.random.default_rng(1)
     k = int(fut.sum())
-    for col, val in (("f_bidaskspreadflip", rng.uniform(0, 5, k)), ("adv_usd", rng.uniform(1, 1e12, k)),
+    for col, val in (("cs_spread", rng.uniform(0, 5, k)), ("adv_usd", rng.uniform(1, 1e12, k)),
                      ("mkt_cap_usd", rng.uniform(1, 1e13, k)), ("monthly_ret", rng.normal(3, 2, k))):
         bad.loc[fut, col] = np.nan if fill == "nan" else val
     bad["ret_kind"] = bad["ret_kind"].astype(object)
@@ -662,8 +658,8 @@ def test_poisoning_every_input_after_t_leaves_t_unchanged(fill):
         ic, _ = CL.ic_forecast(P, LCFG)
         m = int(np.searchsorted(P.dates.values, np.datetime64(t_date)))
         book = [j for j in range(P.M) if P.dates[j] >= pd.Timestamp("2001-01-01") and j <= m]
-        out = {"m": m}
-        for c in ("sector_neutral", "dollar_neutral"):
+        out = {"m": m, "beta": P.market_betas(m)[0]}
+        for c in ("sector_beta_neutral", "sector_neutral", "dollar_neutral"):
             T = {j: CL.build_target(P, R, j, ic[j], LCFG, c) for j in book}
             out[c] = T[m]["t"]
             seen = {}
@@ -787,3 +783,298 @@ def test_paths_csv_reproduces_the_annualised_returns(holdout_pair, tmp_path):
         assert sub["net"].mean() * 12 * 100 == st["net_ann_return_pct"]
         hold = pd.to_datetime(sub["date"]) >= pd.Timestamp(OOS)
         assert sub.loc[hold.values, "net"].mean() * 1200 == pytest.approx(st["cut_holdout_net_ann_return_pct"], rel=1e-12)
+
+
+# ---- D7 (2026-10-01): market-beta constraint, harness-built spread ------------------
+
+def test_kkt_with_the_beta_column_equals_a_dense_solve():
+    X, F, D, alpha, C, g = _random_risk()
+    beta = np.random.default_rng(4).uniform(0.3, 1.8, len(alpha))
+    Cb = np.hstack([C, beta[:, None]])
+    Sigma = X @ F @ X.T + np.diag(D)
+    n, k = Cb.shape
+    K = np.block([[Sigma, Cb], [Cb.T, np.zeros((k, k))]])
+    dense = np.linalg.solve(K, np.concatenate([alpha, np.zeros(k)]))[:n]
+    w = CL.solve_neutral_mv(alpha, X, F, D, Cb)
+    assert np.allclose(w, dense, rtol=1e-9, atol=1e-12)
+    assert np.max(np.abs(Cb.T @ w)) < 1e-12
+    # a beta column collinear with the dummies is a redundant constraint, not an error
+    wc = CL.solve_neutral_mv(alpha, X, F, D, np.hstack([C, C @ np.arange(1.0, C.shape[1] + 1)[:, None]]))
+    assert np.allclose(wc, CL.solve_neutral_mv(alpha, X, F, D, C), rtol=1e-8, atol=1e-12)
+
+
+def test_constraint_projection_is_the_minimum_norm_move_of_the_free_names():
+    rng = np.random.default_rng(12)
+    n, G = 300, 7
+    g = rng.integers(0, G, n)
+    beta = rng.uniform(0.2, 2.0, n)
+    w = rng.normal(0, 0.01, n)
+    free = rng.random(n) < 0.7
+    cons = CL.Constraint(g, G, beta[:, None])
+    p = cons.project(w, free)
+    assert cons.max_resid(p) <= 1e-15 and np.array_equal(p[~free], w[~free])
+    # the closed form: delta_f = -A_f (A_f'A_f)^-1 A'w
+    A = np.hstack([(g[:, None] == np.arange(G)[None, :]).astype(float), beta[:, None]])
+    Af = A[free]
+    dense = w.copy()
+    dense[free] -= Af @ np.linalg.solve(Af.T @ Af, A.T @ w)
+    assert np.allclose(p, dense, rtol=0, atol=1e-15)
+    # without the beta column it IS project_neutral (the same arithmetic)
+    assert np.array_equal(CL.Constraint(g, G).project(w, free), CL.project_neutral(w, g, G, free))
+    assert np.array_equal(CL.Constraint(g, G).step(w, free) + w, CL.project_neutral(w, g, G, free))
+    # a group with no free name keeps its residual; the beta row is still met
+    free2 = free & (g != 0)
+    p2 = cons.project(w, free2)
+    r2 = cons.residual(p2)
+    assert abs(r2[0] - np.sum(w[g == 0])) <= 1e-15 and np.max(np.abs(r2[1:])) <= 1e-15
+    assert cons.bad_rows(p2, 1e-12).all() == False and cons.bad_rows(p2, 1e-12)[g == 0].all()  # noqa: E712
+
+
+# The pre-D7 group-only step 2 and step 5, frozen here as the reference the
+# generalised (constraint-matrix) code must reproduce exactly on a sector-only book.
+def _old_apply_name_cap(w, groups, n_groups, floor, mult, tol, max_iter):
+    gs = CL._group_sums
+    w = np.asarray(w, dtype=float).copy()
+    nL, nS = int((w > 0).sum()), int((w < 0).sum())
+    capL = max(floor, mult / nL) if nL else floor
+    capS = max(floor, mult / nS) if nS else floor
+    caps = lambda x: np.where(x > 0, capL, np.where(x < 0, capS, min(capL, capS)))  # noqa: E731
+    for it in range(1, int(max_iter) + 1):
+        w = np.clip(w, -caps(w), caps(w))
+        if np.max(np.abs(gs(w, groups, n_groups))) <= tol:
+            break
+        w = CL.project_neutral(w, groups, n_groups, np.abs(w) < caps(w) - tol)
+        still = np.abs(gs(w, groups, n_groups)) > tol
+        if still.any():
+            w = CL.project_neutral(w, groups, n_groups, still[groups])
+        if np.max(np.abs(w) - caps(w)) <= tol:
+            break
+    free = np.abs(w) < caps(w)
+    return CL.project_neutral(w, groups, n_groups,
+                              np.where(np.bincount(groups[free], minlength=n_groups)[groups] > 0, free, True))
+
+
+def _old_exact(w, groups, n_groups, eligible, held, capd):
+    pref = eligible & (np.abs(w - held) < capd * (1 - 1e-6))
+    n_pref = np.bincount(groups[pref], minlength=n_groups)
+    n_elig = np.bincount(groups[eligible], minlength=n_groups)
+    members = np.where(n_pref[groups] > 0, pref, np.where(n_elig[groups] > 0, eligible, True))
+    return CL.project_neutral(w, groups, n_groups, members)
+
+
+def _old_neutralise(w, held, capd, groups, n_groups, eligible, tol, max_iter):
+    gs = CL._group_sums
+    w = w.copy()
+    for _ in range(int(max_iter)):
+        r = gs(w, groups, n_groups)
+        bad = np.abs(r) > tol
+        if not bad.any():
+            return _old_exact(w, groups, n_groups, eligible, held, capd)
+        need = -r[groups]
+        d = w - held
+        room = np.where(need > 0, capd - d, capd + d)
+        room = np.where(eligible & bad[groups], np.maximum(room, 0.0), 0.0)
+        free = room > 0
+        nf = np.bincount(groups[free], minlength=n_groups)
+        if not (nf[bad] > 0).any():
+            break
+        share = np.abs(r) / np.maximum(nf, 1)
+        w = w + np.where(free, np.sign(need) * np.minimum(share[groups], room), 0.0)
+    r = gs(w, groups, n_groups)
+    bad = np.abs(r) > tol
+    if not bad.any():
+        return _old_exact(w, groups, n_groups, eligible, held, capd)
+    ne = np.bincount(groups[eligible], minlength=n_groups)
+    return CL.project_neutral(w, groups, n_groups, np.where(ne[groups] > 0, eligible, True) & bad[groups])
+
+
+def _old_final_reproject(w, held, capd, groups, n_groups, eligible, gross_cap, tol, max_iter):
+    for _ in range(int(max_iter)):
+        w = _old_neutralise(w, held, capd, groups, n_groups, eligible, tol, max_iter)
+        g = float(np.abs(w).sum())
+        if g > gross_cap * (1 + 1e-12):
+            w = w * (gross_cap / g)
+        w, _ = CL.participation_cap(w, held, capd)
+        if (np.max(np.abs(CL._group_sums(w, groups, n_groups))) <= tol
+                and float(np.abs(w).sum()) <= gross_cap * (1 + 1e-9)):
+            break
+    w = _old_neutralise(w, held, capd, groups, n_groups, eligible, tol, max_iter)
+    g = float(np.abs(w).sum())
+    return w * (gross_cap / g) if g > gross_cap else w
+
+
+def test_sector_only_book_is_unchanged_by_the_generalised_projection(panel):
+    """layer_no_beta_constraint (sector_neutral) is the pre-D7 layer: the
+    constraint-matrix steps 2 and 5 reproduce the group-only code bit for bit."""
+    audit, P, R, ic_t = panel
+    o = LCFG["optimiser"]
+    rng = np.random.default_rng(3)
+    book = [m for m in range(P.M) if P.dates[m] >= pd.Timestamp("2001-01-01")]
+    for m in book[::3]:
+        T = CL.build_target(P, R, m, abs(ic_t[m]) + 0.05, LCFG, "sector_neutral")
+        I, g, G = T["eligible"], T["groups"], T["n_groups"]
+        old2 = _old_apply_name_cap(T["w_step1"], g[I], G, o["name_cap_floor"], o["name_cap_mult"],
+                                   o["cap_tol"], o["cap_max_iter"])
+        assert np.array_equal(old2, T["t"][I])
+        hU = T["cons"].project(T["t"] * 0.4 + rng.normal(0, 0.003, len(T["t"])) * I)
+        for aum in (1e8, 5e10):
+            capd = o["participation_pct"] / 100 * P.adv[P.sl(m)] * o["participation_days"] / aum
+            w4, _ = CL.participation_cap(CL.buffer_step(T["t"], hU, o["buffer_rel"], o["buffer_abs"],
+                                                        o["buffer_step"])[0], hU, capd)
+            new, _ = CL.final_reproject(w4, hU, capd, T["cons"], I, T["G_t"], o["cap_tol"], o["cap_max_iter"])
+            old = _old_final_reproject(w4, hU, capd, g, G, I, T["G_t"], o["cap_tol"], o["cap_max_iter"])
+            assert np.array_equal(new, old), (m, aum)
+
+
+def test_market_beta_is_analytics_trailing_beta_and_fills_from_the_sector_median(panel):
+    from harness.analytics import trailing_beta, universe_market_return
+    audit, P, R, _ = panel
+    mkt = universe_market_return(audit).reindex(P.dates)
+    assert np.allclose(P.mkt, mkt.to_numpy(), rtol=0, atol=1e-15)
+    m = _book_month(P) + 5
+    raw = CL.market_beta_raw(P, m)
+    ids = P.id_code[P.sl(m)]
+    checked = 0
+    for j in range(0, len(ids), 7):
+        y = pd.Series(P.RET[ids[j]], index=P.dates)          # the name on the panel's calendar (gaps NaN)
+        tb = trailing_beta(y, mkt, P.beta_window, P.beta_min_obs).iloc[m]
+        n_obs = int(np.isfinite(P.RET[ids[j], max(0, m - P.beta_window):m]).sum())
+        if n_obs >= P.beta_min_obs:
+            assert raw[j] == pytest.approx(tb, rel=1e-9, abs=1e-12)
+            checked += 1
+        else:
+            assert np.isnan(raw[j]) and tb == 0.0             # trailing_beta's "no hedge" is "no estimate" here
+    assert checked > 20
+    # the estimate recovers the planted market loadings on average (uniform 0.4..1.6)
+    assert 0.8 < np.nanmedian(raw) < 1.2
+    beta, n_own = P.market_betas(m)
+    valid = np.isfinite(raw)
+    assert n_own == int(valid.sum()) and np.array_equal(beta[valid], raw[valid])
+    g = P.sector[P.sl(m)]
+    for j in np.flatnonzero(~valid)[:10]:
+        assert beta[j] == np.median(raw[valid & (g == g[j])])
+    # no estimate at all (the panel's first year): the constraint is dropped and counted
+    T = CL.build_target(P, R, 3, 0.05, LCFG)
+    assert T["beta"] is None and T["beta_dropped"] and T["cons"].extra is None
+    # point in time: returns at and after t do not move beta_t
+    bad = audit.copy()
+    bad.loc[bad["DATE"] >= P.dates[m], "monthly_ret"] = 9.0
+    assert np.array_equal(CL.LayerPanel(bad, LCFG, METAS).market_betas(m)[0], beta)
+
+
+def test_realised_beta_on_the_market_is_reported_from_the_path(holdout_pair):
+    from harness.analytics import fullwindow_beta
+    full, _, _, meta = holdout_pair
+    for (row, aum), st in full.items():
+        df = meta["paths"][(row, aum)]
+        assert st["net_beta_on_market"] == fullwindow_beta(df["net"], df["mkt"])
+        hold = df.index >= pd.Timestamp(OOS)
+        assert st["cut_holdout_net_beta_on_market"] == fullwindow_beta(df.loc[hold, "net"], df.loc[hold, "mkt"])
+    # the beta-constrained book's ex-ante beta is zero every live month; the reference row's is not
+    lay, ref = meta["paths"][("layer", 1e8)], meta["paths"][("layer_no_beta_constraint", 1e8)]
+    live = ~lay["flat"].astype(bool)
+    assert np.max(np.abs(lay.loc[live, "exp_beta"])) <= 1e-10
+    assert np.mean(np.abs(ref.loc[live, "exp_beta"])) > 1e-4
+
+
+# ---- the Corwin-Schultz series (data_layer) ------------------------------------------
+
+def _candidate(name):
+    spec = importlib.util.spec_from_file_location(f"cand_{name}", ROOT / "factors" / "candidates" / f"{name}.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+class _DailyCtx:
+    """The two MonthContext accessors the BidAskSpread factor reads, over a
+    synthetic daily frame."""
+
+    def __init__(self, daily, signal_asof):
+        self.d, self.signal_asof = daily, pd.Timestamp(signal_asof)
+
+    def partial_months(self, table="SEP"):
+        return frozenset()
+
+    def daily(self, table, fields, days_back):
+        start = self.signal_asof - pd.Timedelta(days=int(days_back))
+        m = (self.d["date"] > start) & (self.d["date"] <= self.signal_asof)
+        return self.d.loc[m, ["date"] + list(fields) + ["ID"]].copy()
+
+
+def _synthetic_daily(seed=0, n_ids=12, start="2003-01-01", end="2004-06-30"):
+    """Random-walk closes inside random high/low ranges, with every case the
+    program screens: zero-volume days, high == low, a high/low > 8 print,
+    overnight gaps outside the day's range, and a name that starts late."""
+    rng = np.random.default_rng(seed)
+    days = pd.bdate_range(start, end)
+    rows = []
+    for i in range(n_ids):
+        d = days[rng.integers(0, 200):] if i == 0 else days
+        d = d[rng.random(len(d)) > 0.03]                      # missing trading days
+        px = 20 * np.exp(np.cumsum(rng.normal(0, 0.02, len(d))))
+        half = px * rng.uniform(0.002, 0.03, len(d))
+        hi, lo = px + half * rng.uniform(0.2, 1.5, len(d)), px - half * rng.uniform(0.2, 1.5, len(d))
+        vol = rng.integers(1000, 100000, len(d)).astype(float)
+        vol[rng.random(len(d)) < 0.05] = 0.0
+        flat = rng.random(len(d)) < 0.04
+        hi[flat] = lo[flat] = px[flat]
+        if i == 1:
+            hi[50] = lo[50] * 9.0                              # high/low > 8: dropped
+        gap = rng.random(len(d)) < 0.05                        # close outside the day's range
+        px = np.where(gap, hi * 1.01, px)
+        rows.append(pd.DataFrame({"ID": f"{1000 + i}", "date": d, "high": hi, "low": lo, "close": px,
+                                  "volume": vol}))
+    daily = pd.concat(rows, ignore_index=True)
+    return daily.sample(frac=1.0, random_state=seed).reset_index(drop=True)   # snapshot rows are unordered
+
+
+def test_cs_spread_series_equals_the_bidaskspread_candidates_raw_value():
+    from harness import data_layer as DL
+    bas = _candidate("BidAskSpread")
+    daily = _synthetic_daily()
+    months = list(pd.date_range("2003-02-01", "2004-06-30", freq="BME"))
+    cs = DL.cs_spread_monthly(daily, months)
+    n_cmp = 0
+    for s in months:
+        raw = bas._compute(_DailyCtx(daily, s))
+        got = cs[cs["me"] == s].set_index("ID")["cs_spread"]
+        assert set(raw.index) == set(got.index), s
+        r, h = raw.sort_index(), got.sort_index()
+        assert np.array_equal(r.to_numpy(), h.to_numpy(), equal_nan=True), s      # bit for bit
+        n_cmp += int(h.notna().sum())
+    assert n_cmp > 150 and (cs["cs_spread"] > 0).mean() > 0.5
+    # a partial month is not estimated; the signal date bounds the window (no later row is read)
+    assert DL.cs_spread_monthly(daily, months[:1], frozenset({months[0].to_period("M")})).empty
+    late = daily.copy()
+    late.loc[late["date"] > months[5], ["high", "low", "close"]] *= 3.0
+    a = cs[cs["me"] <= months[5]].reset_index(drop=True)
+    b = DL.cs_spread_monthly(late, months[:6])
+    pd.testing.assert_frame_equal(a, b)
+    # the cost model charges half of it (floored at 1 bp)
+    tier = np.zeros(len(h), dtype=np.int64)
+    hs = CL.half_spreads(h.to_numpy(), tier, LCFG)
+    ok = np.isfinite(h.to_numpy())
+    assert np.array_equal(hs[ok], np.maximum(0.5 * h.to_numpy()[ok], 1e-4))
+
+
+def test_cs_spread_attaches_on_the_signal_date_and_caches_on_data_sha(tmp_path, snap):
+    from harness import data_layer as DL
+    audit = make_audit(40, 5)
+    cs = pd.DataFrame({"me": audit["SIGNAL_ASOF"], "ID": audit["ID"],
+                       "cs_spread": np.arange(len(audit), dtype=float)})
+    shuffled = cs.sample(frac=1.0, random_state=1)
+    got = CL.attach_spread(audit.drop(columns=["cs_spread"]), shuffled)
+    assert np.array_equal(got["cs_spread"].to_numpy(), np.arange(len(audit), dtype=float))
+    # a name-month the series lacks stays NaN (half_spreads fills it from the tier-month median)
+    assert CL.attach_spread(audit, shuffled.iloc[5:])["cs_spread"].isna().sum() == 5
+    with pytest.raises(CL.LayerRefused):
+        CL.attach_spread(audit, pd.concat([cs, cs.iloc[:1]]))
+    k = DL.cs_spread_cache_key("abc")
+    assert k == DL.cs_spread_cache_key("abc") and k != DL.cs_spread_cache_key("abd")
+    rt = {"cache": {"dir": str(tmp_path), "enabled": True}}
+    built = DL.load_or_build_cs_spread(snap, rt, "abc", root=tmp_path, log=lambda *a: None)
+    assert (tmp_path / f"cs_spread_monthly_{k}.parquet").exists()
+    hit = DL.load_or_build_cs_spread(snap, rt, "abc", root=tmp_path, log=lambda *a: None)
+    pd.testing.assert_frame_equal(built, hit)
+    assert list(built.columns) == ["me", "ID", "cs_spread", "cs_n_days"] and built["cs_spread"].notna().any()

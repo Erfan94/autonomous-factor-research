@@ -1977,6 +1977,207 @@ def load_or_build_trend(snap, cfg, runtime, data_sha, root=ROOT, log=print):
 
 
 # =============================================================================
+# Corwin-Schultz spread series — the construction layer's cost input (D7 item 2)
+# =============================================================================
+# The Phase E cost model charges half a measured bid-ask spread per name per
+# month. It is built here, from SEP daily high / low / close / volume, so the
+# cost model never depends on which factors the composite accepted
+# (docs/DECISIONS.md D7 item 2; CONSTRUCTION.md §6). Read ONLY by
+# `run_test.py --construction-layer`; no factor, universe or Stage 1-3 number
+# reads it.
+#
+# The construction is OSAP's BidAskSpread (the Corwin and Schultz 2011
+# program) exactly as translated in factors/candidates/BidAskSpread.py,
+# reproduced line for line below (the harness never imports a factor file):
+#   1. screen: low == high, low <= 0, high <= 0, close <= 0 or volume == 0 ->
+#      that day's low/high are missing;
+#   2. a screened day takes the retained range of the ID's last good day
+#      (close inside it: copied; below / above: shifted to the close);
+#   3. high/low > 8 is dropped;
+#   4. overnight adjustment against the previous row's close;
+#   5. the two-day estimator: beta = ln(H/L)^2 summed over the two days,
+#      gamma = ln(two-day max H / two-day min L)^2,
+#      alpha = (sqrt(2 beta) - sqrt(beta)) / (3 - 2 sqrt 2) - sqrt(gamma / (3 - 2 sqrt 2)),
+#      S = 2 (e^alpha - 1) / (1 + e^alpha); a NEGATIVE daily estimate is set to 0;
+#   6. the month's value is the plain mean of the daily estimates dated in the
+#      calendar month of the signal date, NaN when fewer than CS_MIN_DAYS.
+# Each month runs the recursion on the SEP rows with
+# signal - CS_DAYS_BACK days < date <= signal, the window the factor reads, so
+# the retained range and the overnight lag are seeded where the factor seeds
+# them and the value equals the factor's raw output name by name. The
+# factor's history gate is a scoring gate of the search, not part of the
+# value, and is not applied. A month in which SEP holds only part of its
+# trading days (the snapshot's first month) is not estimated.
+# The stored value is the FULL proportional (round-trip) spread, OSAP's unit;
+# the layer charges half of it. Point in time: month m's value uses daily
+# rows dated on or before m's signal date only.
+
+CS_DAYS_BACK = 125
+CS_MIN_DAYS = 12
+CS_VERSION = 1
+_CS_C = 3.0 - 2.0 * np.sqrt(2.0)
+
+
+def cs_daily_spread(df):
+    """Daily Corwin-Schultz spread (negatives set to 0) for rows sorted by
+    (ID, date); `df` has ID, high, low, close, volume. NaN where the program
+    yields none. Line for line the BidAskSpread factor's `_daily_spread`."""
+    g = df["ID"].to_numpy()
+    hi = df["high"].to_numpy(dtype=float)
+    lo = df["low"].to_numpy(dtype=float)
+    px = df["close"].to_numpy(dtype=float)
+    vol = df["volume"].to_numpy(dtype=float)
+
+    with np.errstate(invalid="ignore", divide="ignore"):
+        # 1. screen
+        bad = (lo == hi) | (lo <= 0) | (hi <= 0) | (px <= 0) | (vol == 0)
+        lo1 = np.where(bad, np.nan, lo)
+        hi1 = np.where(bad, np.nan, hi)
+
+        # 2. retained range = last good range at or before the row, per ID
+        good = (lo1 > 0) & (lo1 < hi1)
+        ret = pd.DataFrame({"g": g, "lo": np.where(good, lo1, np.nan),
+                            "hi": np.where(good, hi1, np.nan)})
+        rlo = ret.groupby("g")["lo"].ffill().to_numpy()
+        rhi = ret.groupby("g")["hi"].ffill().to_numpy()
+        within = (rlo <= px) & (px <= rhi)
+        below = px < rlo
+        above = px > rhi
+        lo2 = np.where(good, lo1, np.where(within, rlo, np.where(below, px, np.where(above, rlo + (px - rhi), np.nan))))
+        hi2 = np.where(good, hi1, np.where(within, rhi, np.where(below, rhi - (rlo - px), np.where(above, px, np.nan))))
+
+        # 3. high/low > 8 is dropped
+        drop = (lo2 != 0) & (hi2 / lo2 > 8)
+        lo2 = np.where(drop, np.nan, lo2)
+        hi2 = np.where(drop, np.nan, hi2)
+
+        # 4. overnight adjustment; lags are the previous row of the same ID
+        pr = pd.DataFrame({"g": g, "lo": lo2, "hi": hi2, "px": px})
+        sh = pr.groupby("g")[["lo", "hi", "px"]].shift(1)
+        llo, lhi, lpx = sh["lo"].to_numpy(), sh["hi"].to_numpy(), sh["px"].to_numpy()
+        c1 = (lpx < lo2) & (lpx > 0)
+        c2 = (lpx > hi2) & (lpx > 0)
+        thi = np.where(c2, lpx, np.where(c1, hi2 - (lo2 - lpx), hi2))
+        tlo = np.where(c2, lo2 + (lpx - hi2), np.where(c1, lpx, lo2))
+
+        # 5. beta, gamma, alpha, spread
+        ok = (tlo > 0) & (llo > 0) & (thi > 0) & (lhi > 0)
+        beta = np.where(ok, np.log(thi / tlo) ** 2 + np.log(lhi / llo) ** 2, np.nan)
+        hi_2 = np.maximum(thi, lhi)
+        lo_2 = np.minimum(tlo, llo)
+        gamma = np.where(lo_2 > 0, np.log(hi_2 / lo_2) ** 2, np.nan)
+        alpha = (np.sqrt(2.0 * beta) - np.sqrt(beta)) / _CS_C - np.sqrt(gamma / _CS_C)
+        spread = 2.0 * np.tanh(alpha / 2.0)          # = 2(e^a - 1)/(1 + e^a)
+        spread0 = np.where(np.isfinite(spread), np.maximum(spread, 0.0), np.nan)
+    return spread0
+
+
+def table_partial_months(snap, table="SEP"):
+    """Calendar months (pd.Period "M") in which `table` holds only part of the
+    month's trading days because the snapshot starts inside it. The same rule
+    as MonthContext.partial_months, for a builder that has no MonthContext."""
+    d = pd.to_datetime(snap.table(table, ["date"], keep=False)["date"])
+    first = d.min()
+    if pd.notna(first):
+        month_first_bday = pd.offsets.BMonthBegin().rollback(first.normalize())
+        if first.normalize() > month_first_bday:
+            return frozenset({first.to_period("M")})
+    return frozenset()
+
+
+def cs_spread_monthly(daily, signal_dates, partial=frozenset()):
+    """The monthly Corwin-Schultz spread for every ID in `daily` (ID, date,
+    high, low, close, volume, in the snapshot's row order) at each signal
+    date. Frame: me (the signal date), ID, cs_spread (NaN when fewer than
+    CS_MIN_DAYS daily estimates), cs_n_days (the count of daily estimates in
+    the signal month). Names with no daily estimate that month are absent."""
+    dates = daily["date"].to_numpy(dtype="datetime64[ns]")
+    order = np.argsort(dates, kind="stable")
+    sd = dates[order]
+    out = []
+    for s in signal_dates:
+        s = pd.Timestamp(s)
+        month = s.to_period("M")
+        if month in partial:
+            continue
+        lo = np.searchsorted(sd, np.datetime64(s - pd.Timedelta(days=CS_DAYS_BACK)), side="right")
+        hi = np.searchsorted(sd, np.datetime64(s), side="right")
+        if hi <= lo:
+            continue
+        d = daily.iloc[np.sort(order[lo:hi])]                 # the window, in snapshot row order
+        d = d.sort_values(["ID", "date"], kind="mergesort").reset_index(drop=True)
+        d["s0"] = cs_daily_spread(d)
+        cur = d[(d["date"].dt.to_period("M") == month) & d["s0"].notna()]
+        if cur.empty:
+            continue
+        grp = cur.groupby("ID")["s0"]
+        n = grp.count()
+        mean = grp.mean()
+        out.append(pd.DataFrame({"me": s, "ID": n.index, "cs_spread": mean.where(n >= CS_MIN_DAYS).to_numpy(),
+                                 "cs_n_days": n.to_numpy().astype("int64")}))
+    if not out:
+        return pd.DataFrame({"me": pd.Series(dtype="datetime64[ns]"), "ID": pd.Series(dtype=object),
+                             "cs_spread": pd.Series(dtype=float), "cs_n_days": pd.Series(dtype="int64")})
+    return pd.concat(out, ignore_index=True)
+
+
+def build_cs_spread_monthly(snap, log=print):
+    """cs_spread_monthly over every SEP row whose ticker maps to an ID, at the
+    business month-end of every calendar month SEP covers. IDs are str
+    (permaticker), as everywhere in the harness."""
+    t0 = time.time()
+    tmap = snap.ticker_map("SEP")
+    sep = snap.table("SEP", ["ticker", "date", "high", "low", "close", "volume"], keep=False)
+    ids = sep["ticker"].map(tmap)
+    keep = ids.notna().to_numpy()
+    codes, labels = pd.factorize(ids[keep], sort=False)
+    daily = pd.DataFrame({"ID": codes.astype(np.int64),
+                          "date": pd.to_datetime(sep["date"]).to_numpy()[keep],
+                          "high": sep["high"].to_numpy(dtype=float)[keep],
+                          "low": sep["low"].to_numpy(dtype=float)[keep],
+                          "close": sep["close"].to_numpy(dtype=float)[keep],
+                          "volume": sep["volume"].to_numpy(dtype=float)[keep]})
+    del sep, ids
+    signal_dates = sorted(pd.unique(to_bme(pd.Series(pd.unique(daily["date"])))))
+    cs = cs_spread_monthly(daily, signal_dates, table_partial_months(snap, "SEP"))
+    cs["ID"] = np.asarray(labels, dtype=object)[cs["ID"].to_numpy(dtype=np.int64)].astype(str)
+    cs["me"] = pd.to_datetime(cs["me"]).astype("datetime64[ns]")
+    ok = cs["cs_spread"].notna()
+    log(f"    cs spread monthly: {cs['me'].nunique()} months, {int(ok.sum()):,} name-months with >= "
+        f"{CS_MIN_DAYS} daily estimates ({100 * float(ok.mean()) if len(cs) else 0:.1f}% of "
+        f"{len(cs):,}); {time.time() - t0:.0f}s")
+    return cs[["me", "ID", "cs_spread", "cs_n_days"]]
+
+
+def _cs_builder_sha():
+    src = "".join(inspect.getsource(f) for f in
+                  (to_bme, cs_daily_spread, table_partial_months, cs_spread_monthly, build_cs_spread_monthly))
+    consts = (CS_DAYS_BACK, CS_MIN_DAYS, CS_VERSION)
+    return hashlib.sha256((src + repr(consts)).encode()).hexdigest()[:12]
+
+
+def cs_spread_cache_key(data_sha):
+    """Keyed on DATA_SHA and the builder's source: the series reads SEP and
+    TICKERS only, through no universe parameter."""
+    return hashlib.sha256(f"{data_sha}|cs_spread|{_cs_builder_sha()}".encode()).hexdigest()[:12]
+
+
+def load_or_build_cs_spread(snap, runtime, data_sha, root=ROOT, log=print):
+    key = cs_spread_cache_key(data_sha)
+    cache_dir = Path(root) / runtime["cache"]["dir"]
+    p = cache_dir / f"cs_spread_monthly_{key}.parquet"
+    if runtime["cache"].get("enabled", True) and p.exists():
+        log(f"    cs spread monthly: cache hit {p.name}")
+        return pd.read_parquet(p)
+    cs = build_cs_spread_monthly(snap, log=log)
+    if runtime["cache"].get("enabled", True):
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        cs.to_parquet(p)
+        log(f"    cs spread monthly: cached as {p.name}")
+    return cs
+
+
+# =============================================================================
 # Delistings
 # =============================================================================
 
