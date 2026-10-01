@@ -1,0 +1,38 @@
+name: ReturnSkew3F
+osap_acronym: ReturnSkew3F
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b8
+declaration_order: 1
+date_tested: "2026-10-01"
+run: "010"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Bali, Engle and Murray 2015 (Empirical Asset Pricing); SignalDoc sign -1, Cat.Economic risk"
+orientation: "low skewness of daily FF3 residuals over the signal month = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/ReturnSkew3F/spec.md}
+dimension_override: null
+history_gate_months: 1
+preflight: {masspoint_max_pct: 0.111857, qcut_min_bins: 0, coverage_min_pct: 0.0}
+stage1:   # from the run 010 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.000749, ic_tstat_nw: 0.34925, ic_half1_mean: 0.002219, ic_half2_mean: -0.000711, icir: 0.022209, ls_sharpe: -0.306902,
+   ls_ann_return_pct: -1.929561, ls_tstat_nw: -1.490252, ls_maxdd_pct: -49.512789, ls_raw_ann_return_pct: -1.339713,
+   ls_raw_sharpe: -0.223286, ls_raw_maxdd_pct: -46.265449, turnover_d10_pct: 90.611572, turnover_d1_pct: 90.258339,
+   coverage_pct: 96.727533, avg_names_per_decile: 194.994796, n_months: 269, ls_n_months: 269, ic_decay_h1: 0.003643, ic_decay_h6: 0.00273,
+   ic_decay_h12: 0.005671, tier_MEGA_ic_mean: -0.0002, tier_MID_ic_mean: 0.0008, tier_SMALL_ic_mean: 0.0018, ls_beta_mean: 0.026043,
+   ls_beta_fullwindow: 0.016858, ls_sharpe_ex_top_years: -0.678504, ls_top_years: "2000,2012,2021", ls_top_years_share_pct: -62.954595,
+   ls_sharpe_bear: -0.110667, ls_sharpe_bull: -0.283468, decile_avg_ret_pct: "1.029,0.897,0.930,0.970,0.932,0.952,0.934,0.933,1.013,0.918",
+   delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min, ls_raw_ann_return_pct]
+stage2_failed: []
+character: >
+  Deciles flat: D1 1.029, D2-D10 0.90-1.01 %/mo (D10 0.918); raw spread -1.34%/yr (Sharpe -0.223, raw MaxDD -46.3%). IC 0.0007 (NW t 0.35, ICIR 0.022, 50.2% of months positive), halves 0.0022 / -0.0007; annual IC positive in 12 of 23 years. Tiers MEGA -0.0002, MID 0.0008, SMALL 0.0018. Decay 0.0036 h1, 0.0027 h6, 0.0057 h12; turnover 90.6% / 90.3%. Beta +0.02 (ex ante +0.03): hedged -1.93%/yr (Sharpe -0.307, LS NW t -1.49). Window 1999-07..2021-12, 269 months. Coverage 96.7%.
+caveats:
+  - "269 of 276 months: harness FF3 smb / hml start June 1999 (as IdioVol3F); the 1998-12 preflight probe reads 0% coverage for that reason; LS floor 242 met"
+  - "vs ReturnSkew (b7, rejected, NW t 2.22, total-return skewness): annual IC correlation 0.81, same sign 19 / 23; co-movement of annual IC, not a score correlation"
+  - "ls_top_years_share_pct -63.0% is recorded as-is: the summed hedged LS is negative (-42.7 pp), so the share's sign has no reading"
+  - "population skewness (bias=True), >= 15 daily observations, rf omitted, harness-built FF3 factors"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (0.35 < 2.5); ic_mean 0.0007, ic_half_min -0.0007 and the raw spread -1.34%/yr also fail; coverage 96.7%, 195.0 names and 269 LS months (floor 242) pass. Not inconclusive: 269 months >= 120 and the floor. No flip: the OSAP-sign t is positive.

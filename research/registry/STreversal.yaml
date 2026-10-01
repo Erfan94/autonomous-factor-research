@@ -1,0 +1,41 @@
+name: STreversal
+osap_acronym: STreversal
+status: stage2_pending
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b8
+declaration_order: 5
+date_tested: "2026-10-01"
+run: "010"
+stage2_run: null
+stage1_decision: PASS
+decided_by: "all bars"
+source: "Jegadeesh 1990 (Journal of Finance); SignalDoc sign -1, Cat.Economic short-term reversal"
+orientation: "low last-month total return = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/STreversal/spec.md}
+dimension_override: null
+history_gate_months: 1
+preflight: {masspoint_max_pct: 0.660502, qcut_min_bins: 10, coverage_min_pct: 99.561596}
+stage1:   # from the run 010 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.014466, ic_tstat_nw: 2.963026, ic_half1_mean: 0.014148, ic_half2_mean: 0.014784, icir: 0.152163, ls_sharpe: -0.028672,
+   ls_ann_return_pct: -0.476559, ls_tstat_nw: -0.151808, ls_maxdd_pct: -65.50213, ls_raw_ann_return_pct: 3.368948, ls_raw_sharpe: 0.195627,
+   ls_raw_maxdd_pct: -46.064772, turnover_d10_pct: 86.340195, turnover_d1_pct: 88.596439, coverage_pct: 99.802686,
+   avg_names_per_decile: 196.091304, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.002709, ic_decay_h6: -0.002429,
+   ic_decay_h12: 0.010233, tier_MEGA_ic_mean: 0.01, tier_MID_ic_mean: 0.008, tier_SMALL_ic_mean: 0.0188, ls_beta_mean: 0.348914,
+   ls_beta_fullwindow: 0.436731, ls_sharpe_ex_top_years: -0.369039, ls_top_years: "2001,2002,2004", ls_top_years_share_pct: -924.454924,
+   ls_sharpe_bear: 0.45891, ls_sharpe_bull: -0.197218, decile_avg_ret_pct: "0.832,0.738,0.820,0.947,0.916,0.939,1.077,1.146,1.150,1.113",
+   delisting_adjusted_pct: 0.436673}
+stage1_failed: []
+stage2_failed: []
+character: >
+  D10 (last month's losers) 1.113, D7-D9 1.08-1.15; D1 (winners) 0.832 with D2 lowest at 0.738, D3-D6 0.82-0.95 %/mo; raw spread 3.37%/yr at vol 17.2% (Sharpe 0.196, raw MaxDD -46.1%). IC 0.0145 (NW t 2.96, plain t 2.53, ICIR 0.152, 52.9% of months positive), halves 0.0141 / 0.0148; annual IC positive in 17 of 23 years (2019 +0.060, 2001 / 2002 +0.057; 2007 -0.055). Tiers MEGA 0.0100, MID 0.0080, SMALL 0.0188 (raw LS Sharpe -0.078 / -0.086 / 0.474): the spread is SMALL. Decay 0.0027 h1, -0.0059 h2, -0.0021 h3, -0.0024 h6, +0.0102 h12: a one-month signal with a twelve-month echo; turnover 86.3% / 88.6%. Beta +0.44 (ex ante +0.35, last +0.63): the hedge subtracts 3.85 pp, hedged -0.48%/yr (Sharpe -0.029, LS NW t -0.15, MaxDD -65.5%). Hedged LS 2001 +52.1%, 2002 +52.7%; 2007 -32.2%, 2003 -21.4%, 1999 -20.2%, 2013 -18.3%, 2020 -13.7%; summed -3.5 pp; ex-top-years Sharpe -0.369; bear 0.459 / bull -0.197. Coverage 99.8%.
+caveats:
+  - "the first passer with a material positive beta (+0.44; TrendFactor, this batch, +0.05; the 11 earlier passers all negative): the hedge turns raw +3.37%/yr into hedged -0.48%/yr; Stage 1 reads the raw spread (D11); the Stage 2 guard reads the hedged family blend"
+  - "NW t 2.96 exceeds plain t 2.53 (negative IC autocorrelation), the largest NW uplift of the 16 passers (IdioVol3F, MaxRet, RealizedVol, TrendFactor also rise); plain t would also clear 2.5"
+  - "highest turnover of the 16 passers (86.3% / 88.6%; MaxRet 70.8% / 77.5%); lag-1 IC 0.0027 is under a fifth of the IC; turnover is reported, never decides"
+  - "relation to v0 Momentum: this signal is the month Momentum skips (adjacent windows sharing closeadj at t-1); spec-measured Spearman of raw scores 0.05 (range -0.38 to 0.46); annual IC correlation -0.66 with Mom6m (b6, rejected), -0.54 with High52 (b4, rejected), +0.53 with ReturnSkew (b7, rejected), -0.04 to -0.26 with the volatility passers"
+  - "ls_top_years_share_pct -924% recorded as-is: the summed hedged LS is -3.5 pp, a near-zero denominator; the top years 2001 / 2002 / 2004 are all first-half"
+  - "fill_null(0) not reproduced (missing return stays NaN); closeadj month-end ratio, no delisting return; history_months 1"
+  - "Cat.Economic short-term reversal: no v0 seed family covers it"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Passes every Stage 1 bar: IC 0.0145 >= 0.010, NW t 2.96 >= 2.5, halves min 0.0141, raw spread 3.37%/yr > 0, coverage 99.8% >= 40, 196.1 names per decile, 276 LS months >= 248. Status stage2_pending; family to be assigned in Phase C. Twelfth NW t of the 16 passers; the only passer with a negative hedged return (-0.48%/yr) and the lowest ex-top-years Sharpe of the passers (-0.369; CF -0.169 next).

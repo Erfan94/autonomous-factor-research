@@ -1,0 +1,37 @@
+name: RevenueSurprise
+osap_acronym: RevenueSurprise
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b8
+declaration_order: 2
+date_tested: "2026-10-01"
+run: "010"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_mean"
+source: "Jegadeesh and Livnat 2006 (Journal of Accounting and Economics); SignalDoc sign +1, Cat.Economic sales growth"
+orientation: "high standardised revenue-per-share surprise = attractive (SignalDoc sign +1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/RevenueSurprise/spec.md}
+dimension_override: ARQ
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.150678, qcut_min_bins: 10, coverage_min_pct: 34.984656}
+stage1:   # from the run 010 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.009381, ic_tstat_nw: 2.78209, ic_half1_mean: 0.005908, ic_half2_mean: 0.012854, icir: 0.187539, ls_sharpe: 0.347093,
+   ls_ann_return_pct: 2.587698, ls_tstat_nw: 1.65558, ls_maxdd_pct: -21.732845, ls_raw_ann_return_pct: 1.824301, ls_raw_sharpe: 0.249917,
+   ls_raw_maxdd_pct: -23.244067, turnover_d10_pct: 27.813417, turnover_d1_pct: 29.272808, coverage_pct: 86.6066,
+   avg_names_per_decile: 170.163768, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.006033, ic_decay_h6: 0.002146, ic_decay_h12: 0.002011,
+   tier_MEGA_ic_mean: 0.007, tier_MID_ic_mean: 0.0135, tier_SMALL_ic_mean: 0.0087, ls_beta_mean: -0.030615, ls_beta_fullwindow: -0.052394,
+   ls_sharpe_ex_top_years: 0.093139, ls_top_years: "2007,2017,2021", ls_top_years_share_pct: 76.562097, ls_sharpe_bear: -0.518634,
+   ls_sharpe_bull: 0.678299, decile_avg_ret_pct: "0.872,0.947,0.995,0.993,1.096,1.179,0.993,1.051,1.142,1.024",
+   delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean]
+stage2_failed: []
+character: >
+  Hump: D1 0.872, D2-D4 0.95-1.00, D5-D6 1.10-1.18, D7-D10 0.99-1.14 %/mo (D10 1.024); raw spread 1.82%/yr (Sharpe 0.250, raw MaxDD -23.2%). IC 0.0094 (NW t 2.78, plain t 3.12, ICIR 0.188, 60.9% of months positive), halves 0.0059 / 0.0129; annual IC positive in 16 of 23 years (2007 +0.058, 2017 +0.043; 2001 -0.025, 2009 -0.027). Tiers MEGA 0.0070, MID 0.0135, SMALL 0.0087 (raw LS Sharpe 0.020 / 0.180 / 0.284). Decay 0.0060-0.0062 h1-h3, 0.0021 h6, 0.0020 h12; turnover 27.8% / 29.3%. Beta -0.05 (ex ante -0.03): hedged 2.59%/yr (Sharpe 0.347, LS NW t 1.66). 2007, 2017, 2021 carry 77% of the summed LS; ex-top-years Sharpe 0.093; bear -0.519 / bull 0.678. Coverage 86.6% (35.0% at the 1998-12 probe); Communication Services 78.1%, the rest 80.6-91.5%.
+caveats:
+  - "fails ic_mean alone, by 0.0006 (0.009381 < 0.010); NW t 2.78 passes (decided_by ic_mean under stage1_decided_by_convention_fallback, as OPLeverage)"
+  - "vs EarningsSurprise (b3, rejected, NW t 1.63): annual IC correlation 0.87, same sign 21 / 23; vs AnnouncementReturn (b1, rejected) 0.63; co-movement of annual IC, not a score correlation"
+  - "dimension override ARQ; latest ARQ filing <= 110 days old replaces max_fundamental_age_months 15 (OSAP 3-month validity); skipna partial windows as OSAP (full 21-quarter window for ~9% of names at 1999-12)"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_mean (0.0094 < 0.010), the only bar it fails: NW t 2.78, halves (min 0.0059), raw spread 1.82%/yr, coverage 86.6%, 170.2 names and 276 LS months pass. decided_by is ic_mean under stage1_decided_by_convention_fallback because ic_tstat_nw passes. Full sample: a rejection, not an inconclusive.

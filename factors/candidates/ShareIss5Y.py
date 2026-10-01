@@ -65,9 +65,8 @@ DEVIATIONS FROM OSAP:
   - Exact-month CRSP row at t-5 and t-65 -> latest filing known at the business
     month-end (<= 15 months old): carried forward between filings, no gap requirement;
     each reading can be up to ~one quarter stale against CRSP's monthly shrout.
-  - No history gate: the factor reads share counts only, not prices.
-    A price-history gate (has_price_at(65)) would null every month before 2003-06
-    (SEP starts 1997-12) and is deliberately not declared.
+  - History gate: history_months=65 (see HISTORY GATE above; superseded the original
+    no-gate design after alpha_review batch21-23), so scoring starts 2003-06.
   - lookback_months = 65 + 15 = 80: the latest ARQ filing behind the t-65 end may be up
     to 15 months old.
 """

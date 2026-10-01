@@ -1,13 +1,13 @@
 # DERIVED — rebuilt by `python3 scripts/records.py index` from research/registry/*.yaml.
 # One line per factor; the full row is research/registry/<name>.yaml. Never edit by hand.
 search_accounting:
-  n_candidates_suggested: 84
-  n_stage1_tested: 84
-  n_stage1_passed: 11
+  n_candidates_suggested: 96
+  n_stage1_tested: 96
+  n_stage1_passed: 16
   n_stage2_tested: 0
   n_accepted: 0
   n_inconclusive: 0
-  by_status: {"baseline": 5, "rejected": 73, "stage2_pending": 11}
+  by_status: {"baseline": 5, "rejected": 80, "stage2_pending": 16}
 factors:
   - {name: AM, status: rejected, batch: stage1_b1, ic: 0.0098, ic_t: 1.26, sharpe: -0.149, ret: -3.17, raw_ret: 4.72, cov: 99.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.34, sh_exreg: -0.449, family: null, decided_by: "ic_tstat_nw", run: "003"}
   - {name: Accruals, status: rejected, batch: stage1_b1, ic: 0.0048, ic_t: 1.84, sharpe: 0.329, ret: 2.49, raw_ret: 2.92, cov: 76.7, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.04, sh_exreg: 0.107, family: null, decided_by: "ic_tstat_nw", run: "003"}
@@ -96,5 +96,17 @@ factors:
   - {name: RealizedVol, status: stage2_pending, batch: stage1_b7, ic: 0.0234, ic_t: 2.81, sharpe: 0.607, ret: 12.13, raw_ret: 3.39, cov: 99.8, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -1.16, sh_exreg: 0.479, family: null, decided_by: "all bars", run: "009"}
   - {name: ResidualMomentum, status: rejected, batch: stage1_b7, ic: 0.0035, ic_t: 0.72, sharpe: 0.466, ret: 4.92, raw_ret: 1.76, cov: 67.4, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.24, sh_exreg: 0.187, family: null, decided_by: "ic_tstat_nw", run: "009"}
   - {name: ReturnSkew, status: rejected, batch: stage1_b7, ic: 0.0050, ic_t: 2.22, sharpe: 0.066, ret: 0.45, raw_ret: 0.40, cov: 99.8, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.03, sh_exreg: -0.269, family: null, decided_by: "ic_tstat_nw", run: "009"}
+  - {name: ReturnSkew3F, status: rejected, batch: stage1_b8, ic: 0.0007, ic_t: 0.35, sharpe: -0.307, ret: -1.93, raw_ret: -1.34, cov: 96.7, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.02, sh_exreg: -0.679, family: null, decided_by: "ic_tstat_nw", run: "010"}
+  - {name: RevenueSurprise, status: rejected, batch: stage1_b8, ic: 0.0094, ic_t: 2.78, sharpe: 0.347, ret: 2.59, raw_ret: 1.82, cov: 86.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.05, sh_exreg: 0.093, family: null, decided_by: "ic_mean", run: "010"}
+  - {name: RoE, status: stage2_pending, batch: stage1_b8, ic: 0.0192, ic_t: 3.34, sharpe: 0.532, ret: 7.38, raw_ret: 2.95, cov: 93.1, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.59, sh_exreg: 0.372, family: null, decided_by: "all bars", run: "010"}
+  - {name: SP, status: rejected, batch: stage1_b8, ic: 0.0182, ic_t: 2.50, sharpe: 0.145, ret: 2.79, raw_ret: 9.21, cov: 96.1, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.18, sh_exreg: -0.201, family: null, decided_by: "ic_tstat_nw", run: "010"}
+  - {name: STreversal, status: stage2_pending, batch: stage1_b8, ic: 0.0145, ic_t: 2.96, sharpe: -0.029, ret: -0.48, raw_ret: 3.37, cov: 99.8, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.44, sh_exreg: -0.369, family: null, decided_by: "all bars", run: "010"}
+  - {name: ShareIss1Y, status: stage2_pending, batch: stage1_b8, ic: 0.0165, ic_t: 3.52, sharpe: 0.909, ret: 9.06, raw_ret: 7.12, cov: 90.5, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.38, sh_exreg: 0.742, family: null, decided_by: "all bars", run: "010"}
+  - {name: ShareIss5Y, status: stage2_pending, batch: stage1_b8, ic: 0.0158, ic_t: 3.67, sharpe: 1.085, ret: 8.23, raw_ret: 4.88, cov: 62.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.24, sh_exreg: 0.749, family: null, decided_by: "all bars", run: "010"}
   - {name: Size, status: baseline, batch: BASELINE, ic: null, ic_t: null, sharpe: null, ret: null, raw_ret: null, cov: null, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: null, sh_exreg: null, family: "size", decided_by: null, run: "001"}
+  - {name: TotalAccruals, status: rejected, batch: stage1_b8, ic: -0.0000, ic_t: -0.01, sharpe: -0.093, ret: -0.70, raw_ret: 1.47, cov: 94.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.12, sh_exreg: -0.361, family: null, decided_by: "ic_tstat_nw", run: "010"}
+  - {name: TrendFactor, status: stage2_pending, batch: stage1_b8, ic: 0.0171, ic_t: 2.79, sharpe: 0.523, ret: 8.94, raw_ret: 10.12, cov: 68.7, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.05, sh_exreg: 0.276, family: null, decided_by: "all bars", run: "010"}
   - {name: Value, status: baseline, batch: BASELINE, ic: null, ic_t: null, sharpe: null, ret: null, raw_ret: null, cov: null, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: null, sh_exreg: null, family: "value", decided_by: null, run: "001"}
+  - {name: VarCF, status: rejected, batch: stage1_b8, ic: 0.0064, ic_t: 0.76, sharpe: 0.406, ret: 5.59, raw_ret: -3.97, cov: 60.7, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.79, sh_exreg: 0.174, family: null, decided_by: "ic_tstat_nw", run: "010"}
+  - {name: VolMkt, status: rejected, batch: stage1_b8, ic: 0.0161, ic_t: 2.25, sharpe: 0.551, ret: 9.55, raw_ret: 2.38, cov: 97.1, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.94, sh_exreg: 0.320, family: null, decided_by: "ic_tstat_nw", run: "010"}
+  - {name: VolSD, status: rejected, batch: stage1_b8, ic: 0.0112, ic_t: 2.36, sharpe: 0.534, ret: 6.05, raw_ret: 1.95, cov: 79.8, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.47, sh_exreg: 0.398, family: null, decided_by: "ic_tstat_nw", run: "010"}

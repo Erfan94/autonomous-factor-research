@@ -1,0 +1,37 @@
+name: VolMkt
+osap_acronym: VolMkt
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b8
+declaration_order: 11
+date_tested: "2026-10-01"
+run: "010"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Haugen and Baker 1996 (JFE); SignalDoc sign -1, Cat.Economic volume"
+orientation: "low 12-month average dollar volume / market cap = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/VolMkt/spec.md}
+dimension_override: null
+history_gate_months: 9
+preflight: {masspoint_max_pct: 0.056754, qcut_min_bins: 10, coverage_min_pct: 94.420415}
+stage1:   # from the run 010 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.016089, ic_tstat_nw: 2.25319, ic_half1_mean: 0.013517, ic_half2_mean: 0.018661, icir: 0.13398, ls_sharpe: 0.550867,
+   ls_ann_return_pct: 9.553523, ls_tstat_nw: 2.639615, ls_maxdd_pct: -43.160569, ls_raw_ann_return_pct: 2.375264, ls_raw_sharpe: 0.105045,
+   ls_raw_maxdd_pct: -67.64893, turnover_d10_pct: 16.6133, turnover_d1_pct: 14.271324, coverage_pct: 97.132488,
+   avg_names_per_decile: 190.844928, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.018636, ic_decay_h6: 0.01619, ic_decay_h12: 0.012595,
+   tier_MEGA_ic_mean: 0.0093, tier_MID_ic_mean: 0.0192, tier_SMALL_ic_mean: 0.0142, ls_beta_mean: -0.860166, ls_beta_fullwindow: -0.944106,
+   ls_sharpe_ex_top_years: 0.319627, ls_top_years: "2000,2007,2011", ls_top_years_share_pct: 50.022509, ls_sharpe_bear: -0.382223,
+   ls_sharpe_bull: 1.107195, decile_avg_ret_pct: "0.804,0.867,1.024,1.004,1.034,1.088,1.035,0.998,1.010,1.002",
+   delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_tstat_nw]
+stage2_failed: []
+character: >
+  A D1 effect: D1 (highest turnover) 0.804, D2 0.867, D3-D10 1.00-1.09 %/mo; raw spread 2.38%/yr at vol 22.6% (Sharpe 0.105, raw MaxDD -67.6%). IC 0.0161 (NW t 2.25, plain t 2.23, ICIR 0.134), halves 0.0135 / 0.0187; annual IC positive in 14 of 23 years. Tiers MEGA 0.0093, MID 0.0192, SMALL 0.0142 (raw LS Sharpe -0.071 / 0.086 / 0.027). IC decays slowly (0.0186 h1, 0.0162 h6, 0.0126 h12); turnover 16.6% / 14.3%. Beta -0.94 (ex ante -0.86): the hedge adds 7.18 pp, 75% of the hedged 9.55%/yr (Sharpe 0.551, LS NW t 2.64); hedged 1999 -19.8%, 2001 -21.3%, 2009 -34.6%, 2020 -13.7%, 2000 +56.8%; ex-top-years Sharpe 0.320; bear -0.382 / bull 1.107. Coverage 97.1%.
+caveats:
+  - "fails ic_tstat_nw alone (2.25 < 2.5); ic_mean 0.0161 and every other bar pass"
+  - "behaves as the volatility passers: beta -0.94, D1-anchored, the same hedged loss years 1999 / 2009 / 2020; annual IC correlation 0.95 RealizedVol, 0.94 IdioVol3F, 0.92 IdioVolAHT, 0.88 MaxRet (all passers), 0.72 VolSD (this batch); vs DolVol (b3, rejected) 0.03; co-movement of annual IC, not a score correlation"
+  - "monthly sum(volume) x month-end close over calendar months t-11..t (>= 10 observed), / universe market cap; history_months 9"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (2.25 < 2.5), the only bar it fails: IC 0.0161, halves (min 0.0135), raw spread 2.38%/yr, coverage 97.1%, 190.8 names and 276 LS months pass. Full sample: a rejection, not an inconclusive. No flip: the OSAP-sign t is positive.

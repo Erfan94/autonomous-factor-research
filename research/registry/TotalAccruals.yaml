@@ -1,0 +1,38 @@
+name: TotalAccruals
+osap_acronym: TotalAccruals
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b8
+declaration_order: 8
+date_tested: "2026-10-01"
+run: "010"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Richardson, Sloan, Soliman and Tuna 2005 (Journal of Accounting and Economics); SignalDoc sign -1, Cat.Economic investment alt"
+orientation: "low total accruals / lagged assets = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/TotalAccruals/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.093458, qcut_min_bins: 10, coverage_min_pct: 46.90925}
+stage1:   # from the run 010 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: -2.9e-05, ic_tstat_nw: -0.010839, ic_half1_mean: -0.000383, ic_half2_mean: 0.000326, icir: -0.000634, ls_sharpe: -0.092607,
+   ls_ann_return_pct: -0.704107, ls_tstat_nw: -0.463413, ls_maxdd_pct: -35.595504, ls_raw_ann_return_pct: 1.465793,
+   ls_raw_sharpe: 0.191146, ls_raw_maxdd_pct: -29.275222, turnover_d10_pct: 18.428728, turnover_d1_pct: 17.651247, coverage_pct: 94.556522,
+   avg_names_per_decile: 185.783696, n_months: 276, ls_n_months: 276, ic_decay_h1: -0.000613, ic_decay_h6: -0.002608,
+   ic_decay_h12: 0.000843, tier_MEGA_ic_mean: 0.0043, tier_MID_ic_mean: 0.0019, tier_SMALL_ic_mean: -0.0032, ls_beta_mean: 0.099758,
+   ls_beta_fullwindow: 0.116642, ls_sharpe_ex_top_years: -0.361228, ls_top_years: "1999,2003,2009", ls_top_years_share_pct: -212.580428,
+   ls_sharpe_bear: 0.195221, ls_sharpe_bull: -0.337621, decile_avg_ret_pct: "0.818,1.039,0.976,0.954,0.995,1.043,1.063,1.134,1.161,0.940",
+   delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  Hump: D1 0.818, D2-D7 0.95-1.06, D8-D9 1.13-1.16, D10 0.940 %/mo; raw spread 1.47%/yr (Sharpe 0.191, raw MaxDD -29.3%). IC -0.0000 (-0.000029; NW t -0.01, ICIR -0.001, 48.6% of months positive), halves -0.0004 / 0.0003; annual IC positive in 11 of 23 years. Tiers MEGA 0.0043, MID 0.0019, SMALL -0.0032 (raw LS Sharpe -0.086 / -0.013 / 0.365). Decay -0.0006 h1, -0.0026 h6, 0.0008 h12; turnover 18.4% / 17.7%. Beta +0.12 (ex ante +0.10): hedged -0.70%/yr (Sharpe -0.093). Coverage 94.6%.
+caveats:
+  - "accruals relations (facts): same numerator as PctTotAcc (b7, rejected, IC 0.0022, NW t 0.91) over lagged assets instead of |ni|: annual IC correlation 0.84, same sign 20 / 23; vs PctAcc (b7, passer, IC 0.0112, NW t 4.03, operating accruals over |ni|) 0.09; vs Accruals (b1, rejected) 0.23"
+  - "SMALL tier IC -0.0032 against a SMALL raw LS Sharpe 0.365: the decile spread and the rank IC disagree in that tier"
+  - "ls_top_years_share_pct -212.6% recorded as-is: the summed hedged LS is negative (-16.8 pp)"
+  - "ncfdiv null -> NaN; preferred flows un-netted; ART as filed"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (-0.01 < 2.5); ic_mean -0.0000 and ic_half_min -0.0004 also fail; raw spread 1.47%/yr, coverage 94.6%, 185.8 names and 276 LS months pass. Full sample: a rejection, not an inconclusive. No flip: |t| 0.01 < 2.74.

@@ -1,0 +1,38 @@
+name: VolSD
+osap_acronym: VolSD
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b8
+declaration_order: 12
+date_tested: "2026-10-01"
+run: "010"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Chordia, Subrahmanyam and Anshuman 2001 (JFE); SignalDoc sign -1, Cat.Economic liquidity"
+orientation: "low standard deviation of 36 monthly share volumes = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/VolSD/spec.md}
+dimension_override: null
+history_gate_months: 35
+preflight: {masspoint_max_pct: 0.059524, qcut_min_bins: 0, coverage_min_pct: 0.0}
+stage1:   # from the run 010 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.011242, ic_tstat_nw: 2.362442, ic_half1_mean: 0.014663, ic_half2_mean: 0.00782, icir: 0.138801, ls_sharpe: 0.534125,
+   ls_ann_return_pct: 6.052266, ls_tstat_nw: 2.544008, ls_maxdd_pct: -34.770495, ls_raw_ann_return_pct: 1.948162, ls_raw_sharpe: 0.150535,
+   ls_raw_maxdd_pct: -45.880332, turnover_d10_pct: 12.789565, turnover_d1_pct: 4.245534, coverage_pct: 79.765509,
+   avg_names_per_decile: 171.648413, n_months: 252, ls_n_months: 252, ic_decay_h1: 0.011332, ic_decay_h6: 0.009836, ic_decay_h12: 0.007882,
+   tier_MEGA_ic_mean: 0.0118, tier_MID_ic_mean: 0.0047, tier_SMALL_ic_mean: 0.0115, ls_beta_mean: -0.410799, ls_beta_fullwindow: -0.468219,
+   ls_sharpe_ex_top_years: 0.398077, ls_top_years: "2001,2011,2015", ls_top_years_share_pct: 40.141018, ls_sharpe_bear: 0.273544,
+   ls_sharpe_bull: 0.687229, decile_avg_ret_pct: "0.897,1.011,0.986,1.000,0.997,1.025,1.089,0.980,1.117,1.060",
+   delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_tstat_nw]
+stage2_failed: []
+character: >
+  D1 effect, flat interior: D1 0.897, D2-D10 0.98-1.12 %/mo (D9 1.117, D10 1.060); raw spread 1.95%/yr (Sharpe 0.151, raw MaxDD -45.9%). IC 0.0112 (NW t 2.36, plain t 2.20, ICIR 0.139), halves 0.0147 / 0.0078; annual IC positive in 14 of 21 years. Tiers MEGA 0.0118, MID 0.0047, SMALL 0.0115 with raw LS Sharpe -0.119 / -0.177 / -0.212 in every tier against +0.151 pooled. IC decays slowly (0.0113 h1, 0.0098 h6, 0.0079 h12); turnover 12.8% / 4.2%. Beta -0.47 (ex ante -0.41): the hedge adds 4.10 pp, 68% of the hedged 6.05%/yr (Sharpe 0.534, LS NW t 2.54); ex-top-years Sharpe 0.398; bear 0.274 / bull 0.687. 252 months (history_months 35). Coverage 79.8% pooled over 276 months with 24 leading null months.
+caveats:
+  - "fails ic_tstat_nw alone (2.36 < 2.5); ic_mean 0.0112 and every other bar pass"
+  - "raw LS Sharpe negative in all three tiers (bucket-internal deciles) while the pooled raw spread is positive: the pooled D10-D1 mixes tiers"
+  - "annual IC correlation 0.72 with VolMkt (this batch) and RealizedVol, 0.70 IdioVol3F, 0.64 DolVol (b3, rejected)"
+  - "as-traded share volume (volume x close / closeunadj) over 36 calendar months, all required; zero std NaN; scale-dependent (not normalised by shares outstanding), as OSAP"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (2.36 < 2.5), the only bar it fails: IC 0.0112, halves (min 0.0078), raw spread 1.95%/yr, coverage 79.8%, 171.6 names and 252 LS months (floor 226) pass. Not inconclusive: 252 months >= 120 and the floor. No flip: the OSAP-sign t is positive.

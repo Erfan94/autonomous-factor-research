@@ -1,0 +1,38 @@
+name: VarCF
+osap_acronym: VarCF
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b8
+declaration_order: 10
+date_tested: "2026-10-01"
+run: "010"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Haugen and Baker 1996 (JFE); SignalDoc sign -1, Cat.Economic cash flow risk"
+orientation: "low variance of 60 monthly cash-flow-to-price readings = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/VarCF/spec.md}
+dimension_override: null
+history_gate_months: 59
+preflight: {masspoint_max_pct: 0.070423, qcut_min_bins: 0, coverage_min_pct: 0.0}
+stage1:   # from the run 010 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.006363, ic_tstat_nw: 0.756139, ic_half1_mean: 0.001719, ic_half2_mean: 0.010966, icir: 0.055468, ls_sharpe: 0.405595,
+   ls_ann_return_pct: 5.585497, ls_tstat_nw: 1.616544, ls_maxdd_pct: -40.873786, ls_raw_ann_return_pct: -3.969443,
+   ls_raw_sharpe: -0.225585, ls_raw_maxdd_pct: -72.173291, turnover_d10_pct: 5.94723, turnover_d1_pct: 7.560602, coverage_pct: 60.678208,
+   avg_names_per_decile: 143.688646, n_months: 229, ls_n_months: 229, ic_decay_h1: 0.006247, ic_decay_h6: 0.005845, ic_decay_h12: 0.006688,
+   tier_MEGA_ic_mean: 0.0028, tier_MID_ic_mean: 0.0094, tier_SMALL_ic_mean: 0.0059, ls_beta_mean: -0.741135, ls_beta_fullwindow: -0.791498,
+   ls_sharpe_ex_top_years: 0.174125, ls_top_years: "2011,2014,2017", ls_top_years_share_pct: 61.608809, ls_sharpe_bear: -0.30485,
+   ls_sharpe_bull: 0.639729, decile_avg_ret_pct: "1.348,1.158,1.107,1.069,1.102,1.065,1.131,1.081,1.009,1.017",
+   delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ls_raw_ann_return_pct]
+stage2_failed: []
+character: >
+  Inverted: D1 (highest cash-flow variance) 1.348, D2-D8 1.07-1.16, D9-D10 1.01-1.02 %/mo; raw spread -3.97%/yr at vol 17.6% (Sharpe -0.226, raw MaxDD -72.2%). IC 0.0064 (NW t 0.76, ICIR 0.056), halves 0.0017 / 0.0110; annual IC positive in 11 of 20 years. Tiers MEGA 0.0028, MID 0.0094, SMALL 0.0059. Decay flat (0.0062 h1, 0.0067 h12); turnover 5.9% / 7.6%. Beta -0.79 (ex ante -0.74): the hedge adds 9.55 pp, hedged +5.59%/yr (Sharpe 0.406, LS NW t 1.62); ex-top-years Sharpe 0.174; bear -0.305 / bull 0.640. 229 months (history_months 59). Coverage 60.7% pooled over 276 months with 47 null months.
+caveats:
+  - "the raw spread is negative (-3.97%/yr) and the hedged positive (+5.59%/yr) at beta -0.79: the raw bar reads the raw series (D11)"
+  - "vs RealizedVol (b7, passer) annual IC correlation 0.84 over 20 years; vs CF (b2) -0.06"
+  - "229 of 276 months: 60-month full window (history_months 59); LS floor 206 met; the 1998-12 preflight probe reads 0%"
+  - "netinc + netincdis + depamor over SEP close x sharesbas, var(ddof=1), ART"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (0.76 < 2.5); ic_mean 0.0064 and the raw spread -3.97%/yr also fail; halves (min 0.0017), coverage 60.7%, 143.7 names and 229 LS months (floor 206) pass. Not inconclusive: 229 months >= 120 and the floor. No flip: the OSAP-sign t is positive.

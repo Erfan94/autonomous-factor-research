@@ -1,0 +1,38 @@
+name: SP
+osap_acronym: SP
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b8
+declaration_order: 4
+date_tested: "2026-10-01"
+run: "010"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Barbee, Mukherji and Raines 1996 (Financial Analysts Journal); SignalDoc sign +1, Cat.Economic valuation"
+orientation: "high revenue / market cap = attractive (SignalDoc sign +1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/SP/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 1.910531, qcut_min_bins: 10, coverage_min_pct: 57.25559}
+stage1:   # from the run 010 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.018185, ic_tstat_nw: 2.496817, ic_half1_mean: 0.027042, ic_half2_mean: 0.009327, icir: 0.173886, ls_sharpe: 0.145393,
+   ls_ann_return_pct: 2.79404, ls_tstat_nw: 0.633475, ls_maxdd_pct: -63.595919, ls_raw_ann_return_pct: 9.214015, ls_raw_sharpe: 0.467719,
+   ls_raw_maxdd_pct: -53.613473, turnover_d10_pct: 10.831783, turnover_d1_pct: 12.786874, coverage_pct: 96.071048,
+   avg_names_per_decile: 188.75942, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.014967, ic_decay_h6: 0.01327, ic_decay_h12: 0.01418,
+   tier_MEGA_ic_mean: 0.0133, tier_MID_ic_mean: 0.0121, tier_SMALL_ic_mean: 0.0226, ls_beta_mean: 0.14226, ls_beta_fullwindow: 0.184272,
+   ls_sharpe_ex_top_years: -0.201146, ls_top_years: "2001,2009,2021", ls_top_years_share_pct: 208.682074, ls_sharpe_bear: 0.656483,
+   ls_sharpe_bull: 0.073792, decile_avg_ret_pct: "0.633,0.794,0.901,0.876,0.935,0.951,1.013,1.188,1.183,1.401",
+   delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_tstat_nw]
+stage2_failed: []
+character: >
+  Monotone: D1 0.633 rising to D8-D9 1.18-1.19 and D10 1.401 %/mo; raw spread 9.21%/yr at vol 19.7% (Sharpe 0.468, raw MaxDD -53.6%). IC 0.0182 (NW t 2.496817, plain t 2.89, ICIR 0.174), halves 0.0270 / 0.0093; annual IC positive in 16 of 23 years (2021 +0.091, 2001 +0.082; 2007 -0.047, 2018 -0.040). Tiers MEGA 0.0133, MID 0.0121, SMALL 0.0226 (raw LS Sharpe 0.426 / 0.241 / 0.494). IC flat over horizons (0.0150 h1, 0.0133 h6, 0.0142 h12); turnover 10.8% / 12.8%. Beta +0.18 (ex ante +0.14, last +0.50): the hedge subtracts 6.42 pp, hedged 2.79%/yr (Sharpe 0.145, LS NW t 0.63, MaxDD -63.6%). Hedged LS swings: 2021 +57.4%, 2009 +51.9%, 2001 +42.9%; 1999 -36.6%, 2020 -33.0%, 2007 -25.2%; ex-top-years Sharpe -0.201; bear 0.657 / bull 0.074. Coverage 96.1%.
+caveats:
+  - "fails ic_tstat_nw by 0.003183 (2.496817 < 2.5) as the bar is written, no rounding; the index prints it as 2.50; plain t 2.89 and every other bar pass"
+  - "vs the valuation rows: annual IC correlation 0.96 with AM (b1, rejected), 0.91 BMdec (b1, rejected), 0.85 EP (b3, rejected), 0.83 CF (b2, passer); v0 Value is the valuation seed category"
+  - "ls_top_years_share_pct 208.7% recorded as-is: the summed hedged LS is small (about 90 pp over 23 years against +/-30-57% years)"
+  - "revenue <= 0 not guarded (mode 0 at 1.9% of the 2021-11 probe); ART TTM revenue over the universe's market cap; fxusd == 1"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (2.496817 < 2.5, by 0.003183), the only bar it fails: IC 0.0182, halves (min 0.0093), raw spread 9.21%/yr, coverage 96.1%, 188.8 names and 276 LS months pass. Full sample: a rejection, not an inconclusive. No flip: the OSAP-sign t is positive.

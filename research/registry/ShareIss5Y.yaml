@@ -1,0 +1,41 @@
+name: ShareIss5Y
+osap_acronym: ShareIss5Y
+status: stage2_pending
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b8
+declaration_order: 7
+date_tested: "2026-10-01"
+run: "010"
+stage2_run: null
+stage1_decision: PASS
+decided_by: "all bars"
+source: "Daniel and Titman 2006 (Journal of Finance); SignalDoc sign -1, Cat.Economic external financing"
+orientation: "low share-count growth from t-65 to t-5 = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/ShareIss5Y/spec.md}
+dimension_override: ARQ
+history_gate_months: 65
+preflight: {masspoint_max_pct: 0.236267, qcut_min_bins: 0, coverage_min_pct: 0.0}
+stage1:   # from the run 010 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.015791, ic_tstat_nw: 3.667119, ic_half1_mean: 0.015175, ic_half2_mean: 0.016401, icir: 0.255933, ls_sharpe: 1.085246,
+   ls_ann_return_pct: 8.233758, ls_tstat_nw: 4.479492, ls_maxdd_pct: -18.198728, ls_raw_ann_return_pct: 4.881794, ls_raw_sharpe: 0.60801,
+   ls_raw_maxdd_pct: -25.981954, turnover_d10_pct: 6.464965, turnover_d1_pct: 8.112826, coverage_pct: 62.606356,
+   avg_names_per_decile: 152.243498, n_months: 223, ls_n_months: 223, ic_decay_h1: 0.015001, ic_decay_h6: 0.014908, ic_decay_h12: 0.012818,
+   tier_MEGA_ic_mean: 0.0197, tier_MID_ic_mean: 0.0174, tier_SMALL_ic_mean: 0.0124, ls_beta_mean: -0.303689, ls_beta_fullwindow: -0.235743,
+   ls_sharpe_ex_top_years: 0.749473, ls_top_years: "2004,2006,2021", ls_top_years_share_pct: 44.518282, ls_sharpe_bear: 0.150393,
+   ls_sharpe_bull: 1.392612, decile_avg_ret_pct: "0.836,1.015,1.073,1.108,1.120,1.084,1.159,1.153,1.138,1.243",
+   delisting_adjusted_pct: 0.436673}
+stage1_failed: []
+stage2_failed: []
+character: >
+  D1-anchored and graded: D1 (heaviest issuers) 0.836, D2-D9 1.02-1.16, D10 1.243 %/mo; raw spread 4.88%/yr at vol 8.0% (Sharpe 0.608, raw MaxDD -26.0%). IC 0.0158 (NW t 3.67, plain t 3.82, ICIR 0.256), halves 0.0152 / 0.0164; annual IC positive in 14 of 19 years (2021 +0.054, 2011 +0.050; 2020 -0.021). Tiers MEGA 0.0197, MID 0.0174, SMALL 0.0124 (raw LS Sharpe 0.497 / 0.469 / 0.549). IC flat over horizons (0.0150 h1, 0.0149 h6, 0.0128 h12); turnover 6.5% / 8.1%. Beta -0.24 (ex ante -0.30): the hedge adds 3.35 pp, 41% of the hedged 8.23%/yr (Sharpe 1.085, LS NW t 4.48, MaxDD -18.2%, hit 66.8%). Hedged LS negative in 2003 -3.2%, 2007 -0.4%, 2020 -15.7%; 2004, 2006, 2021 carry 45% (2021 +38.7%); ex-top-years Sharpe 0.749; bear 0.150 (35 months) / bull 1.393 (188). 223 months (first scored signal 2003-05). Coverage 62.6% pooled over 276 months with 53 leading null months; Communication Services 48.9%, Technology 53.0%, the rest 60.0-69.4%.
+caveats:
+  - "223 of 276 months: history_months 65 on a 1997-12 SEP start; the halves and the LS floor (200) run on the block's own 223 months; it never sees 1999-2002; the 1998-12 preflight probe reads 0% coverage / 0 bins for that reason"
+  - "likely overlap with ShareIss1Y (this batch; annual IC correlation 0.89), NetEquityFinance (0.91, same sign 11 / 19) and NetPayoutYield (0.81, 14 / 19); vs CompEquIss (b2, rejected, NW t 2.44, five-year composite issuance) 0.21, 16 / 19; co-movement of annual IC, not a score correlation; no Stage 2 number exists"
+  - "vs v0 Investment (asset growth): equity issued enters assets, a mechanical link by construction; not measured"
+  - "bear Sharpe 0.150 rests on 35 months; the hedged Sharpe 1.085 is second of the 16 passers (GP 1.091) and 41% of its return is hedge"
+  - "dimension override ARQ; the docstring's 'No history gate' bullet predates the alpha_review fix that set history_months 65 (the run header confirms the 65m gate); stale text, no value impact"
+  - "approx translation: sharesbas at filing dates (up to ~a quarter stale) for CRSP shrout x cfacshr; split-restated counts"
+  - "Cat.Economic external financing: no v0 seed family covers it"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Passes every Stage 1 bar: IC 0.0158 >= 0.010, NW t 3.67 >= 2.5, halves min 0.0152, raw spread 4.88%/yr > 0, coverage 62.6% >= 40, 152.2 names per decile, 223 LS months >= 200. Not inconclusive: 223 months >= 120 and the floor. Status stage2_pending; family to be assigned in Phase C. Third NW t of the 16 passers (PctAcc 4.03, CBOperProf 3.74); against CompEquIss (rejected at t 2.44 on a similar 228-month window) its t is 3.67.

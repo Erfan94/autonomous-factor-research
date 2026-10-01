@@ -1,0 +1,40 @@
+name: RoE
+osap_acronym: RoE
+status: stage2_pending
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b8
+declaration_order: 3
+date_tested: "2026-10-01"
+run: "010"
+stage2_run: null
+stage1_decision: PASS
+decided_by: "all bars"
+source: "Haugen and Baker 1996 (JFE); SignalDoc sign +1, Cat.Economic profitability"
+orientation: "high net income / book equity = attractive (SignalDoc sign +1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/RoE/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.098522, qcut_min_bins: 10, coverage_min_pct: 55.940377}
+stage1:   # from the run 010 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.019194, ic_tstat_nw: 3.337252, ic_half1_mean: 0.023101, ic_half2_mean: 0.015287, icir: 0.21151, ls_sharpe: 0.531593,
+   ls_ann_return_pct: 7.382402, ls_tstat_nw: 2.448451, ls_maxdd_pct: -38.724538, ls_raw_ann_return_pct: 2.952202, ls_raw_sharpe: 0.179514,
+   ls_raw_maxdd_pct: -58.659805, turnover_d10_pct: 9.739095, turnover_d1_pct: 14.873758, coverage_pct: 93.134937,
+   avg_names_per_decile: 182.99058, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.017234, ic_decay_h6: 0.01576, ic_decay_h12: 0.015126,
+   tier_MEGA_ic_mean: 0.0282, tier_MID_ic_mean: 0.0208, tier_SMALL_ic_mean: 0.016, ls_beta_mean: -0.512938, ls_beta_fullwindow: -0.589327,
+   ls_sharpe_ex_top_years: 0.371772, ls_top_years: "2000,2002,2021", ls_top_years_share_pct: 55.244654, ls_sharpe_bear: 0.28237,
+   ls_sharpe_bull: 0.694198, decile_avg_ret_pct: "0.843,0.940,0.926,0.931,0.951,0.958,1.001,1.056,1.148,1.089",
+   delisting_adjusted_pct: 0.436673}
+stage1_failed: []
+stage2_failed: []
+character: >
+  Graded at the top: D1 0.843, D2-D6 0.93-0.96, D7 1.001, D8 1.056, D9 1.148, D10 1.089 %/mo; raw spread 2.95%/yr at vol 16.5% (Sharpe 0.180, raw MaxDD -58.7%). IC 0.0192 (NW t 3.34, plain t 3.51, ICIR 0.212), halves 0.0231 / 0.0153; annual IC positive in 15 of 23 years (2000 +0.086, 2002 +0.077, 2021 +0.072; 2009 -0.023, 2020 -0.020). Tiers MEGA 0.0282, MID 0.0208, SMALL 0.0160 (raw LS Sharpe 0.305 / 0.370 / 0.030): a MEGA / MID spread. IC decays slowly (0.0172 h1, 0.0158 h6, 0.0151 h12); turnover 9.7% / 14.9%. Beta -0.59 (ex ante -0.51): the hedge adds 4.43 pp, 60% of the hedged 7.38%/yr (Sharpe 0.532, LS NW t 2.45, MaxDD -38.7%). Hedged LS 2000 +50.2%, 2002 +27.8%, 2021 +18.1% (55% of the summed LS); 2009 -13.6%, 2020 -12.7%, 1999 -11.3%; ex-top-years Sharpe 0.372; bear 0.282 / bull 0.694. Coverage 93.1% (55.9% at the 1998-12 probe): Communication Services 83.3%, the rest 91.2-97.4%.
+caveats:
+  - "the hedged headline is 60% hedge: raw 2.95%/yr (Sharpe 0.180) vs hedged 7.38%/yr (Sharpe 0.532) at beta -0.59; not a Stage 1 bar (D11)"
+  - "likely overlap with v0 Profitability: same denominator (SF1.equity, same filing), operating profit vs net income in the numerator; spec-measured Spearman of the raw scores 0.71 (0.62-0.81, 92 months), the first passer with a measured score correlation to a v0 leg"
+  - "vs the profitability passers: annual IC correlation 0.93 with OperProfRD (b7), 0.86 with CBOperProf (b1), 0.72 with GP (b4); same sign 20 / 20 / 18 of 23 years; shared top years 2000 / 2002 / 2021 with OperProfRD and CBOperProf; co-movement of annual IC, not a score correlation; no Stage 2 number exists"
+  - "SMALL tier raw LS Sharpe 0.030 on IC 0.0160: the spread is carried by MEGA / MID"
+  - "approx translation: SF1.equity includes preferred (OSAP ceq excludes it); equity <= 0 -> NaN where OSAP keeps sign-flipped rows; ART TTM at filing, no 6-month annual lag"
+  - "Cat.Economic profitability: the v0 profitability seed family's category"
+  - "delisting_adjusted_pct 0.44% is universe-wide (performance delistings 0.00%)"
+decision: >
+  Passes every Stage 1 bar: IC 0.0192 >= 0.010, NW t 3.34 >= 2.5, halves min 0.0153, raw spread 2.95%/yr > 0, coverage 93.1% >= 40, 183.0 names per decile, 276 LS months >= 248. Status stage2_pending; family to be assigned in Phase C. Seventh NW t of the 16 passers; IC equal to OperProfRD's (0.0192) at a lower raw spread (2.95 vs 6.44%/yr) and ex-top-years Sharpe (0.372 vs 0.452); IC above v0's 0.0145 with level halves (v0 0.0275 / 0.0016).
