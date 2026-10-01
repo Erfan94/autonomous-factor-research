@@ -10,3 +10,4 @@
 - Batches 07-10 classified; review fixes applied to batches 05-09 (CoskewACX market-calendar lag, debtc gate on 5 debt readers, EP earnings lagged to t-6).
 - field_map: SF1.eps, opinc, oibdp verified; compustat.ib remapped to netinc + netincdis.
 - Commits dbbad83 .. cd5bc3d. UNACCOUNTED 128 of 212.
+2026-10-01 | phase_D_closed | ladders 1-5 (runs 012/023/032/037/044): 24 tested, 14 accepted (v1-v14), 10 rejected; v14 19 legs 9 families; baselines+Stage 3 runs 013-043; tag v1 mis-pointed open
