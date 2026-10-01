@@ -5,9 +5,9 @@ search_accounting:
   n_stage1_tested: 107
   n_stage1_passed: 24
   n_stage2_tested: 15
-  n_accepted: 9
+  n_accepted: 10
   n_inconclusive: 0
-  by_status: {"accepted": 9, "baseline": 5, "rejected": 87, "stage2_pending": 11}
+  by_status: {"accepted": 10, "baseline": 5, "rejected": 87, "stage2_pending": 10}
 factors:
   - {name: AM, status: rejected, batch: stage1_b1, ic: 0.0098, ic_t: 1.26, sharpe: -0.149, ret: -3.17, raw_ret: 4.72, cov: 99.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.34, sh_exreg: -0.449, family: null, decided_by: "ic_tstat_nw", run: "003"}
   - {name: Accruals, status: rejected, batch: stage1_b1, ic: 0.0048, ic_t: 1.84, sharpe: 0.329, ret: 2.49, raw_ret: 2.92, cov: 76.7, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.04, sh_exreg: 0.107, family: null, decided_by: "ic_tstat_nw", run: "003"}
@@ -56,7 +56,7 @@ factors:
   - {name: HerfAsset, status: rejected, batch: stage1_b4, ic: -0.0049, ic_t: -2.00, sharpe: -0.182, ret: -1.45, raw_ret: -0.59, cov: 91.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.06, sh_exreg: -0.432, family: null, decided_by: "ic_tstat_nw", run: "006"}
   - {name: HerfBE, status: rejected, batch: stage1_b4, ic: -0.0030, ic_t: -1.21, sharpe: -0.061, ret: -0.44, raw_ret: 0.28, cov: 91.6, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.03, sh_exreg: -0.330, family: null, decided_by: "ic_tstat_nw", run: "006"}
   - {name: High52, status: rejected, batch: stage1_b4, ic: 0.0065, ic_t: 0.77, sharpe: 0.448, ret: 9.38, raw_ret: -0.13, cov: 96.1, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -1.01, sh_exreg: 0.255, family: null, decided_by: "ic_tstat_nw", run: "006"}
-  - {name: IdioVol3F, status: stage2_pending, batch: stage1_b4, ic: 0.0229, ic_t: 3.15, sharpe: 0.536, ret: 10.10, raw_ret: 3.28, cov: 96.7, resid_t: 2.03, dic_t: 0.81, dls_t: 0.89, span_t: -0.85, d_sharpe: -0.012, beta: -0.98, sh_exreg: 0.374, family: "volatility", decided_by: "all bars", run: "006"}
+  - {name: IdioVol3F, status: accepted, batch: stage1_b4, ic: 0.0229, ic_t: 3.15, sharpe: 0.536, ret: 10.10, raw_ret: 3.28, cov: 96.7, resid_t: 2.03, dic_t: 0.81, dls_t: 0.89, span_t: -0.85, d_sharpe: -0.012, beta: -0.98, sh_exreg: 0.374, family: "volatility", decided_by: "all bars", run: "006"}
   - {name: IdioVolAHT, status: stage2_pending, batch: stage1_b4, ic: 0.0238, ic_t: 2.63, sharpe: 0.545, ret: 11.68, raw_ret: 3.89, cov: 96.8, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -1.07, sh_exreg: 0.389, family: "volatility", decided_by: "all bars", run: "006"}
   - {name: Illiquidity, status: rejected, batch: stage1_b5, ic: -0.0064, ic_t: -1.19, sharpe: 0.078, ret: 1.13, raw_ret: 4.31, cov: 96.4, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: 0.29, sh_exreg: -0.137, family: null, decided_by: "ic_tstat_nw", run: "007"}
   - {name: IntMom, status: rejected, batch: stage1_b5, ic: 0.0031, ic_t: 0.50, sharpe: 0.151, ret: 2.24, raw_ret: -1.12, cov: 95.4, resid_t: null, dic_t: null, dls_t: null, span_t: null, d_sharpe: null, beta: -0.18, sh_exreg: -0.117, family: null, decided_by: "ic_tstat_nw", run: "007"}

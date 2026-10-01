@@ -171,3 +171,11 @@
 - Path v9 -> rung 5 WITH arm (hedged): IC 0.0323 -> 0.0355 (NW t 4.50 -> 5.36); Sharpe 0.932 -> 0.919 -> 0.942; 14.87 -> 14.61%/yr; MaxDD -43.7 -> -39.5; beta -0.734 -> -0.512; raw Sharpe 0.579 -> 0.737; turnover D10 44.3 -> 59.1%.
 - Raw vs hedged dLS (pp/yr; hedge part = hedged - raw): OperProfRD +0.19 / +0.17 (-0.02); IdioVol3F +0.41 / +0.38 (-0.03); NetEquityFinance +0.01 / +0.19 (+0.18); CF -0.67 / -0.40 (+0.28); STreversal +1.09 / -0.64 (-1.73 at dbeta +0.20: opposite signs, implied market mean 8.6%/yr). Approximate raw t: 1.03 / 0.95 / 0.02 / -1.30 / 0.91.
 - Records: five rows carry stage2 fields (three rejected, two stage2_pending); logged provenance_verified, 5 factor_evaluated, finding_corrected (IdioVol3F/MaxRet corr 0.94, not 0.97), registry_rows_written; index rebuilt; check OK. v10 and v11 owed on application.
+
+## 2026-10-01 — v10 = v9 + IdioVol3F (volatility, 2nd leg): accepted and applied (runs 033, 034); tag v10-add-IdioVol3F owed
+- Accepted from run 032 rung 2 (base v9) on both bars: residual IC NW t 2.030731 > 2.0 (margin 0.031, the thinnest pass in three ladders; 269 months, FF3 start), at 28% of its own IC; guard t 0.89 >= -2.0. Raw dLS +0.41 and hedged +0.38 pp/yr agree in sign. Joins MaxRet at Stage 1 annual-IC corr 0.942 (decision ladder3_acceptance).
+- Applied: IdioVol3F.py moved to factors/accepted/; COMPOSITE_VERSION v10; COMPOSITE_SHA c961f5791816 -> 1b4195ff18b4, the other stamps unchanged; pytest 434 passed. Volatility = MaxRet, IdioVol3F at 1/14 each; 7 families.
+- Run 033 reproduces the rung 2 WITH arm on 66 of 66 fields to six places: IC 0.032588 (NW t 4.48), hedged Sharpe 0.919312, 15.252859%/yr, MaxDD -45.78, beta -0.752, raw Sharpe 0.578, ex-top-years Sharpe 0.575, turnover 39.8%.
+- Diagnostics (never bars): dSharpe -0.012, MaxDD 2.11 pts worse, dIC +0.0003 (t 0.81), spanning alpha -2.87%/yr (t -0.85); D10 turnover 44.3 -> 39.8% as MaxRet's weight halves.
+- Run 034 (Stage 3, never a gate): equal_rank_decile 0.919; buffered 0.899 at turnover 22.0%; tier_neutral 0.874; vol_targeted 0.794 (the only variant above v9); icir_weighted 0.763 (raw 0.361, beta -0.93).
+- Records: manifest block v10; logged run_started/run_completed (033, 034), provenance_verified (033, 034), construction_reported and composite_updated; IdioVol3F row set to accepted. STreversal (v11) waits on the alpha-reviewer audit.
