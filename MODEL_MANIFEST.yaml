@@ -796,3 +796,61 @@ versions:
       - "TrendFactor is the first momentum addition (Momentum, TrendFactor at 1/18 each), from rung 5 whose base was v13 = v11 + the earlier ladder-4 passers zerotrade6M and VolumeTrend. Bars: residual IC t 2.14 > 2.0 (share 0.46, 228 months from 2002-12), guard t -0.005; Stage 1 annual IC negatively correlated with every leg (-0.09 to -0.37), spanning R2 0.010."
       - "Raw dLS +0.77 vs hedged -0.004 pp/yr: hedge part -0.77 at dbeta_mean +0.045, STreversal's pattern; the implied ~17% market mean is partly the cov(beta_t, m_t) regime-lag term (identity in verification hedge_gap_check_before_phase_d; decision hedge_guard_negative_beta_property). Beta -0.62 -> -0.56, raw Sharpe 0.719 -> 0.773, bear/bull 0.962/1.204 -> 1.219/1.115; hedged MaxDD 1.6 pts worse (-41.6 -> -43.2)."
       - "Front-loaded: dIC +0.0031 in half 1, +0.0004 in half 2. Composite IC NW t 5.24 -> 5.68 (plain t 6.43) nears the ~6 single-leg alpha-reviewer level: noted, not a trigger for a composite. Stage 3 from v13: icir_weighted 0.800 -> 0.902 (raw 0.464), equal_rank_decile 0.979 -> 0.983, buffered 0.945 -> 0.954, tier_neutral 0.826 -> 0.858, vol_targeted 0.909 -> 0.901."
+    construction_layer:                  # run 049, Phase E (D7, D15), GROSS and NET of the layer's modelled costs; reported, never judged; in-window only
+      run: "049"
+      stamps: {harness_sha: 3561590b660a, config_sha: 0d88328d5b10, composite_sha: 7fe6f001e708, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, layer_sha: 4b279fc317cd}
+      window: {book_start: "2001-01", book_end: "2021-12", n_months: 252, eval_end: "2021-12-31", include_holdout: false, layer_composite_pin: 7fe6f001e708}
+      book: "sector + market-beta neutral optimiser over v14's family-blend scores, buffered trading, gross budget G_t = 2 x clip(IC_t/0.02, 0, 1), Corwin-Schultz half-spread (harness-built, no composite leg), impact eta 0.5, borrow flat 25 bp; equal_rank_decile and buffered are the Stage 3 books UNHEDGED (beta about -0.45) over the same 252 months under the same cost model"
+      columns: [gross_ann_pct, gross_sharpe, net_ann_pct, net_sharpe, net_t_nw, net_beta_M, turnover_oneway_pct, cost_spread_pct, cost_impact_pct, cost_borrow_pct, net_maxdd_pct, cut_exyears_net_sharpe, cut_2011_2020_net_sharpe]
+      aum_100M:
+        layer:                     [4.08, 0.856, -0.29, -0.060, -0.24, -0.101, 36.0, 3.39, 0.79, 0.19, -36.7, -0.37, -0.56]
+        "layer_eta_0.25":          [4.08, 0.857, 0.11, 0.023, 0.09, -0.101, 36.0, 3.39, 0.40, 0.19, -32.4, -0.28, -0.50]
+        layer_eta_1:               [4.08, 0.857, -1.08, -0.227, -0.90, -0.101, 36.0, 3.39, 1.58, 0.19, -44.6, -0.55, -0.67]
+        layer_fixed_tier_spread:   [4.06, 0.854, 2.37, 0.502, 1.94, -0.101, 36.0, 0.71, 0.79, 0.19, -19.9, 0.25, -0.09]
+        layer_exec_half_month:     [2.98, 0.662, -1.38, -0.308, -1.22, -0.099, 36.0, 3.39, 0.79, 0.19, -46.3, -0.62, -0.73]
+        layer_tiered_borrow:       [4.08, 0.856, -0.99, -0.208, -0.82, -0.101, 36.0, 3.39, 0.79, 0.89, -44.4, -0.54, -0.73]
+        equal_rank_decile:         [12.52, 0.793, -7.95, -0.507, -2.02, -0.454, 117.7, 12.65, 7.56, 0.25, -95.0, -0.93, -1.22]
+        buffered:                  [11.27, 0.736, -1.77, -0.116, -0.47, -0.474, 77.9, 8.40, 4.38, 0.25, -84.0, -0.48, -0.87]
+        layer_no_buffer:           [6.38, 1.068, -5.07, -0.843, -3.39, -0.114, 90.7, 8.42, 2.79, 0.24, -76.2, -1.23, -1.32]
+        layer_no_beta_constraint:  [4.39, 0.805, 0.10, 0.018, 0.07, -0.135, 35.5, 3.33, 0.77, 0.19, -37.1, -0.28, -0.55]
+        layer_dollar_neutral_only: [4.43, 0.820, 0.18, 0.034, 0.13, -0.127, 34.9, 3.31, 0.75, 0.19, -35.5, -0.25, -0.53]
+      aum_1000M:
+        layer:                     [4.08, 0.857, -1.93, -0.409, -1.63, -0.101, 35.9, 3.38, 2.45, 0.19, -52.3, -0.75, -0.80]
+        "layer_eta_0.25":          [4.08, 0.857, -0.71, -0.150, -0.59, -0.101, 35.9, 3.38, 1.22, 0.19, -41.2, -0.47, -0.62]
+        layer_eta_1:               [4.09, 0.857, -4.39, -0.927, -3.73, -0.101, 36.0, 3.38, 4.91, 0.19, -68.7, -1.29, -1.16]
+        layer_fixed_tier_spread:   [4.07, 0.856, 0.73, 0.156, 0.61, -0.101, 35.9, 0.71, 2.45, 0.19, -22.8, -0.12, -0.33]
+        layer_exec_half_month:     [2.98, 0.662, -3.03, -0.678, -2.72, -0.098, 35.9, 3.38, 2.45, 0.19, -59.6, -1.02, -0.97]
+        layer_tiered_borrow:       [4.08, 0.856, -2.64, -0.559, -2.23, -0.101, 35.9, 3.38, 2.45, 0.89, -58.2, -0.92, -0.98]
+        equal_rank_decile:         [12.52, 0.793, -24.78, -1.587, -6.37, -0.446, 118.7, 12.77, 24.28, 0.25, -99.7, -2.10, -2.09]
+        buffered:                  [11.27, 0.736, -11.41, -0.754, -3.08, -0.470, 78.4, 8.45, 13.98, 0.25, -96.9, -1.21, -1.42]
+        layer_no_buffer:           [6.23, 1.046, -10.40, -1.705, -6.83, -0.113, 89.2, 8.30, 8.10, 0.23, -90.8, -2.14, -2.08]
+        layer_no_beta_constraint:  [4.39, 0.804, -1.52, -0.280, -1.14, -0.136, 35.4, 3.33, 2.40, 0.19, -52.5, -0.61, -0.79]
+        layer_dollar_neutral_only: [4.43, 0.820, -1.40, -0.257, -0.99, -0.126, 34.8, 3.30, 2.34, 0.19, -50.8, -0.58, -0.77]
+      aum_5000M:
+        layer:                     [3.79, 0.819, -4.02, -0.870, -3.49, -0.097, 34.1, 3.20, 4.43, 0.18, -66.9, -1.24, -1.22]
+        "layer_eta_0.25":          [3.78, 0.818, -1.81, -0.393, -1.56, -0.097, 34.1, 3.20, 2.21, 0.18, -50.8, -0.72, -0.84]
+        layer_eta_1:               [3.82, 0.822, -8.46, -1.800, -7.22, -0.098, 34.2, 3.21, 8.88, 0.18, -85.3, -2.25, -1.97]
+        layer_fixed_tier_spread:   [3.78, 0.818, -1.48, -0.324, -1.29, -0.097, 34.1, 0.66, 4.42, 0.18, -47.1, -0.64, -0.75]
+        layer_exec_half_month:     [2.78, 0.630, -5.04, -1.144, -4.64, -0.094, 34.1, 3.20, 4.43, 0.18, -71.7, -1.52, -1.37]
+        layer_tiered_borrow:       [3.79, 0.820, -4.70, -1.017, -4.08, -0.097, 34.1, 3.20, 4.43, 0.86, -70.9, -1.41, -1.39]
+        equal_rank_decile:         [12.52, 0.793, -56.90, -3.345, -11.87, -0.428, 121.0, 13.02, 56.14, 0.25, -100.0, -3.95, -3.61]
+        buffered:                  [11.27, 0.736, -29.36, -1.908, -7.65, -0.463, 79.3, 8.55, 31.83, 0.25, -99.9, -2.51, -2.39]
+        layer_no_buffer:           [5.37, 0.985, -13.89, -2.473, -9.91, -0.103, 77.6, 7.18, 11.85, 0.22, -95.4, -3.05, -2.99]
+        layer_no_beta_constraint:  [4.17, 0.783, -3.55, -0.667, -2.73, -0.133, 33.7, 3.16, 4.38, 0.18, -66.7, -1.05, -1.20]
+        layer_dollar_neutral_only: [4.25, 0.816, -3.43, -0.652, -2.53, -0.119, 33.3, 3.16, 4.33, 0.19, -65.5, -1.02, -1.18]
+      net_maxdd_episode: {layer_100M: "2002-09..2021-01", layer_1000M: "2002-09..2021-06", layer_5000M: "2002-09..2021-06", layer_fixed_tier_spread_100M: "2016-03..2021-01", gross_layer_100M: "-15.8, 2018-12..2020-12"}
+      cuts:                              # layer@100M; regime years from the D5 rule (declared 2000,2001,2021; 2000 precedes the book, effective 2001,2021)
+        cut_exyears: {effective: "2001,2021", n_months: 228, gross_ann_pct: 2.75, gross_sharpe: 0.647, net_ann_pct: -1.57, net_sharpe: -0.370, net_t_nw: -1.36, net_beta_M: -0.084, turnover_oneway_pct: 36.8}
+        cut_2011_2020: {n_months: 120, gross_ann_pct: 0.95, gross_sharpe: 0.222, net_ann_pct: -2.39, net_sharpe: -0.559, net_t_nw: -1.57, net_beta_M: -0.064, turnover_oneway_pct: 32.6}
+        annual_net_pct: "2001:15.8,2002:14.0,2003:-6.7,2004:-5.3,2005:-3.0,2006:1.4,2007:-8.2,2008:8.8,2009:-6.4,2010:0.9,2011:4.1,2012:0.0,2013:-2.2,2014:-0.7,2015:0.7,2016:2.3,2017:-4.5,2018:-0.8,2019:-6.5,2020:-15.5,2021:9.0"
+        tiers_net_cost_pct: {MEGA: [0.26, 0.65], MID: [-0.49, 1.01], SMALL: [-0.06, 2.70]}
+      risk_model: {bias_stat_mean: 2.58, bias_in_band_pct: 20.5, exante_vol_pct: 1.97, realised_vol_pct: 4.78, exp_beta_mean: 0.000, market_beta_own_estimate_pct: 90.4, budget_scaled_months: 42, budget_scaled_live: 40, flat_months: 2, flat_reason: "ic_nonpositive 2021-01, 2021-02", gross_budget_mean_live: 1.91, avg_gross_book: 1.50, avg_n_long: 938, avg_n_short: 969}
+      trading: {reproj_share_pct: [3.2, 3.3, 5.0], participation_hit_share_pct: [0.00, 0.26, 5.91], new_positions_delisting_n: 940, new_positions_delisting_pnl_pct: 0.005, implied_half_spread_bp: 39.2, fixed_tier_half_spread_bp: 8.3}   # [100M, 1000M, 5000M]; half-spread = spread cost / two-way traded notional
+      guards: {spread_measured_pct: 99.95, spread_floor_pct: 95, market_beta_first_month: "2000-01", beta_constraint_dropped_months: 0, max_beta_residual: 0, max_neutrality_residual: 0, name_cap_excess_max: 0, name_cap_excess_months: 0, months_gross_exceeds_budget: 0, applies_to: "27 layer rows; not applicable on the 6 reference rows", validation_warnings: 0}
+      character:
+        - "Information intact, costs exceed it: layer@100M gross 4.08%/yr, vol 4.76%, Sharpe 0.856 (NW t 3.27); measured-CS costs 4.36%/yr (spread 3.39, impact 0.79, borrow 0.19); net -0.29%/yr, Sharpe -0.06; -0.41 at $1B, -0.87 at $5B. Fixed tier spreads (2/5/12 bp, labelled as understating 1999-2007): net Sharpe +0.50 (t 1.94) / +0.16 / -0.32. Net Sharpe = gross Sharpe x (1 - cost/gross) within 0.005 on every $100M row (net vol equals gross vol); the gap grows with cost (0.08 on layer_no_buffer@$5B). Spread and borrow scale with leverage; impact grows faster."
+        - "Implied half-spread 39 bp per unit traded (41 bp if the gross budget stands in for 2x): 49-54 in 2001-02, 30-35 in 2003-07, 63-66 in 2008-09, 57 in 2020, the cached CS series' time profile. The daily CS estimate is floored at zero before averaging, which biases measured spreads up for liquid names; the true cost likely sits between the measured and the fixed-tier rows."
+        - "Return per unit turnover: equal_rank_decile 12.5% gross at 118% one-way and the layer 4.1% at 36% both earn about 0.11, but the buffer moves the ratio (buffered 0.145, layer_no_buffer 0.070): gross return is concave in turnover, not proportional. The turnover the books must pay is what Phase D selected (D10 turnover 28% at v0 -> 58% at v14), not a product of the layer."
+        - "Beta: ex ante 0 (max residual 0); ex post net beta on M -0.101 vs -0.135 (layer_no_beta_constraint) and -0.127 (dollar_neutral_only). The constraint costs 0.31 pp gross (4.39 -> 4.08) and lifts gross Sharpe 0.805 -> 0.856 (vol 5.45 -> 4.76); the trailing 36m stock beta removes only part of the realised loading. Same-months raw decile book: gross Sharpe 0.79 (run 042 over 1999-2021: raw 0.77, hedged 0.98)."
+        - "Front-loaded: net 2001 +15.8, 2002 +14.0, 2021 +9.0; 2003-2020 compounds to -36% net (+38% gross, 1.9%/yr). Ex-years cut (effective 2001, 2021; 2002, the second-best year, stays in) net Sharpe -0.37; 2011-2020 -0.56 (gross 0.95%/yr). Mirrors the composite's IC halves 0.050 / 0.028. Net MaxDD -36.7% runs 2002-09 to 2021-01."
+        - "Risk model underpredicts about 2.4x (ex-ante vol 1.97% vs realised 4.78%; bias stat 2.58, in band 20.5% of windows), likely why the optimiser adds little over the naive decile book (gross Sharpe 0.86 vs 0.79). References at $100M net: equal_rank_decile -7.9, buffered -1.8, layer_no_buffer -5.1, exec_half_month -1.4 (gross 4.08 -> 2.98: a quarter of gross accrues in the first half-month), tiered_borrow -1.0."

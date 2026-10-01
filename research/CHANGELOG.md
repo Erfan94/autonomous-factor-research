@@ -226,3 +226,12 @@
 - Diagnostics, never bars: BidAskSpreadFlip dIC t 1.83; its hedged dLS +0.20 against raw -0.20 pp, with beta -0.617 vs -0.560 (the negative-beta guard property). IdioVolAHT is the only rung where MaxDD worsens (+1.2 pts). NetPayoutYield raw dLS -0.43 vs hedged +0.03 pp. Every WITH arm has a lower raw Sharpe than v14's 0.773.
 - Provenance: 5 stamps match; holdout off; eval_end 2021-12-31; 0 warnings; arms aligned; check_stage2 agrees 4/4; every base arm equals run 042 on 66/66 fields.
 - Records: four rows set to rejected, index rebuilt (24/24 passers Stage 2-tested, 14 accepted), events 044 logged, batch_closed stage2_l5. No composite, manifest or tag change.
+
+## 2026-10-01 — Construction layer on v14 (run 049): REPORTED, never judged; gross information intact, measured costs exceed it
+- layer@$100M: gross 4.08%/yr, Sharpe 0.856 (NW t 3.27); costs 4.36 (spread 3.39, impact 0.79, borrow 0.19); net -0.29%/yr, Sharpe -0.06 (-0.41 at $1B, -0.87 at $5B). Fixed tier spreads: +0.50 (t 1.94) / +0.16 / -0.32.
+- Implied half-spread 39 bp per unit traded, the CS series' time profile; the zero-floored CS estimator biases liquid names up, so the true cost sits between the two spread rows.
+- Beta ex ante 0, ex post -0.101 (no-beta-constraint row -0.135); the constraint costs 0.31 pp gross and raises gross Sharpe 0.805 -> 0.856. Risk model underpredicts about 2.4x (bias stat 2.58).
+- Front-loaded: 2001 +15.8, 2002 +14.0, 2021 +9.0; 2003-2020 compounds to -36% net. Ex-years (effective 2001, 2021) net Sharpe -0.37; 2011-2020 -0.56.
+- Return per unit turnover ~0.11 for equal_rank_decile and the layer, but buffered 0.145 and layer_no_buffer 0.070: return is concave in turnover.
+- Provenance: 5 stamps plus the layer pin match; holdout off; book 2001-01..2021-12; 0 warnings; guards held (spread 99.95% vs 95, first beta 2000-01, 0 dropped, residuals 0).
+- Records: manifest v14 `construction_layer` block; events run_completed, provenance_verified, construction_reported; CONSTRUCTION.md §10; JOURNAL. No gate, registry row or composite change.

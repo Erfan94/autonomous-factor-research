@@ -478,3 +478,19 @@ tested or stated in the layer block.
     than silently dropping the constraint there.
 34. **Cache key.** `_cs_builder_sha` also hashes the snapshot readers it uses
     (`Snapshot.table`, `Snapshot.ticker_map`); DATA_SHA covers the bytes.
+
+## 10. Results (in-window; reported, never judged)
+
+Run 049 (2026-10-01; HARNESS 3561590b660a, CONFIG 0d88328d5b10, COMPOSITE
+7fe6f001e708 = v14, DATA 198b281de1a0, LAYER 4b279fc317cd): 33 blocks (11
+rows × $100M / $1B / $5B) over the book window 2001-01..2021-12, holdout
+off. Every guard held (spread measured on 99.95% against the 95% floor;
+first beta month 2000-01; 0 beta-dropped months; beta, neutrality and
+name-cap residuals 0). The full table, cuts, risk-model diagnostics, guards
+and character lines are the `construction_layer` block under v14 in
+`MODEL_MANIFEST.yaml`. In short: the gross information survives the layer
+(layer@$100M gross Sharpe 0.86, NW t 3.27), but the measured Corwin-Schultz
+costs (4.36%/yr) exceed the gross return (4.08%/yr), so net Sharpe is
+−0.06 at $100M; with the fixed tier spreads it is +0.50. The in-window
+figures describe tradability; only the holdout cut (stop-and-ask 5) is an
+estimate.
