@@ -130,7 +130,7 @@ def _compute(ctx):
 
 
 FACTOR = FactorDef(
-    # family: LEAVE UNSET (assigned in Phase C).
+    family="volatility",                # Phase C, 2026-10-01: Cat.Economic "volatility" (decision phase_c_family_partition)
     name="IdioVol3F",
     col="f_ivol3f",
     compute=_compute,

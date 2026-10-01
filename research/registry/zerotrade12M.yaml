@@ -1,7 +1,7 @@
 name: zerotrade12M
 osap_acronym: zerotrade12M
 status: stage2_pending
-family: null                 # Phase C assigns it; never changed after
+family: liquidity
 batch: stage1_b9
 declaration_order: 8
 date_tested: "2026-10-01"

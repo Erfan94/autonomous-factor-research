@@ -86,7 +86,7 @@ def _compute(ctx):
 
 
 FACTOR = FactorDef(
-    # family: LEAVE UNSET (assigned in Phase C).
+    family="momentum",                # Phase C, 2026-10-01: Cat.Economic "momentum" (decision phase_c_family_partition)
     name="TrendFactor",
     col="f_trendfactor",
     compute=_compute,

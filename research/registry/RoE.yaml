@@ -1,7 +1,7 @@
 name: RoE
 osap_acronym: RoE
 status: stage2_pending
-family: null                 # Phase C assigns it; never changed after
+family: profitability
 batch: stage1_b8
 declaration_order: 3
 date_tested: "2026-10-01"

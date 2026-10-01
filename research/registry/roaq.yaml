@@ -1,7 +1,7 @@
 name: roaq
 osap_acronym: roaq
 status: stage2_pending
-family: null                 # Phase C assigns it; never changed after
+family: profitability
 batch: stage1_b9
 declaration_order: 7
 date_tested: "2026-10-01"

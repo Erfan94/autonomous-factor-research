@@ -1,7 +1,7 @@
 name: NetPayoutYield
 osap_acronym: NetPayoutYield
 status: stage2_pending
-family: null                 # Phase C assigns it; never changed after
+family: value
 batch: stage1_b6
 declaration_order: 12
 date_tested: "2026-10-01"

@@ -1,7 +1,7 @@
 name: OperProfRD
 osap_acronym: OperProfRD
 status: stage2_pending
-family: null                 # Phase C assigns it; never changed after
+family: profitability
 batch: stage1_b7
 declaration_order: 2
 date_tested: "2026-10-01"

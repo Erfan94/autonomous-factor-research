@@ -1,7 +1,7 @@
 name: NetEquityFinance
 osap_acronym: NetEquityFinance
 status: stage2_pending
-family: null                 # Phase C assigns it; never changed after
+family: external_financing
 batch: stage1_b6
 declaration_order: 11
 date_tested: "2026-10-01"

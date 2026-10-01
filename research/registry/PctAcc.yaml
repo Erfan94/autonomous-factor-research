@@ -1,7 +1,7 @@
 name: PctAcc
 osap_acronym: PctAcc
 status: stage2_pending
-family: null                 # Phase C assigns it; never changed after
+family: investment
 batch: stage1_b7
 declaration_order: 4
 date_tested: "2026-10-01"

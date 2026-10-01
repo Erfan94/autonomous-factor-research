@@ -1,7 +1,7 @@
 name: TrendFactor
 osap_acronym: TrendFactor
 status: stage2_pending
-family: null                 # Phase C assigns it; never changed after
+family: momentum
 batch: stage1_b8
 declaration_order: 9
 date_tested: "2026-10-01"

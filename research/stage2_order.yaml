@@ -1,0 +1,31 @@
+# Pre-declared Stage 2 ratchet order — written ONCE at the close of Phase C, never re-sorted.
+# rule: descending_stage1_ic_tstat_nw over ALL Stage 1 passers, full-precision NW t from the registry rows;
+# tie-break (none exact here): higher Stage 1 mean IC, then name. Ladders of <= 5 are cut in this order.
+declared: "2026-10-01T05:45:32Z"
+rule: descending_stage1_ic_tstat_nw
+n: 24
+order:
+  - {rank: 1, factor: PctAcc, ic_tstat_nw: 4.032033, ic_mean: 0.011159, family: investment}
+  - {rank: 2, factor: CBOperProf, ic_tstat_nw: 3.735701, ic_mean: 0.020856, family: profitability}
+  - {rank: 3, factor: ShareIss5Y, ic_tstat_nw: 3.667119, ic_mean: 0.015791, family: external_financing}
+  - {rank: 4, factor: cfp, ic_tstat_nw: 3.651526, ic_mean: 0.024642, family: value}
+  - {rank: 5, factor: XFIN, ic_tstat_nw: 3.570243, ic_mean: 0.017006, family: external_financing}
+  - {rank: 6, factor: GP, ic_tstat_nw: 3.520387, ic_mean: 0.015533, family: profitability}
+  - {rank: 7, factor: ShareIss1Y, ic_tstat_nw: 3.516353, ic_mean: 0.016467, family: external_financing}
+  - {rank: 8, factor: MaxRet, ic_tstat_nw: 3.423890, ic_mean: 0.023275, family: volatility}
+  - {rank: 9, factor: roaq, ic_tstat_nw: 3.366138, ic_mean: 0.020781, family: profitability}
+  - {rank: 10, factor: RoE, ic_tstat_nw: 3.337252, ic_mean: 0.019194, family: profitability}
+  - {rank: 11, factor: OperProfRD, ic_tstat_nw: 3.183514, ic_mean: 0.019224, family: profitability}
+  - {rank: 12, factor: IdioVol3F, ic_tstat_nw: 3.147216, ic_mean: 0.022882, family: volatility}
+  - {rank: 13, factor: NetEquityFinance, ic_tstat_nw: 3.027885, ic_mean: 0.016576, family: external_financing}
+  - {rank: 14, factor: CF, ic_tstat_nw: 3.027856, ic_mean: 0.020063, family: value}
+  - {rank: 15, factor: STreversal, ic_tstat_nw: 2.963026, ic_mean: 0.014466, family: short_term_reversal}
+  - {rank: 16, factor: zerotrade6M, ic_tstat_nw: 2.927305, ic_mean: 0.018548, family: liquidity}
+  - {rank: 17, factor: VolumeTrend, ic_tstat_nw: 2.869779, ic_mean: 0.011364, family: liquidity}
+  - {rank: 18, factor: zerotrade12M, ic_tstat_nw: 2.831524, ic_mean: 0.017979, family: liquidity}
+  - {rank: 19, factor: RealizedVol, ic_tstat_nw: 2.809589, ic_mean: 0.023399, family: volatility}
+  - {rank: 20, factor: TrendFactor, ic_tstat_nw: 2.787353, ic_mean: 0.017142, family: momentum}
+  - {rank: 21, factor: BidAskSpreadFlip, ic_tstat_nw: 2.762832, ic_mean: 0.020576, family: liquidity}
+  - {rank: 22, factor: IdioVolAHT, ic_tstat_nw: 2.628065, ic_mean: 0.023776, family: volatility}
+  - {rank: 23, factor: zerotrade1M, ic_tstat_nw: 2.626066, ic_mean: 0.015549, family: liquidity}
+  - {rank: 24, factor: NetPayoutYield, ic_tstat_nw: 2.604558, ic_mean: 0.014492, family: value}

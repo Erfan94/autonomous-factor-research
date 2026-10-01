@@ -68,7 +68,7 @@ def _compute(ctx):
 
 
 FACTOR = FactorDef(
-    # family: LEAVE UNSET (assigned in Phase C).
+    family="short_term_reversal",                # Phase C, 2026-10-01: Cat.Economic "short-term reversal" (decision phase_c_family_partition)
     name="STreversal",
     col="f_streversal",
     compute=_compute,

@@ -1,7 +1,7 @@
 name: ShareIss5Y
 osap_acronym: ShareIss5Y
 status: stage2_pending
-family: null                 # Phase C assigns it; never changed after
+family: external_financing
 batch: stage1_b8
 declaration_order: 7
 date_tested: "2026-10-01"

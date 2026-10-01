@@ -92,7 +92,7 @@ def _compute(ctx):
 
 
 FACTOR = FactorDef(
-    # family: LEAVE UNSET (assigned in Phase C).
+    family="volatility",                # Phase C, 2026-10-01: Cat.Economic "volatility" (decision phase_c_family_partition)
     name="MaxRet",
     col="f_maxret",
     compute=_compute,

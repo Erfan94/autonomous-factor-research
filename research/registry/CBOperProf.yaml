@@ -1,7 +1,7 @@
 name: CBOperProf
 osap_acronym: CBOperProf
 status: stage2_pending
-family: null                 # Phase C assigns it; never changed after
+family: profitability
 batch: stage1_b1
 declaration_order: 12
 date_tested: "2026-09-30"

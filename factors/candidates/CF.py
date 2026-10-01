@@ -99,7 +99,7 @@ def _compute(ctx):
 
 
 FACTOR = FactorDef(
-    # family: LEAVE UNSET (assigned in Phase C).
+    family="value",                # Phase C, 2026-10-01: Cat.Economic "valuation" (decision phase_c_family_partition)
     name="CF",
     col="f_cf",
     compute=_compute,

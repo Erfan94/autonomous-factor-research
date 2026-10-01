@@ -1,7 +1,7 @@
 name: STreversal
 osap_acronym: STreversal
 status: stage2_pending
-family: null                 # Phase C assigns it; never changed after
+family: short_term_reversal
 batch: stage1_b8
 declaration_order: 5
 date_tested: "2026-10-01"

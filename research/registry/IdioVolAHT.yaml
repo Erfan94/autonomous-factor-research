@@ -1,7 +1,7 @@
 name: IdioVolAHT
 osap_acronym: IdioVolAHT
 status: stage2_pending
-family: null                 # Phase C assigns it; never changed after
+family: volatility
 batch: stage1_b4
 declaration_order: 12
 date_tested: "2026-10-01"

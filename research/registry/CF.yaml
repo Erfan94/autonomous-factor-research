@@ -1,7 +1,7 @@
 name: CF
 osap_acronym: CF
 status: stage2_pending
-family: null                 # Phase C assigns it; never changed after
+family: value
 batch: stage1_b2
 declaration_order: 1
 date_tested: "2026-09-30"

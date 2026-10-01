@@ -92,7 +92,7 @@ def _compute(ctx):
 
 
 FACTOR = FactorDef(
-    # family: LEAVE UNSET (assigned in Phase C).
+    family="external_financing",                # Phase C, 2026-10-01: Cat.Economic "external financing" (decision phase_c_family_partition)
     name="NetEquityFinance",
     col="f_nef",
     compute=_compute,
