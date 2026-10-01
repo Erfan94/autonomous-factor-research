@@ -2118,7 +2118,9 @@ def cs_spread_monthly(daily, signal_dates, partial=frozenset()):
     if not out:
         return pd.DataFrame({"me": pd.Series(dtype="datetime64[ns]"), "ID": pd.Series(dtype=object),
                              "cs_spread": pd.Series(dtype=float), "cs_n_days": pd.Series(dtype="int64")})
-    return pd.concat(out, ignore_index=True)
+    cs = pd.concat(out, ignore_index=True)
+    cs["me"] = pd.to_datetime(cs["me"]).astype("datetime64[ns]")
+    return cs
 
 
 def build_cs_spread_monthly(snap, log=print):
@@ -2141,7 +2143,6 @@ def build_cs_spread_monthly(snap, log=print):
     signal_dates = sorted(pd.unique(to_bme(pd.Series(pd.unique(daily["date"])))))
     cs = cs_spread_monthly(daily, signal_dates, table_partial_months(snap, "SEP"))
     cs["ID"] = np.asarray(labels, dtype=object)[cs["ID"].to_numpy(dtype=np.int64)].astype(str)
-    cs["me"] = pd.to_datetime(cs["me"]).astype("datetime64[ns]")
     ok = cs["cs_spread"].notna()
     log(f"    cs spread monthly: {cs['me'].nunique()} months, {int(ok.sum()):,} name-months with >= "
         f"{CS_MIN_DAYS} daily estimates ({100 * float(ok.mean()) if len(cs) else 0:.1f}% of "
@@ -2150,8 +2151,12 @@ def build_cs_spread_monthly(snap, log=print):
 
 
 def _cs_builder_sha():
+    """The builder's source and constants, plus the snapshot readers it goes
+    through (Snapshot.table, Snapshot.ticker_map): DATA_SHA covers the bytes,
+    this covers how they are read and mapped to IDs."""
     src = "".join(inspect.getsource(f) for f in
-                  (to_bme, cs_daily_spread, table_partial_months, cs_spread_monthly, build_cs_spread_monthly))
+                  (to_bme, cs_daily_spread, table_partial_months, cs_spread_monthly, build_cs_spread_monthly,
+                   Snapshot.table, Snapshot.ticker_map))
     consts = (CS_DAYS_BACK, CS_MIN_DAYS, CS_VERSION)
     return hashlib.sha256((src + repr(consts)).encode()).hexdigest()[:12]
 

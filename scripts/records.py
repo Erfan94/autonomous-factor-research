@@ -37,7 +37,7 @@ KNOWN_EVENTS = {
     "project_initialized", "snapshot_recorded", "factor_suggested", "factor_fetched",
     "factor_infeasible", "factor_dropped", "factor_deferred", "factor_translated",
     "fields_verified", "batch_declared", "batch_amended", "preflight_failed", "preflight_remeasured", "run_started",
-    "run_completed", "run_failed", "provenance_verified", "provenance_mismatch",
+    "run_completed", "run_failed", "run_aborted", "provenance_verified", "provenance_mismatch",
     "validation_warning", "factor_evaluated", "batch_closed", "registry_rows_written",
     "spec_written", "inventory_classified", "family_assigned", "stage2_order_declared",
     "phase_completed",
@@ -257,7 +257,7 @@ def unevaluated_runs():
             if not line.strip():
                 continue
             e = json.loads(line)
-            if e.get("event") in ("run_started", "run_completed", "run_failed"):
+            if e.get("event") in ("run_started", "run_completed", "run_failed", "run_aborted"):
                 continue
             seq = e.get("seq")
             raw = list(seq.values()) if isinstance(seq, dict) else [seq]

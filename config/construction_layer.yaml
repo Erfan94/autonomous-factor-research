@@ -79,6 +79,12 @@ costs:
   # (data_layer.load_or_build_cs_spread, column cs_spread) / 2, per name per month,
   # as of the signal date; no composite leg is read.
   half_spread: "corwin_schultz_half"
+  # 2026-10-01, before any layer number (alpha-review of 41edba9): the layer is
+  # REFUSED when the spread series measures less than this share of the book
+  # window's universe ID-months (a broken join would otherwise price the book on
+  # the tier-median fill). Read first on the real panel without any layer number:
+  # 99.94% of the 276 in-window months' universe name-months, worst month 99.58%.
+  spread_measured_min_pct: 95.0
   half_spread_floor_bp: 1.0
   half_spread_missing: "tier_month_median"
   impact_eta: 0.5                    # c = hs + eta * sigma_daily * sqrt(Q / ADV)

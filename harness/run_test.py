@@ -436,7 +436,12 @@ def drive_layer(frames, legs, cfg, stamps, eval_start, eval_end, include_holdout
           f"vol factor first estimable {meta['vol_factor_first_month']}; {meta['sector_groups']} sector groups")
     print(f"  constraints {meta['constraints']}; market beta first estimable {meta['market_beta_first_month']}, "
           f"own estimate for {_f(meta['market_beta_own_estimate_pct'])}% of book name-months (rest: "
-          f"sector-month median); CS spread measured on {_f(meta['spread_measured_pct'])}% of ID-months")
+          f"sector-month median); CS spread measured on {_f(meta['spread_measured_pct'])}% of book-window "
+          f"ID-months (floor {lcfg['costs']['spread_measured_min_pct']}%)")
+    if results:
+        st0 = results[0][2]
+        print(f"  ex-years cut: declared {st0['cut_exyears_declared']} (D5 rule), effective "
+              f"{st0['cut_exyears_effective']} ({st0['cut_exyears_n']} year(s) inside the book window)")
     print("  In-window figures describe TRADABILITY of a composite selected on this window, not an "
           "expected return (CONSTRUCTION.md §1).")
     paths_sha = "none"
@@ -467,7 +472,8 @@ def drive_layer(frames, legs, cfg, stamps, eval_start, eval_end, include_holdout
                 "exp_beta_mean", "net_maxdd_pct",
                 "net_maxdd_peak", "net_maxdd_trough", "net_worst_12m_pct", "turnover_oneway_pct",
                 "reproj_share_of_turnover_pct", "cost_spread_ann_pct", "cost_impact_ann_pct", "cost_borrow_ann_pct",
-                "participation_hit_share_pct", "budget_scaled_months", "flat_months", "avg_n_long",
+                "participation_hit_share_pct", "budget_scaled_months", "flat_months", "name_cap_excess_max",
+                "name_cap_excess_months", "avg_n_long",
                 "avg_n_short", "bias_stat_mean", "cut_exyears_net_sharpe", "cut_2011_2020_net_sharpe",
                 "cut_holdout_net_sharpe"]
         line = "  ".join(f"{k}={_f(st[k])}" for k in keys if k in st)

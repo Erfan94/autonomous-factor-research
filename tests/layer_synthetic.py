@@ -56,7 +56,7 @@ def make_audit(n_names=300, n_months=48, start="1999-01-01", seed=0, churn=0.02,
         kind[dl] = "partial_delisted_performance"
         ret[dl] = (1 + ret[dl]) * 0.7 - 1
         spread = np.exp(rng.normal(np.log(0.004), 0.6, n))
-        spread[rng.random(n) < 0.05] = np.nan
+        spread[rng.random(n) < 0.01] = np.nan               # ~1% unmeasured (the real series: 0.06%)
         adv = mcap[idx] * np.exp(rng.normal(np.log(0.004), 0.5, n))
         pct = pd.Series(adv).rank(pct=True).values * 100
         tier = np.where(pct >= 80, "MEGA", np.where(pct >= 50, "MID", "SMALL"))

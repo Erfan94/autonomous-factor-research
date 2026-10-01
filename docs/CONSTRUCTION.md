@@ -288,7 +288,10 @@ One-way cost of trading $Q in name i is c_i(Q) = hs_i + η σ_d,i √(Q / ADV_i)
   ex-ante beta, Σ w_i β_i), and `net_beta_on_market` on every cut. Also
   `max_beta_residual` and `beta_constraint_dropped_months`.
 - **The regime cut on every row:** ex the D5 top-3 LS years (v14: 2000,
-  2001, 2021) and 2011–2020.
+  2001, 2021) and 2011–2020. Year 2000 precedes the book (2001-01), so the
+  ex-years cut removes only 2001 and 2021: every block reports the declared
+  years (`cut_exyears_declared`), the years the cut actually removes
+  (`cut_exyears_effective`) and their count (`cut_exyears_n`).
 
 ## 8. Order of work (one logical change per commit)
 
@@ -456,3 +459,22 @@ tested or stated in the layer block.
 29. **No measuring path moved.** The series and the constraint are read
     only under `--construction-layer`; `--baseline --stage 2` under the new
     HARNESS_SHA reproduces run 042.
+
+**Declared 2026-10-01, before any layer number (alpha-review of 41edba9)**
+
+30. **Ex-years reporting.** `cut_exyears_years` is replaced by
+    `cut_exyears_declared` / `cut_exyears_effective` / `cut_exyears_n`
+    (§7); the config value is unchanged.
+31. **Name-cap excess.** Step 2's largest |w_i| − cap_i after its last
+    projection (the beta column can push a name back over its cap) is
+    carried per month: `name_cap_excess_max` and `name_cap_excess_months`
+    (months above `cap_tol`) on every layer row, and in the printed table.
+32. **Spread-join floor.** The layer is refused when the spread series
+    measures less than `costs.spread_measured_min_pct` = 95% of the book
+    window's universe ID-months. Read first on the real panel, with no layer
+    number: 99.94% over the 276 in-window months, worst month 99.58%.
+33. **Beta-constraint guard.** A row under `sector_beta_neutral` is refused
+    when any book month (book_start onward) has no beta estimate, rather
+    than silently dropping the constraint there.
+34. **Cache key.** `_cs_builder_sha` also hashes the snapshot readers it uses
+    (`Snapshot.table`, `Snapshot.ticker_map`); DATA_SHA covers the bytes.

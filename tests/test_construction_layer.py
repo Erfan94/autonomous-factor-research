@@ -517,7 +517,12 @@ def test_holdout_only_window_is_flat_until_the_risk_model_has_history():
     needs 24 months of factor returns inside the frames, so the book is flat,
     and counted as such, until then."""
     audit = make_audit(n_names=150, n_months=30, start="2023-01-01", seed=6)
-    res, meta = CL.run_layer(audit, METAS, CFG, LCFG, SHA, log=lambda *a: None, rows=["layer"],
+    # the beta constraint has no estimate in the first 12 book months: refused (alpha-review of 41edba9)
+    with pytest.raises(CL.LayerRefused, match="market-beta constraint has no estimate in 12 book month"):
+        CL.run_layer(audit, METAS, CFG, LCFG, SHA, log=lambda *a: None, rows=["layer"], oos_start="2023-01-01")
+    lcfg = copy.deepcopy(LCFG)
+    lcfg["optimiser"]["constraints"] = "sector_neutral"
+    res, meta = CL.run_layer(audit, METAS, CFG, lcfg, SHA, log=lambda *a: None, rows=["layer"],
                              oos_start="2023-01-01")
     assert meta["risk_first_ready"].startswith("2025-01")
     for _, _, st in res:
@@ -701,13 +706,16 @@ _CUT_PREFIXES = ("cut_inwindow_", "cut_exyears_", "cut_2011_2020_")
 @pytest.fixture(scope="module")
 def holdout_pair():
     """A synthetic panel 2008-01..2013-12 run with a holdout from 2013-01, and
-    the same panel truncated before 2013 (with and without a declared holdout)."""
+    the same panel truncated before 2013 (with and without a declared holdout).
+    The book starts 2009-01, once 12 months of M exist for the beta constraint."""
     full = make_audit(n_names=150, n_months=72, start="2008-01-01", seed=21)
     trunc = full[full["DATE"] < pd.Timestamp(OOS)].copy()
     q = lambda *a: None  # noqa: E731
-    r_full, m_full = CL.run_layer(full, METAS, CFG, LCFG, SHA, oos_start=OOS, log=q)
-    r_tr, _ = CL.run_layer(trunc, METAS, CFG, LCFG, SHA, oos_start=OOS, log=q)
-    r_none, _ = CL.run_layer(trunc, METAS, CFG, LCFG, SHA, oos_start=None, log=q)
+    lc = copy.deepcopy(LCFG)
+    lc["window"].update({"book_start": "2009-01", "reference_rows_start": "2009-01"})
+    r_full, m_full = CL.run_layer(full, METAS, CFG, lc, SHA, oos_start=OOS, log=q)
+    r_tr, _ = CL.run_layer(trunc, METAS, CFG, lc, SHA, oos_start=OOS, log=q)
+    r_none, _ = CL.run_layer(trunc, METAS, CFG, lc, SHA, oos_start=None, log=q)
     key = lambda res: {(r, a): st for r, a, st in res}  # noqa: E731
     return key(r_full), key(r_tr), key(r_none), m_full
 
@@ -1046,11 +1054,22 @@ def test_cs_spread_series_equals_the_bidaskspread_candidates_raw_value():
     assert n_cmp > 150 and (cs["cs_spread"] > 0).mean() > 0.5
     # a partial month is not estimated; the signal date bounds the window (no later row is read)
     assert DL.cs_spread_monthly(daily, months[:1], frozenset({months[0].to_period("M")})).empty
-    late = daily.copy()
-    late.loc[late["date"] > months[5], ["high", "low", "close"]] *= 3.0
-    a = cs[cs["me"] <= months[5]].reset_index(drop=True)
-    b = DL.cs_spread_monthly(late, months[:6])
+    # point in time: rows dated AFTER the signal date but inside the same calendar
+    # month (a weekend after a Friday month-end) are not read. 2003-08-29 is the
+    # business month-end; extreme prints on 08-30/31 would move August's value
+    # if the window ran to the calendar month-end.
+    s = pd.Timestamp("2003-08-29")
+    assert s in months and s + pd.offsets.BMonthEnd(0) == s and s.dayofweek == 4
+    after = pd.DataFrame([{"ID": i, "date": d, "high": 30.0, "low": 20.0, "close": 25.0, "volume": 1e6}
+                          for i in daily["ID"].unique() for d in (s + pd.Timedelta(days=1), s + pd.Timedelta(days=2))])
+    poisoned = pd.concat([daily, after], ignore_index=True)
+    a = cs[cs["me"] == s].reset_index(drop=True)
+    b = DL.cs_spread_monthly(poisoned, [s])
     pd.testing.assert_frame_equal(a, b)
+    # the test has power: a window that ran to the calendar month-end would read them
+    leaky = DL.cs_spread_monthly(poisoned, [pd.Timestamp("2003-08-31")])
+    lk = leaky.set_index("ID")["cs_spread"].reindex(a["ID"]).to_numpy()
+    assert not np.allclose(lk, a["cs_spread"].to_numpy(), equal_nan=True)
     # the cost model charges half of it (floored at 1 bp)
     tier = np.zeros(len(h), dtype=np.int64)
     hs = CL.half_spreads(h.to_numpy(), tier, LCFG)
@@ -1078,3 +1097,85 @@ def test_cs_spread_attaches_on_the_signal_date_and_caches_on_data_sha(tmp_path, 
     hit = DL.load_or_build_cs_spread(snap, rt, "abc", root=tmp_path, log=lambda *a: None)
     pd.testing.assert_frame_equal(built, hit)
     assert list(built.columns) == ["me", "ID", "cs_spread", "cs_n_days"] and built["cs_spread"].notna().any()
+
+
+# ---- alpha-review of 41edba9 (2026-10-01): ex-years, name-cap excess, guards --------
+
+def test_exyears_cut_reports_declared_and_effective_years(panel, holdout_pair):
+    idx = pd.date_range("2001-01-01", "2021-12-31", freq="BME")
+    f = CL.exyears_fields(idx, LCFG)
+    assert f == {"cut_exyears_declared": "2000,2001,2021", "cut_exyears_effective": "2001,2021", "cut_exyears_n": 2}
+    # with a holdout from 2021-07 the in-window months still include 2021; from 2021-01 they do not
+    assert CL.exyears_fields(idx, LCFG, "2021-07-01")["cut_exyears_effective"] == "2001,2021"
+    assert CL.exyears_fields(idx, LCFG, "2021-01-01")["cut_exyears_effective"] == "2001"
+    audit, P, R, _ = panel                                  # book 2001-01..2002-04
+    res, _ = CL.run_layer(audit, METAS, CFG, LCFG, SHA, log=lambda *a: None, rows=["layer"])
+    for _, _, st in res:
+        assert st["cut_exyears_declared"] == "2000,2001,2021"
+        assert st["cut_exyears_effective"] == "2001" and st["cut_exyears_n"] == 1
+        assert st["cut_exyears_net_n_months"] == st["n_months"] - 12        # exactly 2001's months removed
+        assert "cut_exyears_years" not in st
+    full, *_ = holdout_pair                                 # 2008..2013: no declared year in the book
+    for st in full.values():
+        assert st["cut_exyears_effective"] == "none" and st["cut_exyears_n"] == 0
+    buf = []
+    CL.print_layer_table(res, log=buf.append)
+    assert any("declared 2000,2001,2021 (D5 rule), effective 2001 (1 year(s)" in line for line in buf)
+
+
+def test_name_cap_excess_is_measured_and_carried_to_the_summary(panel):
+    # direct: every name at its cap, a beta residual only an over-cap move can fix
+    w = np.array([0.01, 0.01, -0.01, -0.01])
+    cons = CL.Constraint(np.zeros(4, dtype=np.int64), 1, np.array([[1.0], [1.0], [1.0], [10.0]]))
+    w2, it, excess, resid = CL.apply_name_cap(w, cons, 0.01, 0.0, 1e-10, 1)
+    assert resid <= 1e-12 and excess > 1e-3
+    assert excess == pytest.approx(float(np.max(np.abs(w2) - 0.01)))
+    # through the layer: a binding cap and a single clip-project pass leave excess in the target
+    audit, P, R, ic_t = panel
+    lcfg = copy.deepcopy(LCFG)
+    lcfg["optimiser"].update({"name_cap_floor": 0.0, "name_cap_mult": 0.5, "cap_max_iter": 1})
+    book = [m for m in range(P.M) if P.dates[m] >= pd.Timestamp("2001-01-01")]
+    T = {m: CL.build_target(P, R, m, abs(ic_t[m]) + 0.05, lcfg) for m in book}
+    rec = CL.run_book(P, R, lcfg, book, 1e8, CL.layer_decider(P, T, lcfg, 1e8), 0.5)
+    st, _ = CL.summarise(rec, lcfg)
+    want = [T[m]["name_cap_excess"] for m in book]
+    assert st["name_cap_excess_max"] == max(want) > lcfg["optimiser"]["cap_tol"]
+    assert st["name_cap_excess_months"] == sum(x > lcfg["optimiser"]["cap_tol"] for x in want) > 0
+    # the declared config: no excess on the synthetic panel
+    res, _ = CL.run_layer(audit, METAS, CFG, LCFG, SHA, log=lambda *a: None, rows=["layer"])
+    for _, _, st0 in res:
+        assert st0["name_cap_excess_months"] == 0 and st0["name_cap_excess_max"] <= LCFG["optimiser"]["cap_tol"]
+    buf = []
+    CL.print_layer_table(res, log=buf.append)
+    assert any("capXsM" in line for line in buf)
+
+
+def test_layer_refuses_a_spread_join_below_the_declared_floor():
+    assert LCFG["costs"]["spread_measured_min_pct"] == 95.0
+    audit = make_audit(n_names=150, n_months=30, seed=7)
+    cs = pd.DataFrame({"me": audit["SIGNAL_ASOF"], "ID": audit["ID"], "cs_spread": 0.01})
+    res, meta = CL.run_layer(audit, METAS, CFG, LCFG, SHA, log=lambda *a: None, rows=["layer"], spread=cs)
+    assert meta["spread_measured_pct"] == 100.0
+    # a series keyed on the wrong date (the holding month) joins nothing that month: refused
+    wrong = cs.assign(me=pd.to_datetime(audit["SIGNAL_ASOF"]) + pd.offsets.Day(1))
+    with pytest.raises(CL.LayerRefused, match="spread_measured_min_pct"):
+        CL.run_layer(audit, METAS, CFG, LCFG, SHA, log=lambda *a: None, rows=["layer"], spread=wrong)
+    # a thin series (half the names) is refused too; at the floor it runs
+    book = pd.to_datetime(audit["DATE"]) >= pd.Timestamp("2001-01-01")
+    thin = cs[~(book & (np.arange(len(cs)) % 2 == 0)).to_numpy()]
+    with pytest.raises(CL.LayerRefused, match="below costs.spread_measured_min_pct = 95%"):
+        CL.run_layer(audit, METAS, CFG, LCFG, SHA, log=lambda *a: None, rows=["layer"], spread=thin)
+    lcfg = copy.deepcopy(LCFG)
+    lcfg["costs"]["spread_measured_min_pct"] = 40.0
+    CL.run_layer(audit, METAS, CFG, lcfg, SHA, log=lambda *a: None, rows=["layer"], spread=thin)
+
+
+def test_layer_refuses_a_book_month_without_a_market_beta():
+    late = make_audit(n_names=150, n_months=30, start="2000-06-01", seed=9)    # M from 2000-06: beta from 2001-06
+    with pytest.raises(CL.LayerRefused, match=r"no estimate in 5 book month\(s\) from 2001-01"):
+        CL.run_layer(late, METAS, CFG, LCFG, SHA, log=lambda *a: None, rows=["layer"])
+    # rows that do not use the beta constraint are not refused
+    CL.run_layer(late, METAS, CFG, LCFG, SHA, log=lambda *a: None, rows=["layer_no_beta_constraint"])
+    ok = make_audit(n_names=150, n_months=30, start="1999-06-01", seed=9)       # beta from 2000-06
+    res, _ = CL.run_layer(ok, METAS, CFG, LCFG, SHA, log=lambda *a: None, rows=["layer"])
+    assert all(st["beta_constraint_dropped_months"] == 0 for _, _, st in res)

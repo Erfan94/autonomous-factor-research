@@ -986,7 +986,8 @@ def layer_decider(P, targets, lcfg, aum, use_buffer=True):
                 "G_t": T["G_t"], "ic_t": T["ic_t"], "beta_dropped": bool(T.get("beta_dropped", False))}
         if T["flat"]:
             base.update({"n_participation_hit": 0, "n_traded_pre_cap": 0, "reproj_traded": 0.0,
-                         "overrides": 0, "resid_final": 0.0, "resid_beta_final": 0.0, "gross_excess": 0.0})
+                         "overrides": 0, "resid_final": 0.0, "resid_beta_final": 0.0, "gross_excess": 0.0,
+                         "name_cap_excess": 0.0})
             return np.zeros(len(hU)), base
         t, cons, elig = T["t"], T["cons"], T["eligible"]
         w3 = buffer_step(t, hU, rel, abs_, kappa)[0] if use_buffer else t.copy()
@@ -1000,6 +1001,7 @@ def layer_decider(P, targets, lcfg, aum, use_buffer=True):
                      "reproj_traded": float(np.abs(w5 - w4).sum()), "overrides": info["overrides"],
                      "participation_excess": info["participation_excess"],
                      "resid_final": cons.max_resid(w5), "resid_beta_final": cons.extra_resid(w5),
+                     "name_cap_excess": float(T.get("name_cap_excess", 0.0)),
                      "gross_excess": max(0.0, float(np.abs(w5).sum()) - float(T["G_t"]))})
         return w5, base
     return decide
@@ -1130,6 +1132,19 @@ def cut_masks(index, lcfg, oos_start=None):
     return masks
 
 
+def exyears_fields(index, lcfg, oos_start=None):
+    """cut_exyears_declared (the config's D5 years), cut_exyears_effective (those
+    the ex-years cut actually removes: declared years with an in-window month
+    in `index`) and cut_exyears_n (their count)."""
+    index = pd.DatetimeIndex(index)
+    declared = sorted(int(y) for y in lcfg["report"]["regime_cuts"]["ex_years"])
+    inw = index[index < pd.Timestamp(oos_start)] if oos_start is not None else index
+    present = set(int(y) for y in inw.year)
+    eff = [y for y in declared if y in present]
+    return {"cut_exyears_declared": ",".join(map(str, declared)) or "none",
+            "cut_exyears_effective": ",".join(map(str, eff)) or "none", "cut_exyears_n": len(eff)}
+
+
 def summarise(rec, lcfg, lags=DEFAULT_NW_LAGS, oos_start=None, pipeline=True):
     """Flat dict of the reported metrics for one (row, AUM) path."""
     rep = lcfg["report"]
@@ -1178,6 +1193,12 @@ def summarise(rec, lcfg, lags=DEFAULT_NW_LAGS, oos_start=None, pipeline=True):
         out["budget_scaled_months_flat"] = int((df["budget_scaled"].astype(bool) & ~live).sum())
         out["max_neutrality_residual"] = float(df["resid_final"].max())
         out["max_beta_residual"] = float(df["resid_beta_final"].max()) if "resid_beta_final" in df else 0.0
+        # step 2's name cap: the largest |w_i| - cap_i the target kept after its
+        # final projection (the beta column can push a name back over its cap),
+        # and the months where that exceeds cap_tol
+        nce = pd.to_numeric(df.get("name_cap_excess", pd.Series(0.0, index=df.index)), errors="coerce").fillna(0.0)
+        out["name_cap_excess_max"] = float(nce.max()) if len(nce) else 0.0
+        out["name_cap_excess_months"] = int((nce > float(lcfg["optimiser"]["cap_tol"])).sum())
         out["beta_constraint_dropped_months"] = (int(df["beta_dropped"].astype(bool).sum())
                                                  if "beta_dropped" in df else 0)
         out["gross_budget_max_excess"] = float(df["gross_excess"].max())
@@ -1209,8 +1230,11 @@ def summarise(rec, lcfg, lags=DEFAULT_NW_LAGS, oos_start=None, pipeline=True):
         out[f"tier_{t}_turnover_oneway_pct"] = float(0.5 * df["tier_traded"].apply(lambda v: v[k]).mean() * 100)
         out[f"tier_{t}_avg_n_long"] = float(df.loc[live, "tier_n_long"].apply(lambda v: v[k]).mean()) if live.any() else 0.0
         out[f"tier_{t}_avg_n_short"] = float(df.loc[live, "tier_n_short"].apply(lambda v: v[k]).mean()) if live.any() else 0.0
-    # regime cuts: each on its own months only
-    out["cut_exyears_years"] = ",".join(str(int(y)) for y in rep["regime_cuts"]["ex_years"])
+    # regime cuts: each on its own months only. The declared ex years are the
+    # D5 rule's (config); the EFFECTIVE ones are those the cut can remove:
+    # declared years with at least one in-window book month (a year before
+    # book_start, or in the holdout, removes nothing).
+    out.update(exyears_fields(df.index, lcfg, oos_start))
     newpos = "new_positions_delisting" in (rep.get("diagnostics") or [])
     for pre, mk in cut_masks(df.index, lcfg, oos_start).items():
         out.update(cut_metrics(df.loc[mk], lags, pre, pipeline, newpos))
@@ -1287,6 +1311,13 @@ def aum_tag(aum):
     return f"{aum / 1e6:g}M"
 
 
+def spread_measured_pct(P, months):
+    """% of the universe ID-months in `months` with a measured spread (before
+    the tier-median fill)."""
+    rows = np.concatenate([np.arange(P.offsets[m], P.offsets[m + 1]) for m in months]) if months else []
+    return float(100 * np.isfinite(P.spread[rows]).mean()) if len(rows) else float("nan")
+
+
 def run_layer(audit, metas, cfg, lcfg, composite_sha, oos_start=None, log=print, rows=None, spread=None):
     """Every row at every AUM. Returns [(row, aum, stats)] in AUM x row_specs()
     order, plus a `meta` dict (layer-level diagnostics). `spread`: the
@@ -1301,18 +1332,33 @@ def run_layer(audit, metas, cfg, lcfg, composite_sha, oos_start=None, log=print,
     if spread is not None:
         audit = attach_spread(audit, spread, SPREAD_COLUMNS[str(c["half_spread"])])
     P = LayerPanel(audit, lcfg, metas, group_col=rank_group_col(cfg))
-    log(f"    panel: {P.M} months, {P.N} IDs, {len(P.df)} ID-months; spread column {P.spread_col} "
-        f"({100 * float(np.isfinite(P.spread).mean()):.1f}% of ID-months measured)")
-    R = build_risk_model(P, lcfg, log=log)
-    ic_t, _ = ic_forecast(P, lcfg)
     start = pd.Timestamp(str(lcfg["window"]["book_start"]) + "-01")
     ref_start = pd.Timestamp(str(lcfg["window"]["reference_rows_start"]) + "-01")
     book_months = [m for m in range(P.M) if P.dates[m] >= start]
     ref_months = [m for m in range(P.M) if P.dates[m] >= ref_start]
+    spread_pct = spread_measured_pct(P, book_months)
+    log(f"    panel: {P.M} months, {P.N} IDs, {len(P.df)} ID-months; spread column {P.spread_col} "
+        f"({spread_pct:.2f}% of book-window ID-months measured)")
+    floor = float(c["spread_measured_min_pct"])
+    if not spread_pct >= floor:
+        raise LayerRefused(f"construction layer refused: the spread series measures {spread_pct:.2f}% of the "
+                           f"book window's ID-months, below costs.spread_measured_min_pct = {floor:g}%. The "
+                           "join (ID, SIGNAL_ASOF) or the series is wrong; the tier-median fill would price "
+                           "the book on a handful of names.")
     spec = row_specs(lcfg)
     run_rows = rows or list(spec)
     default_con = str(lcfg["optimiser"]["constraints"])
-    cons_used = {default_con} | {spec[r]["constraint"] for r in run_rows if spec[r]["kind"] == "layer"}
+    cons_run = {spec[r]["constraint"] for r in run_rows if spec[r]["kind"] == "layer"}
+    cons_used = {default_con} | cons_run
+    if "sector_beta_neutral" in cons_run:
+        dropped = [m for m in book_months if P.market_betas(m)[0] is None]
+        if dropped:
+            raise LayerRefused(f"construction layer refused: the market-beta constraint has no estimate in "
+                               f"{len(dropped)} book month(s) from {P.dates[dropped[0]].date()} (book_start "
+                               f"{lcfg['window']['book_start']}); it would be dropped there. The panel needs "
+                               f"{P.beta_min_obs} months of M before the book starts.")
+    R = build_risk_model(P, lcfg, log=log)
+    ic_t, _ = ic_forecast(P, lcfg)
     targets = {k: {m: build_target(P, R, m, ic_t[m], lcfg, k) for m in book_months}
                for k in sorted(cons_used)}
     fam_memo = {}
@@ -1363,7 +1409,7 @@ def run_layer(audit, metas, cfg, lcfg, composite_sha, oos_start=None, log=print,
             "market_beta_first_month": next((str(P.dates[m].date()) for m in range(P.M)
                                              if P.market_betas(m)[0] is not None), "never"),
             "market_beta_own_estimate_pct": float(100 * np.mean(own)) if own else float("nan"),
-            "spread_measured_pct": float(100 * np.isfinite(P.spread).mean()) if len(P.spread) else float("nan"),
+            "spread_measured_pct": spread_pct,
             "paths": paths, **leak}
     return out, meta
 
@@ -1375,7 +1421,7 @@ def print_layer_table(results, log=print):
         log(f"\n  --- Construction layer at AUM ${aum / 1e9:g}B (net of the cost model; gross in brackets) ---")
         log(f"  {'row':<27}{'net ann%':>9}{'(gross)':>9}{'net SR':>8}{'net t':>7}{'netMaxDD':>9}"
             f"{'turn%':>7}{'cost%':>7}{'nL/nS':>11}{'flat':>5}{'budScl':>7}{'partHit%':>9}{'exAvol':>7}{'bias':>6}"
-            f"{'betaPost':>9}")
+            f"{'betaPost':>9}{'capXs':>9}{'capXsM':>7}")
         for row, a, st in results:
             if a != aum:
                 continue
@@ -1386,7 +1432,13 @@ def print_layer_table(results, log=print):
                 f"{g('avg_n_long'):>5.0f}/{g('avg_n_short'):<5.0f}{st.get('flat_months', 0):>5}"
                 f"{st.get('budget_scaled_months_live', 0):>7}{g('participation_hit_share_pct'):>9.1f}"
                 f"{g('exante_vol_ann_pct_mean'):>7.2f}"
-                f"{g('bias_stat_mean'):>6.2f}{g('net_beta_on_market'):>9.3f}")
+                f"{g('bias_stat_mean'):>6.2f}{g('net_beta_on_market'):>9.3f}"
+                f"{g('name_cap_excess_max'):>9.1e}{st.get('name_cap_excess_months', 0):>7}")
     log("  budScl = live months with the gross budget G_t below the cap; partHit% = share of traded "
         "names whose trade the participation cap cut (layer rows only); betaPost = realised beta of the "
-        "net monthly return on the universe's cap-weighted return (D4's M)")
+        "net monthly return on the universe's cap-weighted return (D4's M); capXs = max name-cap excess "
+        "of the target (step 2), capXsM = months it exceeds cap_tol (layer rows only)")
+    if results:
+        st = results[0][2]
+        log(f"  ex-years cut: declared {st.get('cut_exyears_declared')} (D5 rule), effective "
+            f"{st.get('cut_exyears_effective')} ({st.get('cut_exyears_n')} year(s) inside the book window)")
