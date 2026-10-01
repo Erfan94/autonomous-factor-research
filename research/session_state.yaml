@@ -1,6 +1,6 @@
 # The CURRENT state of the loop — replace, never append. History: session_history.md.
-updated: "2026-10-01T14:39:13Z"
-step: phase_D_apply   # v14 applied (TrendFactor)
+updated: "2026-10-01T14:42:09Z"
+step: phase_D_ladder5   # ladders 1-4 closed (14 accepted, v14); ladder 5 = ranks 21-24 vs v14 running (run 044)
 phase: phase_D_ratchet
 composite: {version: v14, legs: 19, families: 9, sha: 7fe6f001e708, legs_list: [Size, Value, Profitability, Investment, Momentum, PctAcc, CBOperProf, ShareIss5Y, cfp, XFIN, GP, MaxRet, roaq, RoE, IdioVol3F, STreversal, zerotrade6M, VolumeTrend, TrendFactor]}
 versions: {v0: "f9d9d9d95731 v0-baseline", v1: "cbeb16455bf4 commit 0d52a33; tag v1-add-PctAcc MIS-POINTED at 2e37d4b (owner)", v2: "8b444636f0a1 v2-add-CBOperProf", v3: "73ee92fe0723 v3-add-ShareIss5Y", v4: "3329679c69fb v4-add-cfp", v5: "d27916e567f2 v5-add-XFIN", v6: "21a6688ae5d1 v6-add-GP", v7: "43c92213ae73 v7-add-MaxRet", v8: "a12e87c5fb36 v8-add-roaq", v9: "c961f5791816 v9-add-RoE", v10: "1b4195ff18b4 v10-add-IdioVol3F", v11: "335b06e3d608 v11-add-STreversal", v12: "612e59349f40 v12-add-zerotrade6M", v13: "fa17bd1cd37e v13-add-VolumeTrend", v14: "7fe6f001e708 v14-add-TrendFactor"}
