@@ -1,0 +1,34 @@
+name: DelNetFin
+osap_acronym: DelNetFin
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b3
+declaration_order: 7
+date_tested: "2026-10-01"
+run: "005"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Richardson et al. 2005 (JAE); SignalDoc sign +1, Cat.Economic investment alt"
+orientation: "high change in net financial assets / average total assets = attractive (SignalDoc sign +1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/DelNetFin/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 2.362752, qcut_min_bins: 10, coverage_min_pct: 37.965804}
+stage1:   # from the run 005 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.002526, ic_tstat_nw: 1.079696, ic_half1_mean: 0.007407, ic_half2_mean: -0.002354, icir: 0.066777,
+   ls_sharpe: 0.316944, ls_ann_return_pct: 2.220789, ls_tstat_nw: 1.350326, ls_maxdd_pct: -29.535747, ls_raw_ann_return_pct: 1.067404,
+   ls_raw_sharpe: 0.153732, ls_raw_maxdd_pct: -31.047149, turnover_d10_pct: 19.108968, turnover_d1_pct: 17.430982, coverage_pct: 77.160039,
+   avg_names_per_decile: 151.603261, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.001278, ic_decay_h6: 0.001387,
+   ic_decay_h12: 0.001054, tier_MEGA_ic_mean: -0.0028, tier_MID_ic_mean: 0.0031, tier_SMALL_ic_mean: 0.0036, ls_beta_mean: 0.035588,
+   ls_beta_fullwindow: -0.004456, ls_sharpe_ex_top_years: -0.237168, ls_top_years: "1999,2002,2021", ls_top_years_share_pct: 156.274397, ls_sharpe_bear: 0.138405,
+   ls_sharpe_bull: 0.122115, decile_avg_ret_pct: "0.859,0.959,1.055,1.019,1.081,1.077,1.149,1.271,1.059,0.948", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  Deciles hump: D1 0.859, peak D8 1.271, D10 0.948 %/mo; raw spread 1.07%/yr (Sharpe 0.154, MaxDD -31.0%). IC 0.0025 (NW t 1.08): first half 0.0074, second -0.0024; annual IC negative every year 2015-2020. Tiers MEGA -0.0028, MID 0.0031, SMALL 0.0036. IC 0.0010-0.0014 at every lag; turnover 19.1% / 17.4%. Beta -0.00 (ex ante 0.04); hedged 2.22%/yr (Sharpe 0.317); ex-top-years Sharpe -0.237 (1999, 2002, 2021); bear 0.138 / bull 0.122.
+caveats:
+  - "halves flip: 0.0074 then -0.0024"
+  - "preflight masspoint 2.36%"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (1.08 < 2.5); ic_mean (0.0025) and ic_half_min (-0.0024) also fail. Raw spread (1.07%/yr), coverage 77.2%, 151.6 names and 276 months pass. Not inconclusive.

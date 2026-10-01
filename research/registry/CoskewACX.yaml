@@ -1,0 +1,36 @@
+name: CoskewACX
+osap_acronym: CoskewACX
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b3
+declaration_order: 1
+date_tested: "2026-10-01"
+run: "005"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Ang, Chen and Xing 2006 (RFS); SignalDoc sign -1, Cat.Economic risk"
+orientation: "low daily-return coskewness with the market over the trailing 12 months = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/CoskewACX/spec.md}
+dimension_override: null
+history_gate_months: 12
+preflight: {masspoint_max_pct: 0.11422, qcut_min_bins: 0, coverage_min_pct: 0.0}
+stage1:   # from the run 005 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.006199, ic_tstat_nw: 1.654064, ic_half1_mean: -0.001135, ic_half2_mean: 0.013533, icir: 0.097269,
+   ls_sharpe: 0.109628, ls_ann_return_pct: 1.245877, ls_tstat_nw: 0.608718, ls_maxdd_pct: -36.720772, ls_raw_ann_return_pct: 2.780275,
+   ls_raw_sharpe: 0.255945, ls_raw_maxdd_pct: -34.013123, turnover_d10_pct: 28.282844, turnover_d1_pct: 28.527677, coverage_pct: 91.145751,
+   avg_names_per_decile: 187.222348, n_months: 264, ls_n_months: 264, ic_decay_h1: 0.00649, ic_decay_h6: 0.006479,
+   ic_decay_h12: 0.004497, tier_MEGA_ic_mean: 0.0119, tier_MID_ic_mean: 0.0036, tier_SMALL_ic_mean: 0.0045, ls_beta_mean: 0.181618,
+   ls_beta_fullwindow: 0.218123, ls_sharpe_ex_top_years: -0.118088, ls_top_years: "2001,2002,2020", ls_top_years_share_pct: 183.676034, ls_sharpe_bear: 0.610272,
+   ls_sharpe_bull: -0.11697, decile_avg_ret_pct: "0.733,0.910,0.972,0.940,1.033,1.038,0.987,1.008,1.004,0.964", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  Deciles are flat from D2 to D10 (0.91-1.04 %/mo) with only D1 low (0.733); raw spread 2.78%/yr (Sharpe 0.256, MaxDD -34.0%). IC 0.0062 (NW t 1.65) is nil in the first half (-0.0011) and 0.0135 in the second; annual IC -0.046 in 2000, positive in 2012-2021 except 2018. Tiers MEGA 0.0119, MID 0.0036, SMALL 0.0045. IC flat across lags (0.0065 h1, 0.0045 h12); turnover 28.3% / 28.5%. Beta 0.22 (ex ante 0.18); hedged 1.25%/yr (Sharpe 0.110); ex-top-years Sharpe -0.118 (2001, 2002, 2020); bear 0.610 / bull -0.117.
+caveats:
+  - "first signal 1999-12 (truncated-window ruling): 264 LS months against a floor of 237; preflight coverage 0.0% at the 1998-12 probe"
+  - "halves flip sharply: -0.0011 then 0.0135"
+  - "coverage (91.1458%) and names per decile (187.22) identical to Coskewness, from the shared 12-month gate; NW t 1.654064 vs Coskewness 1.654192 at different IC means (0.0062 / 0.0068), recorded as a fact"
+  - "rf omitted (cancels under de-meaning)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (1.65 < 2.5); ic_mean (0.0062) and ic_half_min (-0.0011) also fail. Raw spread (2.78%/yr), coverage 91.1%, 187.2 names and 264 months (floor 237) pass, so not inconclusive. No flip (t positive).

@@ -1,0 +1,33 @@
+name: EBM
+osap_acronym: EBM
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b3
+declaration_order: 9
+date_tested: "2026-10-01"
+run: "005"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Penman, Richardson and Tuna 2007 (JAR); SignalDoc sign +1, Cat.Economic valuation"
+orientation: "high enterprise book-to-market (net operating assets / enterprise value) = attractive (SignalDoc sign +1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/EBM/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.073529, qcut_min_bins: 10, coverage_min_pct: 74.177992}
+stage1:   # from the run 005 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.001804, ic_tstat_nw: 0.417019, ic_half1_mean: 0.012457, ic_half2_mean: -0.008849, icir: 0.025581,
+   ls_sharpe: 0.031765, ls_ann_return_pct: 0.299707, ls_tstat_nw: 0.158441, ls_maxdd_pct: -43.773067, ls_raw_ann_return_pct: 3.220367,
+   ls_raw_sharpe: 0.31989, ls_raw_maxdd_pct: -27.618575, turnover_d10_pct: 18.800164, turnover_d1_pct: 17.587921, coverage_pct: 75.627625,
+   avg_names_per_decile: 148.592391, n_months: 276, ls_n_months: 276, ic_decay_h1: -0.000248, ic_decay_h6: -0.001564,
+   ic_decay_h12: 0.001057, tier_MEGA_ic_mean: -0.0003, tier_MID_ic_mean: 0.0032, tier_SMALL_ic_mean: 0.0017, ls_beta_mean: 0.204414,
+   ls_beta_fullwindow: 0.236174, ls_sharpe_ex_top_years: -0.330778, ls_top_years: "1999,2001,2009", ls_top_years_share_pct: 815.331448, ls_sharpe_bear: 0.699642,
+   ls_sharpe_bull: -0.480865, decile_avg_ret_pct: "0.925,0.774,0.960,0.907,1.038,0.965,0.978,0.938,1.070,1.193", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  Deciles flat to D9 (0.77-1.07 %/mo) with D10 1.193; raw spread 3.22%/yr (Sharpe 0.320, MaxDD -27.6%). IC 0.0018 (NW t 0.42): first half 0.0125, second -0.0088; annual IC positive 1999-2010 except 2002 and 2007, negative 2011-2021 except 2016. Tiers MEGA -0.0003, MID 0.0032, SMALL 0.0017. IC about zero at every lag; turnover 18.8% / 17.6%. Beta 0.24 (ex ante 0.20); hedged 0.30%/yr (Sharpe 0.032); ex-top-years Sharpe -0.331 (1999, 2001, 2009); bear 0.700 / bull -0.481.
+caveats:
+  - "halves flip sharply: 0.0125 then -0.0088"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (0.42 < 2.5); ic_mean (0.0018) and ic_half_min (-0.0088) also fail. Raw spread (3.22%/yr), coverage 75.6%, 148.6 names and 276 months pass. Not inconclusive. Cat.Economic valuation, as v0 Value and the passer CF; AM, BMdec and BPEBM were rejected in batch 1.

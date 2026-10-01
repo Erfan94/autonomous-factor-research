@@ -32,3 +32,10 @@
 - Rejected on ic_mean alone: ChNNCOA 0.0094 < 0.010, with NW t 4.15, the highest of the 24 screened so far.
 - No flip qualifies (Cash |t| 1.86 < 2.74). CompositeDebtIssuance passes coverage (46.2%) and names (91.2), so it is not inconclusive. Its 1999-2000 cross-sections are thin (0.3% at the 1998-12 probe) and are its best LS years.
 - Provenance verified on 12 blocks, 0 validation warnings. Hedge-gap facts for the open check: CashProd hedged -5.5 pp vs raw at beta 0.22; ChEQ -2.5 pp at beta ~0; CF -0.6 pp at beta -0.29.
+
+## 2026-10-01 — Stage 1 batch 3 (run 005): 0 pass, 12 rejected, 0 inconclusive
+- Rejected on ic_tstat_nw (each also fails ic_mean): CoskewACX 1.65, Coskewness 1.65, DelCOA 0.26, DelCOL -0.92, DelEqu 1.25, DelFINL 1.36, DelNetFin 1.08, DolVol -0.18, EBM 0.42, EP 0.96, EarningsSurprise 1.63. All but DelEqu and EarningsSurprise also fail ic_half_min.
+- Rejected on ic_mean: EarningsConsistency 0.0090 < 0.010 with NW t 2.60. The raw spread also fails (-0.13%/yr; D1 is the top decile). decision stage1_decided_by_convention_fallback: the first failed bar in check order.
+- Not inconclusive: EarningsConsistency coverage 43.3% >= 40 with 85.2 names; CoskewACX/Coskewness 264 LS months >= the 237 floor (first signal 1999-12). No flip qualifies (DelCOL |t| 0.92).
+- Halves change sign: CoskewACX -0.0011/0.0135, Coskewness -0.0001/0.0137, EBM 0.0125/-0.0088, EP 0.0135/-0.0026, DolVol 0.0056/-0.0073, DelCOA 0.0074/-0.0055, DelFINL 0.0104/-0.0026, DelNetFin 0.0074/-0.0024, DelCOL 0.0025/-0.0095.
+- Provenance verified on 12 blocks, 0 validation warnings. Counters: 36 screened, 2 passed, 34 rejected; composite v0.

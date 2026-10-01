@@ -1,0 +1,34 @@
+name: DelFINL
+osap_acronym: DelFINL
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b3
+declaration_order: 6
+date_tested: "2026-10-01"
+run: "005"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Richardson et al. 2005 (JAE); SignalDoc sign -1, Cat.Economic external financing"
+orientation: "low change in financial liabilities / average total assets = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/DelFINL/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 1.584786, qcut_min_bins: 10, coverage_min_pct: 34.896975}
+stage1:   # from the run 005 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.003891, ic_tstat_nw: 1.358792, ic_half1_mean: 0.010421, ic_half2_mean: -0.00264, icir: 0.08684,
+   ls_sharpe: 0.451127, ls_ann_return_pct: 3.525435, ls_tstat_nw: 2.130996, ls_maxdd_pct: -25.978034, ls_raw_ann_return_pct: 2.263829,
+   ls_raw_sharpe: 0.277454, ls_raw_maxdd_pct: -35.140298, turnover_d10_pct: 19.218288, turnover_d1_pct: 16.364511, coverage_pct: 69.622079,
+   avg_names_per_decile: 136.792754, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.002649, ic_decay_h6: 0.002251,
+   ic_decay_h12: 0.004587, tier_MEGA_ic_mean: -0.003, tier_MID_ic_mean: 0.0028, tier_SMALL_ic_mean: 0.0057, ls_beta_mean: -0.117187,
+   ls_beta_fullwindow: -0.176808, ls_sharpe_ex_top_years: 0.112166, ls_top_years: "2001,2003,2021", ls_top_years_share_pct: 80.207741, ls_sharpe_bear: 0.486005,
+   ls_sharpe_bull: 0.46226, decile_avg_ret_pct: "0.856,0.874,0.967,1.023,1.055,1.107,1.035,1.208,1.113,1.045", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  Deciles rise from D1 0.856 to a D6-D9 hump (peak D8 1.208), D10 1.045; raw spread 2.26%/yr (Sharpe 0.278, MaxDD -35.1%). IC 0.0039 (NW t 1.36): first half 0.0104, second -0.0026; annual IC positive 1999-2006, negative in 2014-2015 and 2017-2020. Tiers MEGA -0.0030, MID 0.0028, SMALL 0.0057. IC 0.0026 at lag 1, 0.0046 at lag 12; turnover 19.2% / 16.4%. Beta -0.18 (ex ante -0.12); hedged 3.53%/yr (Sharpe 0.451); ex-top-years Sharpe 0.112 (2001, 2003, 2021); bear 0.486 / bull 0.462.
+caveats:
+  - "halves flip: 0.0104 then -0.0026"
+  - "preflight masspoint 1.58% (debt unchanged year on year)"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (1.36 < 2.5); ic_mean (0.0039) and ic_half_min (-0.0026) also fail. Raw spread (2.26%/yr), coverage 69.6%, 136.8 names and 276 months pass. Not inconclusive. Same Cat.Economic (external financing) as CompEquIss (NW t 2.44) and CompositeDebtIssuance (1.49), both rejected.

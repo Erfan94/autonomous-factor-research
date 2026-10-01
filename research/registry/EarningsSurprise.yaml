@@ -1,0 +1,34 @@
+name: EarningsSurprise
+osap_acronym: EarningsSurprise
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b3
+declaration_order: 12
+date_tested: "2026-10-01"
+run: "005"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Foster, Olsen and Shevlin 1984 (AR); SignalDoc sign +1, Cat.Economic earnings growth"
+orientation: "high standardized unexpected quarterly EPS (seasonal difference less drift, over its SD) = attractive (SignalDoc sign +1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/EarningsSurprise/spec.md}
+dimension_override: ARQ
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.131062, qcut_min_bins: 10, coverage_min_pct: 33.450241}
+stage1:   # from the run 005 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.004793, ic_tstat_nw: 1.632443, ic_half1_mean: 0.002339, ic_half2_mean: 0.007248, icir: 0.10367,
+   ls_sharpe: 0.323986, ls_ann_return_pct: 2.31693, ls_tstat_nw: 1.405234, ls_maxdd_pct: -29.408294, ls_raw_ann_return_pct: 1.331287,
+   ls_raw_sharpe: 0.189824, ls_raw_maxdd_pct: -31.126888, turnover_d10_pct: 33.95004, turnover_d1_pct: 33.783109, coverage_pct: 86.181913,
+   avg_names_per_decile: 169.329348, n_months: 276, ls_n_months: 276, ic_decay_h1: -0.000299, ic_decay_h6: -0.001275,
+   ic_decay_h12: -0.000644, tier_MEGA_ic_mean: 0.0073, tier_MID_ic_mean: 0.0065, tier_SMALL_ic_mean: 0.0016, ls_beta_mean: -0.065766,
+   ls_beta_fullwindow: -0.091812, ls_sharpe_ex_top_years: 0.051467, ls_top_years: "2000,2003,2007", ls_top_years_share_pct: 86.404764, ls_sharpe_bear: -0.398884,
+   ls_sharpe_bull: 0.676559, decile_avg_ret_pct: "0.961,1.070,0.996,1.042,1.066,0.987,1.033,1.021,1.044,1.072", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw]
+stage2_failed: []
+character: >
+  Deciles flat (0.96-1.07 %/mo; D1 0.961, D10 1.072); raw spread 1.33%/yr (Sharpe 0.190, MaxDD -31.1%). IC 0.0048 (NW t 1.63), positive in both halves (0.0023 / 0.0072). Tiers MEGA 0.0073, MID 0.0065, SMALL 0.0016. IC -0.0003 at lag 1, 0.0042 at lag 3, -0.0006 at lag 12: no persistent signal at the monthly horizon; turnover 34.0% / 33.8%. Beta -0.09 (ex ante -0.07); hedged 2.32%/yr (Sharpe 0.324); ex-top-years Sharpe 0.052 (2000, 2003, 2007); bear -0.399 / bull 0.677.
+caveats:
+  - "SF1 ARQ eps on today's split basis; the ratio to its own SD cancels the scale"
+  - "the published effect is a 60-day post-announcement drift; at month-end rebalancing the lag-1 IC is about zero"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (1.63 < 2.5); ic_mean (0.0048) also fails. Halves (min 0.0023), raw spread (1.33%/yr), coverage 86.2%, 169.3 names and 276 months pass. Not inconclusive.

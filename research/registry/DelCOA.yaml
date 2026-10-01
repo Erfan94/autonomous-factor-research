@@ -1,0 +1,34 @@
+name: DelCOA
+osap_acronym: DelCOA
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b3
+declaration_order: 3
+date_tested: "2026-10-01"
+run: "005"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Richardson et al. 2005 (JAE); SignalDoc sign -1, Cat.Economic investment alt"
+orientation: "low change in current operating assets / average total assets = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/DelCOA/spec.md}
+dimension_override: null
+history_gate_months: null
+preflight: {masspoint_max_pct: 0.229358, qcut_min_bins: 10, coverage_min_pct: 38.228847}
+stage1:   # from the run 005 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: 0.000934, ic_tstat_nw: 0.263648, ic_half1_mean: 0.007382, ic_half2_mean: -0.005513, icir: 0.01793,
+   ls_sharpe: 0.58348, ls_ann_return_pct: 4.912503, ls_tstat_nw: 2.495184, ls_maxdd_pct: -22.805881, ls_raw_ann_return_pct: 4.972235,
+   ls_raw_sharpe: 0.612421, ls_raw_maxdd_pct: -23.151733, turnover_d10_pct: 20.884344, turnover_d1_pct: 18.017825, coverage_pct: 77.284881,
+   avg_names_per_decile: 151.848551, n_months: 276, ls_n_months: 276, ic_decay_h1: -0.001322, ic_decay_h6: -0.002651,
+   ic_decay_h12: 0.000385, tier_MEGA_ic_mean: -0.0036, tier_MID_ic_mean: -0.0, tier_SMALL_ic_mean: 0.0021, ls_beta_mean: -0.045789,
+   ls_beta_fullwindow: -0.065956, ls_sharpe_ex_top_years: 0.195297, ls_top_years: "1999,2003,2021", ls_top_years_share_pct: 73.384416, ls_sharpe_bear: 0.804938,
+   ls_sharpe_bull: 0.267643, decile_avg_ret_pct: "0.784,0.945,1.019,1.003,1.062,1.037,1.065,1.203,1.162,1.198", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  Deciles rise from D1 0.784 to D8-D10 (1.16-1.20 %/mo); raw spread 4.97%/yr (Sharpe 0.612, MaxDD -23.2%) while the rank IC is nil (0.0009, NW t 0.26): the spread sits in D1 and the top three deciles, not across the ranks. Halves 0.0074 then -0.0055; annual IC positive 1999-2003, mixed after. Tiers MEGA -0.0036, MID -0.0000, SMALL 0.0021. IC about zero at every lag (-0.0027 to 0.0004); turnover 20.9% / 18.0%. Beta -0.07 (ex ante -0.05); hedged 4.91%/yr (Sharpe 0.584); ex-top-years Sharpe 0.195 (1999, 2003, 2021); bear 0.805 / bull 0.268.
+caveats:
+  - "halves flip: 0.0074 then -0.0055"
+  - "raw LS Sharpe 0.61 against an IC of 0.0009: a tail effect the rank IC does not see"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (0.26 < 2.5); ic_mean (0.0009) and ic_half_min (-0.0055) also fail. Raw spread (4.97%/yr), coverage 77.3%, 151.8 names and 276 months pass. Not inconclusive. Same Cat.Economic (investment alt) as ChNNCOA, which failed ic_mean alone at NW t 4.15.

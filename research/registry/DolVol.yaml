@@ -1,0 +1,35 @@
+name: DolVol
+osap_acronym: DolVol
+status: rejected
+family: null                 # Phase C assigns it; never changed after
+batch: stage1_b3
+declaration_order: 8
+date_tested: "2026-10-01"
+run: "005"
+stage2_run: null
+stage1_decision: FAIL
+decided_by: "ic_tstat_nw"
+source: "Brennan, Chordia and Subrahmanyam 1998 (JFE); SignalDoc sign -1, Cat.Economic volume"
+orientation: "low log dollar volume of month t-2 = attractive (SignalDoc sign -1)"
+provenance: {harness_sha: 73a95d352942, config_sha: 0d88328d5b10, composite_sha: f9d9d9d95731, data_sha: 198b281de1a0, universe_sha: 1c6512b922a8, spec: osap_source/cache/b4e911e6/DolVol/spec.md}
+dimension_override: null
+history_gate_months: 2
+preflight: {masspoint_max_pct: 0.055991, qcut_min_bins: 10, coverage_min_pct: 99.00519}
+stage1:   # from the run 005 block, verbatim; the beta / ex-regime rows are D5 diagnostics, never bars
+  {ic_mean: -0.000817, ic_tstat_nw: -0.182475, ic_half1_mean: 0.005636, ic_half2_mean: -0.007271, icir: -0.010147,
+   ls_sharpe: 0.165454, ls_ann_return_pct: 1.646229, ls_tstat_nw: 0.792454, ls_maxdd_pct: -36.752909, ls_raw_ann_return_pct: 3.686616,
+   ls_raw_sharpe: 0.363725, ls_raw_maxdd_pct: -25.999659, turnover_d10_pct: 50.537639, turnover_d1_pct: 14.578797, coverage_pct: 99.462826,
+   avg_names_per_decile: 195.423551, n_months: 276, ls_n_months: 276, ic_decay_h1: 0.00031, ic_decay_h6: 0.003066,
+   ic_decay_h12: 0.002812, tier_MEGA_ic_mean: -0.002, tier_MID_ic_mean: -0.0085, tier_SMALL_ic_mean: -0.0008, ls_beta_mean: 0.015083,
+   ls_beta_fullwindow: -0.011536, ls_sharpe_ex_top_years: -0.119437, ls_top_years: "2000,2001,2003", ls_top_years_share_pct: 156.317795, ls_sharpe_bear: 0.657926,
+   ls_sharpe_bull: 0.010264, decile_avg_ret_pct: "0.820,0.929,0.868,0.871,1.006,0.967,0.972,1.058,1.034,1.127", delisting_adjusted_pct: 0.436673}
+stage1_failed: [ic_mean, ic_tstat_nw, ic_half_min]
+stage2_failed: []
+character: >
+  Deciles rise from D1 0.820 to D10 1.127 %/mo, D3-D4 0.87; raw spread 3.69%/yr (Sharpe 0.364, MaxDD -26.0%) while the within-sector rank IC is nil (-0.0008, NW t -0.18). Halves 0.0056 then -0.0073; annual IC negative 2017-2021. Tiers MEGA -0.0020, MID -0.0085, SMALL -0.0008. IC 0.0003 at lag 1 to 0.0028 at lag 12; turnover D10 50.5% vs D1 14.6%. Beta -0.01 (ex ante 0.02); hedged 1.65%/yr (Sharpe 0.166); ex-top-years Sharpe -0.119 (2000, 2001, 2003); bear 0.658 / bull 0.010.
+caveats:
+  - "halves flip: 0.0056 then -0.0073"
+  - "D10 (lowest dollar volume) turnover 50.5%: that decile sits on the universe's dollar-volume entry/exit band"
+  - "a size/liquidity proxy; v0 carries Size"
+decision: >
+  Rejected at Stage 1 on ic_tstat_nw (-0.18 < 2.5); ic_mean (-0.0008) and ic_half_min (-0.0073) also fail. Raw spread (3.69%/yr), coverage 99.5%, 195.4 names and 276 months pass. Not inconclusive; no flip.
