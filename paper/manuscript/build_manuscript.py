@@ -33,6 +33,8 @@ _argv = sys.argv
 sys.argv = [sys.argv[0]]
 import build_tables as bt  # noqa: E402  (rebuilds paper/tables deterministically; exposes FACTS and helpers)
 sys.argv = _argv
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import math_render as mr  # noqa: E402  (display equations as MathML/OMML; inline \( \) math as italic/subscript)
 
 OUT_STEM = ROOT / "paper" / "Alpha_Model_Autonomous_Research_Loop_Sadeghi_2026"
 FIGDIR = HERE / "figures"
@@ -405,8 +407,8 @@ T("harness", "V", "The Fixed Harness",
     "sector each month; a sector-month with fewer than 10 scored names falls back to the cross-section rank (D3). "
     "Composite: two-level family blend, equal weight across families and within, renormalised over the legs a name "
     "has."],
-   ["Market hedge", "Every long-short is reported hedged: D10 − D1 − β_t × M_t, where M is the universe’s own "
-    "cap-weighted total return and β_t is estimated on months t−36..t−1 only (0 before 12 months) (D4). The raw "
+   ["Market hedge", "Every long-short is reported hedged: D10 − D1 − \\(β_t\\) × \\(M_t\\), where \\(M\\) is the universe’s own "
+    "cap-weighted total return and \\(β_t\\) is estimated on months \\(t\\)−36..\\(t\\)−1 only (0 before 12 months) (D4). The raw "
     "series, the ex-ante and full-window β, and the Sharpe ex the three best calendar years print beside it (D5)."],
    ["Statistics", "Monthly Spearman IC of the continuous score against next-month return; every t-statistic "
     "Newey-West with 3 lags. Equal-weight decile 10 minus decile 1 long-short with annualised Sharpe, drawdown, hit "
@@ -901,6 +903,11 @@ BLOCKS = [(k, sub_facts(v) if k in ("p", "pni", "refitem", "h1", "h2", "h3", "eq
 
 # ============================================================================= HTML
 def inline_html(s):
+    pieces = mr.INLINE.split(s)
+    return "".join(mr.inline_html(x) if k % 2 else _inline_text_html(x) for k, x in enumerate(pieces))
+
+
+def _inline_text_html(s):
     s = html.escape(s, quote=False)
     s = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", s)
     s = re.sub(r"(?<![\w*])\*(?!\s)(.+?)(?<!\s)\*(?![\w*])", r"<i>\1</i>", s)
@@ -918,7 +925,9 @@ h1 { font-size: 12pt; text-align: center; font-weight: bold; margin: 14pt 0 10pt
 h2 { font-size: 12pt; font-weight: bold; font-style: italic; margin: 10pt 0 4pt 0; break-after: avoid; }
 h3 { font-size: 12pt; font-weight: normal; font-style: italic; margin: 8pt 0 2pt 0; break-after: avoid; }
 .mono { font-family: "Courier New", monospace; font-size: 11pt; }
-.eq { text-align: center; line-height: 2; margin: 0; }
+.eq { text-align: center; margin: 6pt 0 6pt 0; }
+sub, sup { line-height: 0; }
+math { font-family: 'STIX Two Math', 'Cambria Math', serif; font-size: 12.5pt; }
 .tblock { margin: 14pt 0 14pt 0; }
 .tnum { text-align: center; font-weight: bold; font-size: 12pt; margin: 0; line-height: 1.25; break-after: avoid; }
 .ttitle { text-align: center; font-weight: bold; font-size: 12pt; margin: 0 0 4pt 0; line-height: 1.25; break-after: avoid; }
@@ -1003,7 +1012,7 @@ def build_html():
         elif kind == "refitem":
             parts.append(f"<p>{inline_html(val)}</p>")
         elif kind == "eq":
-            parts.append(f"<p class='eq'>{inline_html(val)}</p>")
+            parts.append(f"<div class='eq'>{mr.mathml(val)}</div>")
         elif kind == "table":
             parts.append(html_table(TABLES[val]))
         elif kind == "figure":
@@ -1046,7 +1055,7 @@ def build_docx():
     from docx.enum.section import WD_SECTION
     from docx.enum.table import WD_TABLE_ALIGNMENT
     from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK
-    from docx.oxml import OxmlElement
+    from docx.oxml import OxmlElement, parse_xml
     from docx.oxml.ns import qn
     from docx.shared import Inches, Pt
 
@@ -1066,9 +1075,21 @@ def build_docx():
     pf.space_after = Pt(0)
 
     def runs(p, text, size=None, bold=None, italic=None):
-        tokens = re.split(r"(\*\*.+?\*\*|(?<![\w*])\*(?!\s).+?(?<!\s)\*(?![\w*])|`.+?`)", text)
+        tokens = re.split(r"(\\\(.+?\\\)|\*\*.+?\*\*|(?<![\w*])\*(?!\s).+?(?<!\s)\*(?![\w*])|`.+?`)", text)
         for tok in tokens:
             if not tok:
+                continue
+            if tok.startswith("\\(") and tok.endswith("\\)"):
+                for seg, seg_it, vert in mr.inline_segments(tok[2:-2]):
+                    r = p.add_run(seg)
+                    r.italic = True if (seg_it or italic) else None
+                    r.bold = bold
+                    if vert == "sub":
+                        r.font.subscript = True
+                    elif vert == "sup":
+                        r.font.superscript = True
+                    if size:
+                        r.font.size = Pt(size)
                 continue
             b, it, mono = bold, italic, False
             if tok.startswith("**") and tok.endswith("**"):
@@ -1233,7 +1254,8 @@ def build_docx():
             q.paragraph_format.left_indent = Inches(0.5)
             q.paragraph_format.first_line_indent = Inches(-0.5)
         elif kind == "eq":
-            para(val, indent=False, align=WD_ALIGN_PARAGRAPH.CENTER)
+            q = para("", indent=False, align=WD_ALIGN_PARAGRAPH.CENTER, spacing=1.0, before=6, after=6)
+            q._p.append(parse_xml(mr.omml_para(val)))
         elif kind == "table":
             add_table(TABLES[val])
         elif kind == "figure":
