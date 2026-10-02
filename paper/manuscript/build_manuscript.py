@@ -728,8 +728,8 @@ T("labour", "DI", "Division of Labour between Agents and Mechanism",
   ["Component", "Role", "What it may and may not do"],
   [["Runner (Claude Opus)", "Runs the loop from the standing instruction file: reads the state, launches sub-agents, "
     "runs the harness, writes the journal, commits and tags, locally.", "May decide anything not on the stop-and-ask "
-    "list. May not edit a past result, move a stamp while a run is unevaluated, push or add a remote, or read the "
-    "earlier searches’ outcomes."],
+    "list. May not edit a past result, move a stamp while a run is unevaluated, push or add a remote, or read "
+    "anything outside the project."],
    ["Advisor (Claude Fable)", "A stronger model consulted at every phase boundary, before every acceptance is "
     "committed, before any stop-and-ask is raised, and whenever a result looks too good.", "Advises only; advice that "
     "changes a decision is logged."],
@@ -956,6 +956,7 @@ tr { break-inside: avoid; }
 .abs { margin: 0 0.5in; }
 .abs p { line-height: 1.22; text-indent: 0.4in; margin: 0 0 5pt 0; text-align: justify; }
 .abs p.kw { text-indent: 0; }
+.abs p.kw.first { margin-top: 30pt; }
 .fn { position: absolute; bottom: 0; left: 0; right: 0; font-size: 9pt; line-height: 1.25; text-align: justify; }
 .fn hr { width: 2in; margin: 0 0 4pt 0; border: 0; border-top: 1px solid #000; }
 .refs p { text-indent: -0.5in; padding-left: 0.5in; line-height: 1.5; text-align: left; margin: 0 0 4pt 0; }
@@ -995,7 +996,7 @@ def build_html():
         f"<div class='date'>{inline_html(fm['date'])}</div>"
         "<div class='abs-h'>Abstract</div>"
         f"<div class='abs'>{abstract}"
-        f"<p class='kw'><i>JEL classification:</i> {inline_html(fm['jel'])}</p>"
+        f"<p class='kw first'><i>JEL classification:</i> {inline_html(fm['jel'])}</p>"
         f"<p class='kw'><i>Keywords:</i> {inline_html(fm['keywords'])}</p></div>"
         f"<div class='fn'><hr><sup>*</sup>{inline_html(fm['footnote'])}</div></div>")
     in_refs = False
@@ -1224,6 +1225,8 @@ def build_docx():
         q = d.add_paragraph()
         q.paragraph_format.left_indent = Inches(0.5); q.paragraph_format.right_indent = Inches(0.5)
         q.paragraph_format.line_spacing = 1.15; q.paragraph_format.space_after = Pt(4)
+        if key == "jel":
+            q.paragraph_format.space_before = Pt(30)
         r = q.add_run(lab + " "); r.italic = True
         q.add_run(fm[key])
     ff = sec.first_page_footer.paragraphs[0]
