@@ -1,4 +1,4 @@
-*Table 10d_event_counts. research/events.jsonl by event type (1131 rows).*
+*Table 10d_event_counts. research/events.jsonl by event type (1132 rows).*
 
 | event | count |
 |---|---|
@@ -26,9 +26,9 @@
 | repository_committed | 10 |
 | harness_changed | 6 |
 | verification_completed | 6 |
+| phase_completed | 5 |
 | validation_warning | 5 |
 | finding_confirmed | 4 |
-| phase_completed | 4 |
 | config_changed | 2 |
 | flip_hypothesis_qualified | 2 |
 | snapshot_recorded | 2 |
