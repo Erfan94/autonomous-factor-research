@@ -48,6 +48,7 @@ KNOWN_EVENTS = {
     "frontier_classified",
     "preflight_passed",
     "verification_completed", "rule_conflict_found", "decision",
+    "holdout_spent",
 }
 
 

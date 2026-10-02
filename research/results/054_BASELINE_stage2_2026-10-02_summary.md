@@ -1,0 +1,17 @@
+# RUN 054 BASELINE stage 2
+
+stamps: HARNESS 1271266472a9 CONFIG 0d88328d5b10 COMPOSITE 7fe6f001e708 DATA 42587e08609a
+window: 1999-01-01 .. 2026-09-30  holdout_included: True
+composite: v14: Size, Value, Profitability, Investment, Momentum, PctAcc, CBOperProf, ShareIss5Y, cfp, XFIN, GP, MaxRet, roaq, RoE, IdioVol3F, STreversal, zerotrade6M, VolumeTrend, TrendFactor
+
+## BASELINE_v14  (stage baseline)  → **MEASURED**
+stats: ic_mean=0.0374  ic_tstat_nw=5.8426  icir=0.3559  ic_half1_mean=0.0466  ic_half2_mean=0.0282  ls_sharpe=0.8962  ls_ann_return_pct=15.3963  ls_ann_vol_pct=17.1801  ls_maxdd_pct=-43.2337  ls_hit_rate_pct=62.1622  turnover_d10_pct=57.4538  turnover_d1_pct=52.8283  coverage_pct=100.0  avg_names_per_decile=195.3  n_months=333  ls_n_months=333  delisting_adjusted_pct=0.4256  leg_coverage_pct_full=47.3946  ls_raw_sharpe=0.6466  ls_beta_mean=-0.5414  ls_beta_fullwindow=-0.6083  ls_sharpe_ex_top_years=0.6163  ls_top_years=2000,2001,2021  ls_sharpe_bear=1.2617  ls_sharpe_bull=0.9279  cut_inwindow_n_months=276  cut_inwindow_ic_mean=0.0389  cut_inwindow_ic_tstat_nw=5.6812  cut_inwindow_ls_sharpe=0.9964  cut_inwindow_ls_ann_return_pct=16.3444  cut_inwindow_ls_maxdd_pct=-43.2337  cut_inwindow_ls_raw_sharpe=0.7902  cut_inwindow_ls_beta_mean=-0.5398  cut_holdout_n_months=57  cut_holdout_ic_mean=0.0300  cut_holdout_ic_tstat_nw=1.8743  cut_holdout_ls_sharpe=0.5233  cut_holdout_ls_ann_return_pct=10.8055  cut_holdout_ls_maxdd_pct=-35.6476  cut_holdout_ls_raw_sharpe=0.1239  cut_holdout_ls_beta_mean=-0.5492  ls_excess_sharpe=0.8182  ls_excess_ann_return_pct=13.9699  ls_excess_maxdd_pct=-43.3352  ls_excess_tstat_nw=3.7279  ls_excess_sharpe_ex_top_years=0.5422  ls_excess_top_years=2000,2001,2021  ls_rf_credit_pp=-1.4264
+deciles D1..D10 avg %/mo: 0.286,0.574,0.753,0.762,0.955,1.002,1.031,1.154,1.238,1.359
+hedge/regime (diagnostics): beta ex-ante -0.5414 full-window -0.6083  raw Sharpe 0.6466  Sharpe ex top years 0.6163 (2000,2001,2021)  bear/bull 1.2617/0.9279
+cut_inwindow: n_months=276  ic_mean=0.0389  ic_tstat_nw=5.6812  ls_sharpe=0.9964  ls_ann_return_pct=16.3444  ls_maxdd_pct=-43.2337  ls_raw_sharpe=0.7902  ls_beta_mean=-0.5398
+cut_inwindow excess: ls_excess_sharpe=0.9285  ls_excess_ann_return_pct=15.0907  ls_excess_maxdd_pct=-43.3352  ls_excess_tstat_nw=3.7491  ls_excess_sharpe_ex_top_years=0.6045  ls_excess_top_years=2000,2001,2021  ls_rf_credit_pp=-1.2537
+cut_holdout: n_months=57  ic_mean=0.0300  ic_tstat_nw=1.8743  ls_sharpe=0.5233  ls_ann_return_pct=10.8055  ls_maxdd_pct=-35.6476  ls_raw_sharpe=0.1239  ls_beta_mean=-0.5492
+cut_holdout excess: ls_excess_sharpe=0.4130  ls_excess_ann_return_pct=8.5429  ls_excess_maxdd_pct=-37.4241  ls_excess_tstat_nw=0.9307  ls_excess_sharpe_ex_top_years=-0.7084  ls_excess_top_years=2022,2024,2026  ls_rf_credit_pp=-2.2626
+ic decay: h1=0.0281  h2=0.0253  h3=0.0254  h6=0.0201  h12=0.0240
+tiers (tier, IC, ICIR, Sharpe, ann%, avgN): MEGA 0.0312 0.1978 0.1750 5.0000 391; MID 0.0357 0.3120 0.5180 11.3200 586; SMALL 0.0398 0.4115 0.7890 14.3200 975; ALL 0.0374 0.3559 0.6470 12.8700 1953
+annual IC: 1999:+0.018 2000:+0.122 2001:+0.109 2002:+0.118 2003:-0.000 2004:+0.041 2005:+0.026 2006:+0.040 2007:-0.016 2008:+0.081 2009:+0.003 2010:+0.032 2011:+0.059 2012:+0.019 2013:+0.019 2014:+0.041 2015:+0.040 2016:+0.030 2017:+0.001 2018:+0.039 2019:+0.009 2020:-0.049 2021:+0.114 2022:+0.105 2023:-0.002 2024:+0.031 2025:-0.021 2026:+0.040
