@@ -1,4 +1,4 @@
-*Table 09_alpha_reviews. Every alpha-reviewer audit. Source: events `alpha_review` (finding lists counted).*
+*Table 09_alpha_reviews. Every alpha-reviewer audit. Source: events `alpha_review` (finding lists counted). Timestamps on events rows 219-419 are sequence estimates, not clock readings (finding_corrected events_ts_estimated, events_ts_estimated_row); their true bound is the commit that first carries them.*
 
 | events line | ts | target | findings by severity | verdict |
 |---|---|---|---|---|

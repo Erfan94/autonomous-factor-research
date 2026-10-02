@@ -1,4 +1,4 @@
-*Table 09b_process_findings. Every process_finding. Source: events `process_finding` (text truncated at 200 characters; ids with the other project's name have that word masked as `other-project`; text that refers to another project is omitted and pointed to by line).*
+*Table 09b_process_findings. Every process_finding. Source: events `process_finding` (text truncated at 200 characters; ids with the other project's name have that word masked as `other-project`; clauses that refer to another project are omitted and pointed to by line). 'LESSONS n' in a note refers to research/LESSONS.md, the project's methodology file; it is cited there for method, not for any predictor's outcome.*
 
 | events line | date | subject / id | note or action (record text) |
 |---|---|---|---|
@@ -29,7 +29,7 @@
 | 900 | 2026-10-01 | tag_v1_mispointed | tag not moved or deleted (CLAUDE.md: tags are never moved); manifest v1 git_tag annotated; owner decides whether to delete and recreate it on 0d52a33. Fix: tag only after `git rev-parse HEAD` shows th … |
 | 1020 | 2026-10-01 | v12_apply_permission_denied | not retried by another route; the coordinator does not perform a subagent-denied action; awaiting the owner |
 | 1056 | 2026-10-01 | leak_sweep_phase_d_close | none required |
-| 1064 | 2026-10-01 | construction_md_other-project_caveat | [text omitted: refers to another project; events.jsonl line 1064] |
+| 1064 | 2026-10-01 | construction_md_other-project_caveat | contradicted here (run 042 ls_sharpe_ex_top_years 0.65); removed in the D7 edit [1 clause(s) omitted: refer to another project; events.jsonl line 1064] |
 | 1070 | 2026-10-01 | d7_other-project_outcome_clause | CONSTRUCTION.md sentence replaced by the design reason; D7 annotated with a dated governing note (decision text not rewritten); docs are unstamped, no SHA moves |
 | 1087 | 2026-10-01 | d8_other-project_restatement_figure | dated governing note added under D8; decision text not rewritten |
 | 1129 | 2026-10-02 | stage3_holdout_cuts_absent | not re-run: the block is spent once (D8); the gap is disclosed in the manifest and the paper |

@@ -24,19 +24,33 @@
 | cnt_preflight_failed | 29 | events preflight_failed count |
 | cnt_preflight_passed | 105 | events preflight_passed count |
 | cnt_spec_written | 207 | events spec_written count |
+| comp_gross | +37.7 | compounded run 049 layer@100M annual_gross_returns_pct 2003-2020 |
+| comp_gross_arith | 1.96 | mean of run 049 annual_gross_returns_pct 2003-2020 |
+| comp_gross_geo | 1.79 | geometric annual rate of comp_gross over 18 years |
+| comp_net | -36.1 | compounded run 049 layer@100M annual_net_returns_pct 2003-2020 |
 | config_sha | 0d88328d5b10 | run 053 block config_sha |
 | cont_n | 20 | run 054 cut_inwindow_* fields with a same-named run 053 field |
 | cont_same | 20 | run 054 cut_inwindow_* fields equal to the run 053 field of the same name |
+| cut_1120_gross | 0.95 | run 049 layer@100M cut_2011_2020_gross_ann_return_pct |
+| cut_1120_gross_sh | 0.222 | run 049 layer@100M cut_2011_2020_gross_sharpe |
+| cut_1120_net_sh | -0.559 | run 049 layer@100M cut_2011_2020_net_sharpe |
+| cut_ex_eff | 2001, 2021 | run 049 layer@100M cut_exyears_effective |
+| cut_ex_gross_sh | 0.647 | run 049 layer@100M cut_exyears_gross_sharpe |
+| cut_ex_net_sh | -0.370 | run 049 layer@100M cut_exyears_net_sharpe |
 | data_sha_1 | 198b281de1a0 | events snapshot_recorded #1 data_sha |
 | data_sha_2 | 42587e08609a | events snapshot_recorded #2 new_data_sha |
 | deny_text | factor-evaluator step 1 for v12 (git mv factors/candidates/zerotrade6M.py -> factors/accepted/ plus the factors/composite.py edit) was refused by the session permission classifier; repo unchanged, no stamp moved, no run started | events process_finding v12_apply_permission_denied evidence |
 | eval_end | 2021-12-31 | config dates.eval_end |
+| eval_end_runs | 52 | runs 001-053 with result blocks |
+| eval_end_set | 2021-12-31 | eval_end over every result block of runs 001-053 |
 | eval_start | 1999-01-01 | config dates.eval_start |
 | families_max | 9 | config search.families_max |
 | fixed_half_spread_bp | 8.3 | manifest v14 construction_layer.trading.fixed_tier_half_spread_bp |
 | flip_bar | 2.74 | CLAUDE.md flip rule \|t\| >= 2.74 |
 | floor_warn | Only 57 usable months (minimum 120). INCONCLUSIVE, not a rejection — a thin sample is a coverage problem. | events validation_warning seq 055 warnings[1] |
-| fmax_reached | v12 | first MODEL_MANIFEST version whose families string has families_max entries |
+| fmax_held | v12 | first MODEL_MANIFEST version whose composite holds families_max families |
+| fmax_opened_by | VolumeTrend | events line 867 family_assigned (first with n_families_after = families_max and new_family) |
+| fmax_opened_ts | 2026-10-01T05:45:32Z | events line 867 family_assigned ts |
 | full054_raw_mdd | -51.84 | run 054 ls_raw_maxdd_pct (1999-2026) |
 | gate_ShareIss5Y | 65 | registry ShareIss5Y history_gate_months |
 | grl_parent_t | 2.75 | events flip_hypothesis_qualified GrLTNOA \|ic_tstat_nw\| |
@@ -52,6 +66,7 @@
 | ho055_sh | 0.584 | run 055 ls_sharpe |
 | ho_2022_h | +60.0 | 056 equal_rank_decile annual 2022 |
 | ho_2022_ic | +0.105 | 054 summary annual IC 2022 |
+| ho_bear_m | 12 | manifest v14 holdout.holdout_detail.bear_bull.holdout_months_bear_bull_054[0] (trailing-12m market down) |
 | ho_benchmark_h2 | 0.0283 | run 053 ic_half2_mean (decision holdout_expectations_v14_spend_snapshot) |
 | ho_beta_exante | -0.549 | run 054 cut_holdout_ls_beta_mean |
 | ho_beta_exante2 | -0.55 | run 054 cut_holdout_ls_beta_mean |
@@ -61,17 +76,19 @@
 | ho_beta_last | -1.108 | run 054 ls_beta_last |
 | ho_beta_real | -0.836 | run 055 ls_beta_fullwindow (holdout-only run, 57 months) |
 | ho_beta_real2 | -0.84 | run 055 ls_beta_fullwindow |
+| ho_bull_m | 45 | manifest v14 holdout.holdout_detail.bear_bull.holdout_months_bear_bull_054[1] (trailing-12m market up) |
 | ho_d1 | 0.406 | run 055 decile_avg_ret_pct D1 |
 | ho_d2_d10_max | 0.712 | run 055 decile_avg_ret_pct max of D2..D10 |
 | ho_d2_d10_min | 0.629 | run 055 decile_avg_ret_pct min of D2..D10 |
-| ho_ex3_h | -0.57 | run 055 ls_sharpe_ex_top_years |
-| ho_ex3_x | -0.71 | run 054 cut_holdout_ls_excess_sharpe_ex_top_years |
+| ho_ex3_h | -0.572 | run 055 ls_sharpe_ex_top_years |
+| ho_ex3_x | -0.708 | run 054 cut_holdout_ls_excess_sharpe_ex_top_years |
 | ho_ex_ret | 8.54 | run 054 cut_holdout_ls_excess_ann_return_pct |
-| ho_ex_sh | 0.41 | run 054 cut_holdout_ls_excess_sharpe |
+| ho_ex_sh | 0.413 | run 054 cut_holdout_ls_excess_sharpe |
+| ho_ex_t | 0.93 | run 054 cut_holdout_ls_excess_tstat_nw |
 | ho_first_ts | 2026-10-02T01:09:09Z | events run_started 054 ts |
 | ho_h_mdd | -35.65 | run 054 cut_holdout_ls_maxdd_pct |
 | ho_h_ret | 10.81 | run 054 cut_holdout_ls_ann_return_pct |
-| ho_h_sh | 0.52 | run 054 cut_holdout_ls_sharpe |
+| ho_h_sh | 0.523 | run 054 cut_holdout_ls_sharpe |
 | ho_h_t | 1.18 | run 054 cut_holdout_ls_tstat_nw |
 | ho_ic | 0.0300 | run 054 cut_holdout_ic_mean |
 | ho_ic3 | 0.030 | run 054 cut_holdout_ic_mean |
@@ -80,14 +97,18 @@
 | ho_ic_share_full | 77 | 100 x run 054 cut_holdout_ic_mean / run 053 ic_mean |
 | ho_ic_t | 1.87 | run 054 cut_holdout_ic_tstat_nw |
 | ho_n | 57 | run 054 cut_holdout_n_months |
+| ho_p1 | 0.030 | one-sided normal p of run 054 cut_holdout_ic_tstat_nw |
+| ho_p2 | 0.061 | two-sided normal p of run 054 cut_holdout_ic_tstat_nw |
 | ho_raw_ret | 3.01 | run 054 cut_holdout_ls_raw_ann_return_pct |
 | ho_raw_ret1 | 3.0 | run 054 cut_holdout_ls_raw_ann_return_pct |
-| ho_raw_sh | 0.12 | run 054 cut_holdout_ls_raw_sharpe |
+| ho_raw_sh | 0.124 | run 054 cut_holdout_ls_raw_sharpe |
 | ho_rf_credit | -2.26 | run 054 cut_holdout_ls_rf_credit_pp |
+| ho_top_ic_year | 2022 | year of the largest holdout annual IC (054 summary) |
 | ho_top_years | 2022,2024,2026 | run 054 cut_holdout_ls_excess_top_years |
 | hx_text | Rule: D8 reads the holdout against the live version's in-window figures on the spend snapshot. On DATA 42587e08609a (run 053, in-window 1999-2021, v14): hedged LS Sharpe 0.9964 (ann 16.34%); ex-top-3-years Sharpe 0.6665 (2000, 2001, 2021); excess-of-rf hedged Sharpe 0.9285 (ann 15.09%); excess ex-top-3-years Sharpe 0.6045; mean IC 0.0389 full window, 0.0283 second half (benchmark the holdout IC against the second half); raw Sharpe 0.7902; layer run 049 net Sharpe -0.06 @100M (old bytes, measured CS). The run-042 expectations stay as history. Written before any out-of-sample number; no bar. | events decision holdout_expectations_v14_spend_snapshot (verbatim) |
 | hx_ts | 2026-10-02T00:14:32Z | events decision holdout_expectations_v14_spend_snapshot ts |
 | identity_maxgap | 0.005 | max \|difference\| in table 07b |
+| ivol_hedge_part | -0.03 | events factor_evaluated IdioVol3F stage 2 raw_vs_hedged_dls_pp.hedge_part |
 | iw_bear | 1.257 | run 053 ls_sharpe_bear |
 | iw_beta_exante | -0.540 | run 053 ls_beta_mean |
 | iw_beta_fw | -0.556 | run 053 ls_beta_fullwindow |
@@ -120,6 +141,8 @@
 | l49_beta | -0.101 | run 049 layer@100M net_beta_on_market |
 | l49_bias | 2.58 | run 049 layer@100M bias_stat_mean |
 | l49_bias_band | 20.5 | run 049 layer@100M bias_stat_in_band_pct |
+| l49_book | 2001-01 | run 049 layer@100M book_start |
+| l49_book_end | 2021-12 | run 049 layer@100M book_end |
 | l49_borrow | 0.19 | run 049 layer@100M cost_borrow_ann_pct |
 | l49_cost | 4.36 | run 049 layer@100M cost_total_ann_pct |
 | l49_erd_gross | 12.52 | run 049 equal_rank_decile@100M gross_ann_return_pct |
@@ -127,9 +150,13 @@
 | l49_erd_to | 117.7 | run 049 equal_rank_decile@100M turnover_oneway_pct |
 | l49_exante_vol | 1.97 | run 049 layer@100M exante_vol_ann_pct_mean |
 | l49_fts_net_sh | 0.502 | run 049 layer_fixed_tier_spread@100M net_sharpe |
+| l49_g2001 | +23.6 | run 049 layer@100M annual_gross_returns_pct 2001 |
+| l49_g2002 | +20.3 | run 049 layer@100M annual_gross_returns_pct 2002 |
 | l49_gross | 4.08 | run 049 layer@100M gross_ann_return_pct |
 | l49_gross_t | 3.27 | run 049 layer@100M gross_tstat_nw |
 | l49_impact | 0.79 | run 049 layer@100M cost_impact_ann_pct |
+| l49_n2001 | +15.8 | run 049 layer@100M annual_net_returns_pct 2001 |
+| l49_n2002 | +14.0 | run 049 layer@100M annual_net_returns_pct 2002 |
 | l49_nbc_beta | -0.135 | run 049 layer_no_beta_constraint@100M net_beta_on_market |
 | l49_nbc_gross | 4.39 | run 049 layer_no_beta_constraint@100M gross_ann_return_pct |
 | l49_nbc_gross_sh | 0.805 | run 049 layer_no_beta_constraint@100M gross_sharpe |
@@ -140,7 +167,9 @@
 | l49_real_vol | 4.78 | run 049 layer@100M realised_vol_ann_pct_live |
 | l49_spread | 3.39 | run 049 layer@100M cost_spread_ann_pct |
 | l49_to | 36.0 | run 049 layer@100M turnover_oneway_pct |
-| l57_bias_full | 3.12 | run 057 layer@100M bias_stat_mean (1999-2026 book) |
+| l57_bias_full | 3.12 | run 057 layer@100M bias_stat_mean (book 2001-01..2026-09) |
+| l57_book | 2001-01..2026-09 | run 057 layer@100M book_start, book_end |
+| l57_book_n | 309 | run 057 layer@100M n_months |
 | l57ho_cost | 3.40 | run 057 layer@100M cut_holdout_cost_total_ann_pct |
 | l57iw_gross | 4.15 | run 057 layer@100M cut_inwindow_gross_ann_return_pct |
 | l57iw_net_sh | -0.022 | run 057 layer@100M cut_inwindow_net_sharpe |
@@ -148,13 +177,15 @@
 | ladder_runs | 012, 023, 032, 037, 044 | registry stage2_run over the 24 Stage 2 rows |
 | layer_canon_neg_all | yes | runs 049 net_sharpe, 057 cut_inwindow_net_sharpe and cut_holdout_net_sharpe for layer@100M/1000M/5000M |
 | layer_ho_gross_ret | 0.74 | run 057 layer@100M cut_holdout_gross_ann_return_pct |
-| layer_ho_gross_sh | 0.10 | run 057 layer@100M cut_holdout_gross_sharpe |
+| layer_ho_gross_sh | 0.101 | run 057 layer@100M cut_holdout_gross_sharpe |
 | layer_ho_net_ret | -2.66 | run 057 layer@100M cut_holdout_net_ann_return_pct |
-| layer_ho_net_sh | -0.37 | run 057 layer@100M cut_holdout_net_sharpe |
+| layer_ho_net_sh | -0.367 | run 057 layer@100M cut_holdout_net_sharpe |
 | layer_iw057_gross_sh3 | 0.856 | run 057 layer@100M cut_inwindow_gross_sharpe |
 | layer_iw_gross_sh | 0.86 | run 049 layer@100M gross_sharpe |
 | layer_iw_gross_sh3 | 0.856 | run 049 layer@100M gross_sharpe |
+| leak_ids | book_equity_preferred_terms, scratchpad_glob_other-project_names, leak_sweep_phase_d_close, construction_md_other-project_caveat, d7_other-project_outcome_clause, d8_other-project_restatement_figure | process_findings whose record text refers to another project (ids masked) |
 | legs_1999 | 15 | table 06f 1999 January |
+| man_comp_text | 2003-2020 compounds to -36% net (+38% gross, 1.9%/yr) | manifest v14 construction_layer.character (verbatim) |
 | min_guard_f | RoE | factor with the lowest guard t |
 | min_guard_t | -1.26 | registry RoE stage2.paired_delta_ls_tstat (lowest guard t) |
 | min_months | 120 | config rebalance.min_months |
@@ -176,7 +207,8 @@
 | n_alpha_phaseA | 20 | events alpha_review before phase_completed A |
 | n_alpha_reviews | 23 | events alpha_review |
 | n_cfg_shas | 1 | distinct config_sha over every run_started event |
-| n_composite_moves | 15 | events composite_updated |
+| n_composite_moves | 14 | events composite_updated minus the v0 recording |
+| n_composite_versions | 15 | events composite_updated (one per version v0-v14) |
 | n_config_moves | 1 | events config_changed with a SHA |
 | n_decisions | 11 | docs/DECISIONS.md D headings |
 | n_events | 1131 | research/events.jsonl rows |
@@ -201,8 +233,9 @@
 | n_infeasible | 73 | events inventory_classified n_infeasible |
 | n_labels | 11 | distinct SignalDoc Cat.Economic labels in table 04 (seed labels plus passer labels) |
 | n_ladders | 5 | distinct stage2_run |
+| n_layer_rows | 33 | run 049 result blocks |
 | n_leak_findings | 6 | process_findings whose record text refers to another project |
-| n_neg_ic_years | 2 | run 053 summary annual IC < 0 |
+| n_neg_ic_years | 3 | run 053 summary annual IC printed with a minus sign |
 | n_osap | 212 | events inventory_classified n_predictors |
 | n_pf_failed | 28 | events inventory_classified n_preflight_failed |
 | n_pos_fixed | 4 | rows of table 07e with half_spread_mode fixed |
@@ -227,6 +260,7 @@
 | n_t_pass_other_fail | 4 | rows in table 03c |
 | n_translated | 106 | events inventory_classified n_translated |
 | n_translated_distinct | 108 | distinct factors over events factor_translated |
+| neg_ic_years | 2003 (-0.000), 2007 (-0.016), 2020 (-0.049) | run 053 summary annual IC printed with a minus sign |
 | null_e1 | 0.658 | null_n x null_p25 |
 | null_e2 | 0.326 | null_n x null_p274 |
 | null_e3 | 0.546 | n_stage2_tested x null_p20 |
@@ -246,12 +280,17 @@
 | phaseB_h | 6.17 | sum of run_completed runtime_seconds, runs 003-011 / 3600 |
 | phaseD_h | 7.19 | sum of run_completed runtime_seconds, runs 012-044 / 3600 |
 | pos_measured_max | 0.058 | max net Sharpe over measured-spread rows of table 07e |
+| pp_events | 105 | events preflight_passed |
+| pp_implied | AM, Accruals | screened candidates whose preflight is recorded inside factor_translated (RECORDS.md: a pass is implied) |
+| pp_multi | BidAskSpreadFlip | events preflight_passed with a factors list |
+| pp_single | 104 | events preflight_passed with a single factor |
 | repro_fields | 66/66 | events phase_completed D digest |
 | restate_dic | -0.000009 | run 053 ic_mean - run 052 ic_mean |
 | restate_dt | -0.0019 | run 053 ic_tstat_nw - run 052 ic_tstat_nw |
 | restate_moved | 54 | run 052 vs 053 result-block fields, different (includes data_sha) |
 | restate_new | 8 | run 053 fields absent from 052 (the excess-of-rf diagnostic) |
 | restate_same | 28 | run 052 vs 053 result-block fields, identical |
+| roaq_hedge_part | +0.51 | events factor_evaluated roaq stage 2 raw_vs_hedged_dls_pp.hedge_part |
 | s1_batch | 12 | config search.stage1_batch_size |
 | s2_rej_bars | resid_ic_tstat_nw | decided_by over Stage 2 FAIL rows |
 | seed_ic_Investment | 0.0054 | run 051 legic_f_inv_close |
@@ -273,9 +312,11 @@
 | skip1_dic | -0.0044 | run 051 paired_dic_mean |
 | skip1_dic_t | -3.06 | run 051 paired_dic_tstat_nw |
 | skip1_h2 | 0.0270 | run 051 ic_half2_mean |
-| skip1_ic | 0.0345 | run 051 ic_mean |
+| skip1_ic | 0.0346 | run 051 ic_mean |
 | skip1_sh | 0.777 | run 051 ls_sharpe |
 | skip1_share | 11 | 100 x -run 051 paired_dic_mean / run 050 ic_mean |
+| snap1_recorded | 2026-09-30T16:39:10Z | git d477021^:data/SNAPSHOT_MANIFEST.yaml recorded_on |
+| snap1_sep_max | 2026-09-29 | git d477021^:data/SNAPSHOT_MANIFEST.yaml tables.SEP.max_date (the frozen manifest before the refresh) |
 | snap2_recorded | 2026-10-01T23:26:28Z | data/SNAPSHOT_MANIFEST.yaml recorded_on |
 | spent_on | 2026-10-02 | MODEL_MANIFEST.yaml holdout.spent_on |
 | spread_measured | 99.95 | run 049 layer@100M spread_measured_pct |
@@ -283,17 +324,21 @@
 | start_ShareIss5Y | 2003-06 | table 06e first holding month of ShareIss5Y |
 | start_TrendFactor | 2003-01 | table 06e first holding month of TrendFactor |
 | start_VolumeTrend | 2003-01 | table 06e first holding month of VolumeTrend |
+| str_hedge_part | -1.73 | events factor_evaluated STreversal stage 2 raw_vs_hedged_dls_pp.hedge_part |
+| tf_hedge_part | -0.77 | events factor_evaluated TrendFactor stage 2 raw_vs_hedged_dls_pp.hedge_part |
 | thin0 | IdioVol3F | table 05c |
 | thin0_t | 2.03 | registry IdioVol3F stage2.resid_ic_tstat_nw |
 | thin1 | VolumeTrend | table 05c |
 | thin1_t | 2.04 | registry VolumeTrend stage2.resid_ic_tstat_nw |
 | top_years_k | 3 | config diagnostics.ex_regime_top_years |
 | translated_unscreened | DelDRC, EarnSupBig | factor_translated factors without a registry row (failed preflight; frontier) |
+| ts_est_rows | 219-419 | finding_corrected events_ts_estimated and events_ts_estimated_row |
 | v0_beta | -0.140 | manifest v0 baseline.beta.ls_beta_fullwindow (run 001) |
 | v0_ic | 0.0145 | manifest v0 baseline.ic.ic_mean (run 001) |
 | v0_ic_t | 2.62 | manifest v0 baseline.ic.ic_tstat_nw (run 001) |
 | v0_sh | 0.600 | manifest v0 baseline.ls_hedged.ls_sharpe (run 001) |
 | v0_to | 28.0 | manifest v0 baseline.breadth.turnover_d10_pct (run 001) |
+| v10_sh | 0.919 | manifest v10 baseline.ls_hedged.ls_sharpe (run 033) |
 | v14_fams | 9 | manifest v14 families |
 | v14_legs | 19 | manifest v14 legs |
 | v14_sha | 7fe6f001e708 | manifest v14 stamps.composite_sha |
@@ -302,5 +347,7 @@
 | v14a_ic_t | 5.68 | manifest v14 baseline.ic.ic_tstat_nw (run 042) |
 | v14a_sh | 0.983 | manifest v14 baseline.ls_hedged.ls_sharpe (run 042) |
 | v14a_to | 58.1 | manifest v14 baseline.breadth.turnover_d10_pct (run 042) |
+| v9_sh | 0.932 | manifest v9 baseline.ls_hedged.ls_sharpe (run 030) |
 | wall_hours | 21.9 | sum of run_completed runtime_seconds / 3600 |
 | wall_seconds | 78885.2 | sum of run_completed runtime_seconds |
+| zt6_hedge_part | +0.90 | events factor_evaluated zerotrade6M stage 2 raw_vs_hedged_dls_pp.hedge_part |

@@ -3,7 +3,7 @@
 | events line | ts (UTC) | event | old | new | reason (record text, truncated at 160) |
 |---|---|---|---|---|---|
 | 7 | 2026-09-30T13:05:45Z | first commit 705d9f9 | HARNESS / CONFIG / COMPOSITE / DATA | e2e0b18a0115 / 1cef53e19e16 / f9d9d9d95731 / nodata | stamps of the first commit (finding_corrected bootstrap_stamps) |
-| 10 | 2026-09-30T16:11:08Z | config_changed | 1cef53e19e16 | 0d88328d5b10 | [text omitted: refers to another project; events.jsonl line 10] |
+| 10 | 2026-09-30T16:11:08Z | config_changed | 1cef53e19e16 | 0d88328d5b10 | D11: stage1_standalone.ls_spread_series: raw; schema 5 -> 6; comments; bars and levels unchanged; no run existed [1 clause(s) omitted: refer to another project; events.jsonl line 10] |
 | 11 | 2026-09-30T16:11:08Z | harness_changed | e2e0b18a0115 | 73a95d352942 | D11: stage1_checks reads ls_spread_series (default raw) and names the bar row after the series; ls_raw_ann_return_pct required on Stage 1 blocks; records.py ind … |
 | 13 | 2026-09-30T16:41:44Z | snapshot_recorded | nodata | 198b281de1a0 | first pull, full history, 13 tables; verify OK (vocabularies match config: exchanges, categories, 10 delisting actions, ART; marketcap median 712m); live OK col … |
 | 27 | 2026-09-30T16:53:36Z | composite_updated v0 |  | f9d9d9d95731 | runs 001,002 |

@@ -1,4 +1,4 @@
-*Table 09e_findings_confirmed. Every finding_confirmed. Source: events `finding_confirmed` (text truncated at 200 characters).*
+*Table 09e_findings_confirmed. Every finding_confirmed. Source: events `finding_confirmed` (text truncated at 200 characters). The skip1 row's text rounds the composite IC and the paired t as 0.0346 and -3.07; the run 051 block gives 0.034550 and -3.064867 (0.0346 and -3.06, half-up), which the paper uses.*
 
 | events line | date | subject | evidence (record text) |
 |---|---|---|---|

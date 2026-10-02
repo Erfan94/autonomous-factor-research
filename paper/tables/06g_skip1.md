@@ -2,7 +2,7 @@
 
 | field | run 050 (signal-close base) | run 051 (skip1 base) |
 |---|---|---|
-| ic_mean | 0.0389 | 0.0345 |
+| ic_mean | 0.0389 | 0.0346 |
 | ic_tstat_nw | 5.68 | 5.16 |
 | ic_half1_mean | 0.0498 | 0.0421 |
 | ic_half2_mean | 0.0281 | 0.0270 |

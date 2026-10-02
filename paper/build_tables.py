@@ -28,6 +28,8 @@ import sys
 from pathlib import Path
 
 import yaml
+from decimal import Decimal, ROUND_HALF_UP
+import subprocess
 
 ROOT = Path(__file__).resolve().parent.parent
 PAPER = ROOT / "paper"
@@ -149,9 +151,10 @@ def ev_one(kind, **match):
 # ----------------------------------------------------------------------------- formatting
 
 def fnum(x, nd):
-    x = float(x)
-    s = f"{x:.{nd}f}"
-    if s.startswith("-") and float(s) == 0.0:
+    """Round half up on the record's decimal string (0.034550 -> 0.0346 at 4 places)."""
+    d = Decimal(x.strip() if isinstance(x, str) else repr(float(x)))
+    s = str(d.quantize(Decimal(1).scaleb(-nd), rounding=ROUND_HALF_UP)) if nd > 0 else str(d.quantize(Decimal(1), rounding=ROUND_HALF_UP))
+    if s.startswith("-") and Decimal(s) == 0:
         s = s[1:]
     return s
 
@@ -174,7 +177,13 @@ def mask_id(s):
 def safe_text(s, line, limit=None):
     s = "" if s is None else (s if isinstance(s, str) else json.dumps(s, sort_keys=True))
     if BANNED.search(s):
-        return f"[text omitted: refers to another project; events.jsonl line {line}]"
+        parts = [c for c in re.split(r";\s*", s)]
+        kept = [c for c in parts if not BANNED.search(c)]
+        where = f"events.jsonl line {line}" if line else "the record"
+        if not kept:
+            return f"[text omitted: refers to another project; {where}]"
+        s = "; ".join(kept) + f" [{len(parts) - len(kept)} clause(s) omitted: refer to another project; {where}]"
+        return s
     if limit and len(s) > limit:
         s = s[:limit].rstrip() + " …"
     return s
@@ -229,9 +238,9 @@ fact("iw_ic_h2", fnum(b053["ic_half2_mean"], 4), "run 053 ic_half2_mean")
 fact("iw_n", b053["n_months"], "run 053 n_months")
 fact("ho_raw_ret", fnum(b054["cut_holdout_ls_raw_ann_return_pct"], 2), "run 054 cut_holdout_ls_raw_ann_return_pct")
 fact("ho_raw_ret1", fnum(b054["cut_holdout_ls_raw_ann_return_pct"], 1), "run 054 cut_holdout_ls_raw_ann_return_pct")
-fact("ho_raw_sh", fnum(b054["cut_holdout_ls_raw_sharpe"], 2), "run 054 cut_holdout_ls_raw_sharpe")
+fact("ho_raw_sh", fnum(b054["cut_holdout_ls_raw_sharpe"], 3), "run 054 cut_holdout_ls_raw_sharpe")
 fact("ho_h_ret", fnum(b054["cut_holdout_ls_ann_return_pct"], 2), "run 054 cut_holdout_ls_ann_return_pct")
-fact("ho_h_sh", fnum(b054["cut_holdout_ls_sharpe"], 2), "run 054 cut_holdout_ls_sharpe")
+fact("ho_h_sh", fnum(b054["cut_holdout_ls_sharpe"], 3), "run 054 cut_holdout_ls_sharpe")
 fact("ho_h_t", fnum(b054["cut_holdout_ls_tstat_nw"], 2), "run 054 cut_holdout_ls_tstat_nw")
 fact("ho_h_mdd", fnum(b054["cut_holdout_ls_maxdd_pct"], 2), "run 054 cut_holdout_ls_maxdd_pct")
 fact("iw_h_ret", fnum(b053["ls_ann_return_pct"], 2), "run 053 ls_ann_return_pct")
@@ -243,6 +252,12 @@ fact("iw_raw_sh", fnum(b053["ls_raw_sharpe"], 3), "run 053 ls_raw_sharpe")
 fact("iw_raw_mdd", fnum(b053["ls_raw_maxdd_pct"], 2), "run 053 ls_raw_maxdd_pct")
 hedge_iw = float(b053["ls_ann_return_pct"]) - float(b053["ls_raw_ann_return_pct"])
 hedge_ho = float(b054["cut_holdout_ls_ann_return_pct"]) - float(b054["cut_holdout_ls_raw_ann_return_pct"])
+fact("ho_ex_t", fnum(b054["cut_holdout_ls_excess_tstat_nw"], 2), "run 054 cut_holdout_ls_excess_tstat_nw")
+fact("ho_p1", fnum(norm_cdf_upper(float(b054["cut_holdout_ic_tstat_nw"])), 3), "one-sided normal p of run 054 cut_holdout_ic_tstat_nw")
+fact("ho_p2", fnum(2 * norm_cdf_upper(float(b054["cut_holdout_ic_tstat_nw"])), 3), "two-sided normal p of run 054 cut_holdout_ic_tstat_nw")
+_bb = MAN["versions"][-1]["holdout"]["holdout_detail"]["bear_bull"]["holdout_months_bear_bull_054"]
+fact("ho_bear_m", _bb[0], "manifest v14 holdout.holdout_detail.bear_bull.holdout_months_bear_bull_054[0] (trailing-12m market down)")
+fact("ho_bull_m", _bb[1], "manifest v14 holdout.holdout_detail.bear_bull.holdout_months_bear_bull_054[1] (trailing-12m market up)")
 fact("hedge_term_iw", fnum(hedge_iw, 2), "run 053 ls_ann_return_pct - ls_raw_ann_return_pct")
 fact("hedge_term_ho", fnum(hedge_ho, 2), "run 054 cut_holdout_ls_ann_return_pct - cut_holdout_ls_raw_ann_return_pct")
 fact("ho_beta_exante", fnum(b054["cut_holdout_ls_beta_mean"], 3), "run 054 cut_holdout_ls_beta_mean")
@@ -260,9 +275,9 @@ fact("iw_beta_fw2", fnum(b053["ls_beta_fullwindow"], 2), "run 053 ls_beta_fullwi
 fact("layer_iw_gross_sh", fnum(L049["layer@100M"]["gross_sharpe"], 2), "run 049 layer@100M gross_sharpe")
 fact("layer_iw_gross_sh3", fnum(L049["layer@100M"]["gross_sharpe"], 3), "run 049 layer@100M gross_sharpe")
 fact("layer_iw057_gross_sh3", fnum(L057["layer@100M"]["cut_inwindow_gross_sharpe"], 3), "run 057 layer@100M cut_inwindow_gross_sharpe")
-fact("layer_ho_gross_sh", fnum(L057["layer@100M"]["cut_holdout_gross_sharpe"], 2), "run 057 layer@100M cut_holdout_gross_sharpe")
+fact("layer_ho_gross_sh", fnum(L057["layer@100M"]["cut_holdout_gross_sharpe"], 3), "run 057 layer@100M cut_holdout_gross_sharpe")
 fact("layer_ho_gross_ret", fnum(L057["layer@100M"]["cut_holdout_gross_ann_return_pct"], 2), "run 057 layer@100M cut_holdout_gross_ann_return_pct")
-fact("layer_ho_net_sh", fnum(L057["layer@100M"]["cut_holdout_net_sharpe"], 2), "run 057 layer@100M cut_holdout_net_sharpe")
+fact("layer_ho_net_sh", fnum(L057["layer@100M"]["cut_holdout_net_sharpe"], 3), "run 057 layer@100M cut_holdout_net_sharpe")
 fact("layer_ho_net_ret", fnum(L057["layer@100M"]["cut_holdout_net_ann_return_pct"], 2), "run 057 layer@100M cut_holdout_net_ann_return_pct")
 fact("ho_benchmark_h2", fnum(b053["ic_half2_mean"], 4), "run 053 ic_half2_mean (decision holdout_expectations_v14_spend_snapshot)")
 fact("ho_ic_share_full", fnum(100 * float(b054["cut_holdout_ic_mean"]) / float(b053["ic_mean"]), 0),
@@ -277,6 +292,7 @@ for run, L, field in (("049", L049, "net_sharpe"), ("057 in-window", L057, "cut_
             pos_rows.append((run, var, L[var][field], L[var].get("half_spread_mode", "")))
 canon_neg = all(float(L[f"layer@{a}M"][fld]) < 0 for a in ("100", "1000", "5000")
                 for L, fld in ((L049, "net_sharpe"), (L057, "cut_inwindow_net_sharpe"), (L057, "cut_holdout_net_sharpe")))
+assert canon_neg, "the declared layer row is not negative everywhere: revise section 7"
 fact("layer_canon_neg_all", "yes" if canon_neg else "no",
      "runs 049 net_sharpe, 057 cut_inwindow_net_sharpe and cut_holdout_net_sharpe for layer@100M/1000M/5000M")
 put_table("07e_layer_positive_net_rows", table(
@@ -607,7 +623,10 @@ put_table("04c_phase_c_timeline", table(["event", "events line", "ts (UTC)"], tr
 fact("n_family_assigned", len(fa), "events family_assigned")
 # families_max reached
 reach = next(v for v in VORDER if len(VER[v]["families"].split("|")) == CFG["search"]["families_max"])
-fact("fmax_reached", reach, "first MODEL_MANIFEST version whose families string has families_max entries")
+fact("fmax_held", reach, "first MODEL_MANIFEST version whose composite holds families_max families")
+_fo = next((i, e) for i, e in ev("family_assigned") if e.get("n_families_after") == CFG["search"]["families_max"] and e.get("new_family"))
+fact("fmax_opened_by", _fo[1]["factor"], f"events line {_fo[0]} family_assigned (first with n_families_after = families_max and new_family)")
+fact("fmax_opened_ts", _fo[1]["ts"], f"events line {_fo[0]} family_assigned ts")
 
 ordrows = [(o["rank"], o["factor"], fnum(o["ic_tstat_nw"], 6), fnum(o["ic_mean"], 6), o["family"]) for o in ORD["order"]]
 put_table("A4_stage2_order", table(["rank", "factor", "Stage 1 NW t", "Stage 1 mean IC", "family"], ordrows,
@@ -683,6 +702,11 @@ _, mr = ev_one("factor_evaluated", factor="MaxRet", stage=2)
 fact("mr_hedged_dls", fnum(mr["raw_vs_hedged_dls_pp"]["hedged"], 2), "events factor_evaluated MaxRet stage 2 raw_vs_hedged_dls_pp.hedged")
 fact("mr_raw_dls", fnum(mr["raw_vs_hedged_dls_pp"]["raw"], 2), "events factor_evaluated MaxRet raw_vs_hedged_dls_pp.raw")
 fact("mr_hedge_part", fnum(mr["raw_vs_hedged_dls_pp"]["hedge_part"], 2), "events factor_evaluated MaxRet raw_vs_hedged_dls_pp.hedge_part")
+for _f, _k in (("zerotrade6M", "zt6"), ("roaq", "roaq"), ("IdioVol3F", "ivol"), ("TrendFactor", "tf"), ("STreversal", "str")):
+    _e = ev_one("factor_evaluated", factor=_f, stage=2)[1]
+    fact(f"{_k}_hedge_part", fsig(_e["raw_vs_hedged_dls_pp"]["hedge_part"], 2), f"events factor_evaluated {_f} stage 2 raw_vs_hedged_dls_pp.hedge_part")
+fact("v9_sh", fnum(VER["v9"]["baseline"]["ls_hedged"]["ls_sharpe"], 3), "manifest v9 baseline.ls_hedged.ls_sharpe (run 030)")
+fact("v10_sh", fnum(VER["v10"]["baseline"]["ls_hedged"]["ls_sharpe"], 3), "manifest v10 baseline.ls_hedged.ls_sharpe (run 033)")
 fact("mr_resid_t", fnum(REG["MaxRet"]["stage2"]["resid_ic_tstat_nw"], 2), "registry MaxRet stage2.resid_ic_tstat_nw")
 hgrows = []
 for i, e in ev("factor_evaluated"):
@@ -809,11 +833,13 @@ tiers = [(t, b053[f"tier_{t}_ic_mean"], b053[f"tier_{t}_ls_sharpe"], b053[f"tier
 put_table("06c_tiers", table(["tier", "IC", "raw LS Sharpe", "avg names"], tiers,
                              "Liquidity tiers in-window (diagnostic). Source: run 053 `tier_*` fields."))
 ai = annual_pairs(summary_line("053", "annual IC:"))
-put_table("06d_annual_ic", table(["year"] + [str(y) for y, _ in ai[:12]], [("IC",) + tuple(fsig(v, 3) for _, v in ai[:12])],
+ai_raw = [tuple(t.split(":", 1)) for t in summary_line("053", "annual IC:").split()]
+put_table("06d_annual_ic", table(["year"] + [y for y, _ in ai_raw[:12]], [("IC",) + tuple(v for _, v in ai_raw[:12])],
                                  "Annual mean IC, in-window, part 1. Source: research/results/053_*_summary.md `annual IC`.") + "\n" +
-          table(["year"] + [str(y) for y, _ in ai[12:]], [("IC",) + tuple(fsig(v, 3) for _, v in ai[12:])],
-                "Annual mean IC, in-window, part 2. Source: as above."))
-fact("n_neg_ic_years", sum(1 for _, v in ai if v < 0), "run 053 summary annual IC < 0")
+          table(["year"] + [y for y, _ in ai_raw[12:]], [("IC",) + tuple(v for _, v in ai_raw[12:])],
+                "Annual mean IC, in-window, part 2. Source: as above; values as printed there (a sign with 0.000 is a value smaller than 0.0005 in size)."))
+fact("n_neg_ic_years", sum(1 for _, v in ai_raw if v.startswith("-")), "run 053 summary annual IC printed with a minus sign")
+fact("neg_ic_years", ", ".join(f"{y} ({v})" for y, v in ai_raw if v.startswith("-")), "run 053 summary annual IC printed with a minus sign")
 fact("n_ic_years", len(ai), "run 053 summary annual IC years")
 
 # legs active by year
@@ -918,6 +944,15 @@ put_table("07_layer049", table(["AUM", "variant", "gross ann %", "gross Sharpe",
                                 "net NW t", "one-way turnover %", "net beta on M"], lrows,
                                "Construction layer on v14, in-window book 2001-01..2021-12 (252 months), pre-refresh bytes. Source: run 049 result blocks "
                                "(HARNESS 3561590b660a, LAYER 4b279fc317cd). Costs in %/yr; equal_rank_decile and buffered are the Stage 3 books unhedged under the same cost model."))
+srow = []
+for var, a in (("layer", "100"), ("layer", "1000"), ("layer", "5000"), ("layer_fixed_tier_spread", "100"), ("layer_no_beta_constraint", "100"),
+               ("equal_rank_decile", "100")):
+    b = L049[f"{var}@{a}M"]
+    srow.append((f"{var} @ ${a}M", fnum(b["gross_ann_return_pct"], 2), fnum(b["gross_sharpe"], 3), fnum(b["cost_total_ann_pct"], 2),
+                 fnum(b["net_ann_return_pct"], 2), fnum(b["net_sharpe"], 3), fnum(b["turnover_oneway_pct"], 1), fnum(b["net_beta_on_market"], 3)))
+put_table("07a_layer_summary", table(["row", "gross ann %", "gross Sharpe", "total cost %/yr", "net ann %", "net Sharpe", "one-way turnover %", "net beta on M"], srow,
+                                     "The construction layer in-window (book 2001-01..2021-12), selected rows; all 33 rows are in Appendix B1 (table 07_layer049). "
+                                     "Source: run 049 result blocks (pre-refresh bytes)."))
 l = L049["layer@100M"]
 fact("l49_gross", fnum(l["gross_ann_return_pct"], 2), "run 049 layer@100M gross_ann_return_pct")
 fact("l49_gross_t", fnum(l["gross_tstat_nw"], 2), "run 049 layer@100M gross_tstat_nw")
@@ -933,7 +968,31 @@ fact("l49_bias", fnum(l["bias_stat_mean"], 2), "run 049 layer@100M bias_stat_mea
 fact("l49_bias_band", fnum(l["bias_stat_in_band_pct"], 1), "run 049 layer@100M bias_stat_in_band_pct")
 fact("l49_exante_vol", fnum(l["exante_vol_ann_pct_mean"], 2), "run 049 layer@100M exante_vol_ann_pct_mean")
 fact("l49_real_vol", fnum(l["realised_vol_ann_pct_live"], 2), "run 049 layer@100M realised_vol_ann_pct_live")
-fact("l57_bias_full", fnum(L057["layer@100M"]["bias_stat_mean"], 2), "run 057 layer@100M bias_stat_mean (1999-2026 book)")
+fact("l57_bias_full", fnum(L057["layer@100M"]["bias_stat_mean"], 2), "run 057 layer@100M bias_stat_mean (book 2001-01..2026-09)")
+fact("l57_book", L057["layer@100M"]["book_start"][:7] + ".." + L057["layer@100M"]["book_end"][:7], "run 057 layer@100M book_start, book_end")
+fact("l57_book_n", L057["layer@100M"]["n_months"], "run 057 layer@100M n_months")
+fact("l49_book", L049["layer@100M"]["book_start"][:7], "run 049 layer@100M book_start")
+fact("cut_ex_eff", L049["layer@100M"]["cut_exyears_effective"].replace(",", ", "), "run 049 layer@100M cut_exyears_effective")
+fact("cut_ex_net_sh", fnum(L049["layer@100M"]["cut_exyears_net_sharpe"], 3), "run 049 layer@100M cut_exyears_net_sharpe")
+fact("cut_ex_gross_sh", fnum(L049["layer@100M"]["cut_exyears_gross_sharpe"], 3), "run 049 layer@100M cut_exyears_gross_sharpe")
+fact("cut_1120_gross", fnum(L049["layer@100M"]["cut_2011_2020_gross_ann_return_pct"], 2), "run 049 layer@100M cut_2011_2020_gross_ann_return_pct")
+fact("cut_1120_gross_sh", fnum(L049["layer@100M"]["cut_2011_2020_gross_sharpe"], 3), "run 049 layer@100M cut_2011_2020_gross_sharpe")
+fact("cut_1120_net_sh", fnum(L049["layer@100M"]["cut_2011_2020_net_sharpe"], 3), "run 049 layer@100M cut_2011_2020_net_sharpe")
+_ag = dict(annual_pairs(L049["layer@100M"]["annual_gross_returns_pct"]))
+_an = dict(annual_pairs(L049["layer@100M"]["annual_net_returns_pct"]))
+_mid = range(2003, 2021)
+_cg = math.prod(1 + _ag[y] / 100 for y in _mid) - 1
+_cn = math.prod(1 + _an[y] / 100 for y in _mid) - 1
+fact("l49_g2001", fsig(_ag[2001], 1), "run 049 layer@100M annual_gross_returns_pct 2001")
+fact("l49_g2002", fsig(_ag[2002], 1), "run 049 layer@100M annual_gross_returns_pct 2002")
+fact("l49_n2001", fsig(_an[2001], 1), "run 049 layer@100M annual_net_returns_pct 2001")
+fact("l49_n2002", fsig(_an[2002], 1), "run 049 layer@100M annual_net_returns_pct 2002")
+fact("comp_gross", fsig(100 * _cg, 1), "compounded run 049 layer@100M annual_gross_returns_pct 2003-2020")
+fact("comp_net", fsig(100 * _cn, 1), "compounded run 049 layer@100M annual_net_returns_pct 2003-2020")
+fact("comp_gross_geo", fnum(100 * ((1 + _cg) ** (1 / len(_mid)) - 1), 2), "geometric annual rate of comp_gross over 18 years")
+fact("comp_gross_arith", fnum(sum(_ag[y] for y in _mid) / len(_mid), 2), "mean of run 049 annual_gross_returns_pct 2003-2020")
+_ch = " ".join(VER["v14"]["construction_layer"]["character"])
+fact("man_comp_text", re.search(r"2003-2020 compounds to [^)]*\)", _ch).group(0), "manifest v14 construction_layer.character (verbatim)")
 fact("l49_net_1b", fnum(L049["layer@1000M"]["net_sharpe"], 3), "run 049 layer@1000M net_sharpe")
 fact("l49_net_5b", fnum(L049["layer@5000M"]["net_sharpe"], 3), "run 049 layer@5000M net_sharpe")
 fact("l49_fts_net_sh", fnum(L049["layer_fixed_tier_spread@100M"]["net_sharpe"], 3), "run 049 layer_fixed_tier_spread@100M net_sharpe")
@@ -994,10 +1053,32 @@ first_ho_run = ev_one("run_started", seq="054")
 fact("ho_first_ts", first_ho_run[1]["ts"], "events run_started 054 ts")
 assert hx["ts"] < first_ho_run[1]["ts"]
 VE = VER["v14"]["holdout"]["vs_expectation"]
-put_table("08_vs_expectation", table(["metric", "in-window expectation (run 053 unless noted)", "holdout", "holdout source"],
-                                     [(k, v[0], v[1], v[2]) for k, v in VE.items()],
-                                     "The holdout against the expectations written before it. Source: MODEL_MANIFEST.yaml v14 `holdout.vs_expectation` "
-                                     "(= events `holdout_spent` vs_expectation); expectations from decision holdout_expectations_v14_spend_snapshot."))
+_VEMAP = {"hedged_sharpe": ((b053, "ls_sharpe"), (b054, "cut_holdout_ls_sharpe")),
+          "hedged_ann_return_pct": ((b053, "ls_ann_return_pct"), (b054, "cut_holdout_ls_ann_return_pct")),
+          "hedged_ls_t_nw": ((b053, "ls_tstat_nw"), (b054, "cut_holdout_ls_tstat_nw")),
+          "ex_top3_hedged_sharpe": ((b053, "ls_sharpe_ex_top_years"), (b055, "ls_sharpe_ex_top_years")),
+          "excess_sharpe": ((b053, "ls_excess_sharpe"), (b054, "cut_holdout_ls_excess_sharpe")),
+          "excess_ann_return_pct": ((b053, "ls_excess_ann_return_pct"), (b054, "cut_holdout_ls_excess_ann_return_pct")),
+          "excess_ex_top3_sharpe": ((b053, "ls_excess_sharpe_ex_top_years"), (b054, "cut_holdout_ls_excess_sharpe_ex_top_years")),
+          "rf_credit_pp": ((b053, "ls_rf_credit_pp"), (b054, "cut_holdout_ls_rf_credit_pp")),
+          "ic_mean": ((b053, "ic_mean"), (b054, "cut_holdout_ic_mean")),
+          "ic_t_nw": ((b053, "ic_tstat_nw"), (b054, "cut_holdout_ic_tstat_nw")),
+          "raw_sharpe": ((b053, "ls_raw_sharpe"), (b054, "cut_holdout_ls_raw_sharpe")),
+          "raw_ann_return_pct": ((b053, "ls_raw_ann_return_pct"), (b054, "cut_holdout_ls_raw_ann_return_pct")),
+          "hedged_maxdd_pct": ((b053, "ls_maxdd_pct"), (b054, "cut_holdout_ls_maxdd_pct")),
+          "layer_net_sharpe_100M": ((L049["layer@100M"], "net_sharpe"), (L057["layer@100M"], "cut_holdout_net_sharpe"))}
+_vrows = []
+for k, v in VE.items():
+    (be, fe), (bh, fh) = _VEMAP[k]
+    nd = 4 if k == "ic_mean" else 3 if "sharpe" in k else 2
+    for rec, raw in ((v[0], be[fe]), (v[1], bh[fh])):   # the manifest's rounded value must agree with the block
+        assert abs(float(rec) - float(raw)) <= 0.51 * 10 ** -len(str(rec).split(".")[-1]), (k, rec, raw)
+    _vrows.append((k, fnum(be[fe], nd), fnum(bh[fh], nd), v[2]))
+put_table("08_vs_expectation", table(["metric", "in-window expectation (run 053 unless noted)", "holdout", "holdout source"], _vrows,
+                                     "The holdout against the expectations written before it. Metrics and sources from MODEL_MANIFEST.yaml v14 "
+                                     "`holdout.vs_expectation` (= events `holdout_spent`); values re-read from the named run blocks (run 053; run 054 "
+                                     "`cut_holdout_*`; run 055; runs 049 and 057 for the layer) at the paper's precision, and checked against the manifest's "
+                                     "rounded values. Expectations from decision holdout_expectations_v14_spend_snapshot."))
 ho_ic = annual_pairs(summary_line("054", "annual IC:"))
 ho_ic = [(y, v) for y, v in ho_ic if y >= 2022]
 s056 = {b["variant"]: b for b in blocks("056")}
@@ -1009,17 +1090,21 @@ put_table("08b_holdout_years", table(["year", "composite IC (054)", "hedged D10-
                                      [(y, fsig(v, 3), fsig(ann_h[y], 1), fsig(ann_lg[y], 1), fsig(ann_ln[y], 1)) for y, v in ho_ic],
                                      "The holdout by calendar year (2026 is January-September). Sources: research/results/054_*_summary.md `annual IC`; "
                                      "run 056 equal_rank_decile `annual_returns_pct`; run 057 layer@100M `annual_gross_returns_pct`, `annual_net_returns_pct`."))
+_ty = max(ho_ic, key=lambda x: x[1])[0]
+fact("ho_top_ic_year", _ty, "year of the largest holdout annual IC (054 summary)")
+fact("n_layer_rows", len(L049), "run 049 result blocks")
+fact("l49_book_end", L049["layer@100M"].get("book_end", CFG["dates"]["eval_end"])[:7], "run 049 layer@100M book_end")
 fact("ho_2022_ic", fsig(dict(ho_ic)[2022], 3), "054 summary annual IC 2022")
 fact("ho_2022_h", fsig(ann_h[2022], 1), "056 equal_rank_decile annual 2022")
 fact("n_ho_years", len(ho_ic), "054 summary annual IC years >= 2022")
 fact("n_ho_years_left", len(ho_ic) - CFG["diagnostics"]["ex_regime_top_years"], "holdout calendar years minus top_years_k")
-fact("ho_ex3_h", fnum(b055["ls_sharpe_ex_top_years"], 2), "run 055 ls_sharpe_ex_top_years")
-fact("ho_ex3_x", fnum(b054["cut_holdout_ls_excess_sharpe_ex_top_years"], 2), "run 054 cut_holdout_ls_excess_sharpe_ex_top_years")
+fact("ho_ex3_h", fnum(b055["ls_sharpe_ex_top_years"], 3), "run 055 ls_sharpe_ex_top_years")
+fact("ho_ex3_x", fnum(b054["cut_holdout_ls_excess_sharpe_ex_top_years"], 3), "run 054 cut_holdout_ls_excess_sharpe_ex_top_years")
 fact("ho_top_years", b054["cut_holdout_ls_excess_top_years"], "run 054 cut_holdout_ls_excess_top_years")
 fact("ho_ic_h1_055", fnum(b055["ic_half1_mean"], 4), "run 055 ic_half1_mean")
 fact("ho_ic_h2_055", fnum(b055["ic_half2_mean"], 4), "run 055 ic_half2_mean")
 fact("ho_rf_credit", fnum(b054["cut_holdout_ls_rf_credit_pp"], 2), "run 054 cut_holdout_ls_rf_credit_pp")
-fact("ho_ex_sh", fnum(b054["cut_holdout_ls_excess_sharpe"], 2), "run 054 cut_holdout_ls_excess_sharpe")
+fact("ho_ex_sh", fnum(b054["cut_holdout_ls_excess_sharpe"], 3), "run 054 cut_holdout_ls_excess_sharpe")
 fact("ho_ex_ret", fnum(b054["cut_holdout_ls_excess_ann_return_pct"], 2), "run 054 cut_holdout_ls_excess_ann_return_pct")
 fact("ho055_sh", fnum(b055["ls_sharpe"], 3), "run 055 ls_sharpe")
 fact("ho055_ret", fnum(b055["ls_ann_return_pct"], 2), "run 055 ls_ann_return_pct")
@@ -1035,7 +1120,7 @@ hoti = [(t, b055[f"tier_{t}_ic_mean"], b055[f"tier_{t}_ls_sharpe"]) for t in ("M
 put_table("08c_holdout_tiers", table(["tier", "IC", "raw LS Sharpe"], hoti,
                                      "Liquidity tiers in the holdout (diagnostic). Source: run 055 `tier_*` fields (run 054's holdout cut prints no tiers)."))
 hb = [("ex-ante beta, mean over holdout months", "run 054 cut_holdout_ls_beta_mean", fnum(b054["cut_holdout_ls_beta_mean"], 3)),
-      ("ex-ante beta, mean (beta = 0 in 2022)", "run 055 ls_beta_mean", fnum(b055["ls_beta_mean"], 3)),
+      (f"ex-ante beta, mean over the {b055['ls_hedged_months']} hedged months of the holdout-only run", "run 055 ls_beta_mean", fnum(b055["ls_beta_mean"], 3)),
       ("realised beta of the raw LS, holdout", "run 055 ls_beta_fullwindow", fnum(b055["ls_beta_fullwindow"], 3)),
       ("ex-ante beta, last month", "run 054 ls_beta_last", fnum(b054["ls_beta_last"], 3)),
       ("ex-ante beta, mean in-window", "run 053 ls_beta_mean", fnum(b053["ls_beta_mean"], 3)),
@@ -1073,6 +1158,10 @@ fact("cont_same", len(same054), "run 054 cut_inwindow_* fields equal to the run 
 fact("cont_n", len(eq), "run 054 cut_inwindow_* fields with a same-named run 053 field")
 
 # ============================================================================= Section 9: integrity
+_ts1 = ev_one("finding_corrected", id="events_ts_estimated")[1]
+_ts2 = ev_one("finding_corrected", id="events_ts_estimated_row")[1]
+TS_EST = re.search(r"starts at row (\d+)", _ts2["correction"]).group(1) + "-" + re.search(r"to row (\d+)", _ts1["finding"]).group(1)
+fact("ts_est_rows", TS_EST, "finding_corrected events_ts_estimated and events_ts_estimated_row")
 
 ar = []
 for i, e in ev("alpha_review"):
@@ -1081,7 +1170,9 @@ for i, e in ev("alpha_review"):
     verdict = e.get("verdict", "")
     ar.append((i, e["ts"], safe_text(e["target"], i, 120), counts, safe_text(verdict, i)))
 put_table("09_alpha_reviews", table(["events line", "ts", "target", "findings by severity", "verdict"], ar,
-                                    "Every alpha-reviewer audit. Source: events `alpha_review` (finding lists counted)."))
+                                    "Every alpha-reviewer audit. Source: events `alpha_review` (finding lists counted). Timestamps on events rows "
+                                    f"{TS_EST} are sequence estimates, not clock readings (finding_corrected events_ts_estimated, events_ts_estimated_row); "
+                                    "their true bound is the commit that first carries them."))
 fact("n_alpha_reviews", len(ar), "events alpha_review")
 _phA = ev_one("phase_completed", phase="A")[0]
 fact("n_alpha_phaseA", sum(1 for i, e in ev("alpha_review") if i < _phA), "events alpha_review before phase_completed A")
@@ -1094,7 +1185,9 @@ for i, e in ev("process_finding"):
     pf.append((i, e["ts"][:10], mask_id(sid), safe_text(body, i, 200)))
 put_table("09b_process_findings", table(["events line", "date", "subject / id", "note or action (record text)"], pf,
                                         "Every process_finding. Source: events `process_finding` (text truncated at 200 characters; ids with the other project's "
-                                        "name have that word masked as `other-project`; text that refers to another project is omitted and pointed to by line)."))
+                                        "name have that word masked as `other-project`; clauses that refer to another project are omitted and pointed to by line). "
+                                        "'LESSONS n' in a note refers to research/LESSONS.md, the project's methodology file; it is cited there for method, "
+                                        "not for any predictor's outcome."))
 fact("n_process_findings", len(pf), "events process_finding")
 fc = []
 for i, e in ev("finding_corrected"):
@@ -1109,9 +1202,12 @@ put_table("09d_verifications", table(["events line", "date", "subject", "detail 
                                      "Every verification_completed. Source: events `verification_completed` (text truncated at 200 characters)."))
 fcf = [(i, e["ts"][:10], e["subject"], safe_text(e.get("detail") or e.get("evidence") or e.get("note"), i, 200)) for i, e in ev("finding_confirmed")]
 put_table("09e_findings_confirmed", table(["events line", "date", "subject", "evidence (record text)"], fcf,
-                                          "Every finding_confirmed. Source: events `finding_confirmed` (text truncated at 200 characters)."))
+                                          "Every finding_confirmed. Source: events `finding_confirmed` (text truncated at 200 characters). The skip1 row's text rounds "
+                                          f"the composite IC and the paired t as 0.0346 and -3.07; the run 051 block gives {b051['ic_mean']} and {b051['paired_dic_tstat_nw']} "
+                                          f"({fnum(b051['ic_mean'], 4)} and {fnum(b051['paired_dic_tstat_nw'], 2)}, half-up), which the paper uses."))
 leak_ids = [mask_id(e.get("id") or e.get("subject")) for i, e in ev("process_finding") if BANNED.search(json.dumps(e))]
 fact("n_leak_findings", len(leak_ids), "process_findings whose record text refers to another project")
+fact("leak_ids", ", ".join(leak_ids), "process_findings whose record text refers to another project (ids masked)")
 
 # ============================================================================= Section 10: orchestration
 
@@ -1165,7 +1261,8 @@ put_table("10c_stamp_moves", table(["events line", "ts (UTC)", "event", "old", "
 fact("n_harness_moves", sum(1 for i, e in ev("harness_changed") if "see provenance" not in e["new_sha"]), "events harness_changed with a SHA")
 fact("n_config_moves", sum(1 for i, e in ev("config_changed") if "see provenance" not in e["new_sha"]), "events config_changed with a SHA")
 fact("n_snapshot_moves", len(ev("snapshot_recorded")), "events snapshot_recorded")
-fact("n_composite_moves", len(ev("composite_updated")), "events composite_updated")
+fact("n_composite_versions", len(ev("composite_updated")), "events composite_updated (one per version v0-v14)")
+fact("n_composite_moves", len(ev("composite_updated")) - 1, "events composite_updated minus the v0 recording")
 cnt = {}
 for _, e in EV:
     cnt[e["event"]] = cnt.get(e["event"], 0) + 1
@@ -1186,8 +1283,16 @@ for i, e in EV:
 _, rcf = ev_one("rule_conflict_found")
 ow.insert(0, (next(i for i, e in EV if e["event"] == "rule_conflict_found"), rcf["ts"], "rule_conflict_found " + rcf["subject"],
               rcf["resolved_by"], "paraphrase in the record"))
-put_table("10f_owner", table(["events line", "ts", "record", "owner's input", "form"], ow,
-                             "The owner's inputs as recorded. Source: events with a `verbatim` field, and rule_conflict_found (resolved_by)."))
+_jl = [(n, l) for n, l in enumerate(open(ROOT / "docs/JOURNAL.md").read().splitlines(), 1) if "owner authorised the coordinator" in l]
+_cl = [(n, l) for n, l in enumerate(open(ROOT / "research/CHANGELOG.md").read().splitlines(), 1) if "owner-authorised" in l]
+for n, l in _jl:
+    ow.append((f"docs/JOURNAL.md line {n}", "2026-10-01 (Phase D entry)", "v12 apply after the permission denial",
+               l[l.index("owner authorised"):].rstrip("."), "paraphrase; the chat message is not in any record file"))
+for n, l in _cl:
+    ow.append((f"research/CHANGELOG.md line {n}", "", "v12 apply", l[l.index("Applied by"):l.index(":")], "paraphrase"))
+put_table("10f_owner", table(["record", "ts", "subject", "owner's input", "form"], ow,
+                             "The owner's inputs as recorded. Source: events with a `verbatim` field, rule_conflict_found (resolved_by), and the "
+                             "docs/JOURNAL.md and research/CHANGELOG.md lines that record the v12 authorisation."))
 _, deny = ev_one("process_finding", subject="v12_apply_permission_denied")
 fact("deny_text", deny["evidence"], "events process_finding v12_apply_permission_denied evidence")
 _tr = sorted({e["factor"] for i, e in ev("factor_translated")})
@@ -1209,6 +1314,29 @@ fact("journal_phaseB_h", re.search(r"Cost: ([\d.]+) h of screening", jr).group(1
 fact("phaseB_h", fnum(phase_s["B"] / 3600.0, 2), "sum of run_completed runtime_seconds, runs 003-011 / 3600")
 fact("phaseD_h", fnum(phase_s["D"] / 3600.0, 2), "sum of run_completed runtime_seconds, runs 012-044 / 3600")
 fact("osap_tag", CFG["osap_source"]["tag"], "config osap_source.tag")
+
+_ppe = ev("preflight_passed")
+_pp_single = {e["factor"] for i, e in _ppe if "factor" in e}
+_pp_multi = sorted({f for i, e in _ppe if "factors" in e for f in e["factors"]})
+_impl = sorted(f for f in _tr if f in REG and f not in _pp_single and f not in _pp_multi)
+fact("pp_events", len(_ppe), "events preflight_passed")
+fact("pp_single", len([1 for i, e in _ppe if "factor" in e]), "events preflight_passed with a single factor")
+fact("pp_multi", ", ".join(_pp_multi), "events preflight_passed with a factors list")
+fact("pp_implied", ", ".join(_impl), "screened candidates whose preflight is recorded inside factor_translated (RECORDS.md: a pass is implied)")
+_ee = {}
+for n in range(1, 54):
+    for b in blocks(f"{n:03d}"):
+        _ee.setdefault(b.get("eval_end"), set()).add(n)
+fact("eval_end_set", ", ".join(sorted(k for k in _ee if k)), "eval_end over every result block of runs 001-053")
+fact("eval_end_runs", len(set().union(*_ee.values())), "runs 001-053 with result blocks")
+try:
+    _old = yaml.safe_load(subprocess.run(["git", "show", "d477021^:data/SNAPSHOT_MANIFEST.yaml"], cwd=ROOT, capture_output=True,
+                                         text=True, check=True).stdout)
+    fact("snap1_sep_max", _old["tables"]["SEP"]["max_date"], "git d477021^:data/SNAPSHOT_MANIFEST.yaml tables.SEP.max_date (the frozen manifest before the refresh)")
+    fact("snap1_recorded", _old["recorded_on"], "git d477021^:data/SNAPSHOT_MANIFEST.yaml recorded_on")
+except Exception:
+    fact("snap1_sep_max", "(git history unavailable)", "git d477021^:data/SNAPSHOT_MANIFEST.yaml")
+    fact("snap1_recorded", "(git history unavailable)", "git d477021^:data/SNAPSHOT_MANIFEST.yaml")
 
 # ============================================================================= Appendices
 
@@ -1273,6 +1401,16 @@ if src_path.exists():
         if bad:
             print("hand-typed decimals in paper_src.md:", sorted(set(bad)))
             sys.exit(1)
+        ident = re.compile(r"(?:\b(?:run|runs|Run|Runs|D|v|Section|Sections|table|tables|Appendix|stop-and-ask|rung|Stage|stage|line|lines|ladder|Phase|step|t−|t-)\s?|[–-])$")
+        typed = []
+        for m in re.finditer(r"(?<![\w.])(\d+)(?![\w.])", bare):
+            left = bare[max(0, m.start() - 14):m.start()]
+            if ident.search(left):
+                continue
+            typed.append((m.group(1), " ".join(bare[max(0, m.start() - 30):m.end() + 12].split())))
+        print(f"typed integers outside placeholders, identifiers excluded ({len(typed)}):")
+        for tok, ctx in typed:
+            print(f"  {tok:>5}  ...{ctx}...")
         hits = [l for l in out.splitlines() if BANNED.search(l)]
         if len(hits) > 1:
             print("words naming the other project on more than one line of paper.md:", hits)

@@ -1,37 +1,49 @@
 <!-- SOURCE of paper/paper.md. Do not edit paper.md: run `python3 paper/build_tables.py --check`.
      A double-braced key is a value from paper/tables/00_facts.md (each with its record source);
-     a double-braced table:NN_name pastes paper/tables/NN_name.md. No number is typed here by hand. -->
+     a double-braced table:NN_name pastes paper/tables/NN_name.md. No decimal is typed here by hand;
+     `--check` lists every remaining typed integer. -->
 
 # A pre-registered factor search on Sharadar with a sector-relative, market-hedged family blend: the full record
 
 Alpha Model Auto Research V4. Every number below is generated from the project's record files by
-`paper/build_tables.py`; `paper/tables/00_facts.md` gives the source of each number in the prose.
+`paper/build_tables.py`; Appendix A7 (`paper/tables/00_facts.md`) gives the source of each number in the prose.
 
 ## Headline
 
-- **The selection carried ranking information out of sample, at about its late in-window level, without statistical significance.**
-  Over the 57-month holdout (2022-01-01 to 2026-09-30) the finished composite's mean rank IC was 0.0300
-  with Newey-West t 1.87 (run 054, `cut_holdout_*`). The benchmark written before the spend was the second-half
+All holdout figures cover 57 months, 2022-01-01 to 2026-09-30; the canonical read is run 054 `cut_holdout_*`.
+
+- **The declared headline fell to about half of its expectation, without significance.** The hedged D10−D1, the
+  pre-registered headline, earned 10.81%/yr at Sharpe 0.523, NW t 1.18 (run 054). The expectation
+  written before the spend was 16.34%/yr, Sharpe 0.996, NW t 3.96 (run 053). Beside it: the raw spread
+  earned 3.01%/yr, Sharpe 0.124 (run 054). The hedge's ex-ante β averaged -0.549 (run 054),
+  and the raw spread's realised β was -0.836 (run 055, the holdout-only cross-check).
+- **The ranking information persisted at about its late in-window level, also without significance.** The composite's
+  mean rank IC was 0.0300, NW t 1.87 (run 054): one-sided p ≈ 0.030, two-sided p ≈ 0.061, and below
+  the 2.5 bar a single predictor needed at Stage 1. The benchmark written before the spend was the second-half
   in-window IC, 0.0283 (run 053). The IC was concentrated in 2022 (+0.105; table 08b).
-- **The raw long-short earned little out of sample.** The equal-weight D10−D1 spread returned 3.01%/yr,
-  Sharpe 0.12 (run 054).
-- **The hedged headline was mostly the hedge.** The hedged series exceeds the raw one by 1.43 pp/yr in-window
-  (run 053) and by 7.79 pp/yr out of sample (run 054). The hedge used an ex-ante β of -0.549 over
-  the holdout months (run 054). The realised β of the raw spread over those months was -0.836 (run 055). The
-  "hedged" series therefore still carried about 0.29 of short market exposure in a rising market.
-- **The β-neutral investable book did not survive costs.** The construction layer's book, neutral to sector and market β
-  ex ante, had a gross Sharpe of 0.86 in-window (run 049; 0.856 on the spend snapshot,
-  run 057) and 0.10 out of sample (run 057). Net of measured costs, the declared layer row is negative at
-  every size in both windows. Some sensitivity rows are not (Section 7).
-- **The contribution is the record, not the model.** The record accounts for every one of 212 OSAP predictors:
-  screened, excluded with a measured reason, or held as a seed leg; the bars and verdicts of 107 screens, rejections included;
-  the decision log; and the orchestration that produced them.
+- **Out of sample, most of the hedged return was the hedge term.** The hedge term is hedged − raw = −12·mean(β_t·M_t),
+  the long market position the hedge adds to a net-short book. It was 7.79 of the 10.81 pp/yr out of
+  sample (run 054), against 1.43 of 16.34 pp/yr in-window (run 053). Part of it is mechanical: M is a
+  total return, so the hedge credits |β|·rf, which the excess-of-rf diagnostic removes (-2.26 pp/yr out of
+  sample, -1.25 in-window). The lag ran the other way. The ex-ante β was about 0.29 less negative
+  than the realised one, so the "hedged" series stayed net short that much market in a mostly rising market
+  (45 of 57 months had a positive trailing 12-month market return; manifest, run 054). That residual short
+  exposure depressed the hedged return.
+- **The corrected readings are small.** The excess-of-rf hedged series earned 8.54%/yr, Sharpe 0.413,
+  NW t 0.93 (run 054). The β-neutral investable book (the construction layer at $100M) earned
+  0.74%/yr gross, Sharpe 0.101 (run 057). Its in-window gross Sharpe was
+  0.856 (run 057 `cut_inwindow_*`, equal to run 049's to three places). Net of measured costs the
+  declared layer row is negative at every size in both windows; some sensitivity rows are not (Section 7).
+- **The contribution is the record, not the model.** It accounts for every one of 212 OSAP predictors: screened,
+  excluded with a measured reason, or held as a seed leg. It also holds the bars and verdicts of 107 screens,
+  rejections included, the decision log, and the orchestration that produced them.
 
 **Convention.** Main-text in-window figures use the spend snapshot: run 053, DATA 42587e08609a, the bytes the holdout
-was read on. Acceptance-time figures come from runs 012–044 on DATA 198b281de1a0, before the snapshot refresh. They appear
-in the version history (table 05e), the ratchet tables and the appendix, labelled "acceptance-time, pre-refresh bytes". All
-returns are gross unless labelled net. "Hedged" is the declared D4 series, "raw" is the unhedged D10−D1, and "excess" is the
-rf-corrected diagnostic (Section 2). There are no charts; every table caption names its run or record file.
+was read on. Acceptance-time figures come from runs 001–052 on DATA 198b281de1a0, before the snapshot refresh. They
+appear in the version history (table 05e), the ratchet tables and the appendices, labelled "acceptance-time, pre-refresh
+bytes". All returns are gross unless labelled net. "Hedged" is the declared D4 series, "raw" is the unhedged D10−D1, and
+"excess" is the rf-corrected diagnostic (Section 2). There are no charts; every table caption names its run or record
+file. Sharpe ratios are printed to three places.
 
 The project was built from a predecessor's skeleton, methodology only (D1).
 
@@ -47,8 +59,10 @@ The four construction changes were fixed before any candidate was screened:
 1. **Within-sector ranks (D3).** Every signal is percentile-ranked within its sector each month. A sector-month with
    fewer than 10 scored names falls back to the cross-section rank. The family blend averages these ranks.
 2. **A market hedge by construction (D4).** The headline long-short is D10−D1 minus β_t × M_t. M is the universe's own
-   cap-weighted return. β_t is estimated on months t−36..t−1 only, and is 0 before 12 months of history.
-   Under D11 the hedge reaches exactly one bar, the Stage 2 return guard. The Stage 1 spread bar reads the raw D10−D1.
+   cap-weighted total return. β_t is estimated on months t−36..t−1 only, and is 0 before 12 months
+   of history. Under D11 the hedge reaches exactly one bar, the Stage 2 return guard. The Stage 1 spread bar reads the raw
+   D10−D1. Both series are annualised as the monthly mean × 12, so hedged − raw = −12·mean(β_t·M_t) exactly (verification
+   hedge_gap_check_before_phase_d); this paper calls that difference the hedge term.
 3. **β and a date-free ex-regime Sharpe on every block (D5).** These are the Sharpe after removing the 3 best
    calendar years, and a bear/bull split on the sign of the trailing 12-month market return. They are
    diagnostics, never bars.
@@ -125,12 +139,19 @@ The runner had to stop and ask the owner only in these cases:
 
 ## 2. Data
 
-All data come from one direct pull of the Sharadar API, recorded twice. The first recording (DATA 198b281de1a0) held
-13 Sharadar tables with full history. FUNDS is mapped in the field map but not held. Every run up
-to 052, and so every decision of the search, used these bytes. The block ends after that pull, so the holdout could not be read
-from it. D8 therefore required a refresh (stop-and-ask 3). The second recording (DATA 42587e08609a) re-pulled the same
-13 tables to 2026-10-01. It also added one external table, the three-month Treasury bill rate TB3MS from
-FRED. The owner approved both changes in one message: "approve both, use TB3MS for rf".
+All data come from direct pulls of the Sharadar API, recorded twice. The first recording (DATA 198b281de1a0) held
+13 Sharadar tables with full history; FUNDS is mapped in the field map but not held. Every run up to
+052, and so every decision of the search, used these bytes.
+
+**The first snapshot already held the holdout months.** It was a full-history pull, recorded 2026-09-30T16:39:10Z, and its
+SEP table runs to 2026-09-29 (the frozen manifest before the refresh). The holdout was isolated by rule, not by
+absent bytes. Every result block of runs 001–053 (52 runs with blocks) has eval_end 2021-12-31, and
+`CLAUDE.md` makes a block whose eval_end reaches 2022 a hard stop, which the harness's validation flags as an
+out-of-sample breach. The refresh was needed because the block ends on 2026-09-30, after that pull.
+
+D8 required that refresh (stop-and-ask 3). The second recording (DATA 42587e08609a) re-pulled the same
+13 tables, and added one external table, the three-month Treasury bill rate TB3MS from FRED. The
+owner approved both in one message: "approve both, use TB3MS for rf".
 
 *Table 02_snapshots. The two snapshot recordings. Source: research/events.jsonl `snapshot_recorded` (record text truncated at 260 characters).*
 
@@ -159,19 +180,20 @@ FRED. The owner approved both changes in one message: "approve both, use TB3MS f
 | TICKERS | sharadar | 74,282 |  |  |
 
 **The rf correction is a diagnostic, not a replacement.** The declared hedge (D4) subtracts β_t times the universe's
-*total* return. A negative-β book is therefore credited β_t × rf_t as if it were return (decision
+*total* return, so a negative-β book is credited |β_t| × rf_t as if it were return (decision
 hedge_guard_negative_beta_property, logged during Phase D). Replacing the hedge proxy would move CONFIG_SHA, which is
 stop-and-ask 2, and that was not asked. So the correction is reported beside the declared hedge:
 excess_t = hedged_t + β_t × rf_t, with rf = TB3MS/1200 paired with the holding month. The bars are unchanged. In-window
-on the spend snapshot the rf credit is -1.25 pp/yr. The excess-of-rf Sharpe is 0.928 against the
-hedged 0.996 (run 053).
+on the spend snapshot the rf credit (`ls_rf_credit_pp`, excess minus hedged) is -1.25 pp/yr. The excess-of-rf
+Sharpe is 0.928 against the hedged 0.996 (run 053).
 
-**The refresh restated the in-window block without moving a verdict.** Run 052 used the frozen bytes and run 053 the
-refreshed bytes, with the same harness, config and composite. Of their shared result-block fields, 28 are
-identical and 54 differ (including data_sha). Run 053 adds 8 excess-of-rf fields. The mean IC
-moved by -0.000009. The hedged Sharpe moved from 0.983 to 0.996. No residual-IC verdict can move against
-the thinnest margins, and no rejection rested on the guard (decision d8_step2_restatement_within_margin). The monthly
-series is not stored, so the restated months are not itemised.
+**The refresh restated the in-window block.** Run 052 used the frozen bytes and run 053 the refreshed bytes, with the
+same harness, config and composite. Of their shared result-block fields, 28 are identical and
+54 differ (including data_sha). Run 053 adds 8 excess-of-rf fields. The mean IC moved by
+-0.000009, and the hedged Sharpe from 0.983 to 0.996. No Stage 2 verdict is expected to move (decision
+d8_step2_restatement_within_margin). That expectation is inferred from the composite-IC deltas against the thinnest
+residual-t margins; the rungs were not re-run on the new bytes. No rejection rested on the guard. The monthly series is
+not stored, so the restated months are not itemised.
 
 *Table 02c_restatement. D8 step 2: the same harness, config and composite on the frozen and the refreshed bytes, in-window. Source: result blocks of runs 052 and 053; 28 fields identical, 54 different (including data_sha), 8 new in 053.*
 
@@ -194,12 +216,12 @@ series is not stored, so the restated months are not itemised.
 
 ## 3. Inventory and the Stage 1 screen
 
-Every OSAP predictor at the pinned commit was inventoried: 212 in all. 5 are the v0 seed legs. Of the rest,
-134 were constructible from Sharadar and 73 were not. Of the constructible ones, 106
-were translated and passed preflight, and 28 failed preflight. Every excluded predictor has a frontier row
-with its measured reason (Appendix A2): 64 need data Sharadar does not publish (analyst forecasts,
-options, short interest, some Compustat items), 28 failed preflight (mass points, discrete flags, coverage), and
-9 start too late for the 120-month minimum.
+Every OSAP predictor at the pinned commit was inventoried: 212 in all. 5 are the v0 seed legs. Of the
+rest, 134 were constructible from Sharadar and 73 were not. Of the constructible ones,
+106 were translated and passed preflight, and 28 failed preflight. Every excluded predictor has
+a frontier row with its measured reason (Appendix A2): 64 need data Sharadar does not publish
+(analyst forecasts, options, short interest, some Compustat items), 28 failed preflight (mass
+points, discrete flags, coverage), and 9 start too late for the 120-month minimum.
 
 *Table 03_inventory. Inventory accounting. Sources: research/events.jsonl `inventory_classified`; osap_source/osap_frontier.yaml; research/registry/*.yaml; research/registry_index.yaml `search_accounting`.*
 
@@ -218,8 +240,8 @@ options, short interest, some Compustat items), 28 failed preflight (mass points
 
 The Stage 1 screen ran in batches of 12 in alphabetical order. It covered 107 signals: the
 106 candidates and one declared flip. 24 passed, 83 were rejected and 0
-were inconclusive. Most rejections fell on the t bar (79 decided by `ic_tstat_nw`). 4
-signals cleared the t bar but had a mean IC below 0.010.
+were inconclusive. Most rejections fell on the t bar (79 decided by `ic_tstat_nw`).
+4 signals cleared the t bar but had a mean IC below 0.010.
 
 *Table 03b_stage1_fail_bars. Stage 1 rejections by bar. Source: research/registry/*.yaml `decided_by` and `stage1_failed` on the FAIL rows (decided_by names ic_tstat_nw when it fails, else the first failed bar in check order: decisions stage1_decided_by_convention, _fallback).*
 
@@ -246,12 +268,13 @@ the t bar with probability P(Z ≥ 2.5) = 0.006210. The expected number of false
 
 The flip rule adds a second path. A predictor qualifies for a reversed-sign screen when t ≤ −2.74, with
 probability P(Z ≥ 2.74) = 0.003072 per predictor, or 0.326 expected. Both paths together give
-0.984 expected false passes, against 24 observed. The other Stage 1 bars (IC level, both halves
-positive, a positive raw spread) can only reduce the null count, so these figures are upper bounds for the t bar alone.
+0.984 expected false passes, against 24 observed. A screen must pass every bar, not only the t bar, so
+these t-bar counts are upper bounds on the null passes of all bars.
 
 Stage 2 is one-sided too (t > 2.0). Over 24 rungs the null expectation is 24 × 0.022750 =
 0.546, against 14 acceptances. These expectations hold whatever the dependence between tests; correlated
-signals widen the spread around them, not their mean. The normal tail approximates the Newey-West t, which is computed on a few hundred monthly observations.
+signals widen the spread around them, not their mean. The normal tail approximates the Newey-West t, which is computed on
+a few hundred monthly observations.
 
 *Table 03d_null_fp. Expected false positives under the global null. Normal tail, p = 0.5 erfc(z / sqrt 2); counts from research/registry/*.yaml and research/registry_index.yaml `search_accounting`; bars from config/test_config.yaml; the 2.74 flip bar from CLAUDE.md and events `flip_hypothesis_qualified`. The expectation n x p holds under any dependence between tests; dependence widens its spread.*
 
@@ -262,11 +285,11 @@ signals widen the spread around them, not their mean. The normal tail approximat
 | Stage 1, both paths | 106 |  |  | 0.009282 | 0.984 | 24 passed |
 | Stage 2, residual IC | 24 | NW t > 2.00 | one-sided (upper) | 0.022750 | 0.546 | 14 accepted |
 
-**Flip hypotheses.** Two predictors qualified for a flip, both in the OSAP sign at |t| ≥ 2.74. BidAskSpread
-(|t| 2.77) was declared as BidAskSpreadFlip and screened in the last batch. It passed at t 2.7628,
-clearing the 2.74 bar, and was later rejected at Stage 2. GrLTNOA (|t| 2.75) qualified but was not
-screened. Its reversed mean IC, 0.0059, fails the 0.010 IC bar by a margin the rank-reversal offset cannot
-close (decision flip_not_screened_when_deterministic_fail).
+**Flip hypotheses.** Two predictors qualified for a flip, both at an absolute t of at least 2.74 in the OSAP sign.
+BidAskSpread (absolute t 2.77) was declared as BidAskSpreadFlip and screened in the last batch. It passed at
+t 2.7628, clearing the 2.74 bar, and was later rejected at Stage 2. GrLTNOA (absolute t 2.75)
+qualified but was not screened. Its reversed mean IC, 0.0059, fails the 0.010 IC bar by a margin the
+rank-reversal offset cannot close (decision flip_not_screened_when_deterministic_fail).
 
 *Table 03e_flips. Flip hypotheses. Source: events `flip_hypothesis_qualified` (parent statistics), research/registry/<flip>.yaml (screen), decision flip_not_screened_when_deterministic_fail.*
 
@@ -329,16 +352,17 @@ phase close all precede the first Stage 2 run.
 | first Stage 2 run started (run 012) | 880 | 2026-10-01T05:52:14Z |
 | first Stage 2 number evaluated (factor_evaluated, run 012) | 884 | 2026-10-01T06:02:03Z |
 
-The ninth family was opened at v12, reaching `families_max`. The remaining passers fell into existing
+The ninth family was opened in Phase C, by VolumeTrend's assignment (2026-10-01T05:45:32Z), which reached
+`families_max`. The composite first held nine families at v12. The remaining passers fell into existing
 families. The order (Appendix A4) sorts all 24 passers by full-precision Stage 1 NW t and was never re-sorted.
 
 ## 5. The ratchet
 
-5 ladders (runs 012, 023, 032, 037, 044) were cut from the declared order, five rungs at a time; the last had four. Rung i
-faced the base plus every earlier passing rung. Of 24 rungs, 14 were accepted, 10 rejected
-and 0 inconclusive. Every rejection was decided by `resid_ic_tstat_nw`. None was decided by the guard: no
-rung had a guard t below -2.0 (0 rows). The lowest guard t was -1.26 (RoE,
-accepted).
+5 ladders (runs 012, 023, 032, 037, 044) were cut from the declared order, five rungs at a time; the last had four.
+Rung i faced the base plus every earlier passing rung. Of 24 rungs, 14 were accepted, 10
+rejected and 0 inconclusive. Every rejection was decided by `resid_ic_tstat_nw`. None was decided by the guard:
+no rung had a guard t below -2.0 (0 rows). The lowest guard t was -1.26
+(RoE, accepted).
 
 *Table 05_rungs. Every Stage 2 rung. Source: research/registry/<name>.yaml `stage2_run`, `stage2` (verbatim from the rung's block), `decided_by`; version from MODEL_MANIFEST.yaml `ratchet`. Acceptance-time, pre-refresh bytes (DATA 198b281de1a0).*
 
@@ -380,8 +404,8 @@ accepted).
 | 044 | 4 | 19 | 0 | 4 |  | BidAskSpreadFlip, IdioVolAHT, zerotrade1M, NetPayoutYield |
 
 **Margins.** The two thinnest acceptances were IdioVol3F at 2.03 and VolumeTrend at 2.04. For scale, the
-snapshot refresh moved the composite IC t by -0.0019 (table 02c). The two nearest misses were IdioVolAHT at 1.92 and ShareIss1Y
-at 1.88. In every case the rule decided; no rung was re-litigated.
+snapshot refresh moved the composite IC t by -0.0019 (table 02c). The two nearest misses were IdioVolAHT at
+1.92 and ShareIss1Y at 1.88. In every case the rule decided; no rung was re-litigated.
 
 *Table 05c_margins. Thinnest passes and nearest misses on the residual-IC bar. Source: research/registry/<name>.yaml stage2.resid_ic_tstat_nw.*
 
@@ -395,10 +419,10 @@ at 1.88. In every case the rule decided; no rung was re-litigated.
 | nearest miss | BidAskSpreadFlip | 1.769160 | -0.230840 |
 
 **The guard has a disclosed bias toward negative-β legs** (decision hedge_guard_negative_beta_property). A rung that
-moves the blend's ex-ante β is credited by the hedge term, whatever its information. MaxRet is the clearest case (run 023).
-Its raw spread delta was -0.59 pp/yr, the hedge part 2.82 and the hedged delta 2.23.
-Its residual IC t of 4.01 carried the acceptance. For a negative-β new family the guard is close to
-non-binding, and the residual IC is the operative gate. The split was recorded from ladder 2 on:
+moves the blend's ex-ante β is credited through the hedge term, whatever its information. MaxRet is the clearest case
+(run 023). Its raw spread delta was -0.59 pp/yr, the hedge part 2.82 and the hedged delta
+2.23. Its residual IC t of 4.01 carried the acceptance. For a negative-β new family the guard is
+close to non-binding, and the residual IC is the operative gate. The split was recorded from ladder 2 on:
 
 *Table 05d_hedge_part. The guard's delta split into raw spread and hedge term, as recorded from ladder 2 on. Source: events `factor_evaluated` (stage 2) field raw_vs_hedged_dls_pp; ladder 1 rows predate the field.*
 
@@ -414,7 +438,7 @@ non-binding, and the residual IC is the operative gate. The split was recorded f
 | 032 | NetEquityFinance | +0.01 | +0.18 | +0.19 | 0.47 | FAIL |
 | 032 | CF | -0.67 | +0.28 | -0.40 | -0.76 | FAIL |
 | 032 | STreversal | +1.09 | -1.73 | -0.64 | -0.54 | PASS |
-| 037 | zerotrade6M | +0.64 | +0.90 | +1.54 | 1.72 | PASS |
+| 037 | zerotrade6M | +0.64 | +0.90 | +1.55 | 1.72 | PASS |
 | 037 | VolumeTrend | +0.18 | -0.21 | -0.03 | -0.09 | PASS |
 | 037 | zerotrade12M | -0.06 | +0.11 | +0.04 | 0.14 | FAIL |
 | 037 | RealizedVol | -0.38 | +0.25 | -0.13 | -0.61 | FAIL |
@@ -451,19 +475,20 @@ The version history, acceptance-time, pre-refresh bytes:
 | v13 | VolumeTrend | liquidity | 18 | 9 | 037/2 | 2.04 | -0.09 | 040 | 0.0372 | 5.24 | 0.979 | 16.13 | -41.60 | -0.619 | 0.719 | 0.635 | 56.6 | 041 | fa17bd1cd37e |
 | v14 | TrendFactor | momentum | 19 | 9 | 037/5 | 2.14 | -0.01 | 042 | 0.0389 | 5.68 | 0.983 | 16.12 | -43.21 | -0.560 | 0.773 | 0.650 | 58.1 | 043 | 7fe6f001e708 |
 
-Between v0 and v14 the composite's mean IC rose from 0.0145 to 0.0389 and its NW t from 2.62 to
-5.68. The hedged Sharpe rose from 0.600 to 0.983. The full-window β of the raw spread went from
--0.140 to -0.560, and D10 turnover from 28.0% to 58.1% a month (runs 001, 042). Much of the
-hedged gain from v7 on came with negative-β legs (MaxRet, IdioVol3F, zerotrade6M), which is the mechanism above. The
-acceptance-time hedged Sharpe peaked at v4 (0.996); later acceptances raised the IC and its t, not the
-hedged Sharpe.
+At acceptance time, on the pre-refresh bytes, the composite's mean IC rose between v0 and v14 from 0.0145 to
+0.0389, and its NW t from 2.62 to 5.68. The hedged Sharpe rose from 0.600 to 0.983. The
+full-window β of the raw spread went from -0.140 to -0.560, and D10 turnover from 28.0% to 58.1%
+a month (runs 001 and 042). The guard's hedge part was largest for three accepted legs: MaxRet (2.82 pp/yr),
+zerotrade6M (+0.90) and roaq (+0.51) (table 05d). IdioVol3F's was -0.03, and the
+hedged Sharpe fell when it joined (0.932 at v9, 0.919 at v10). The acceptance-time hedged Sharpe peaked at
+v4 (0.996); later acceptances raised the IC and its t, not the hedged Sharpe.
 
 ## 6. The in-window composite (v14, run 053)
 
-v14 has 19 legs in 9 families (COMPOSITE 7fe6f001e708). On the spend snapshot, 1999–2021 (run 053),
-its mean IC is 0.0389, NW t 5.68 (plain t 6.43). The hedged long-short earns 16.34%/yr at
-Sharpe 0.996, and the raw spread 14.91%/yr at Sharpe 0.790. The hedge adds 1.43 pp/yr
-at a full-window β of -0.556.
+v14 has 19 legs in 9 families (COMPOSITE 7fe6f001e708). On the spend snapshot, 1999-01-01 to
+2021-12-31 (run 053), its mean IC is 0.0389, NW t 5.68 (plain t 6.43). The hedged long-short
+earns 16.34%/yr at Sharpe 0.996, and the raw spread 14.91%/yr at Sharpe 0.790. The hedge
+term is 1.43 pp/yr at a full-window β of -0.556.
 
 *Table 06_v14_inwindow. v14 in-window, 1999-01..2021-12, on the spend snapshot. Source: run 053 result block (HARNESS 1271266472a9, CONFIG 0d88328d5b10, COMPOSITE 7fe6f001e708, DATA 42587e08609a). Gross; LS hedged unless labelled raw.*
 
@@ -492,16 +517,16 @@ at a full-window β of -0.556.
 | delisting-adjusted returns % | 0.44 |
 
 **The information is front-loaded.** The IC halves are 0.0496 and 0.0283. The years 2000,2001,2021 carry
-53.6% of the summed long-short return. The Sharpe without those years is 0.666. Annual IC is negative
-in 2 of 23 years.
+53.6% of the summed long-short return. The Sharpe without those years is 0.666. Annual IC is negative in
+3 of 23 years: 2003 (-0.000), 2007 (-0.016), 2020 (-0.049), as printed in the run 053 summary.
 
 *Table 06d_annual_ic. Annual mean IC, in-window, part 1. Source: research/results/053_*_summary.md `annual IC`.*
 
 | year | 1999 | 2000 | 2001 | 2002 | 2003 | 2004 | 2005 | 2006 | 2007 | 2008 | 2009 | 2010 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| IC | +0.018 | +0.122 | +0.109 | +0.118 | +0.000 | +0.041 | +0.026 | +0.040 | -0.016 | +0.081 | +0.003 | +0.032 |
+| IC | +0.018 | +0.122 | +0.109 | +0.118 | -0.000 | +0.041 | +0.026 | +0.040 | -0.016 | +0.081 | +0.003 | +0.032 |
 
-*Annual mean IC, in-window, part 2. Source: as above.*
+*Annual mean IC, in-window, part 2. Source: as above; values as printed there (a sign with 0.000 is a value smaller than 0.0005 in size).*
 
 | year | 2011 | 2012 | 2013 | 2014 | 2015 | 2016 | 2017 | 2018 | 2019 | 2020 | 2021 |
 |---|---|---|---|---|---|---|---|---|---|---|---|
@@ -522,11 +547,12 @@ in 2 of 23 years.
 | MID | 0.034700 | 0.629000 | 587 |
 | SMALL | 0.041200 | 0.922000 | 978 |
 
-**The legs do not all start in 1999.** The early years run on fewer legs. In 1999 all nine families are present,
-but 15 of the 19 legs score in January. IdioVol3F starts in 1999-08: its FF3 factors are built from June 1999
-formations, so its first signal is 1999-07. VolumeTrend and TrendFactor start in 2003-01 (signal
-month-end 2002-12). ShareIss5Y starts in 2003-06 (signal 2003-05) because of its
-65-month history gate. The family blend renormalises over the legs present.
+**The legs do not all start in 1999.** The early years run on fewer legs. In the first year all nine families are
+present, but 15 of the 19 legs score in January. IdioVol3F starts in 1999-08: its FF3
+factors are built from June 1999 formations, so its first signal is 1999-07. VolumeTrend and TrendFactor start
+in 2003-01 (signal month-end 2002-12). ShareIss5Y starts in 2003-06 (signal
+2003-05) because of its 65-month history gate. The family blend renormalises over the legs
+present.
 
 *Table 06e_leg_starts. When each v14 leg starts. Source: research/registry/<leg>.yaml stage1.n_months (candidates) and the run 053 preflight table (1998-12-31 probe); seed legs have no Stage 1 row and score from the first month. First month = 1999-01 plus (276 - scored months), i.e. unscored months are leading; registry caveats give the reasons (IdioVol3F: FF3 factors from 1999-07; ShareIss5Y: 65-month history gate; VolumeTrend: 60-month window; TrendFactor: uncensored coefficients from 2002-12).*
 
@@ -563,20 +589,20 @@ month-end 2002-12). ShareIss5Y starts in 2003-06 (signal 2003-05) because of its
 15.09%/yr. The rf credit is -1.25 pp/yr. The Sharpe without the top-3 years is 0.605 on the
 excess series.
 
-**Return-start sensitivity** (runs 050 and 051, pre-refresh bytes; finding_confirmed
+**Return-start sensitivity** (runs 050 and 051, pre-refresh bytes; figures from the run 051 block; finding_confirmed
 skip1_return_start_sensitivity). The whole-model alpha review flagged one risk: several legs end on the same close that
 starts the forward return. That could carry untradeable bid-ask bounce into the IC. A diagnostic run started the forward
-return at the first trade of month t+1 instead. The composite IC fell from 0.0389 to 0.0345 (paired
+return at the first trade of month t+1 instead. The composite IC fell from 0.0389 to 0.0346 (paired
 ΔIC -0.0044, NW t -3.06), about 11% of the IC. The hedged Sharpe fell from 0.983 to
 0.777. The second-half IC barely moved (0.0281 to 0.0270). The loss sits in the value, investment and
-financing legs, not in the short-horizon legs the bounce hypothesis named (table 06h). The convention was declared in
-advance; no verdict is affected.
+financing legs, not in the short-horizon legs the bounce hypothesis named (table 06h). The signal-close convention was
+declared in advance; no verdict is affected.
 
 *Table 06g_skip1. Return-start sensitivity, diagnostic only. Source: result blocks of runs 050 and 051 (HARNESS aef490297071, DATA 198b281de1a0: pre-refresh bytes); finding_confirmed skip1_return_start_sensitivity.*
 
 | field | run 050 (signal-close base) | run 051 (skip1 base) |
 |---|---|---|
-| ic_mean | 0.0389 | 0.0345 |
+| ic_mean | 0.0389 | 0.0346 |
 | ic_tstat_nw | 5.68 | 5.16 |
 | ic_half1_mean | 0.0498 | 0.0421 |
 | ic_half2_mean | 0.0281 | 0.0270 |
@@ -627,10 +653,9 @@ in-window Stage 3 was run on the spend snapshot.
 
 D7 required three changes before the layer's first number. The book must be neutral to market β as well as sector
 (implemented as a hard constraint). The half-spread must come from a harness-built Corwin-Schultz series rather than a
-composite leg. The regime cuts must follow the D5 rule; the declared years were 2000, 2001 and 2021, of which 2000
-precedes the book. The alpha review of that change asked for fixes first: one major (a passage in the design notes cited
-another project's outcome; removed), one medium (the ex-years cut) and several lows. They landed in a second harness move.
-Runs 045, 047 and 048 reproduced the measuring path (docs/JOURNAL.md).
+composite leg. The regime cuts must follow the D5 rule. The alpha review of that change asked for fixes first: one major
+(a passage in the design notes cited another project's outcome; removed), one medium (the ex-years cut) and several
+lows. They landed in a second harness move. Runs 045, 047 and 048 reproduced the measuring path (docs/JOURNAL.md).
 
 *Table 07d_d7_changes. The D7 layer changes and the alpha-review fixes. Source: events `harness_changed` (text truncated at 420 characters).*
 
@@ -639,50 +664,32 @@ Runs 045, 047 and 048 reproduced the measuring path (docs/JOURNAL.md).
 | 1060 | 2026-10-01T17:04:10Z | 73a95d352942 | 471f70782486 | 441 passed (434 - 1 replaced + 8 new) | D7 construction layer: (1) sector+market-beta neutrality via a constraint matrix [sector dummies \| beta_i], beta_i trailing 36m on D4's M (min 12, sector-month median fill), held by steps 1,2,5 per CONSTRUCTION.md 9.5, final book \|beta'w\|<=1e-10; reference row layer_no_beta_constraint; (2) Corwin-Schultz spread built in harness/data_layer.py (bit-exact vs BidAskSpread candidate raw on 1984 real name-months), no leg c … |
 | 1071 | 2026-10-01T18:44:13Z | 471f70782486 | 3561590b660a | 445 passed | alpha_review fixes to the D7 layer (layer path only): declared vs effective ex-years fields (2000 precedes book_start; effective 2001,2021); name_cap_excess carried to summary; LayerRefused if spread join < costs.spread_measured_min_pct 95 (real 99.938% in-window, worst 99.58% 2021-02) or a sector_beta_neutral book month lacks beta; CS PIT test replaced with a non-vacuous one; _cs_builder_sha hashes Snapshot.table/ti … |
 
-**In-window result** (run 049, book 2001–2021, pre-refresh bytes). At $100M the layer earns 4.08%/yr gross,
-Sharpe 0.856, NW t 3.27. Measured costs are 4.36%/yr: spread 3.39, impact
-0.79, borrow 0.19. Net, it earns -0.29%/yr at Sharpe -0.060; the net Sharpe is
--0.409 at $1B and -0.870 at $5B. One-way turnover is 36.0% a month. Ex-post net β on M is
--0.101 against an ex-ante target of zero. Without the β constraint, net β is -0.135 and gross return is
-4.39%/yr at Sharpe 0.805.
+**In-window result** (run 049, book 2001-01 to 2021-12, pre-refresh bytes). At $100M the layer earns
+4.08%/yr gross, Sharpe 0.856, NW t 3.27. Measured costs are 4.36%/yr:
+spread 3.39, impact 0.79, borrow 0.19. Net, it earns -0.29%/yr at Sharpe
+-0.060; the net Sharpe is -0.409 at $1B and -0.870 at $5B. One-way turnover is 36.0% a
+month. Ex-post net β on M is -0.101 against an ex-ante target of zero. Without the β constraint, net β is
+-0.135 and gross return is 4.39%/yr at Sharpe 0.805. All 33 rows are in
+Appendix B1.
 
-*Table 07_layer049. Construction layer on v14, in-window book 2001-01..2021-12 (252 months), pre-refresh bytes. Source: run 049 result blocks (HARNESS 3561590b660a, LAYER 4b279fc317cd). Costs in %/yr; equal_rank_decile and buffered are the Stage 3 books unhedged under the same cost model.*
+*Table 07a_layer_summary. The construction layer in-window (book 2001-01..2021-12), selected rows; all 33 rows are in Appendix B1 (table 07_layer049). Source: run 049 result blocks (pre-refresh bytes).*
 
-| AUM | variant | gross ann % | gross Sharpe | spread | impact | borrow | total cost | net ann % | net Sharpe | net NW t | one-way turnover % | net beta on M |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| $100M | layer | 4.08 | 0.856 | 3.39 | 0.79 | 0.19 | 4.36 | -0.29 | -0.060 | -0.24 | 36.0 | -0.101 |
-| $100M | layer_eta_0.25 | 4.08 | 0.857 | 3.39 | 0.40 | 0.19 | 3.97 | 0.11 | 0.023 | 0.09 | 36.0 | -0.101 |
-| $100M | layer_eta_1 | 4.08 | 0.857 | 3.39 | 1.58 | 0.19 | 5.16 | -1.08 | -0.227 | -0.90 | 36.0 | -0.101 |
-| $100M | layer_fixed_tier_spread | 4.06 | 0.854 | 0.71 | 0.79 | 0.19 | 1.69 | 2.37 | 0.502 | 1.94 | 36.0 | -0.101 |
-| $100M | layer_exec_half_month | 2.98 | 0.662 | 3.39 | 0.79 | 0.19 | 4.36 | -1.38 | -0.308 | -1.22 | 36.0 | -0.099 |
-| $100M | layer_tiered_borrow | 4.08 | 0.856 | 3.39 | 0.79 | 0.89 | 5.06 | -0.99 | -0.208 | -0.82 | 36.0 | -0.101 |
-| $100M | layer_no_buffer | 6.38 | 1.068 | 8.42 | 2.79 | 0.24 | 11.45 | -5.07 | -0.843 | -3.39 | 90.7 | -0.114 |
-| $100M | layer_no_beta_constraint | 4.39 | 0.805 | 3.33 | 0.77 | 0.19 | 4.29 | 0.10 | 0.018 | 0.07 | 35.5 | -0.135 |
-| $100M | layer_dollar_neutral_only | 4.43 | 0.820 | 3.31 | 0.75 | 0.19 | 4.25 | 0.18 | 0.034 | 0.13 | 34.9 | -0.127 |
-| $100M | equal_rank_decile | 12.52 | 0.793 | 12.65 | 7.56 | 0.25 | 20.47 | -7.95 | -0.507 | -2.02 | 117.7 | -0.454 |
-| $100M | buffered | 11.27 | 0.736 | 8.40 | 4.38 | 0.25 | 13.04 | -1.77 | -0.116 | -0.47 | 77.9 | -0.474 |
-| $1000M | layer | 4.08 | 0.857 | 3.38 | 2.45 | 0.19 | 6.01 | -1.93 | -0.409 | -1.63 | 35.9 | -0.101 |
-| $1000M | layer_eta_0.25 | 4.08 | 0.857 | 3.38 | 1.22 | 0.19 | 4.79 | -0.71 | -0.150 | -0.59 | 35.9 | -0.101 |
-| $1000M | layer_eta_1 | 4.09 | 0.857 | 3.38 | 4.91 | 0.19 | 8.47 | -4.39 | -0.927 | -3.73 | 36.0 | -0.101 |
-| $1000M | layer_fixed_tier_spread | 4.07 | 0.856 | 0.71 | 2.45 | 0.19 | 3.34 | 0.73 | 0.156 | 0.61 | 35.9 | -0.101 |
-| $1000M | layer_exec_half_month | 2.98 | 0.662 | 3.38 | 2.45 | 0.19 | 6.01 | -3.03 | -0.678 | -2.72 | 35.9 | -0.098 |
-| $1000M | layer_tiered_borrow | 4.08 | 0.856 | 3.38 | 2.45 | 0.89 | 6.72 | -2.64 | -0.559 | -2.23 | 35.9 | -0.101 |
-| $1000M | layer_no_buffer | 6.23 | 1.046 | 8.30 | 8.10 | 0.23 | 16.63 | -10.40 | -1.705 | -6.83 | 89.2 | -0.113 |
-| $1000M | layer_no_beta_constraint | 4.39 | 0.804 | 3.33 | 2.40 | 0.19 | 5.91 | -1.52 | -0.280 | -1.14 | 35.4 | -0.136 |
-| $1000M | layer_dollar_neutral_only | 4.43 | 0.820 | 3.30 | 2.34 | 0.19 | 5.83 | -1.40 | -0.257 | -0.99 | 34.8 | -0.126 |
-| $1000M | equal_rank_decile | 12.52 | 0.793 | 12.77 | 24.28 | 0.25 | 37.30 | -24.78 | -1.587 | -6.37 | 118.7 | -0.446 |
-| $1000M | buffered | 11.27 | 0.736 | 8.45 | 13.98 | 0.25 | 22.68 | -11.41 | -0.754 | -3.08 | 78.4 | -0.470 |
-| $5000M | layer | 3.79 | 0.819 | 3.20 | 4.43 | 0.18 | 7.81 | -4.02 | -0.870 | -3.49 | 34.1 | -0.097 |
-| $5000M | layer_eta_0.25 | 3.78 | 0.818 | 3.20 | 2.21 | 0.18 | 5.59 | -1.81 | -0.393 | -1.56 | 34.1 | -0.097 |
-| $5000M | layer_eta_1 | 3.82 | 0.822 | 3.21 | 8.88 | 0.18 | 12.27 | -8.46 | -1.800 | -7.22 | 34.2 | -0.098 |
-| $5000M | layer_fixed_tier_spread | 3.78 | 0.818 | 0.66 | 4.42 | 0.18 | 5.26 | -1.48 | -0.324 | -1.29 | 34.1 | -0.097 |
-| $5000M | layer_exec_half_month | 2.78 | 0.630 | 3.20 | 4.43 | 0.18 | 7.81 | -5.04 | -1.144 | -4.64 | 34.1 | -0.094 |
-| $5000M | layer_tiered_borrow | 3.79 | 0.820 | 3.20 | 4.43 | 0.86 | 8.49 | -4.70 | -1.017 | -4.08 | 34.1 | -0.097 |
-| $5000M | layer_no_buffer | 5.37 | 0.985 | 7.18 | 11.85 | 0.22 | 19.25 | -13.89 | -2.473 | -9.91 | 77.6 | -0.103 |
-| $5000M | layer_no_beta_constraint | 4.17 | 0.783 | 3.16 | 4.38 | 0.18 | 7.72 | -3.55 | -0.667 | -2.73 | 33.7 | -0.133 |
-| $5000M | layer_dollar_neutral_only | 4.25 | 0.816 | 3.16 | 4.33 | 0.19 | 7.68 | -3.43 | -0.652 | -2.53 | 33.3 | -0.119 |
-| $5000M | equal_rank_decile | 12.52 | 0.793 | 13.02 | 56.14 | 0.25 | 69.42 | -56.90 | -3.345 | -11.87 | 121.0 | -0.428 |
-| $5000M | buffered | 11.27 | 0.736 | 8.55 | 31.83 | 0.25 | 40.63 | -29.36 | -1.908 | -7.65 | 79.3 | -0.463 |
+| row | gross ann % | gross Sharpe | total cost %/yr | net ann % | net Sharpe | one-way turnover % | net beta on M |
+|---|---|---|---|---|---|---|---|
+| layer @ $100M | 4.08 | 0.856 | 4.36 | -0.29 | -0.060 | 36.0 | -0.101 |
+| layer @ $1000M | 4.08 | 0.857 | 6.01 | -1.93 | -0.409 | 35.9 | -0.101 |
+| layer @ $5000M | 3.79 | 0.819 | 7.81 | -4.02 | -0.870 | 34.1 | -0.097 |
+| layer_fixed_tier_spread @ $100M | 4.06 | 0.854 | 1.69 | 2.37 | 0.502 | 36.0 | -0.101 |
+| layer_no_beta_constraint @ $100M | 4.39 | 0.805 | 4.29 | 0.10 | 0.018 | 35.5 | -0.135 |
+| equal_rank_decile @ $100M | 12.52 | 0.793 | 20.47 | -7.95 | -0.507 | 117.7 | -0.454 |
+
+**The regime cuts (D7 item 3; manifest v14 `construction_layer.cuts`, run 049).** The D5 rule gave the declared ex-years;
+the first precedes the book, so the effective cut removes 2001, 2021. Without them the layer's net Sharpe is
+-0.370 (gross 0.647). In 2011–2020 it earned 0.95%/yr gross, Sharpe
+0.222, and net Sharpe -0.559. **The gross return also faded after 2002.** It was
++23.6% in 2001 and +20.3% in 2002 (net +15.8 and +14.0). Over 2003–2020 it compounds to
++37.7% gross, about 1.79%/yr geometric (1.96%/yr arithmetic), and -36.1%
+net (run 049 annual returns). The manifest's character line reads: "2003-2020 compounds to -36% net (+38% gross, 1.9%/yr)".
 
 **Costs exceed the information, and the identity shows by how much.** Net and gross vol are close, so net Sharpe equals
 gross Sharpe × (1 − cost/gross) to within 0.005 on every $100M row (table 07b). The layer is negative net
@@ -706,8 +713,8 @@ whenever measured costs exceed the gross return. The equal-weight decile book ea
 | buffered | 0.736 | 1.157 | -0.116 | -0.116 | +0.000 | 15.30 | 15.24 |
 
 **Risk model.** Ex-ante vol averages 1.97% a year against 4.78% realised. The bias statistic is
-2.58, inside the band in 20.5% of windows (run 049). Over the 1999–2026 book of run 057 it is
-3.12. The risk model underpredicts by more than a factor of two.
+2.58, inside the band in 20.5% of windows (run 049). Over run 057's book (2001-01..2026-09,
+309 months) it is 3.12. The risk model underpredicts by more than a factor of two.
 
 **Spread.** The measured Corwin-Schultz half-spread implies 39.2 bp per unit traded. The fixed-tier
 alternative implies 8.3 bp (manifest v14 `construction_layer.trading`), with spread coverage
@@ -716,10 +723,11 @@ averaging. That biases measured spreads up for liquid names, so the true cost li
 fixed-tier rows (manifest v14 `construction_layer.character`). The fixed-tier row is net positive in-window at $100M
 (Sharpe 0.502). No run measures which spread is right.
 
-**"Negative net of measured costs" holds for the declared layer row (`layer@100M/1000M/5000M` negative in runs 049 and
-057, both windows: yes), not for every row.**
-9 rows are net positive: 4 use the fixed-tier spread, and 5 are $100M
-sensitivity rows with measured spreads and net Sharpe of at most 0.058. None is positive out of sample (0 rows).
+**"Negative net of measured costs" holds for the declared layer row, not for every row.** The `layer` row is net
+negative at $100M, $1B and $5B in run 049 and in both windows of run 057; the build asserts it. 9
+other rows are net positive: 4 use the fixed-tier spread, and 5 are $100M sensitivity
+rows with measured spreads and net Sharpe of at most 0.058. None is positive out of sample
+(0 rows).
 
 *Table 07e_layer_positive_net_rows. Every construction-layer row with a positive net Sharpe. Source: runs 049 (`net_sharpe`), 057 (`cut_inwindow_net_sharpe`, `cut_holdout_net_sharpe`), all 33 variants each; `half_spread_mode` from the block.*
 
@@ -748,49 +756,55 @@ $100M (run 057 `cut_inwindow_*`).
 
 ## 8. Out of sample
 
-The holdout was spent once, on 2026-10-02, on v14 with DATA 42587e08609a and the frozen layer (runs 054–057). The owner
-answered stop-and-ask 5 with "Yes". The canonical read is run 054 `cut_holdout_*`. In that run the hedge β is
-estimated continuously across the 2021-12/2022-01 boundary. Run 055 (`--holdout-only`) is the cross-check. Its first
-months run unhedged (β = 0, 45 hedged months), and it reports the deciles, tiers and ex-top-3 rows that
-054's cut does not print. Run 054's in-window cut equals run 053 on 20 of 20 shared fields.
+The holdout was spent once, on 2026-10-02, on v14 with DATA 42587e08609a and the frozen layer (runs 054–057). The
+owner answered stop-and-ask 5 with "Yes". The canonical read is run 054 `cut_holdout_*`. In that run the hedge
+β is estimated continuously across the 2021-12/2022-01 boundary. Run 055 (`--holdout-only`) is the cross-check. Its
+first months run unhedged (β = 0; 45 hedged months), and it reports the deciles, tiers and ex-top-3
+rows that 054's cut does not print. Run 054's in-window cut equals run 053 on 20 of 20 shared fields.
 
 **The expectations, verbatim** (decision holdout_expectations_v14_spend_snapshot, logged 2026-10-02T00:14:32Z; the first holdout
 run started 2026-10-02T01:09:09Z):
 
 > Rule: D8 reads the holdout against the live version's in-window figures on the spend snapshot. On DATA 42587e08609a (run 053, in-window 1999-2021, v14): hedged LS Sharpe 0.9964 (ann 16.34%); ex-top-3-years Sharpe 0.6665 (2000, 2001, 2021); excess-of-rf hedged Sharpe 0.9285 (ann 15.09%); excess ex-top-3-years Sharpe 0.6045; mean IC 0.0389 full window, 0.0283 second half (benchmark the holdout IC against the second half); raw Sharpe 0.7902; layer run 049 net Sharpe -0.06 @100M (old bytes, measured CS). The run-042 expectations stay as history. Written before any out-of-sample number; no bar.
 
-*Table 08_vs_expectation. The holdout against the expectations written before it. Source: MODEL_MANIFEST.yaml v14 `holdout.vs_expectation` (= events `holdout_spent` vs_expectation); expectations from decision holdout_expectations_v14_spend_snapshot.*
+*Table 08_vs_expectation. The holdout against the expectations written before it. Metrics and sources from MODEL_MANIFEST.yaml v14 `holdout.vs_expectation` (= events `holdout_spent`); values re-read from the named run blocks (run 053; run 054 `cut_holdout_*`; run 055; runs 049 and 057 for the layer) at the paper's precision, and checked against the manifest's rounded values. Expectations from decision holdout_expectations_v14_spend_snapshot.*
 
 | metric | in-window expectation (run 053 unless noted) | holdout | holdout source |
 |---|---|---|---|
-| hedged_sharpe | 0.9964 | 0.5233 | 054 |
+| hedged_sharpe | 0.996 | 0.523 | 054 |
 | hedged_ann_return_pct | 16.34 | 10.81 | 054 |
 | hedged_ls_t_nw | 3.96 | 1.18 | 054 |
-| ex_top3_hedged_sharpe | 0.6665 | -0.5717 | 055 only (054 cut prints none); top years 2022,2024,2026 = 3 of 5 calendar years |
-| excess_sharpe | 0.9285 | 0.413 | 054 |
+| ex_top3_hedged_sharpe | 0.666 | -0.572 | 055 only (054 cut prints none); top years 2022,2024,2026 = 3 of 5 calendar years |
+| excess_sharpe | 0.928 | 0.413 | 054 |
 | excess_ann_return_pct | 15.09 | 8.54 | 054 |
-| excess_ex_top3_sharpe | 0.6045 | -0.7084 | 054; top years 2022,2024,2026 |
+| excess_ex_top3_sharpe | 0.605 | -0.708 | 054; top years 2022,2024,2026 |
 | rf_credit_pp | -1.25 | -2.26 | 054 |
-| ic_mean | 0.0389 | 0.03 | 054; vs second-half benchmark 0.0283 |
+| ic_mean | 0.0389 | 0.0300 | 054; vs second-half benchmark 0.0283 |
 | ic_t_nw | 5.68 | 1.87 | 054 |
-| raw_sharpe | 0.7902 | 0.1239 | 054 (= 055) |
+| raw_sharpe | 0.790 | 0.124 | 054 (= 055) |
 | raw_ann_return_pct | 14.91 | 3.01 | 054 (= 055) |
 | hedged_maxdd_pct | -43.23 | -35.65 | 054 |
-| layer_net_sharpe_100M | -0.06 | -0.367 | 057 layer@100M; expectation is run 049 on the old bytes (057 in-window restates it to -0.022) |
+| layer_net_sharpe_100M | -0.060 | -0.367 | 057 layer@100M; expectation is run 049 on the old bytes (057 in-window restates it to -0.022) |
 
 **What held.** The mean IC, 0.0300, is 77% of the full in-window mean and above the second-half
-benchmark 0.0283. At NW t 1.87 on 57 months it is not significant at conventional levels.
+benchmark 0.0283. At NW t 1.87 on 57 months the one-sided p is about 0.030: not significant
+two-sided (p ≈ 0.061), and below the 2.5 Stage 1 bar.
 
 **What did not.**
 
-- *Concentration.* 2022 alone has IC +0.105 and a hedged return of +60.0%. The holdout-only IC halves are
-  0.0567 and 0.0043 (run 055).
+- *The declared headline.* The hedged D10−D1 earned 10.81%/yr, Sharpe 0.523, NW t 1.18 (run 054),
+  against an expected 16.34%/yr, Sharpe 0.996, NW t 3.96 (run 053). Beside it, the raw spread earned
+  3.01%/yr (Sharpe 0.124) and the excess series 8.54%/yr (Sharpe 0.413).
+- *Concentration.* 2022 alone has IC +0.105 (run 054) and a hedged return of +60.0% (run 056
+  equal_rank_decile, the same series as run 054's cut). The holdout-only IC halves are 0.0567 and
+  0.0043 (run 055).
 - *Decile shape.* In the holdout D1 earns 0.406%/mo, and D2 to D10 sit flat between 0.629 and
   0.712 (run 055; table 06b). The spread is the short bottom decile only.
-- *Drawdown.* The raw maximum drawdown of the whole 1999–2026 record, -51.84% (run 054), falls in the holdout.
+- *Drawdown.* The raw maximum drawdown of the whole 1999–2026 record, -51.84% (run 054), falls in the
+  holdout.
 - *The ex-top-3 diagnostic is mechanical here.* The holdout spans 5 calendar years. Removing the top
-  3 (2022,2024,2026) leaves 2, both negative. The resulting Sharpes (-0.57
-  hedged, run 055; -0.71 excess, run 054) carry no regime information.
+  3 (2022,2024,2026) leaves 2, both negative. The resulting Sharpes (-0.572
+  hedged, run 055; -0.708 excess, run 054) carry no regime information.
 
 *Table 08b_holdout_years. The holdout by calendar year (2026 is January-September). Sources: research/results/054_*_summary.md `annual IC`; run 056 equal_rank_decile `annual_returns_pct`; run 057 layer@100M `annual_gross_returns_pct`, `annual_net_returns_pct`.*
 
@@ -810,20 +824,22 @@ benchmark 0.0283. At NW t 1.87 on 57 months it is not significant at conventiona
 | MID | 0.040400 | 0.126000 |
 | SMALL | 0.033100 | 0.209000 |
 
-**The hedge lagged.** The ex-ante β averaged -0.549 over the holdout (run 054); the raw spread's realised β
-was -0.836 (run 055), with the last ex-ante estimate at -1.108. In-window the two agreed
-(-0.540 and -0.556, run 053). The trailing 36-month estimate under-hedged by about 0.29
-of market in a rising market. The hedged series is thus neither the raw book nor a neutral one. The hedge term was
-7.79 pp/yr: 10.81%/yr hedged against 3.01%/yr raw. The rf credit was
--2.26 pp/yr (in-window -1.25), and the excess series earned 8.54%/yr at Sharpe 0.41 (run 054). The cross-check
-(run 055), which left 2022 unhedged, shows a hedged Sharpe of 0.584 and an identical IC and raw return.
+**The hedge lagged, and the lag cost return.** The ex-ante β averaged -0.549 over the holdout (run 054). The
+raw spread's realised β was -0.836 (run 055), and the last ex-ante estimate was -1.108. In-window the
+two agreed (-0.540 and -0.556, run 053). The trailing 36-month estimate under-hedged by
+about 0.29 of market, so the hedged series stayed net short in a mostly rising market (bull months
+45, bear months 12; manifest, run 054). That depressed the hedged return; it is neither the raw book
+nor a neutral one. What flattered the hedged return mechanically is the rf credit, -2.26 pp/yr (in-window
+-1.25). The excess series, which removes it, earned 8.54%/yr at Sharpe 0.413, NW t
+0.93 (run 054). The cross-check (run 055) left the first year unhedged. It shows a hedged Sharpe of 0.584,
+with the same IC and raw return.
 
 *Table 08d_beta. The hedge beta against the realised beta. Sources as named per row.*
 
 | quantity | source field | value |
 |---|---|---|
 | ex-ante beta, mean over holdout months | run 054 cut_holdout_ls_beta_mean | -0.549 |
-| ex-ante beta, mean (beta = 0 in 2022) | run 055 ls_beta_mean | -0.504 |
+| ex-ante beta, mean over the 45 hedged months of the holdout-only run | run 055 ls_beta_mean | -0.504 |
 | realised beta of the raw LS, holdout | run 055 ls_beta_fullwindow | -0.836 |
 | ex-ante beta, last month | run 054 ls_beta_last | -1.108 |
 | ex-ante beta, mean in-window | run 053 ls_beta_mean | -0.540 |
@@ -831,8 +847,8 @@ of market in a rising market. The hedged series is thus neither the raw book nor
 | layer@$100M net beta on M, holdout | run 057 cut_holdout_net_beta_on_market | -0.186 |
 | layer@$100M net beta on M, in-window | run 057 cut_inwindow_net_beta_on_market | -0.098 |
 
-**The investable book.** At $100M the layer earned 0.74%/yr gross, Sharpe 0.10. Costs
-of 3.40%/yr left -2.66%/yr net, Sharpe -0.37 (run 057).
+**The investable book.** At $100M the layer earned 0.74%/yr gross, Sharpe 0.101. Costs
+of 3.40%/yr left -2.66%/yr net, Sharpe -0.367 (run 057).
 
 *Table 08e_layer_holdout. The construction layer in the holdout (57 months). Source: run 057 `cut_holdout_*` fields.*
 
@@ -852,10 +868,10 @@ of 3.40%/yr left -2.66%/yr net, Sharpe -0.37 (run 057).
 | $5000M | equal_rank_decile | 3.01 | 0.124 | 45.75 | -42.73 | -1.759 | -0.822 |
 
 **Gaps in the spend, disclosed rather than repaired.** D8 step 4 asked for Stage 3 to be read from its holdout cuts.
-Run 056's Stage 3 blocks carry none (process_finding stage3_holdout_cuts_absent). The only Stage 3 evidence for 2022–2026
-is therefore the calendar-year returns below and the 1999–2026 full-window statistics. Run 055 is flagged by the harness's
-own minimum-sample rule: "Only 57 usable months (minimum 120). INCONCLUSIVE, not a rejection — a thin sample is a coverage problem." Its decile-collapse warning is the same floor applied to a 57-month window,
-with the long-short present in every month.
+Run 056's Stage 3 blocks carry none (process_finding stage3_holdout_cuts_absent). The only Stage 3 evidence for the
+holdout is therefore the calendar-year returns below and the 1999–2026 full-window statistics. Run 055 is flagged by the
+harness's own minimum-sample rule: "Only 57 usable months (minimum 120). INCONCLUSIVE, not a rejection — a thin sample is a coverage problem." Its decile-collapse warning is the same floor applied to a
+57-month window, with the long-short present in every month.
 
 *Table 08f_stage3_holdout. Stage 3 variants in the spend run. Run 056 printed no holdout cut (process_finding stage3_holdout_cuts_absent), so only the 1999-2026 full-window statistics and the printed calendar-year hedged returns exist. Source: run 056 result blocks.*
 
@@ -868,21 +884,22 @@ with the long-short present in every month.
 | vol_targeted | 0.822 | 0.599 | -0.33 | +21.5 | -4.9 | -0.2 | -8.0 | +7.9 |
 
 **What the holdout can and cannot test (D2).** The block is a clean test of factor selection. Every candidate was
-screened fresh on this snapshot, and no 2022+ month entered any decision. It is not an unbiased test of the construction
-changes (within-sector ranks, the hedge, the diagnostics). Those were motivated by a study, made before this project, that
-read 2023–2026 data. The owner chose this overlap knowingly. The holdout can confirm or refute the selected composite. It
-cannot say whether the hedge and the sector ranking would have been chosen without seeing those years.
+screened fresh on this snapshot, and no month after 2021-12-31 entered any decision. It is not an unbiased test of the
+construction changes (within-sector ranks, the hedge, the diagnostics). Those were motivated by a study, made before this
+project, that read 2023–2026 data. The owner chose this overlap knowingly. The holdout can confirm or refute the
+selected composite. It cannot say whether the hedge and the sector ranking would have been chosen without seeing those
+years.
 
 ## 9. Integrity
 
-**Alpha reviews.** There were 23 adversarial audits: 20 on translated batches in Phase A,
-then the STreversal residual-share trigger, the D7 layer and the whole model before the holdout. They found
-1 critical issue, a missing history gate on PriceDelayRsq, fixed before any screen. The Phase A majors
-were fixed before any screen, and the D7 review's major before the first layer number. The whole-model review's two
-majors were answered by a diagnostic (the skip1 run 051) and by the choice of the holdout IC benchmark (the second
+**Alpha reviews.** There were 23 adversarial audits: 20 on translated batches in
+Phase A, then the STreversal residual-share trigger, the D7 layer and the whole model before the holdout. They found
+1 critical issue, a missing history gate on PriceDelayRsq, fixed before any screen. The Phase A
+majors were fixed before any screen, and the D7 review's major before the first layer number. The whole-model review's
+two majors were answered by a diagnostic (the skip1 run 051) and by the choice of the holdout IC benchmark (the second
 half).
 
-*Table 09_alpha_reviews. Every alpha-reviewer audit. Source: events `alpha_review` (finding lists counted).*
+*Table 09_alpha_reviews. Every alpha-reviewer audit. Source: events `alpha_review` (finding lists counted). Timestamps on events rows 219-419 are sequence estimates, not clock readings (finding_corrected events_ts_estimated, events_ts_estimated_row); their true bound is the commit that first carries them.*
 
 | events line | ts | target | findings by severity | verdict |
 |---|---|---|---|---|
@@ -910,97 +927,38 @@ half).
 | 1069 | 2026-10-01T17:14:30Z | 41edba9 D7 construction layer | major 1, medium 1, low 5 | fix first |
 | 1084 | 2026-10-01T19:44:00Z | whole model v14 (19 legs, composite.py) before stop-and-ask 3/5 | critical 0, major 2, minor 4 | clean to take to the owner |
 
-**Process findings.** There are 31 process findings. 6 of them concern text that
-refers to another project. Three removed or annotated passages in design documents that had carried another project's outcome or
-measurement: a caveat in `docs/CONSTRUCTION.md`, a clause in D7, and a restatement figure in D8. The record text of those
-rows is not reproduced here. Other entries:
+**Process findings.** There are 31 process findings (Appendix B2). 6 of them
+concern text that refers to another project: book_equity_preferred_terms, scratchpad_glob_other-project_names, leak_sweep_phase_d_close, construction_md_other-project_caveat, d7_other-project_outcome_clause, d8_other-project_restatement_figure. Their record text is not reproduced; the clauses that name
+the other project are omitted and pointed to by events line.
+
+- book_equity_preferred_terms: field-map notes cited a ruling logged only in another project's event log; the ruling was
+  re-made here on its own terms.
+- scratchpad_glob_other-project_names: a fetcher's directory listing showed another project's scratch folder names.
+  Nothing was opened or cited, and later prompts named their own folder.
+- leak_sweep_phase_d_close: the grep sweep at the D-to-E boundary. Its hits were project provenance and one
+  data-construction parity note; no predictor's outcome elsewhere was cited, and no action was needed.
+- construction_md_other-project_caveat, d7_other-project_outcome_clause and d8_other-project_restatement_figure: three
+  passages in design documents (`docs/CONSTRUCTION.md`, D7, D8) that carried another project's outcome or measurement.
+  The first was removed; the D7 and D8 decisions were annotated with dated governing notes, and their text was left
+  as dated.
+
+The only CONFIG move (events line 10, Appendix B7) has one clause omitted for the same reason. It records D11: the Stage 1
+spread bar reads the raw series, the config schema moved, bars and levels were unchanged, and no run existed.
+
+Other entries:
 
 - The v1 tag is mis-pointed (tag_v1_mispointed): `v1-add-PctAcc` annotates 2e37d4b, not the v1 commit 0d52a33. Tags
   are never moved, so the owner decides (Appendix A6).
 - Two of the whole-model review's minors: current SIC, sector and exchange labels are used historically (a declared D3
-  limitation), and a weekend print after the signal date was possible. The second it was checked (verification_completed
-  weekend_print_after_signal_asof) and found 0 affected months in-window.
+  limitation), and a weekend print after the signal date was possible. The weekend print was then checked
+  (verification_completed weekend_print_after_signal_asof), and no in-window month was affected.
 - The session permission classifier refused one subagent action, the v12 apply. The record reads: "factor-evaluator step 1 for v12 (git mv factors/candidates/zerotrade6M.py -> factors/accepted/ plus the factors/composite.py edit) was refused by the session permission classifier; repo unchanged, no stamp moved, no run started".
-  The coordinator did not route around the refusal and waited for the owner, who then authorised the coordinator to perform the moves
-  (research/CHANGELOG.md).
+  The coordinator did not route around the refusal and waited for the owner, who then authorised the coordinator to
+  make the moves and composite edits (docs/JOURNAL.md, research/CHANGELOG.md; table 10f).
 
-*Table 09b_process_findings. Every process_finding. Source: events `process_finding` (text truncated at 200 characters; ids with the other project's name have that word masked as `other-project`; text that refers to another project is omitted and pointed to by line).*
-
-| events line | date | subject / id | note or action (record text) |
-|---|---|---|---|
-| 2 | 2026-09-30 | field_map_verification_reset | a verification from another snapshot is a mapping, not a proof (LESSONS 25) |
-| 14 | 2026-09-30 | unregistered_event_types | added both to KNOWN_EVENTS and RECORDS.md; scripts/ is outside HARNESS_SHA; check OK |
-| 23 | 2026-09-30 | phase_gate_baseline_stage2 | latent: once candidate files exist before Stage 1 rows (Phase A/B) check will DRIFT falsely; gate should skip baseline runs. scripts/ outside HARNESS_SHA; not fixed here |
-| 24 | 2026-09-30 | frontier_masks_osap_Investment | osap_frontier counts rows by filename; should use osap_acronym for status baseline. Phase A would skip Investment; its candidate file would also collide with the leg row name |
-| 48 | 2026-09-30 | missing_item_rule_applied | rule applied as written: infeasible unless OSAP zero-fills; no per-predictor substitution (ppnenet for ppegt) adopted |
-| 62 | 2026-09-30 | book_equity_preferred_terms | adopted here: a missing preferred term that only adjusts book equity -> approx (equity (+taxliabilities), preferred not removed), consistent with the v0 Value leg; a signal that IS preferred stock sta … |
-| 63 | 2026-09-30 | AnnouncementReturn_date_source | option B: code-22 8-K dates only, no datekey fallback (a filing-date return is a different event); 67 of 276 months null, all in the first half |
-| 64 | 2026-09-30 | field_map_dc_gloss | zero-fill applies either way; gloss correction owed to the field-checker at batch 02 |
-| 80 | 2026-09-30 | BPEBM_orientation_fixed_before_preflight | set ascending=False before any preflight or screen; no number existed |
-| 115 | 2026-09-30 | sf1_netincdis_sign_inverted | known_trap added to field_map.yaml; CF ib = netinc + netincdis |
-| 132 | 2026-09-30 | ChAssetTurnover_route | route A (terms dropped, as the logged missing-item rule prescribes); route B (identity reconstruction) not adopted: would null ~20% (financials/REITs) and carry txp inside lco |
-| 184 | 2026-09-30 | tie_rule_change_in_level_signals | standing rule: for a change-in-level signal, names whose level is exactly 0 (or null, where OSAP zero-fills) at BOTH ends are NaN - the zero change is structural, not information; one-end-zero kept. A … |
-| 193 | 2026-09-30 | CoskewACX_truncated_early_windows | nulled: a window opening before the market series is truncated, not OSAP construct; first signal 1999-12 (11 of 276 months) |
-| 235 | 2026-09-30 | debt_gate_unapplied | gate added to all five (debtc notna at every date read); inputs list SF1.debtc; re-preflight |
-| 240 | 2026-09-30 | dolvol_history_gate | history_months=2 (price at the month t-2 end), docstring updated |
-| 269 | 2026-09-30 | fieldmap_ib_stale | ib entry remapped to netinc + netincdis, status approx; index rebuilt |
-| 352 | 2026-10-01 | scratchpad_glob_other-project_names | fetcher prompts name their own scratchpad subfolder explicitly; no content reached any record |
-| 448 | 2026-09-30 | asc842_tie_rule_reach | declared in NetDebtFinance; factor-evaluator to read 2019-21 decile bins and within-sector mass for debt-flow candidates at Stage 1 |
-| 469 | 2026-09-30 | commit_swept_inflight_specs | commits stage named spec paths only while fetchers run |
-| 627 | 2026-09-30 | fieldmap_ibq_stale | ibq remapped to netinc + netincdis (approx); index rebuilt; no translated file read ibq as netinccmn |
-| 693 | 2026-09-30 | docs/CONSTRUCTION.md f_bidaskspreadflip | construction layer names f_bidaskspreadflip as its spread source before any V4 screen; BidAskSpread flip qualified in run 003 (\|t\| 2.77). Pre-registration/D7 review owed; not edited |
-| 700 | 2026-09-30 | records_index_raw_ret | fixed in scripts/records.py (outside HARNESS_SHA); RECORDS.md notes ls_top_years_share_pct is undefined when the summed LS is near zero or negative |
-| 833 | 2026-10-01 | shareiss5y_stale_docstring | docstring corrected; no number affected (comment only) |
-| 881 | 2026-10-01 | records_phase_gate_acronym_keys | scripts/records.py passes row file names to phase_gate (outside HARNESS_SHA); no harness or record change |
-| 900 | 2026-10-01 | tag_v1_mispointed | tag not moved or deleted (CLAUDE.md: tags are never moved); manifest v1 git_tag annotated; owner decides whether to delete and recreate it on 0d52a33. Fix: tag only after `git rev-parse HEAD` shows th … |
-| 1020 | 2026-10-01 | v12_apply_permission_denied | not retried by another route; the coordinator does not perform a subagent-denied action; awaiting the owner |
-| 1056 | 2026-10-01 | leak_sweep_phase_d_close | none required |
-| 1064 | 2026-10-01 | construction_md_other-project_caveat | [text omitted: refers to another project; events.jsonl line 1064] |
-| 1070 | 2026-10-01 | d7_other-project_outcome_clause | CONSTRUCTION.md sentence replaced by the design reason; D7 annotated with a dated governing note (decision text not rewritten); docs are unstamped, no SHA moves |
-| 1087 | 2026-10-01 | d8_other-project_restatement_figure | dated governing note added under D8; decision text not rewritten |
-| 1129 | 2026-10-02 | stage3_holdout_cuts_absent | not re-run: the block is spent once (D8); the gap is disclosed in the manifest and the paper |
-
-**Corrections.** 14 findings were corrected append-only. Among them, the timestamps of events rows
-219–419 were estimates rather than clock readings; their true bound is the commit that carries them.
-
-*Table 09c_findings_corrected. Every finding_corrected (append-only corrections). Source: events `finding_corrected` (text truncated at 200 characters).*
-
-| events line | date | subject / id | correction (record text) |
-|---|---|---|---|
-| 7 | 2026-09-30 | bootstrap_stamps | the stamps of the first commit |
-| 30 | 2026-09-30 | v0_early_leg_coverage | a data property of Sharadar's early ART, not a harness defect; affects 3 of 276 signal months. Every ART-flow or 12m-lag candidate inherits it |
-| 81 | 2026-09-30 | events_line77_missing_ts | append-only log; this row carries the timestamp |
-| 98 | 2026-09-30 | AnnouncementReturn_batch02_review_minors | {"a_carry": "_CARRY_MONTHS 6->7 (ages 0-6, matches OSAP), _EVENT_MONTHS 7->8", "b_history_months": "7->1 (window needs ~4 SEP rows; OSAP has no listing-age gate), lookback_months 7->8", "c_dedupe": "1 … |
-| 99 | 2026-09-30 | BPEBM | alpha_review MAJOR: EV floor M+T>=0.05M inverted rationale (M+T<0 = net debt > mcap) and dropped net debt >= 0.95M, the leverage tail; rank scoring makes magnitude moot -> ev.where(ev>0); *usd docstri … |
-| 100 | 2026-09-30 | BMdec | alpha_review MAJOR: BE was latest ART quarter vs ME Dec Y-1 (up to 17m mismatch); OSAP pairs FY Y-1 BE; data_layer.py:628-635 convention -> ARY, reportperiod calendar year = Dec ME year, datekey<=sign … |
-| 165 | 2026-09-30 | batch04: ChInv, ChAssetTurnover, ChEQ, ChInvIA | ["ChInv docstring null-vs-0 rule aligned to code (zero-fill then both-zero->NaN)", "ChInv spurious one-date-null share measured: 0.00% at 1999-12/2008-12/2020-12 (0/1488, 0/1162, 0/1124 scored); Shara … |
-| 420 | 2026-09-30 | events_ts_estimated | rows are not edited (append-only); the true time bound of each of those rows is the author time of the commit that first carries it (git log research/events.jsonl); row order is correct |
-| 421 | 2026-09-30 | events_ts_estimated_row | the estimated-ts range in the previous row starts at row 219 (DelCOL preflight_passed), not row 230 |
-| 757 | 2026-10-01 | research/registry/BidAskSpread.yaml caveat 2 (run 003) | conclusion stands, reason wrong: raw LS is annualised arithmetically (analytics.py:706); the inexactness is the D3 within-sector rank-reversal offset 1/n_s plus qcut ties. Row not edited. |
-| 988 | 2026-10-01 | batch_declared stage2_l3 note: IdioVol3F/MaxRet annual-IC corr | IdioVol3F/MaxRet Stage 1 annual-IC corr is 0.94 (20/23 same sign), not 0.97 (0.97 is IdioVolAHT/MaxRet); NetEquityFinance/XFIN 0.948, ShareIss5Y 0.913 |
-| 1083 | 2026-10-01 | run_049_character_lines | ratio 0.106 (decile) / 0.113 (layer) but buffered 0.145, layer_no_buffer 0.070: gross return concave in turnover, buffer raises return per turnover; spread and borrow scale with leverage, impact (\|dw\| … |
-| 1130 | 2026-10-02 | paper_headline_brief | only the declared `layer` row is negative at every AUM in 049 and 057; nine in-window rows are net positive (4 fixed-tier, 5 $100M measured-spread sensitivities, max 0.058), none out of sample (paper … |
-| 1131 | 2026-10-02 | record_internal_inconsistencies | run_completed runtimes sum to 6.17 h for Phase B; 20 alpha_review events before Phase A closed; run 051 block 0.034550 / -3.064867 (rounding); the paper uses the event fields |
-
-*Table 09d_verifications. Every verification_completed. Source: events `verification_completed` (text truncated at 200 characters).*
-
-| events line | date | subject | detail (record text) |
-|---|---|---|---|
-| 8 | 2026-09-30 | bootstrap | [text omitted: refers to another project; events.jsonl line 8] |
-| 573 | 2026-09-30 | stray post-BME rows in the monthly panel | scratch count over SEP (37.6M rows) and DAILY (33.1M rows) 1997-12..2021-12: 0 rows dated after their calendar month's business month-end; build_monthly_panel's tail(1) therefore always takes a row on … |
-| 704 | 2026-10-01 | hedge_gap_check_before_phase_d | independent rebuild of AM, BMdec, BookLeverage, CBOperProf hedged LS matches run 003 blocks to ~1e-15; beta_t on t-36..t-1 only (look-ahead and stale windows do not match); market proxy = cap-weighted … |
-| 877 | 2026-10-01 | stage2_new_family_blend | drive_stage2 builds trial = cur_meta + [candidate meta]; family_members/blend_family_ranks derive families from the trial metas; tests/test_composite.py::test_a_candidate_opening_a_new_family_gets_a_f … |
-| 1057 | 2026-10-01 | phase_d_close_checks | 15 tags v0..v14; v2..v14 each on its 'ratchet: vN' commit; v1 mis-pointed (open, owner); families.yaml accepted members == composite.families() on all 9 families (19 legs); every passer's registry fam … |
-| 1085 | 2026-10-01 | weekend_print_after_signal_asof | cached monthly panel fb86ececd100, me 1998-12..2021-12: 1,711,671 ID-months, 0 with last SEP date > me; the alpha_review minor does not bite in-window; no logged row affected |
-
-*Table 09e_findings_confirmed. Every finding_confirmed. Source: events `finding_confirmed` (text truncated at 200 characters).*
-
-| events line | date | subject | evidence (record text) |
-|---|---|---|---|
-| 28 | 2026-09-30 | records_py_phase_gate_and_frontier | phase_gate now skips run_started rows with factors/label 'baseline'; osap_frontier matches registry rows on osap_acronym (leg Investment.yaml = AssetGrowth). frontier UNACCOUNTED 206 -> 207, Investmen … |
-| 29 | 2026-09-30 | performance_delisting_count | ACTIONS 1999-01..2022-01: bankruptcyliquidation 2448, regulatorydelisting 507, delisted 13289; run 001 in-universe performance delistings 21. classify_delistings defaults unknown reasons to performanc … |
-| 68 | 2026-09-30 | fundamentals_latest_datekey_staleness | alpha_review batch01 minors 1-2 measured at signals 1999-12, 2003-12, 2008-12, 2013-12, 2018-12, 2021-11: fundamentals() row older than fundamentals_history q_back0 reportperiod 0 of 1790-2610 names e … |
-| 1096 | 2026-10-01 | skip1_return_start_sensitivity | diagnostic, never a bar. v14 close->skip1: IC 0.0389->0.0346 (paired delta -0.0044, NW t -3.07), NW t 5.68->5.16, halves 0.0498/0.0281->0.0421/0.0270, hedged Sharpe 0.983->0.777, raw 0.773->0.655, hed … |
+**Corrections.** 14 findings were corrected append-only (Appendix B3). Among them, the timestamps of
+events rows 219-419 were estimates rather than clock readings; their true bound is the commit that carries them.
+Verifications and confirmed findings are in Appendices B4 and B5.
 
 ## 10. Orchestration
 
@@ -1010,79 +968,20 @@ counts:
 
 - osap-fetcher wrote the predictor specs (207 `spec_written`, one per non-seed predictor);
 - sharadar-field-checker verified fields on this snapshot (27 `fields_verified`);
-- sharadar-translator wrote the factor files (108 `factor_translated`: the 106 screened
+- sharadar-translator wrote the factor files (108 `factor_translated`: the 106
   candidates plus DelDRC, EarnSupBig, translated and then failed preflight);
 - alpha-reviewer audited code (23);
 - factor-evaluator checked provenance and wrote every record (132 `factor_evaluated`).
 
-The runner logged 51 judgment calls as `decision` events. The event log has 1131 rows (table 10d).
+Preflight passes reconcile as follows. There are 105 `preflight_passed` events: 104 single-factor
+events and one for BidAskSpreadFlip. The preflights of AM, Accruals are recorded inside their `factor_translated` events,
+which RECORDS.md treats as an implied pass. The runner logged 51 judgment calls as `decision` events. The
+event log has 1131 rows (Appendix B8).
 
-**Runs.** 57 runs were started and 56 completed. Run 046 was aborted as
-superseded, with no result. The completed runs total 21.9 hours of wall time (`runtime_seconds`). The runtimes
-of runs 003–011 sum to 6.17 h, while docs/JOURNAL.md states 4.9 h for Phase B; the paper uses
-the event field.
-
-*Table 10_runs. Every run. Source: events `run_started` and `run_completed` (runtime_seconds); run 046 has a `run_aborted` event and no runtime.*
-
-| run | label | stage | started (UTC) | runtime s | HARNESS | CONFIG | COMPOSITE | DATA | factors |
-|---|---|---|---|---|---|---|---|---|---|
-| 001 | v0_baseline_stage2 | 2 | 2026-09-30T16:41:59Z | 121.0 | 73a95d352942 | 0d88328d5b10 | f9d9d9d95731 | 198b281de1a0 | baseline |
-| 002 | v0_baseline_stage3 | 3 | 2026-09-30T16:44:54Z | 60.0 | 73a95d352942 | 0d88328d5b10 | f9d9d9d95731 | 198b281de1a0 | baseline |
-| 003 | stage1_b1 | 1 | 2026-09-30T23:16:12Z | 1719.0 | 73a95d352942 | 0d88328d5b10 | f9d9d9d95731 | 198b281de1a0 | 12 factors |
-| 004 | stage1_b2 | 1 | 2026-09-30T23:45:20Z | 1161.0 | 73a95d352942 | 0d88328d5b10 | f9d9d9d95731 | 198b281de1a0 | 12 factors |
-| 005 | stage1_b3 | 1 | 2026-10-01T00:05:13Z | 1219.0 | 73a95d352942 | 0d88328d5b10 | f9d9d9d95731 | 198b281de1a0 | 12 factors |
-| 006 | stage1_b4 | 1 | 2026-10-01T00:25:50Z | 1780.0 | 73a95d352942 | 0d88328d5b10 | f9d9d9d95731 | 198b281de1a0 | 12 factors |
-| 007 | stage1_b5 | 1 | 2026-10-01T00:56:00Z | 5523.0 | 73a95d352942 | 0d88328d5b10 | f9d9d9d95731 | 198b281de1a0 | 12 factors |
-| 008 | stage1_b6 | 1 | 2026-10-01T02:28:31Z | 4016.0 | 73a95d352942 | 0d88328d5b10 | f9d9d9d95731 | 198b281de1a0 | 12 factors |
-| 009 | stage1_b7 | 1 | 2026-10-01T03:35:52Z | 1884.0 | 73a95d352942 | 0d88328d5b10 | f9d9d9d95731 | 198b281de1a0 | 12 factors |
-| 010 | stage1_b8 | 1 | 2026-10-01T04:07:40Z | 2872.0 | 73a95d352942 | 0d88328d5b10 | f9d9d9d95731 | 198b281de1a0 | 12 factors |
-| 011 | stage1_b9 | 1 | 2026-10-01T04:55:59Z | 2044.0 | 73a95d352942 | 0d88328d5b10 | f9d9d9d95731 | 198b281de1a0 | 11 factors |
-| 012 | stage2_l1 | 2 | 2026-10-01T05:52:14Z | 224.0 | 73a95d352942 | 0d88328d5b10 | f9d9d9d95731 | 198b281de1a0 | PctAcc,CBOperProf,ShareIss5Y,cfp,XFIN |
-| 013 | v1_baseline_stage2 | 2 | 2026-10-01T06:09:17Z | 87.0 | 73a95d352942 | 0d88328d5b10 | cbeb16455bf4 | 198b281de1a0 | baseline |
-| 014 | v1_baseline_stage3 | 3 | 2026-10-01T06:11:00Z | 90.0 | 73a95d352942 | 0d88328d5b10 | cbeb16455bf4 | 198b281de1a0 | baseline |
-| 015 | v2_baseline_stage2 | 2 | 2026-10-01T06:20:47Z | 118.0 | 73a95d352942 | 0d88328d5b10 | 8b444636f0a1 | 198b281de1a0 | baseline |
-| 016 | v2_baseline_stage3 | 3 | 2026-10-01T06:22:56Z | 123.0 | 73a95d352942 | 0d88328d5b10 | 8b444636f0a1 | 198b281de1a0 | baseline |
-| 017 | v3_baseline_stage2 | 2 | 2026-10-01T06:30:54Z | 134.0 | 73a95d352942 | 0d88328d5b10 | 73ee92fe0723 | 198b281de1a0 | baseline |
-| 018 | v3_baseline_stage3 | 3 | 2026-10-01T06:33:19Z | 133.0 | 73a95d352942 | 0d88328d5b10 | 73ee92fe0723 | 198b281de1a0 | baseline |
-| 019 | v4_baseline_stage2 | 2 | 2026-10-01T06:41:25Z | 142.0 | 73a95d352942 | 0d88328d5b10 | 3329679c69fb | 198b281de1a0 | baseline |
-| 020 | v4_baseline_stage3 | 3 | 2026-10-01T06:43:58Z | 147.0 | 73a95d352942 | 0d88328d5b10 | 3329679c69fb | 198b281de1a0 | baseline |
-| 021 | v5_baseline_stage2 | 2 | 2026-10-01T06:52:15Z | 154.0 | 73a95d352942 | 0d88328d5b10 | d27916e567f2 | 198b281de1a0 | baseline |
-| 022 | v5_baseline_stage3 | 3 | 2026-10-01T06:55:00Z | 159.0 | 73a95d352942 | 0d88328d5b10 | d27916e567f2 | 198b281de1a0 | baseline |
-| 023 | stage2_l2 | 2 | 2026-10-01T07:03:31Z | 510.0 | 73a95d352942 | 0d88328d5b10 | d27916e567f2 | 198b281de1a0 | GP,ShareIss1Y,MaxRet,roaq,RoE |
-| 024 | v6_baseline_stage2 | 2 | 2026-10-01T07:25:39Z | 163.0 | 73a95d352942 | 0d88328d5b10 | 21a6688ae5d1 | 198b281de1a0 | baseline |
-| 025 | v6_baseline_stage3 | 3 | 2026-10-01T07:28:43Z | 167.0 | 73a95d352942 | 0d88328d5b10 | 21a6688ae5d1 | 198b281de1a0 | baseline |
-| 026 | v7_baseline_stage2 | 2 | 2026-10-01T07:37:50Z | 366.0 | 73a95d352942 | 0d88328d5b10 | 43c92213ae73 | 198b281de1a0 | baseline |
-| 027 | v7_baseline_stage3 | 3 | 2026-10-01T07:44:21Z | 370.0 | 73a95d352942 | 0d88328d5b10 | 43c92213ae73 | 198b281de1a0 | baseline |
-| 028 | v8_baseline_stage2 | 2 | 2026-10-01T07:56:20Z | 391.0 | 73a95d352942 | 0d88328d5b10 | a12e87c5fb36 | 198b281de1a0 | baseline |
-| 029 | v8_baseline_stage3 | 3 | 2026-10-01T08:03:02Z | 399.0 | 73a95d352942 | 0d88328d5b10 | a12e87c5fb36 | 198b281de1a0 | baseline |
-| 030 | v9_baseline_stage2 | 2 | 2026-10-01T08:15:23Z | 405.0 | 73a95d352942 | 0d88328d5b10 | c961f5791816 | 198b281de1a0 | baseline |
-| 031 | v9_baseline_stage3 | 3 | 2026-10-01T08:22:20Z | 411.0 | 73a95d352942 | 0d88328d5b10 | c961f5791816 | 198b281de1a0 | baseline |
-| 032 | stage2_l3 | 2 | 2026-10-01T08:33:18Z | 944.0 | 73a95d352942 | 0d88328d5b10 | c961f5791816 | 198b281de1a0 | OperProfRD,IdioVol3F,NetEquityFinance,CF,STreversal |
-| 033 | v10_baseline_stage2 | 2 | 2026-10-01T09:03:50Z | 603.0 | 73a95d352942 | 0d88328d5b10 | 1b4195ff18b4 | 198b281de1a0 | baseline |
-| 034 | v10_baseline_stage3 | 3 | 2026-10-01T09:14:16Z | 609.0 | 73a95d352942 | 0d88328d5b10 | 1b4195ff18b4 | 198b281de1a0 | baseline |
-| 035 | v11_baseline_stage2 | 2 | 2026-10-01T09:30:29Z | 793.0 | 73a95d352942 | 0d88328d5b10 | 335b06e3d608 | 198b281de1a0 | baseline |
-| 036 | v11_baseline_stage3 | 3 | 2026-10-01T09:44:00Z | 799.0 | 73a95d352942 | 0d88328d5b10 | 335b06e3d608 | 198b281de1a0 | baseline |
-| 037 | stage2_l4 | 2 | 2026-10-01T10:01:37Z | 3081.0 | 73a95d352942 | 0d88328d5b10 | 335b06e3d608 | 198b281de1a0 | 5 factors |
-| 038 | v12_baseline_stage2 | 2 | 2026-10-01T11:25:18Z | 1088.0 | 73a95d352942 | 0d88328d5b10 | 612e59349f40 | 198b281de1a0 | baseline |
-| 039 | v12_baseline_stage3 | 3 | 2026-10-01T11:44:20Z | 1073.0 | 73a95d352942 | 0d88328d5b10 | 612e59349f40 | 198b281de1a0 | baseline |
-| 040 | v13_baseline_stage2 | 2 | 2026-10-01T12:09:19Z | 1805.0 | 73a95d352942 | 0d88328d5b10 | fa17bd1cd37e | 198b281de1a0 | baseline |
-| 041 | v13_baseline_stage3 | 3 | 2026-10-01T12:40:00Z | 1816.0 | 73a95d352942 | 0d88328d5b10 | fa17bd1cd37e | 198b281de1a0 | baseline |
-| 042 | v14_baseline_stage2 | 2 | 2026-10-01T13:16:33Z | 2407.0 | 73a95d352942 | 0d88328d5b10 | 7fe6f001e708 | 198b281de1a0 | baseline |
-| 043 | v14_baseline_stage3 | 3 | 2026-10-01T13:57:21Z | 2405.0 | 73a95d352942 | 0d88328d5b10 | 7fe6f001e708 | 198b281de1a0 | baseline |
-| 044 | stage2_l5 | 2 | 2026-10-01T14:43:48Z | 3757.9 | 73a95d352942 | 0d88328d5b10 | 7fe6f001e708 | 198b281de1a0 | BidAskSpreadFlip,IdioVolAHT,zerotrade1M,NetPayoutYield |
-| 045 | v14_baseline_stage2_harness_471f | 2 | 2026-10-01T17:04:10Z | 2430.0 | 471f70782486 | 0d88328d5b10 | 7fe6f001e708 | 198b281de1a0 | baseline |
-| 046 | v14_baseline_stage3_harness_471f | 3 | 2026-10-01T17:07:15Z | aborted | 471f70782486 | 0d88328d5b10 | 7fe6f001e708 | 198b281de1a0 | baseline |
-| 047 | v14_baseline_stage2_harness_3561 | 2 | 2026-10-01T18:44:13Z | 2421.7 | 3561590b660a | 0d88328d5b10 | 7fe6f001e708 | 198b281de1a0 | baseline |
-| 048 | v14_baseline_stage3_harness_3561 | 3 | 2026-10-01T18:44:13Z | 2428.6 | 3561590b660a | 0d88328d5b10 | 7fe6f001e708 | 198b281de1a0 | baseline |
-| 049 | v14_baseline_construction_layer | layer | 2026-10-01T18:47:31Z | 2473.6 | 3561590b660a | 0d88328d5b10 | 7fe6f001e708 | 198b281de1a0 | baseline |
-| 050 | v14_baseline_stage2_harness_aef4 | 2 | 2026-10-01T21:21:35Z | 2410.4 | aef490297071 | 0d88328d5b10 | 7fe6f001e708 | 198b281de1a0 | baseline |
-| 051 | v14_baseline_skip1_diagnostic | 2 | 2026-10-01T21:21:35Z | 2418.7 | aef490297071 | 0d88328d5b10 | 7fe6f001e708 | 198b281de1a0 | baseline |
-| 052 | v14_baseline_stage2_harness_1271 | 2 | 2026-10-01T23:07:10Z | 3597.4 | 1271266472a9 | 0d88328d5b10 | 7fe6f001e708 | 198b281de1a0 | baseline |
-| 053 | v14_baseline_stage2_d8_refresh | 2 | 2026-10-01T23:27:07Z | 2699.9 | 1271266472a9 | 0d88328d5b10 | 7fe6f001e708 | 42587e08609a | baseline |
-| 054 | v14_baseline_stage2_holdout_include | 2 | 2026-10-02T01:09:09Z | 3004.2 | 1271266472a9 | 0d88328d5b10 | 7fe6f001e708 | 42587e08609a | baseline |
-| 055 | v14_baseline_stage2_holdout_only | 2 | 2026-10-02T01:59:29Z | 637.0 | 1271266472a9 | 0d88328d5b10 | 7fe6f001e708 | 42587e08609a | baseline |
-| 056 | v14_baseline_stage3_holdout_include | 3 | 2026-10-02T02:10:24Z | 3002.5 | 1271266472a9 | 0d88328d5b10 | 7fe6f001e708 | 42587e08609a | baseline |
-| 057 | v14_baseline_layer_holdout_include | layer | 2026-10-02T03:00:42Z | 3088.3 | 1271266472a9 | 0d88328d5b10 | 7fe6f001e708 | 42587e08609a | baseline |
+**Runs.** 57 runs were started and 56 completed (Appendix B6). Run 046 was
+aborted as superseded, with no result. The completed runs total 21.9 hours of wall time (`runtime_seconds`).
+The runtimes of runs 003–011 sum to 6.17 h, while docs/JOURNAL.md states 4.9 h for Phase B; the
+paper uses the event field.
 
 *Table 10b_runtime_by_phase. Run wall time by phase (runs 001-002 bootstrap, 003-011 Phase B, 012-044 Phase D, 045-053 Phase E and D8, 054-057 holdout). Source: events `run_completed` runtime_seconds.*
 
@@ -1094,43 +993,20 @@ the event field.
 | E (D7, D8) | 8 | 5.80 |
 | E (holdout) | 4 | 2.70 |
 
-**Stamp moves.** CONFIG moved once, before any run (1 `config_changed` with a SHA). HARNESS moved
-5 times: once for D11 before any run, twice for D7 and its fixes, once for the skip1 diagnostic and once
-for the rf diagnostic. None of these moves fell inside a declared ladder. DATA moved 2 times (the first
-pull and the D8 refresh). COMPOSITE moved 15 times (v0–v14).
-
-*Table 10c_stamp_moves. Every stamp move. Source: events `harness_changed`, `config_changed`, `snapshot_recorded`, `composite_updated`, and finding_corrected bootstrap_stamps for the first commit (the two bootstrap rows that preceded it carry no SHA).*
-
-| events line | ts (UTC) | event | old | new | reason (record text, truncated at 160) |
-|---|---|---|---|---|---|
-| 7 | 2026-09-30T13:05:45Z | first commit 705d9f9 | HARNESS / CONFIG / COMPOSITE / DATA | e2e0b18a0115 / 1cef53e19e16 / f9d9d9d95731 / nodata | stamps of the first commit (finding_corrected bootstrap_stamps) |
-| 10 | 2026-09-30T16:11:08Z | config_changed | 1cef53e19e16 | 0d88328d5b10 | [text omitted: refers to another project; events.jsonl line 10] |
-| 11 | 2026-09-30T16:11:08Z | harness_changed | e2e0b18a0115 | 73a95d352942 | D11: stage1_checks reads ls_spread_series (default raw) and names the bar row after the series; ls_raw_ann_return_pct required on Stage 1 blocks; records.py ind … |
-| 13 | 2026-09-30T16:41:44Z | snapshot_recorded | nodata | 198b281de1a0 | first pull, full history, 13 tables; verify OK (vocabularies match config: exchanges, categories, 10 delisting actions, ART; marketcap median 712m); live OK col … |
-| 27 | 2026-09-30T16:53:36Z | composite_updated v0 |  | f9d9d9d95731 | runs 001,002 |
-| 899 | 2026-10-01T06:13:22Z | composite_updated v1 |  | cbeb16455bf4 | runs 012,013,014 |
-| 908 | 2026-10-01T06:25:38Z | composite_updated v2 |  | 8b444636f0a1 | runs 012,015,016 |
-| 916 | 2026-10-01T06:36:15Z | composite_updated v3 |  | 73ee92fe0723 | runs 012,017,018 |
-| 924 | 2026-10-01T06:47:03Z | composite_updated v4 |  | 3329679c69fb | runs 012,019,020 |
-| 932 | 2026-10-01T06:58:27Z | composite_updated v5 |  | d27916e567f2 | runs 012,021,022 |
-| 953 | 2026-10-01T07:32:25Z | composite_updated v6 |  | 21a6688ae5d1 | runs 023,024,025 |
-| 961 | 2026-10-01T07:51:16Z | composite_updated v7 |  | 43c92213ae73 | runs 023,026,027 |
-| 969 | 2026-10-01T08:10:20Z | composite_updated v8 |  | a12e87c5fb36 | runs 023,028,029 |
-| 977 | 2026-10-01T08:29:53Z | composite_updated v9 |  | c961f5791816 | runs 023,030,031 |
-| 999 | 2026-10-01T09:25:17Z | composite_updated v10 |  | 1b4195ff18b4 | runs 032,033,034 |
-| 1007 | 2026-10-01T09:58:12Z | composite_updated v11 |  | 335b06e3d608 | runs 032,035,036 |
-| 1028 | 2026-10-01T12:02:46Z | composite_updated v12 |  | 612e59349f40 | runs 037,038,039 |
-| 1036 | 2026-10-01T13:11:19Z | composite_updated v13 |  | fa17bd1cd37e | runs 037,040,041 |
-| 1044 | 2026-10-01T14:38:34Z | composite_updated v14 |  | 7fe6f001e708 | runs 037,042,043 |
-| 1060 | 2026-10-01T17:04:10Z | harness_changed | 73a95d352942 | 471f70782486 | D7 construction layer: (1) sector+market-beta neutrality via a constraint matrix [sector dummies \| beta_i], beta_i trailing 36m on D4's M (min 12, sector-month … |
-| 1071 | 2026-10-01T18:44:13Z | harness_changed | 471f70782486 | 3561590b660a | alpha_review fixes to the D7 layer (layer path only): declared vs effective ex-years fields (2000 precedes book_start; effective 2001,2021); name_cap_excess car … |
-| 1089 | 2026-10-01T21:21:35Z | harness_changed | 3561590b660a | aef490297071 | diagnostic --return-start skip1 (alpha_review major 1): forward return of t+1 based at the first SEP trade of t+1 (within 7 days of the market's first trading d … |
-| 1098 | 2026-10-01T23:07:10Z | harness_changed | aef490297071 | 1271266472a9 | rf diagnostic (owner_stop_and_ask_3_approved): external-table kind in snapshot.py (TB3MS from FRED fredgraph.csv, keyless, frozen in data/sharadar/TB3MS.parquet … |
-| 1104 | 2026-10-01T23:27:07Z | snapshot_recorded | 198b281de1a0 | 42587e08609a | D8 step 1 refresh (owner-approved stop-and-ask 3): 13 Sharadar tables re-pulled full history (SEP 45,393,854 rows to 2026-10-01; 2026-09-30 present with 6,262 n … |
+**Stamp moves** (Appendix B7). CONFIG moved once, before any run (1 `config_changed` with a SHA).
+HARNESS moved 5 times: once for D11 before any run, twice for D7 and its fixes, once for the skip1
+diagnostic and once for the rf diagnostic. None of these moves fell inside a declared ladder. DATA was recorded twice,
+2 `snapshot_recorded` events: the first pull and the D8 refresh. COMPOSITE took
+15 values (v0–v14), so it moved 14 times.
 
 **Advisor and owner.** The event log records 6 advisor consultations: four ladder acceptances, the Phase D
-to E boundary, and the D8 step-2 verdict. `docs/ORCHESTRATION.md` asks for more (every phase boundary). Consultations not
-logged cannot be verified from the record. The owner's inputs are recorded once as a paraphrase and twice verbatim.
+to E boundary, and the D8 step-2 verdict. `docs/ORCHESTRATION.md` asks for more (every phase boundary); consultations not
+logged cannot be verified from the record. The owner's inputs on record are:
+
+- two verbatim answers to stop-and-ask questions, in events;
+- one paraphrased resolution of a rule conflict (D11), in events;
+- the v12 authorisation, recorded only as a paraphrase in docs/JOURNAL.md and research/CHANGELOG.md. The chat message
+  itself is in no record file, so it is not quoted.
 
 *Table 10e_advisor. Advisor consultations recorded in the event log. Source: events with an `advisor` field or 'Advisor consulted' in the decision text.*
 
@@ -1143,57 +1019,15 @@ logged cannot be verified from the record. The owner's inputs are recorded once 
 | 1058 | 2026-10-01T15:57:46Z | phase_e_stage3_is_run_043 | consulted at D->E |
 | 1107 | 2026-10-02T00:14:32Z | d8_step2_restatement_within_margin | consulted |
 
-*Table 10f_owner. The owner's inputs as recorded. Source: events with a `verbatim` field, and rule_conflict_found (resolved_by).*
+*Table 10f_owner. The owner's inputs as recorded. Source: events with a `verbatim` field, rule_conflict_found (resolved_by), and the docs/JOURNAL.md and research/CHANGELOG.md lines that record the v12 authorisation.*
 
-| events line | ts | record | owner's input | form |
+| record | ts | subject | owner's input | form |
 |---|---|---|---|---|
 | 9 | 2026-09-30T16:11:08Z | rule_conflict_found D4_vs_D6_hedged_bars | owner in chat, 2026-09-30: Stage 1 bar reads the raw D10-D1, Stage 2 guard reads the hedged blend; no decile-monotonicity statistic | paraphrase in the record |
 | 1097 | 2026-10-01T21:47:56Z | owner_stop_and_ask_3_approved | "approve both, use TB3MS for rf" | verbatim |
 | 1109 | 2026-10-02T01:09:05Z | owner_stop_and_ask_5_approved | "Yes" | verbatim |
-
-*Table 10d_event_counts. research/events.jsonl by event type (1131 rows).*
-
-| event | count |
-|---|---|
-| spec_written | 207 |
-| factor_evaluated | 132 |
-| factor_translated | 108 |
-| preflight_passed | 105 |
-| factor_infeasible | 71 |
-| run_started | 57 |
-| provenance_verified | 56 |
-| run_completed | 56 |
-| decision | 51 |
-| process_finding | 31 |
-| preflight_failed | 29 |
-| fields_verified | 27 |
-| family_assigned | 24 |
-| alpha_review | 23 |
-| construction_reported | 18 |
-| composite_updated | 15 |
-| registry_rows_written | 15 |
-| batch_closed | 14 |
-| batch_declared | 14 |
-| finding_corrected | 14 |
-| preflight_remeasured | 14 |
-| repository_committed | 10 |
-| harness_changed | 6 |
-| verification_completed | 6 |
-| validation_warning | 5 |
-| finding_confirmed | 4 |
-| phase_completed | 4 |
-| config_changed | 2 |
-| flip_hypothesis_qualified | 2 |
-| snapshot_recorded | 2 |
-| batch_amended | 1 |
-| factor_dropped | 1 |
-| holdout_spent | 1 |
-| inventory_classified | 1 |
-| project_initialized | 1 |
-| repository_initialized | 1 |
-| rule_conflict_found | 1 |
-| run_aborted | 1 |
-| stage2_order_declared | 1 |
+| docs/JOURNAL.md line 59 | 2026-10-01 (Phase D entry) | v12 apply after the permission denial | owner authorised the coordinator to do moves and composite edits | paraphrase; the chat message is not in any record file |
+| research/CHANGELOG.md line 201 |  | v12 apply | Applied by the coordinator (owner-authorised) | paraphrase |
 
 ## 11. Limitations, and what a next pre-registration would change
 
@@ -1201,31 +1035,41 @@ These limitations follow from the record. The proposals describe what would be d
 
 **Limitations.**
 
-- *The hedged headline is not a market-neutral return.* The declared hedge credits β × rf. Its trailing β lagged the
-  holdout's realised β by about 0.29. In both windows the gap between hedged and raw is mostly the hedge
-  term. The raw series and the β-neutral layer are the honest readings.
+- *The hedged headline is not a market-neutral return.* Its hedge term includes the rf credit, which flatters it
+  (-2.26 pp/yr out of sample). Its trailing β lagged the holdout's realised β by about 0.29, which
+  left residual short exposure in a rising market. The raw spread is not neutral either: its realised holdout β is
+  -0.836 (run 055). The corrected readings are the excess-of-rf series (8.54%/yr, Sharpe
+  0.413, NW t 0.93; run 054) and the β-neutral layer (0.74%/yr gross; run 057).
 - *The holdout is short and concentrated.* At 57 months it is below the harness's own 120-month floor.
   One year carries the IC, and the ex-top-3 diagnostic is mechanical on 5 calendar years.
 - *The holdout does not test the construction changes* (D2, Section 8).
+- *The holdout was isolated by rule, not by data* (Section 2). The first snapshot held those months.
 - *Sector labels are current, not point in time* (D3). This touches every leg's rank, and the industry-built predictors
   through current SIC (decision current_sic_signal_values).
-- *The seed legs were never screened.* In-window standalone ICs on the pre-refresh bytes (run 051, signal-close base) are
+- *The seed legs were never screened.* Their in-window standalone ICs (run 051, signal-close base, pre-refresh bytes) are:
   Size -0.0093 (t -1.53), Value 0.0058 (t 0.85), Investment
-  0.0054 (t 1.21) and Momentum 0.0096 (t 1.27); only
-  Profitability (0.0205, t 3.78) would clear the Stage 1 t bar. By pre-registration
-  they anchor five of the nine families, and Size alone is the size family, one ninth of the blend's weight.
+  0.0054 (t 1.21) and Momentum 0.0096 (t 1.27). Only
+  Profitability (0.0205, t 3.78) would clear the Stage 1 t bar. By
+  pre-registration the seeds anchor five of the nine families, and Size alone is the size family.
 - *The family partition was chosen with Stage 1 numbers visible* (decision phase_c_family_partition, disclosed). It was
   fixed before any Stage 2 number.
-- *Multiple testing is controlled only by the bar levels.* About one Stage 1 false pass and about half a Stage 2 false
-  acceptance are expected under the global null (table 03d). No family-wise or false-discovery correction was
+- *Multiple testing is controlled only by the bar levels.* Under the global null about one Stage 1 false pass and about
+  half a Stage 2 false acceptance are expected (table 03d). No family-wise or false-discovery correction was
   pre-registered.
-- *Acceptance-time and spend-snapshot figures differ slightly* (table 02c). Every verdict was taken on the frozen bytes.
+- *Acceptance-time and spend-snapshot figures differ slightly* (table 02c). Every verdict was taken on the frozen bytes;
+  the rungs were not re-run on the refreshed bytes.
 - *Costs.* No cost enters selection. Measured costs exceed the layer's gross return, and the spread measure may overstate
-  costs for liquid names (a judgment, Section 7). The risk model underpredicts by more than a factor of two.
-- *About 11% of the in-window IC arrives on the first trading day* of the holding month (run 051).
-- *Record defects disclosed:* estimated event timestamps on rows 219–419; the mis-pointed v1 tag; the missing Stage 3
-  holdout cuts; the missing tiers and deciles in run 054's holdout cut; the Phase B runtime stated differently in the
-  journal and the events.
+  costs for liquid names (a judgment, Section 7). The risk model underpredicts by more than a factor of two, and the
+  layer's gross return faded after 2002.
+- *About 11% of the in-window IC arrives on the first trading day* of the holding month (run 051,
+  pre-refresh bytes).
+- *Record defects, disclosed:*
+  - estimated event timestamps on rows 219-419;
+  - the mis-pointed v1 tag;
+  - the missing Stage 3 holdout cuts;
+  - the missing tiers and deciles in run 054's holdout cut;
+  - the Phase B runtime, stated differently in the journal and the events;
+  - the skip1 finding text's rounding (Appendix B5).
 
 **Not tested.**
 
@@ -1237,17 +1081,18 @@ These limitations follow from the record. The proposals describe what would be d
 - Any universe outside US common stock on NYSE, NASDAQ and NYSEMKT.
 - Any walk-forward of the selection rules on this snapshot.
 - Any Stage 3 variant's holdout Sharpe.
+- Any re-run of the Stage 2 rungs on the refreshed bytes.
 - Any tuning of the layer after the spend.
 
 **What a next pre-registration would change, described not tuned.**
 
-- Declare the hedge as excess of rf with a β estimate whose tracking is itself reported, or make the raw spread the
-  headline.
+- Declare the hedge as excess of rf, with a β estimate whose tracking error is itself reported.
 - Require every holdout-reading run (Stage 3 and the layer) to emit holdout cuts, and test that before the spend.
+- Hold the holdout months out of the decision snapshot, or record their isolation as a tested property.
 - Use point-in-time sector labels.
 - Screen the seed legs, or justify each.
 - Fix the family partition rule before Stage 1 runs.
-- Declare the return-start convention with the skip1 base as a reported sensitivity.
+- Declare the return-start convention, with the skip1 base as a reported sensitivity.
 - Pre-register a spread measure without the zero floor, and a risk-model calibration check.
 - State the holdout's power before choosing its length.
 - Tag a version only after `git rev-parse HEAD` shows the version commit.
@@ -1663,19 +1508,33 @@ assignments:
 | cnt_preflight_failed | 29 | events preflight_failed count |
 | cnt_preflight_passed | 105 | events preflight_passed count |
 | cnt_spec_written | 207 | events spec_written count |
+| comp_gross | +37.7 | compounded run 049 layer@100M annual_gross_returns_pct 2003-2020 |
+| comp_gross_arith | 1.96 | mean of run 049 annual_gross_returns_pct 2003-2020 |
+| comp_gross_geo | 1.79 | geometric annual rate of comp_gross over 18 years |
+| comp_net | -36.1 | compounded run 049 layer@100M annual_net_returns_pct 2003-2020 |
 | config_sha | 0d88328d5b10 | run 053 block config_sha |
 | cont_n | 20 | run 054 cut_inwindow_* fields with a same-named run 053 field |
 | cont_same | 20 | run 054 cut_inwindow_* fields equal to the run 053 field of the same name |
+| cut_1120_gross | 0.95 | run 049 layer@100M cut_2011_2020_gross_ann_return_pct |
+| cut_1120_gross_sh | 0.222 | run 049 layer@100M cut_2011_2020_gross_sharpe |
+| cut_1120_net_sh | -0.559 | run 049 layer@100M cut_2011_2020_net_sharpe |
+| cut_ex_eff | 2001, 2021 | run 049 layer@100M cut_exyears_effective |
+| cut_ex_gross_sh | 0.647 | run 049 layer@100M cut_exyears_gross_sharpe |
+| cut_ex_net_sh | -0.370 | run 049 layer@100M cut_exyears_net_sharpe |
 | data_sha_1 | 198b281de1a0 | events snapshot_recorded #1 data_sha |
 | data_sha_2 | 42587e08609a | events snapshot_recorded #2 new_data_sha |
 | deny_text | factor-evaluator step 1 for v12 (git mv factors/candidates/zerotrade6M.py -> factors/accepted/ plus the factors/composite.py edit) was refused by the session permission classifier; repo unchanged, no stamp moved, no run started | events process_finding v12_apply_permission_denied evidence |
 | eval_end | 2021-12-31 | config dates.eval_end |
+| eval_end_runs | 52 | runs 001-053 with result blocks |
+| eval_end_set | 2021-12-31 | eval_end over every result block of runs 001-053 |
 | eval_start | 1999-01-01 | config dates.eval_start |
 | families_max | 9 | config search.families_max |
 | fixed_half_spread_bp | 8.3 | manifest v14 construction_layer.trading.fixed_tier_half_spread_bp |
 | flip_bar | 2.74 | CLAUDE.md flip rule \|t\| >= 2.74 |
 | floor_warn | Only 57 usable months (minimum 120). INCONCLUSIVE, not a rejection — a thin sample is a coverage problem. | events validation_warning seq 055 warnings[1] |
-| fmax_reached | v12 | first MODEL_MANIFEST version whose families string has families_max entries |
+| fmax_held | v12 | first MODEL_MANIFEST version whose composite holds families_max families |
+| fmax_opened_by | VolumeTrend | events line 867 family_assigned (first with n_families_after = families_max and new_family) |
+| fmax_opened_ts | 2026-10-01T05:45:32Z | events line 867 family_assigned ts |
 | full054_raw_mdd | -51.84 | run 054 ls_raw_maxdd_pct (1999-2026) |
 | gate_ShareIss5Y | 65 | registry ShareIss5Y history_gate_months |
 | grl_parent_t | 2.75 | events flip_hypothesis_qualified GrLTNOA \|ic_tstat_nw\| |
@@ -1691,6 +1550,7 @@ assignments:
 | ho055_sh | 0.584 | run 055 ls_sharpe |
 | ho_2022_h | +60.0 | 056 equal_rank_decile annual 2022 |
 | ho_2022_ic | +0.105 | 054 summary annual IC 2022 |
+| ho_bear_m | 12 | manifest v14 holdout.holdout_detail.bear_bull.holdout_months_bear_bull_054[0] (trailing-12m market down) |
 | ho_benchmark_h2 | 0.0283 | run 053 ic_half2_mean (decision holdout_expectations_v14_spend_snapshot) |
 | ho_beta_exante | -0.549 | run 054 cut_holdout_ls_beta_mean |
 | ho_beta_exante2 | -0.55 | run 054 cut_holdout_ls_beta_mean |
@@ -1700,17 +1560,19 @@ assignments:
 | ho_beta_last | -1.108 | run 054 ls_beta_last |
 | ho_beta_real | -0.836 | run 055 ls_beta_fullwindow (holdout-only run, 57 months) |
 | ho_beta_real2 | -0.84 | run 055 ls_beta_fullwindow |
+| ho_bull_m | 45 | manifest v14 holdout.holdout_detail.bear_bull.holdout_months_bear_bull_054[1] (trailing-12m market up) |
 | ho_d1 | 0.406 | run 055 decile_avg_ret_pct D1 |
 | ho_d2_d10_max | 0.712 | run 055 decile_avg_ret_pct max of D2..D10 |
 | ho_d2_d10_min | 0.629 | run 055 decile_avg_ret_pct min of D2..D10 |
-| ho_ex3_h | -0.57 | run 055 ls_sharpe_ex_top_years |
-| ho_ex3_x | -0.71 | run 054 cut_holdout_ls_excess_sharpe_ex_top_years |
+| ho_ex3_h | -0.572 | run 055 ls_sharpe_ex_top_years |
+| ho_ex3_x | -0.708 | run 054 cut_holdout_ls_excess_sharpe_ex_top_years |
 | ho_ex_ret | 8.54 | run 054 cut_holdout_ls_excess_ann_return_pct |
-| ho_ex_sh | 0.41 | run 054 cut_holdout_ls_excess_sharpe |
+| ho_ex_sh | 0.413 | run 054 cut_holdout_ls_excess_sharpe |
+| ho_ex_t | 0.93 | run 054 cut_holdout_ls_excess_tstat_nw |
 | ho_first_ts | 2026-10-02T01:09:09Z | events run_started 054 ts |
 | ho_h_mdd | -35.65 | run 054 cut_holdout_ls_maxdd_pct |
 | ho_h_ret | 10.81 | run 054 cut_holdout_ls_ann_return_pct |
-| ho_h_sh | 0.52 | run 054 cut_holdout_ls_sharpe |
+| ho_h_sh | 0.523 | run 054 cut_holdout_ls_sharpe |
 | ho_h_t | 1.18 | run 054 cut_holdout_ls_tstat_nw |
 | ho_ic | 0.0300 | run 054 cut_holdout_ic_mean |
 | ho_ic3 | 0.030 | run 054 cut_holdout_ic_mean |
@@ -1719,14 +1581,18 @@ assignments:
 | ho_ic_share_full | 77 | 100 x run 054 cut_holdout_ic_mean / run 053 ic_mean |
 | ho_ic_t | 1.87 | run 054 cut_holdout_ic_tstat_nw |
 | ho_n | 57 | run 054 cut_holdout_n_months |
+| ho_p1 | 0.030 | one-sided normal p of run 054 cut_holdout_ic_tstat_nw |
+| ho_p2 | 0.061 | two-sided normal p of run 054 cut_holdout_ic_tstat_nw |
 | ho_raw_ret | 3.01 | run 054 cut_holdout_ls_raw_ann_return_pct |
 | ho_raw_ret1 | 3.0 | run 054 cut_holdout_ls_raw_ann_return_pct |
-| ho_raw_sh | 0.12 | run 054 cut_holdout_ls_raw_sharpe |
+| ho_raw_sh | 0.124 | run 054 cut_holdout_ls_raw_sharpe |
 | ho_rf_credit | -2.26 | run 054 cut_holdout_ls_rf_credit_pp |
+| ho_top_ic_year | 2022 | year of the largest holdout annual IC (054 summary) |
 | ho_top_years | 2022,2024,2026 | run 054 cut_holdout_ls_excess_top_years |
 | hx_text | Rule: D8 reads the holdout against the live version's in-window figures on the spend snapshot. On DATA 42587e08609a (run 053, in-window 1999-2021, v14): hedged LS Sharpe 0.9964 (ann 16.34%); ex-top-3-years Sharpe 0.6665 (2000, 2001, 2021); excess-of-rf hedged Sharpe 0.9285 (ann 15.09%); excess ex-top-3-years Sharpe 0.6045; mean IC 0.0389 full window, 0.0283 second half (benchmark the holdout IC against the second half); raw Sharpe 0.7902; layer run 049 net Sharpe -0.06 @100M (old bytes, measured CS). The run-042 expectations stay as history. Written before any out-of-sample number; no bar. | events decision holdout_expectations_v14_spend_snapshot (verbatim) |
 | hx_ts | 2026-10-02T00:14:32Z | events decision holdout_expectations_v14_spend_snapshot ts |
 | identity_maxgap | 0.005 | max \|difference\| in table 07b |
+| ivol_hedge_part | -0.03 | events factor_evaluated IdioVol3F stage 2 raw_vs_hedged_dls_pp.hedge_part |
 | iw_bear | 1.257 | run 053 ls_sharpe_bear |
 | iw_beta_exante | -0.540 | run 053 ls_beta_mean |
 | iw_beta_fw | -0.556 | run 053 ls_beta_fullwindow |
@@ -1759,6 +1625,8 @@ assignments:
 | l49_beta | -0.101 | run 049 layer@100M net_beta_on_market |
 | l49_bias | 2.58 | run 049 layer@100M bias_stat_mean |
 | l49_bias_band | 20.5 | run 049 layer@100M bias_stat_in_band_pct |
+| l49_book | 2001-01 | run 049 layer@100M book_start |
+| l49_book_end | 2021-12 | run 049 layer@100M book_end |
 | l49_borrow | 0.19 | run 049 layer@100M cost_borrow_ann_pct |
 | l49_cost | 4.36 | run 049 layer@100M cost_total_ann_pct |
 | l49_erd_gross | 12.52 | run 049 equal_rank_decile@100M gross_ann_return_pct |
@@ -1766,9 +1634,13 @@ assignments:
 | l49_erd_to | 117.7 | run 049 equal_rank_decile@100M turnover_oneway_pct |
 | l49_exante_vol | 1.97 | run 049 layer@100M exante_vol_ann_pct_mean |
 | l49_fts_net_sh | 0.502 | run 049 layer_fixed_tier_spread@100M net_sharpe |
+| l49_g2001 | +23.6 | run 049 layer@100M annual_gross_returns_pct 2001 |
+| l49_g2002 | +20.3 | run 049 layer@100M annual_gross_returns_pct 2002 |
 | l49_gross | 4.08 | run 049 layer@100M gross_ann_return_pct |
 | l49_gross_t | 3.27 | run 049 layer@100M gross_tstat_nw |
 | l49_impact | 0.79 | run 049 layer@100M cost_impact_ann_pct |
+| l49_n2001 | +15.8 | run 049 layer@100M annual_net_returns_pct 2001 |
+| l49_n2002 | +14.0 | run 049 layer@100M annual_net_returns_pct 2002 |
 | l49_nbc_beta | -0.135 | run 049 layer_no_beta_constraint@100M net_beta_on_market |
 | l49_nbc_gross | 4.39 | run 049 layer_no_beta_constraint@100M gross_ann_return_pct |
 | l49_nbc_gross_sh | 0.805 | run 049 layer_no_beta_constraint@100M gross_sharpe |
@@ -1779,7 +1651,9 @@ assignments:
 | l49_real_vol | 4.78 | run 049 layer@100M realised_vol_ann_pct_live |
 | l49_spread | 3.39 | run 049 layer@100M cost_spread_ann_pct |
 | l49_to | 36.0 | run 049 layer@100M turnover_oneway_pct |
-| l57_bias_full | 3.12 | run 057 layer@100M bias_stat_mean (1999-2026 book) |
+| l57_bias_full | 3.12 | run 057 layer@100M bias_stat_mean (book 2001-01..2026-09) |
+| l57_book | 2001-01..2026-09 | run 057 layer@100M book_start, book_end |
+| l57_book_n | 309 | run 057 layer@100M n_months |
 | l57ho_cost | 3.40 | run 057 layer@100M cut_holdout_cost_total_ann_pct |
 | l57iw_gross | 4.15 | run 057 layer@100M cut_inwindow_gross_ann_return_pct |
 | l57iw_net_sh | -0.022 | run 057 layer@100M cut_inwindow_net_sharpe |
@@ -1787,13 +1661,15 @@ assignments:
 | ladder_runs | 012, 023, 032, 037, 044 | registry stage2_run over the 24 Stage 2 rows |
 | layer_canon_neg_all | yes | runs 049 net_sharpe, 057 cut_inwindow_net_sharpe and cut_holdout_net_sharpe for layer@100M/1000M/5000M |
 | layer_ho_gross_ret | 0.74 | run 057 layer@100M cut_holdout_gross_ann_return_pct |
-| layer_ho_gross_sh | 0.10 | run 057 layer@100M cut_holdout_gross_sharpe |
+| layer_ho_gross_sh | 0.101 | run 057 layer@100M cut_holdout_gross_sharpe |
 | layer_ho_net_ret | -2.66 | run 057 layer@100M cut_holdout_net_ann_return_pct |
-| layer_ho_net_sh | -0.37 | run 057 layer@100M cut_holdout_net_sharpe |
+| layer_ho_net_sh | -0.367 | run 057 layer@100M cut_holdout_net_sharpe |
 | layer_iw057_gross_sh3 | 0.856 | run 057 layer@100M cut_inwindow_gross_sharpe |
 | layer_iw_gross_sh | 0.86 | run 049 layer@100M gross_sharpe |
 | layer_iw_gross_sh3 | 0.856 | run 049 layer@100M gross_sharpe |
+| leak_ids | book_equity_preferred_terms, scratchpad_glob_other-project_names, leak_sweep_phase_d_close, construction_md_other-project_caveat, d7_other-project_outcome_clause, d8_other-project_restatement_figure | process_findings whose record text refers to another project (ids masked) |
 | legs_1999 | 15 | table 06f 1999 January |
+| man_comp_text | 2003-2020 compounds to -36% net (+38% gross, 1.9%/yr) | manifest v14 construction_layer.character (verbatim) |
 | min_guard_f | RoE | factor with the lowest guard t |
 | min_guard_t | -1.26 | registry RoE stage2.paired_delta_ls_tstat (lowest guard t) |
 | min_months | 120 | config rebalance.min_months |
@@ -1815,7 +1691,8 @@ assignments:
 | n_alpha_phaseA | 20 | events alpha_review before phase_completed A |
 | n_alpha_reviews | 23 | events alpha_review |
 | n_cfg_shas | 1 | distinct config_sha over every run_started event |
-| n_composite_moves | 15 | events composite_updated |
+| n_composite_moves | 14 | events composite_updated minus the v0 recording |
+| n_composite_versions | 15 | events composite_updated (one per version v0-v14) |
 | n_config_moves | 1 | events config_changed with a SHA |
 | n_decisions | 11 | docs/DECISIONS.md D headings |
 | n_events | 1131 | research/events.jsonl rows |
@@ -1840,8 +1717,9 @@ assignments:
 | n_infeasible | 73 | events inventory_classified n_infeasible |
 | n_labels | 11 | distinct SignalDoc Cat.Economic labels in table 04 (seed labels plus passer labels) |
 | n_ladders | 5 | distinct stage2_run |
+| n_layer_rows | 33 | run 049 result blocks |
 | n_leak_findings | 6 | process_findings whose record text refers to another project |
-| n_neg_ic_years | 2 | run 053 summary annual IC < 0 |
+| n_neg_ic_years | 3 | run 053 summary annual IC printed with a minus sign |
 | n_osap | 212 | events inventory_classified n_predictors |
 | n_pf_failed | 28 | events inventory_classified n_preflight_failed |
 | n_pos_fixed | 4 | rows of table 07e with half_spread_mode fixed |
@@ -1866,6 +1744,7 @@ assignments:
 | n_t_pass_other_fail | 4 | rows in table 03c |
 | n_translated | 106 | events inventory_classified n_translated |
 | n_translated_distinct | 108 | distinct factors over events factor_translated |
+| neg_ic_years | 2003 (-0.000), 2007 (-0.016), 2020 (-0.049) | run 053 summary annual IC printed with a minus sign |
 | null_e1 | 0.658 | null_n x null_p25 |
 | null_e2 | 0.326 | null_n x null_p274 |
 | null_e3 | 0.546 | n_stage2_tested x null_p20 |
@@ -1885,12 +1764,17 @@ assignments:
 | phaseB_h | 6.17 | sum of run_completed runtime_seconds, runs 003-011 / 3600 |
 | phaseD_h | 7.19 | sum of run_completed runtime_seconds, runs 012-044 / 3600 |
 | pos_measured_max | 0.058 | max net Sharpe over measured-spread rows of table 07e |
+| pp_events | 105 | events preflight_passed |
+| pp_implied | AM, Accruals | screened candidates whose preflight is recorded inside factor_translated (RECORDS.md: a pass is implied) |
+| pp_multi | BidAskSpreadFlip | events preflight_passed with a factors list |
+| pp_single | 104 | events preflight_passed with a single factor |
 | repro_fields | 66/66 | events phase_completed D digest |
 | restate_dic | -0.000009 | run 053 ic_mean - run 052 ic_mean |
 | restate_dt | -0.0019 | run 053 ic_tstat_nw - run 052 ic_tstat_nw |
 | restate_moved | 54 | run 052 vs 053 result-block fields, different (includes data_sha) |
 | restate_new | 8 | run 053 fields absent from 052 (the excess-of-rf diagnostic) |
 | restate_same | 28 | run 052 vs 053 result-block fields, identical |
+| roaq_hedge_part | +0.51 | events factor_evaluated roaq stage 2 raw_vs_hedged_dls_pp.hedge_part |
 | s1_batch | 12 | config search.stage1_batch_size |
 | s2_rej_bars | resid_ic_tstat_nw | decided_by over Stage 2 FAIL rows |
 | seed_ic_Investment | 0.0054 | run 051 legic_f_inv_close |
@@ -1912,9 +1796,11 @@ assignments:
 | skip1_dic | -0.0044 | run 051 paired_dic_mean |
 | skip1_dic_t | -3.06 | run 051 paired_dic_tstat_nw |
 | skip1_h2 | 0.0270 | run 051 ic_half2_mean |
-| skip1_ic | 0.0345 | run 051 ic_mean |
+| skip1_ic | 0.0346 | run 051 ic_mean |
 | skip1_sh | 0.777 | run 051 ls_sharpe |
 | skip1_share | 11 | 100 x -run 051 paired_dic_mean / run 050 ic_mean |
+| snap1_recorded | 2026-09-30T16:39:10Z | git d477021^:data/SNAPSHOT_MANIFEST.yaml recorded_on |
+| snap1_sep_max | 2026-09-29 | git d477021^:data/SNAPSHOT_MANIFEST.yaml tables.SEP.max_date (the frozen manifest before the refresh) |
 | snap2_recorded | 2026-10-01T23:26:28Z | data/SNAPSHOT_MANIFEST.yaml recorded_on |
 | spent_on | 2026-10-02 | MODEL_MANIFEST.yaml holdout.spent_on |
 | spread_measured | 99.95 | run 049 layer@100M spread_measured_pct |
@@ -1922,17 +1808,21 @@ assignments:
 | start_ShareIss5Y | 2003-06 | table 06e first holding month of ShareIss5Y |
 | start_TrendFactor | 2003-01 | table 06e first holding month of TrendFactor |
 | start_VolumeTrend | 2003-01 | table 06e first holding month of VolumeTrend |
+| str_hedge_part | -1.73 | events factor_evaluated STreversal stage 2 raw_vs_hedged_dls_pp.hedge_part |
+| tf_hedge_part | -0.77 | events factor_evaluated TrendFactor stage 2 raw_vs_hedged_dls_pp.hedge_part |
 | thin0 | IdioVol3F | table 05c |
 | thin0_t | 2.03 | registry IdioVol3F stage2.resid_ic_tstat_nw |
 | thin1 | VolumeTrend | table 05c |
 | thin1_t | 2.04 | registry VolumeTrend stage2.resid_ic_tstat_nw |
 | top_years_k | 3 | config diagnostics.ex_regime_top_years |
 | translated_unscreened | DelDRC, EarnSupBig | factor_translated factors without a registry row (failed preflight; frontier) |
+| ts_est_rows | 219-419 | finding_corrected events_ts_estimated and events_ts_estimated_row |
 | v0_beta | -0.140 | manifest v0 baseline.beta.ls_beta_fullwindow (run 001) |
 | v0_ic | 0.0145 | manifest v0 baseline.ic.ic_mean (run 001) |
 | v0_ic_t | 2.62 | manifest v0 baseline.ic.ic_tstat_nw (run 001) |
 | v0_sh | 0.600 | manifest v0 baseline.ls_hedged.ls_sharpe (run 001) |
 | v0_to | 28.0 | manifest v0 baseline.breadth.turnover_d10_pct (run 001) |
+| v10_sh | 0.919 | manifest v10 baseline.ls_hedged.ls_sharpe (run 033) |
 | v14_fams | 9 | manifest v14 families |
 | v14_legs | 19 | manifest v14 legs |
 | v14_sha | 7fe6f001e708 | manifest v14 stamps.composite_sha |
@@ -1941,5 +1831,273 @@ assignments:
 | v14a_ic_t | 5.68 | manifest v14 baseline.ic.ic_tstat_nw (run 042) |
 | v14a_sh | 0.983 | manifest v14 baseline.ls_hedged.ls_sharpe (run 042) |
 | v14a_to | 58.1 | manifest v14 baseline.breadth.turnover_d10_pct (run 042) |
+| v9_sh | 0.932 | manifest v9 baseline.ls_hedged.ls_sharpe (run 030) |
 | wall_hours | 21.9 | sum of run_completed runtime_seconds / 3600 |
 | wall_seconds | 78885.2 | sum of run_completed runtime_seconds |
+| zt6_hedge_part | +0.90 | events factor_evaluated zerotrade6M stage 2 raw_vs_hedged_dls_pp.hedge_part |
+
+## Appendix B. Record dumps
+
+### B1. The construction layer, all rows (run 049)
+
+*Table 07_layer049. Construction layer on v14, in-window book 2001-01..2021-12 (252 months), pre-refresh bytes. Source: run 049 result blocks (HARNESS 3561590b660a, LAYER 4b279fc317cd). Costs in %/yr; equal_rank_decile and buffered are the Stage 3 books unhedged under the same cost model.*
+
+| AUM | variant | gross ann % | gross Sharpe | spread | impact | borrow | total cost | net ann % | net Sharpe | net NW t | one-way turnover % | net beta on M |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| $100M | layer | 4.08 | 0.856 | 3.39 | 0.79 | 0.19 | 4.36 | -0.29 | -0.060 | -0.24 | 36.0 | -0.101 |
+| $100M | layer_eta_0.25 | 4.08 | 0.857 | 3.39 | 0.40 | 0.19 | 3.97 | 0.11 | 0.023 | 0.09 | 36.0 | -0.101 |
+| $100M | layer_eta_1 | 4.08 | 0.857 | 3.39 | 1.58 | 0.19 | 5.16 | -1.08 | -0.227 | -0.90 | 36.0 | -0.101 |
+| $100M | layer_fixed_tier_spread | 4.06 | 0.854 | 0.71 | 0.79 | 0.19 | 1.69 | 2.37 | 0.502 | 1.94 | 36.0 | -0.101 |
+| $100M | layer_exec_half_month | 2.98 | 0.662 | 3.39 | 0.79 | 0.19 | 4.36 | -1.38 | -0.308 | -1.22 | 36.0 | -0.099 |
+| $100M | layer_tiered_borrow | 4.08 | 0.856 | 3.39 | 0.79 | 0.89 | 5.06 | -0.99 | -0.208 | -0.82 | 36.0 | -0.101 |
+| $100M | layer_no_buffer | 6.38 | 1.068 | 8.42 | 2.79 | 0.24 | 11.45 | -5.07 | -0.843 | -3.39 | 90.7 | -0.114 |
+| $100M | layer_no_beta_constraint | 4.39 | 0.805 | 3.33 | 0.77 | 0.19 | 4.29 | 0.10 | 0.018 | 0.07 | 35.5 | -0.135 |
+| $100M | layer_dollar_neutral_only | 4.43 | 0.820 | 3.31 | 0.75 | 0.19 | 4.25 | 0.18 | 0.034 | 0.13 | 34.9 | -0.127 |
+| $100M | equal_rank_decile | 12.52 | 0.793 | 12.65 | 7.56 | 0.25 | 20.47 | -7.95 | -0.507 | -2.02 | 117.7 | -0.454 |
+| $100M | buffered | 11.27 | 0.736 | 8.40 | 4.38 | 0.25 | 13.04 | -1.77 | -0.116 | -0.47 | 77.9 | -0.474 |
+| $1000M | layer | 4.08 | 0.857 | 3.38 | 2.45 | 0.19 | 6.01 | -1.93 | -0.409 | -1.63 | 35.9 | -0.101 |
+| $1000M | layer_eta_0.25 | 4.08 | 0.857 | 3.38 | 1.22 | 0.19 | 4.79 | -0.71 | -0.150 | -0.59 | 35.9 | -0.101 |
+| $1000M | layer_eta_1 | 4.09 | 0.857 | 3.38 | 4.91 | 0.19 | 8.47 | -4.39 | -0.927 | -3.73 | 36.0 | -0.101 |
+| $1000M | layer_fixed_tier_spread | 4.07 | 0.856 | 0.71 | 2.45 | 0.19 | 3.34 | 0.73 | 0.156 | 0.61 | 35.9 | -0.101 |
+| $1000M | layer_exec_half_month | 2.98 | 0.662 | 3.38 | 2.45 | 0.19 | 6.01 | -3.03 | -0.678 | -2.72 | 35.9 | -0.098 |
+| $1000M | layer_tiered_borrow | 4.08 | 0.856 | 3.38 | 2.45 | 0.89 | 6.72 | -2.64 | -0.559 | -2.23 | 35.9 | -0.101 |
+| $1000M | layer_no_buffer | 6.23 | 1.046 | 8.30 | 8.10 | 0.23 | 16.63 | -10.40 | -1.705 | -6.83 | 89.2 | -0.113 |
+| $1000M | layer_no_beta_constraint | 4.39 | 0.804 | 3.33 | 2.40 | 0.19 | 5.91 | -1.52 | -0.280 | -1.14 | 35.4 | -0.136 |
+| $1000M | layer_dollar_neutral_only | 4.43 | 0.820 | 3.30 | 2.34 | 0.19 | 5.83 | -1.40 | -0.257 | -0.99 | 34.8 | -0.126 |
+| $1000M | equal_rank_decile | 12.52 | 0.793 | 12.77 | 24.28 | 0.25 | 37.30 | -24.78 | -1.587 | -6.37 | 118.7 | -0.446 |
+| $1000M | buffered | 11.27 | 0.736 | 8.45 | 13.98 | 0.25 | 22.68 | -11.41 | -0.754 | -3.08 | 78.4 | -0.470 |
+| $5000M | layer | 3.79 | 0.819 | 3.20 | 4.43 | 0.18 | 7.81 | -4.02 | -0.870 | -3.49 | 34.1 | -0.097 |
+| $5000M | layer_eta_0.25 | 3.78 | 0.818 | 3.20 | 2.21 | 0.18 | 5.59 | -1.81 | -0.393 | -1.56 | 34.1 | -0.097 |
+| $5000M | layer_eta_1 | 3.82 | 0.822 | 3.21 | 8.88 | 0.18 | 12.27 | -8.46 | -1.800 | -7.22 | 34.2 | -0.098 |
+| $5000M | layer_fixed_tier_spread | 3.78 | 0.818 | 0.66 | 4.42 | 0.18 | 5.26 | -1.48 | -0.324 | -1.29 | 34.1 | -0.097 |
+| $5000M | layer_exec_half_month | 2.78 | 0.630 | 3.20 | 4.43 | 0.18 | 7.81 | -5.04 | -1.144 | -4.64 | 34.1 | -0.094 |
+| $5000M | layer_tiered_borrow | 3.79 | 0.820 | 3.20 | 4.43 | 0.86 | 8.49 | -4.70 | -1.017 | -4.08 | 34.1 | -0.097 |
+| $5000M | layer_no_buffer | 5.37 | 0.985 | 7.18 | 11.85 | 0.22 | 19.25 | -13.89 | -2.473 | -9.91 | 77.6 | -0.103 |
+| $5000M | layer_no_beta_constraint | 4.17 | 0.783 | 3.16 | 4.38 | 0.18 | 7.72 | -3.55 | -0.667 | -2.73 | 33.7 | -0.133 |
+| $5000M | layer_dollar_neutral_only | 4.25 | 0.816 | 3.16 | 4.33 | 0.19 | 7.68 | -3.43 | -0.652 | -2.53 | 33.3 | -0.119 |
+| $5000M | equal_rank_decile | 12.52 | 0.793 | 13.02 | 56.14 | 0.25 | 69.42 | -56.90 | -3.345 | -11.87 | 121.0 | -0.428 |
+| $5000M | buffered | 11.27 | 0.736 | 8.55 | 31.83 | 0.25 | 40.63 | -29.36 | -1.908 | -7.65 | 79.3 | -0.463 |
+
+### B2. Process findings
+
+*Table 09b_process_findings. Every process_finding. Source: events `process_finding` (text truncated at 200 characters; ids with the other project's name have that word masked as `other-project`; clauses that refer to another project are omitted and pointed to by line). 'LESSONS n' in a note refers to research/LESSONS.md, the project's methodology file; it is cited there for method, not for any predictor's outcome.*
+
+| events line | date | subject / id | note or action (record text) |
+|---|---|---|---|
+| 2 | 2026-09-30 | field_map_verification_reset | a verification from another snapshot is a mapping, not a proof (LESSONS 25) |
+| 14 | 2026-09-30 | unregistered_event_types | added both to KNOWN_EVENTS and RECORDS.md; scripts/ is outside HARNESS_SHA; check OK |
+| 23 | 2026-09-30 | phase_gate_baseline_stage2 | latent: once candidate files exist before Stage 1 rows (Phase A/B) check will DRIFT falsely; gate should skip baseline runs. scripts/ outside HARNESS_SHA; not fixed here |
+| 24 | 2026-09-30 | frontier_masks_osap_Investment | osap_frontier counts rows by filename; should use osap_acronym for status baseline. Phase A would skip Investment; its candidate file would also collide with the leg row name |
+| 48 | 2026-09-30 | missing_item_rule_applied | rule applied as written: infeasible unless OSAP zero-fills; no per-predictor substitution (ppnenet for ppegt) adopted |
+| 62 | 2026-09-30 | book_equity_preferred_terms | adopted here: a missing preferred term that only adjusts book equity -> approx (equity (+taxliabilities), preferred not removed), consistent with the v0 Value leg; a signal that IS preferred stock sta … |
+| 63 | 2026-09-30 | AnnouncementReturn_date_source | option B: code-22 8-K dates only, no datekey fallback (a filing-date return is a different event); 67 of 276 months null, all in the first half |
+| 64 | 2026-09-30 | field_map_dc_gloss | zero-fill applies either way; gloss correction owed to the field-checker at batch 02 |
+| 80 | 2026-09-30 | BPEBM_orientation_fixed_before_preflight | set ascending=False before any preflight or screen; no number existed |
+| 115 | 2026-09-30 | sf1_netincdis_sign_inverted | known_trap added to field_map.yaml; CF ib = netinc + netincdis |
+| 132 | 2026-09-30 | ChAssetTurnover_route | route A (terms dropped, as the logged missing-item rule prescribes); route B (identity reconstruction) not adopted: would null ~20% (financials/REITs) and carry txp inside lco |
+| 184 | 2026-09-30 | tie_rule_change_in_level_signals | standing rule: for a change-in-level signal, names whose level is exactly 0 (or null, where OSAP zero-fills) at BOTH ends are NaN - the zero change is structural, not information; one-end-zero kept. A … |
+| 193 | 2026-09-30 | CoskewACX_truncated_early_windows | nulled: a window opening before the market series is truncated, not OSAP construct; first signal 1999-12 (11 of 276 months) |
+| 235 | 2026-09-30 | debt_gate_unapplied | gate added to all five (debtc notna at every date read); inputs list SF1.debtc; re-preflight |
+| 240 | 2026-09-30 | dolvol_history_gate | history_months=2 (price at the month t-2 end), docstring updated |
+| 269 | 2026-09-30 | fieldmap_ib_stale | ib entry remapped to netinc + netincdis, status approx; index rebuilt |
+| 352 | 2026-10-01 | scratchpad_glob_other-project_names | fetcher prompts name their own scratchpad subfolder explicitly; no content reached any record |
+| 448 | 2026-09-30 | asc842_tie_rule_reach | declared in NetDebtFinance; factor-evaluator to read 2019-21 decile bins and within-sector mass for debt-flow candidates at Stage 1 |
+| 469 | 2026-09-30 | commit_swept_inflight_specs | commits stage named spec paths only while fetchers run |
+| 627 | 2026-09-30 | fieldmap_ibq_stale | ibq remapped to netinc + netincdis (approx); index rebuilt; no translated file read ibq as netinccmn |
+| 693 | 2026-09-30 | docs/CONSTRUCTION.md f_bidaskspreadflip | construction layer names f_bidaskspreadflip as its spread source before any V4 screen; BidAskSpread flip qualified in run 003 (\|t\| 2.77). Pre-registration/D7 review owed; not edited |
+| 700 | 2026-09-30 | records_index_raw_ret | fixed in scripts/records.py (outside HARNESS_SHA); RECORDS.md notes ls_top_years_share_pct is undefined when the summed LS is near zero or negative |
+| 833 | 2026-10-01 | shareiss5y_stale_docstring | docstring corrected; no number affected (comment only) |
+| 881 | 2026-10-01 | records_phase_gate_acronym_keys | scripts/records.py passes row file names to phase_gate (outside HARNESS_SHA); no harness or record change |
+| 900 | 2026-10-01 | tag_v1_mispointed | tag not moved or deleted (CLAUDE.md: tags are never moved); manifest v1 git_tag annotated; owner decides whether to delete and recreate it on 0d52a33. Fix: tag only after `git rev-parse HEAD` shows th … |
+| 1020 | 2026-10-01 | v12_apply_permission_denied | not retried by another route; the coordinator does not perform a subagent-denied action; awaiting the owner |
+| 1056 | 2026-10-01 | leak_sweep_phase_d_close | none required |
+| 1064 | 2026-10-01 | construction_md_other-project_caveat | contradicted here (run 042 ls_sharpe_ex_top_years 0.65); removed in the D7 edit [1 clause(s) omitted: refer to another project; events.jsonl line 1064] |
+| 1070 | 2026-10-01 | d7_other-project_outcome_clause | CONSTRUCTION.md sentence replaced by the design reason; D7 annotated with a dated governing note (decision text not rewritten); docs are unstamped, no SHA moves |
+| 1087 | 2026-10-01 | d8_other-project_restatement_figure | dated governing note added under D8; decision text not rewritten |
+| 1129 | 2026-10-02 | stage3_holdout_cuts_absent | not re-run: the block is spent once (D8); the gap is disclosed in the manifest and the paper |
+
+### B3. Findings corrected
+
+*Table 09c_findings_corrected. Every finding_corrected (append-only corrections). Source: events `finding_corrected` (text truncated at 200 characters).*
+
+| events line | date | subject / id | correction (record text) |
+|---|---|---|---|
+| 7 | 2026-09-30 | bootstrap_stamps | the stamps of the first commit |
+| 30 | 2026-09-30 | v0_early_leg_coverage | a data property of Sharadar's early ART, not a harness defect; affects 3 of 276 signal months. Every ART-flow or 12m-lag candidate inherits it |
+| 81 | 2026-09-30 | events_line77_missing_ts | append-only log; this row carries the timestamp |
+| 98 | 2026-09-30 | AnnouncementReturn_batch02_review_minors | {"a_carry": "_CARRY_MONTHS 6->7 (ages 0-6, matches OSAP), _EVENT_MONTHS 7->8", "b_history_months": "7->1 (window needs ~4 SEP rows; OSAP has no listing-age gate), lookback_months 7->8", "c_dedupe": "1 … |
+| 99 | 2026-09-30 | BPEBM | alpha_review MAJOR: EV floor M+T>=0.05M inverted rationale (M+T<0 = net debt > mcap) and dropped net debt >= 0.95M, the leverage tail; rank scoring makes magnitude moot -> ev.where(ev>0); *usd docstri … |
+| 100 | 2026-09-30 | BMdec | alpha_review MAJOR: BE was latest ART quarter vs ME Dec Y-1 (up to 17m mismatch); OSAP pairs FY Y-1 BE; data_layer.py:628-635 convention -> ARY, reportperiod calendar year = Dec ME year, datekey<=sign … |
+| 165 | 2026-09-30 | batch04: ChInv, ChAssetTurnover, ChEQ, ChInvIA | ["ChInv docstring null-vs-0 rule aligned to code (zero-fill then both-zero->NaN)", "ChInv spurious one-date-null share measured: 0.00% at 1999-12/2008-12/2020-12 (0/1488, 0/1162, 0/1124 scored); Shara … |
+| 420 | 2026-09-30 | events_ts_estimated | rows are not edited (append-only); the true time bound of each of those rows is the author time of the commit that first carries it (git log research/events.jsonl); row order is correct |
+| 421 | 2026-09-30 | events_ts_estimated_row | the estimated-ts range in the previous row starts at row 219 (DelCOL preflight_passed), not row 230 |
+| 757 | 2026-10-01 | research/registry/BidAskSpread.yaml caveat 2 (run 003) | conclusion stands, reason wrong: raw LS is annualised arithmetically (analytics.py:706); the inexactness is the D3 within-sector rank-reversal offset 1/n_s plus qcut ties. Row not edited. |
+| 988 | 2026-10-01 | batch_declared stage2_l3 note: IdioVol3F/MaxRet annual-IC corr | IdioVol3F/MaxRet Stage 1 annual-IC corr is 0.94 (20/23 same sign), not 0.97 (0.97 is IdioVolAHT/MaxRet); NetEquityFinance/XFIN 0.948, ShareIss5Y 0.913 |
+| 1083 | 2026-10-01 | run_049_character_lines | ratio 0.106 (decile) / 0.113 (layer) but buffered 0.145, layer_no_buffer 0.070: gross return concave in turnover, buffer raises return per turnover; spread and borrow scale with leverage, impact (\|dw\| … |
+| 1130 | 2026-10-02 | paper_headline_brief | only the declared `layer` row is negative at every AUM in 049 and 057; nine in-window rows are net positive (4 fixed-tier, 5 $100M measured-spread sensitivities, max 0.058), none out of sample (paper … |
+| 1131 | 2026-10-02 | record_internal_inconsistencies | run_completed runtimes sum to 6.17 h for Phase B; 20 alpha_review events before Phase A closed; run 051 block 0.034550 / -3.064867 (rounding); the paper uses the event fields |
+
+### B4. Verifications
+
+*Table 09d_verifications. Every verification_completed. Source: events `verification_completed` (text truncated at 200 characters).*
+
+| events line | date | subject | detail (record text) |
+|---|---|---|---|
+| 8 | 2026-09-30 | bootstrap | snapshot not pulled (key file placed after the last commit; snapshot.py probe: key OK, 13 tables entitled) [1 clause(s) omitted: refer to another project; events.jsonl line 8] |
+| 573 | 2026-09-30 | stray post-BME rows in the monthly panel | scratch count over SEP (37.6M rows) and DAILY (33.1M rows) 1997-12..2021-12: 0 rows dated after their calendar month's business month-end; build_monthly_panel's tail(1) therefore always takes a row on … |
+| 704 | 2026-10-01 | hedge_gap_check_before_phase_d | independent rebuild of AM, BMdec, BookLeverage, CBOperProf hedged LS matches run 003 blocks to ~1e-15; beta_t on t-36..t-1 only (look-ahead and stale windows do not match); market proxy = cap-weighted … |
+| 877 | 2026-10-01 | stage2_new_family_blend | drive_stage2 builds trial = cur_meta + [candidate meta]; family_members/blend_family_ranks derive families from the trial metas; tests/test_composite.py::test_a_candidate_opening_a_new_family_gets_a_f … |
+| 1057 | 2026-10-01 | phase_d_close_checks | 15 tags v0..v14; v2..v14 each on its 'ratchet: vN' commit; v1 mis-pointed (open, owner); families.yaml accepted members == composite.families() on all 9 families (19 legs); every passer's registry fam … |
+| 1085 | 2026-10-01 | weekend_print_after_signal_asof | cached monthly panel fb86ececd100, me 1998-12..2021-12: 1,711,671 ID-months, 0 with last SEP date > me; the alpha_review minor does not bite in-window; no logged row affected |
+
+### B5. Findings confirmed
+
+*Table 09e_findings_confirmed. Every finding_confirmed. Source: events `finding_confirmed` (text truncated at 200 characters). The skip1 row's text rounds the composite IC and the paired t as 0.0346 and -3.07; the run 051 block gives 0.034550 and -3.064867 (0.0346 and -3.06, half-up), which the paper uses.*
+
+| events line | date | subject | evidence (record text) |
+|---|---|---|---|
+| 28 | 2026-09-30 | records_py_phase_gate_and_frontier | phase_gate now skips run_started rows with factors/label 'baseline'; osap_frontier matches registry rows on osap_acronym (leg Investment.yaml = AssetGrowth). frontier UNACCOUNTED 206 -> 207, Investmen … |
+| 29 | 2026-09-30 | performance_delisting_count | ACTIONS 1999-01..2022-01: bankruptcyliquidation 2448, regulatorydelisting 507, delisted 13289; run 001 in-universe performance delistings 21. classify_delistings defaults unknown reasons to performanc … |
+| 68 | 2026-09-30 | fundamentals_latest_datekey_staleness | alpha_review batch01 minors 1-2 measured at signals 1999-12, 2003-12, 2008-12, 2013-12, 2018-12, 2021-11: fundamentals() row older than fundamentals_history q_back0 reportperiod 0 of 1790-2610 names e … |
+| 1096 | 2026-10-01 | skip1_return_start_sensitivity | diagnostic, never a bar. v14 close->skip1: IC 0.0389->0.0346 (paired delta -0.0044, NW t -3.07), NW t 5.68->5.16, halves 0.0498/0.0281->0.0421/0.0270, hedged Sharpe 0.983->0.777, raw 0.773->0.655, hed … |
+
+### B6. Every run
+
+*Table 10_runs. Every run. Source: events `run_started` and `run_completed` (runtime_seconds); run 046 has a `run_aborted` event and no runtime.*
+
+| run | label | stage | started (UTC) | runtime s | HARNESS | CONFIG | COMPOSITE | DATA | factors |
+|---|---|---|---|---|---|---|---|---|---|
+| 001 | v0_baseline_stage2 | 2 | 2026-09-30T16:41:59Z | 121.0 | 73a95d352942 | 0d88328d5b10 | f9d9d9d95731 | 198b281de1a0 | baseline |
+| 002 | v0_baseline_stage3 | 3 | 2026-09-30T16:44:54Z | 60.0 | 73a95d352942 | 0d88328d5b10 | f9d9d9d95731 | 198b281de1a0 | baseline |
+| 003 | stage1_b1 | 1 | 2026-09-30T23:16:12Z | 1719.0 | 73a95d352942 | 0d88328d5b10 | f9d9d9d95731 | 198b281de1a0 | 12 factors |
+| 004 | stage1_b2 | 1 | 2026-09-30T23:45:20Z | 1161.0 | 73a95d352942 | 0d88328d5b10 | f9d9d9d95731 | 198b281de1a0 | 12 factors |
+| 005 | stage1_b3 | 1 | 2026-10-01T00:05:13Z | 1219.0 | 73a95d352942 | 0d88328d5b10 | f9d9d9d95731 | 198b281de1a0 | 12 factors |
+| 006 | stage1_b4 | 1 | 2026-10-01T00:25:50Z | 1780.0 | 73a95d352942 | 0d88328d5b10 | f9d9d9d95731 | 198b281de1a0 | 12 factors |
+| 007 | stage1_b5 | 1 | 2026-10-01T00:56:00Z | 5523.0 | 73a95d352942 | 0d88328d5b10 | f9d9d9d95731 | 198b281de1a0 | 12 factors |
+| 008 | stage1_b6 | 1 | 2026-10-01T02:28:31Z | 4016.0 | 73a95d352942 | 0d88328d5b10 | f9d9d9d95731 | 198b281de1a0 | 12 factors |
+| 009 | stage1_b7 | 1 | 2026-10-01T03:35:52Z | 1884.0 | 73a95d352942 | 0d88328d5b10 | f9d9d9d95731 | 198b281de1a0 | 12 factors |
+| 010 | stage1_b8 | 1 | 2026-10-01T04:07:40Z | 2872.0 | 73a95d352942 | 0d88328d5b10 | f9d9d9d95731 | 198b281de1a0 | 12 factors |
+| 011 | stage1_b9 | 1 | 2026-10-01T04:55:59Z | 2044.0 | 73a95d352942 | 0d88328d5b10 | f9d9d9d95731 | 198b281de1a0 | 11 factors |
+| 012 | stage2_l1 | 2 | 2026-10-01T05:52:14Z | 224.0 | 73a95d352942 | 0d88328d5b10 | f9d9d9d95731 | 198b281de1a0 | PctAcc,CBOperProf,ShareIss5Y,cfp,XFIN |
+| 013 | v1_baseline_stage2 | 2 | 2026-10-01T06:09:17Z | 87.0 | 73a95d352942 | 0d88328d5b10 | cbeb16455bf4 | 198b281de1a0 | baseline |
+| 014 | v1_baseline_stage3 | 3 | 2026-10-01T06:11:00Z | 90.0 | 73a95d352942 | 0d88328d5b10 | cbeb16455bf4 | 198b281de1a0 | baseline |
+| 015 | v2_baseline_stage2 | 2 | 2026-10-01T06:20:47Z | 118.0 | 73a95d352942 | 0d88328d5b10 | 8b444636f0a1 | 198b281de1a0 | baseline |
+| 016 | v2_baseline_stage3 | 3 | 2026-10-01T06:22:56Z | 123.0 | 73a95d352942 | 0d88328d5b10 | 8b444636f0a1 | 198b281de1a0 | baseline |
+| 017 | v3_baseline_stage2 | 2 | 2026-10-01T06:30:54Z | 134.0 | 73a95d352942 | 0d88328d5b10 | 73ee92fe0723 | 198b281de1a0 | baseline |
+| 018 | v3_baseline_stage3 | 3 | 2026-10-01T06:33:19Z | 133.0 | 73a95d352942 | 0d88328d5b10 | 73ee92fe0723 | 198b281de1a0 | baseline |
+| 019 | v4_baseline_stage2 | 2 | 2026-10-01T06:41:25Z | 142.0 | 73a95d352942 | 0d88328d5b10 | 3329679c69fb | 198b281de1a0 | baseline |
+| 020 | v4_baseline_stage3 | 3 | 2026-10-01T06:43:58Z | 147.0 | 73a95d352942 | 0d88328d5b10 | 3329679c69fb | 198b281de1a0 | baseline |
+| 021 | v5_baseline_stage2 | 2 | 2026-10-01T06:52:15Z | 154.0 | 73a95d352942 | 0d88328d5b10 | d27916e567f2 | 198b281de1a0 | baseline |
+| 022 | v5_baseline_stage3 | 3 | 2026-10-01T06:55:00Z | 159.0 | 73a95d352942 | 0d88328d5b10 | d27916e567f2 | 198b281de1a0 | baseline |
+| 023 | stage2_l2 | 2 | 2026-10-01T07:03:31Z | 510.0 | 73a95d352942 | 0d88328d5b10 | d27916e567f2 | 198b281de1a0 | GP,ShareIss1Y,MaxRet,roaq,RoE |
+| 024 | v6_baseline_stage2 | 2 | 2026-10-01T07:25:39Z | 163.0 | 73a95d352942 | 0d88328d5b10 | 21a6688ae5d1 | 198b281de1a0 | baseline |
+| 025 | v6_baseline_stage3 | 3 | 2026-10-01T07:28:43Z | 167.0 | 73a95d352942 | 0d88328d5b10 | 21a6688ae5d1 | 198b281de1a0 | baseline |
+| 026 | v7_baseline_stage2 | 2 | 2026-10-01T07:37:50Z | 366.0 | 73a95d352942 | 0d88328d5b10 | 43c92213ae73 | 198b281de1a0 | baseline |
+| 027 | v7_baseline_stage3 | 3 | 2026-10-01T07:44:21Z | 370.0 | 73a95d352942 | 0d88328d5b10 | 43c92213ae73 | 198b281de1a0 | baseline |
+| 028 | v8_baseline_stage2 | 2 | 2026-10-01T07:56:20Z | 391.0 | 73a95d352942 | 0d88328d5b10 | a12e87c5fb36 | 198b281de1a0 | baseline |
+| 029 | v8_baseline_stage3 | 3 | 2026-10-01T08:03:02Z | 399.0 | 73a95d352942 | 0d88328d5b10 | a12e87c5fb36 | 198b281de1a0 | baseline |
+| 030 | v9_baseline_stage2 | 2 | 2026-10-01T08:15:23Z | 405.0 | 73a95d352942 | 0d88328d5b10 | c961f5791816 | 198b281de1a0 | baseline |
+| 031 | v9_baseline_stage3 | 3 | 2026-10-01T08:22:20Z | 411.0 | 73a95d352942 | 0d88328d5b10 | c961f5791816 | 198b281de1a0 | baseline |
+| 032 | stage2_l3 | 2 | 2026-10-01T08:33:18Z | 944.0 | 73a95d352942 | 0d88328d5b10 | c961f5791816 | 198b281de1a0 | OperProfRD,IdioVol3F,NetEquityFinance,CF,STreversal |
+| 033 | v10_baseline_stage2 | 2 | 2026-10-01T09:03:50Z | 603.0 | 73a95d352942 | 0d88328d5b10 | 1b4195ff18b4 | 198b281de1a0 | baseline |
+| 034 | v10_baseline_stage3 | 3 | 2026-10-01T09:14:16Z | 609.0 | 73a95d352942 | 0d88328d5b10 | 1b4195ff18b4 | 198b281de1a0 | baseline |
+| 035 | v11_baseline_stage2 | 2 | 2026-10-01T09:30:29Z | 793.0 | 73a95d352942 | 0d88328d5b10 | 335b06e3d608 | 198b281de1a0 | baseline |
+| 036 | v11_baseline_stage3 | 3 | 2026-10-01T09:44:00Z | 799.0 | 73a95d352942 | 0d88328d5b10 | 335b06e3d608 | 198b281de1a0 | baseline |
+| 037 | stage2_l4 | 2 | 2026-10-01T10:01:37Z | 3081.0 | 73a95d352942 | 0d88328d5b10 | 335b06e3d608 | 198b281de1a0 | 5 factors |
+| 038 | v12_baseline_stage2 | 2 | 2026-10-01T11:25:18Z | 1088.0 | 73a95d352942 | 0d88328d5b10 | 612e59349f40 | 198b281de1a0 | baseline |
+| 039 | v12_baseline_stage3 | 3 | 2026-10-01T11:44:20Z | 1073.0 | 73a95d352942 | 0d88328d5b10 | 612e59349f40 | 198b281de1a0 | baseline |
+| 040 | v13_baseline_stage2 | 2 | 2026-10-01T12:09:19Z | 1805.0 | 73a95d352942 | 0d88328d5b10 | fa17bd1cd37e | 198b281de1a0 | baseline |
+| 041 | v13_baseline_stage3 | 3 | 2026-10-01T12:40:00Z | 1816.0 | 73a95d352942 | 0d88328d5b10 | fa17bd1cd37e | 198b281de1a0 | baseline |
+| 042 | v14_baseline_stage2 | 2 | 2026-10-01T13:16:33Z | 2407.0 | 73a95d352942 | 0d88328d5b10 | 7fe6f001e708 | 198b281de1a0 | baseline |
+| 043 | v14_baseline_stage3 | 3 | 2026-10-01T13:57:21Z | 2405.0 | 73a95d352942 | 0d88328d5b10 | 7fe6f001e708 | 198b281de1a0 | baseline |
+| 044 | stage2_l5 | 2 | 2026-10-01T14:43:48Z | 3757.9 | 73a95d352942 | 0d88328d5b10 | 7fe6f001e708 | 198b281de1a0 | BidAskSpreadFlip,IdioVolAHT,zerotrade1M,NetPayoutYield |
+| 045 | v14_baseline_stage2_harness_471f | 2 | 2026-10-01T17:04:10Z | 2430.0 | 471f70782486 | 0d88328d5b10 | 7fe6f001e708 | 198b281de1a0 | baseline |
+| 046 | v14_baseline_stage3_harness_471f | 3 | 2026-10-01T17:07:15Z | aborted | 471f70782486 | 0d88328d5b10 | 7fe6f001e708 | 198b281de1a0 | baseline |
+| 047 | v14_baseline_stage2_harness_3561 | 2 | 2026-10-01T18:44:13Z | 2421.7 | 3561590b660a | 0d88328d5b10 | 7fe6f001e708 | 198b281de1a0 | baseline |
+| 048 | v14_baseline_stage3_harness_3561 | 3 | 2026-10-01T18:44:13Z | 2428.6 | 3561590b660a | 0d88328d5b10 | 7fe6f001e708 | 198b281de1a0 | baseline |
+| 049 | v14_baseline_construction_layer | layer | 2026-10-01T18:47:31Z | 2473.6 | 3561590b660a | 0d88328d5b10 | 7fe6f001e708 | 198b281de1a0 | baseline |
+| 050 | v14_baseline_stage2_harness_aef4 | 2 | 2026-10-01T21:21:35Z | 2410.4 | aef490297071 | 0d88328d5b10 | 7fe6f001e708 | 198b281de1a0 | baseline |
+| 051 | v14_baseline_skip1_diagnostic | 2 | 2026-10-01T21:21:35Z | 2418.7 | aef490297071 | 0d88328d5b10 | 7fe6f001e708 | 198b281de1a0 | baseline |
+| 052 | v14_baseline_stage2_harness_1271 | 2 | 2026-10-01T23:07:10Z | 3597.4 | 1271266472a9 | 0d88328d5b10 | 7fe6f001e708 | 198b281de1a0 | baseline |
+| 053 | v14_baseline_stage2_d8_refresh | 2 | 2026-10-01T23:27:07Z | 2699.9 | 1271266472a9 | 0d88328d5b10 | 7fe6f001e708 | 42587e08609a | baseline |
+| 054 | v14_baseline_stage2_holdout_include | 2 | 2026-10-02T01:09:09Z | 3004.2 | 1271266472a9 | 0d88328d5b10 | 7fe6f001e708 | 42587e08609a | baseline |
+| 055 | v14_baseline_stage2_holdout_only | 2 | 2026-10-02T01:59:29Z | 637.0 | 1271266472a9 | 0d88328d5b10 | 7fe6f001e708 | 42587e08609a | baseline |
+| 056 | v14_baseline_stage3_holdout_include | 3 | 2026-10-02T02:10:24Z | 3002.5 | 1271266472a9 | 0d88328d5b10 | 7fe6f001e708 | 42587e08609a | baseline |
+| 057 | v14_baseline_layer_holdout_include | layer | 2026-10-02T03:00:42Z | 3088.3 | 1271266472a9 | 0d88328d5b10 | 7fe6f001e708 | 42587e08609a | baseline |
+
+### B7. Every stamp move
+
+*Table 10c_stamp_moves. Every stamp move. Source: events `harness_changed`, `config_changed`, `snapshot_recorded`, `composite_updated`, and finding_corrected bootstrap_stamps for the first commit (the two bootstrap rows that preceded it carry no SHA).*
+
+| events line | ts (UTC) | event | old | new | reason (record text, truncated at 160) |
+|---|---|---|---|---|---|
+| 7 | 2026-09-30T13:05:45Z | first commit 705d9f9 | HARNESS / CONFIG / COMPOSITE / DATA | e2e0b18a0115 / 1cef53e19e16 / f9d9d9d95731 / nodata | stamps of the first commit (finding_corrected bootstrap_stamps) |
+| 10 | 2026-09-30T16:11:08Z | config_changed | 1cef53e19e16 | 0d88328d5b10 | D11: stage1_standalone.ls_spread_series: raw; schema 5 -> 6; comments; bars and levels unchanged; no run existed [1 clause(s) omitted: refer to another project; events.jsonl line 10] |
+| 11 | 2026-09-30T16:11:08Z | harness_changed | e2e0b18a0115 | 73a95d352942 | D11: stage1_checks reads ls_spread_series (default raw) and names the bar row after the series; ls_raw_ann_return_pct required on Stage 1 blocks; records.py ind … |
+| 13 | 2026-09-30T16:41:44Z | snapshot_recorded | nodata | 198b281de1a0 | first pull, full history, 13 tables; verify OK (vocabularies match config: exchanges, categories, 10 delisting actions, ART; marketcap median 712m); live OK col … |
+| 27 | 2026-09-30T16:53:36Z | composite_updated v0 |  | f9d9d9d95731 | runs 001,002 |
+| 899 | 2026-10-01T06:13:22Z | composite_updated v1 |  | cbeb16455bf4 | runs 012,013,014 |
+| 908 | 2026-10-01T06:25:38Z | composite_updated v2 |  | 8b444636f0a1 | runs 012,015,016 |
+| 916 | 2026-10-01T06:36:15Z | composite_updated v3 |  | 73ee92fe0723 | runs 012,017,018 |
+| 924 | 2026-10-01T06:47:03Z | composite_updated v4 |  | 3329679c69fb | runs 012,019,020 |
+| 932 | 2026-10-01T06:58:27Z | composite_updated v5 |  | d27916e567f2 | runs 012,021,022 |
+| 953 | 2026-10-01T07:32:25Z | composite_updated v6 |  | 21a6688ae5d1 | runs 023,024,025 |
+| 961 | 2026-10-01T07:51:16Z | composite_updated v7 |  | 43c92213ae73 | runs 023,026,027 |
+| 969 | 2026-10-01T08:10:20Z | composite_updated v8 |  | a12e87c5fb36 | runs 023,028,029 |
+| 977 | 2026-10-01T08:29:53Z | composite_updated v9 |  | c961f5791816 | runs 023,030,031 |
+| 999 | 2026-10-01T09:25:17Z | composite_updated v10 |  | 1b4195ff18b4 | runs 032,033,034 |
+| 1007 | 2026-10-01T09:58:12Z | composite_updated v11 |  | 335b06e3d608 | runs 032,035,036 |
+| 1028 | 2026-10-01T12:02:46Z | composite_updated v12 |  | 612e59349f40 | runs 037,038,039 |
+| 1036 | 2026-10-01T13:11:19Z | composite_updated v13 |  | fa17bd1cd37e | runs 037,040,041 |
+| 1044 | 2026-10-01T14:38:34Z | composite_updated v14 |  | 7fe6f001e708 | runs 037,042,043 |
+| 1060 | 2026-10-01T17:04:10Z | harness_changed | 73a95d352942 | 471f70782486 | D7 construction layer: (1) sector+market-beta neutrality via a constraint matrix [sector dummies \| beta_i], beta_i trailing 36m on D4's M (min 12, sector-month … |
+| 1071 | 2026-10-01T18:44:13Z | harness_changed | 471f70782486 | 3561590b660a | alpha_review fixes to the D7 layer (layer path only): declared vs effective ex-years fields (2000 precedes book_start; effective 2001,2021); name_cap_excess car … |
+| 1089 | 2026-10-01T21:21:35Z | harness_changed | 3561590b660a | aef490297071 | diagnostic --return-start skip1 (alpha_review major 1): forward return of t+1 based at the first SEP trade of t+1 (within 7 days of the market's first trading d … |
+| 1098 | 2026-10-01T23:07:10Z | harness_changed | aef490297071 | 1271266472a9 | rf diagnostic (owner_stop_and_ask_3_approved): external-table kind in snapshot.py (TB3MS from FRED fredgraph.csv, keyless, frozen in data/sharadar/TB3MS.parquet … |
+| 1104 | 2026-10-01T23:27:07Z | snapshot_recorded | 198b281de1a0 | 42587e08609a | D8 step 1 refresh (owner-approved stop-and-ask 3): 13 Sharadar tables re-pulled full history (SEP 45,393,854 rows to 2026-10-01; 2026-09-30 present with 6,262 n … |
+
+### B8. Event counts
+
+*Table 10d_event_counts. research/events.jsonl by event type (1131 rows).*
+
+| event | count |
+|---|---|
+| spec_written | 207 |
+| factor_evaluated | 132 |
+| factor_translated | 108 |
+| preflight_passed | 105 |
+| factor_infeasible | 71 |
+| run_started | 57 |
+| provenance_verified | 56 |
+| run_completed | 56 |
+| decision | 51 |
+| process_finding | 31 |
+| preflight_failed | 29 |
+| fields_verified | 27 |
+| family_assigned | 24 |
+| alpha_review | 23 |
+| construction_reported | 18 |
+| composite_updated | 15 |
+| registry_rows_written | 15 |
+| batch_closed | 14 |
+| batch_declared | 14 |
+| finding_corrected | 14 |
+| preflight_remeasured | 14 |
+| repository_committed | 10 |
+| harness_changed | 6 |
+| verification_completed | 6 |
+| validation_warning | 5 |
+| finding_confirmed | 4 |
+| phase_completed | 4 |
+| config_changed | 2 |
+| flip_hypothesis_qualified | 2 |
+| snapshot_recorded | 2 |
+| batch_amended | 1 |
+| factor_dropped | 1 |
+| holdout_spent | 1 |
+| inventory_classified | 1 |
+| project_initialized | 1 |
+| repository_initialized | 1 |
+| rule_conflict_found | 1 |
+| run_aborted | 1 |
+| stage2_order_declared | 1 |
