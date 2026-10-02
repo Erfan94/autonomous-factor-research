@@ -1115,7 +1115,7 @@ def build_docx():
     def cell_margins(tbl):
         tblPr = tbl._tbl.tblPr
         mar = OxmlElement("w:tblCellMar")
-        for edge, v in (("top", 15), ("bottom", 15), ("left", 50), ("right", 50)):
+        for edge, v in (("top", 10), ("bottom", 10), ("left", 28), ("right", 28)):
             e = OxmlElement(f"w:{edge}")
             e.set(qn("w:w"), str(v)); e.set(qn("w:type"), "dxa")
             mar.append(e)
@@ -1145,16 +1145,21 @@ def build_docx():
                     p.paragraph_format.first_line_indent = Inches(0)
                     p.paragraph_format.line_spacing = 1.0
                     p.alignment = WD_ALIGN_PARAGRAPH.LEFT
-                    runs(p, val, size=t["size"], bold=True if ri == 0 else None)
+                    runs(p, val, size=t["size"] - 0.6, bold=True if ri == 0 else None)
                     if ri == 0:
                         borders(c, top=True, bottom=True)
                     if ri == len(rows):
                         borders(c, bottom=True)
+            tblPr = tbl._tbl.tblPr
+            lay = OxmlElement("w:tblLayout"); lay.set(qn("w:type"), "fixed"); tblPr.append(lay)
+            tw = OxmlElement("w:tblW"); tw.set(qn("w:w"), str(int(total * 1440))); tw.set(qn("w:type"), "dxa"); tblPr.append(tw)
+            grid = tbl._tbl.tblGrid
+            for gi, gc in enumerate(grid.findall(qn("w:gridCol"))):
+                gc.set(qn("w:w"), str(int(ws[gi] * 1440)))
+            for ci, col in enumerate(tbl.columns):
+                col.width = Inches(ws[ci])
             trPr = tbl.rows[0]._tr.get_or_add_trPr()
             h = OxmlElement("w:tblHeader"); h.set(qn("w:val"), "true"); trPr.append(h)
-            for row in tbl.rows:
-                trPr = row._tr.get_or_add_trPr()
-                cs = OxmlElement("w:cantSplit"); cs.set(qn("w:val"), "true"); trPr.append(cs)
         para("", indent=False, spacing=1.0, after=6)
 
     def add_figure(fg):
@@ -1178,21 +1183,21 @@ def build_docx():
 
     # ---- title page
     sec.different_first_page_header_footer = True
-    para(fm["title"], indent=False, align=WD_ALIGN_PARAGRAPH.CENTER, spacing=1.0, size=18, bold=True, before=60, after=18)
+    para(fm["title"], indent=False, align=WD_ALIGN_PARAGRAPH.CENTER, spacing=1.0, size=18, bold=True, before=24, after=12)
     p = para(fm["author"], indent=False, align=WD_ALIGN_PARAGRAPH.CENTER, spacing=1.15, size=13)
     r = p.add_run("*"); r.font.superscript = True; r.font.size = Pt(13)
-    para(fm["date"], indent=False, align=WD_ALIGN_PARAGRAPH.CENTER, spacing=1.15, size=13, after=20)
+    para(fm["date"], indent=False, align=WD_ALIGN_PARAGRAPH.CENTER, spacing=1.15, size=13, after=12)
     p = para("Abstract", indent=False, align=WD_ALIGN_PARAGRAPH.CENTER, spacing=1.15, after=6)
     p.runs[0].font.small_caps = True
     for pp in fm["abstract"].split(" | "):
-        q = para(pp.strip(), indent=True, spacing=1.35, after=6)
+        q = para(pp.strip(), indent=True, spacing=1.15, after=4, size=11.5)
         q.paragraph_format.left_indent = Inches(0.5)
         q.paragraph_format.right_indent = Inches(0.5)
         q.paragraph_format.first_line_indent = Inches(0.4)
     for lab, key in (("JEL classification:", "jel"), ("Keywords:", "keywords")):
         q = d.add_paragraph()
         q.paragraph_format.left_indent = Inches(0.5); q.paragraph_format.right_indent = Inches(0.5)
-        q.paragraph_format.line_spacing = 1.35; q.paragraph_format.space_after = Pt(6)
+        q.paragraph_format.line_spacing = 1.15; q.paragraph_format.space_after = Pt(4)
         r = q.add_run(lab + " "); r.italic = True
         q.add_run(fm[key])
     ff = sec.first_page_footer.paragraphs[0]
