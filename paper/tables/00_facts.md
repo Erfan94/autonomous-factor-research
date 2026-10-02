@@ -211,12 +211,12 @@
 | n_composite_versions | 15 | events composite_updated (one per version v0-v14) |
 | n_config_moves | 1 | events config_changed with a SHA |
 | n_decisions | 11 | docs/DECISIONS.md D headings |
-| n_events | 1132 | research/events.jsonl rows |
+| n_events | 1133 | research/events.jsonl rows |
 | n_fail_by_t | 79 | registry FAIL rows decided_by ic_tstat_nw |
 | n_families | 9 | distinct families in table 04 |
 | n_family_assigned | 24 | events family_assigned |
 | n_feasible | 134 | events inventory_classified n_feasible |
-| n_finding_corrected | 14 | events finding_corrected |
+| n_finding_corrected | 15 | events finding_corrected |
 | n_flip_qualified | 2 | events flip_hypothesis_qualified |
 | n_flip_screens | 1 | registry Stage 1 rows named *Flip |
 | n_fr_data_start | 9 | osap_frontier.yaml rows with class data_start |

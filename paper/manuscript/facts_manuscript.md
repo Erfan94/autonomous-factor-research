@@ -79,6 +79,7 @@
 | l57_ho_to | 28.7 | run 057 layer@100M cut_holdout_turnover_oneway_pct |
 | l57_iw_beta | -0.098 | run 057 layer@100M cut_inwindow_net_beta_on_market |
 | l57_iw_cost | 4.25 | run 057 layer@100M cut_inwindow_cost_total_ann_pct |
+| l57_iw_fts | 0.519 | run 057 layer_fixed_tier_spread@100M cut_inwindow_net_sharpe |
 | l57_iw_to | 35.2 | run 057 layer@100M cut_inwindow_turnover_oneway_pct |
 | ls56_2000 | +118.4 | run 056 equal_rank_decile annual_returns_pct 2000 |
 | ls56_2001 | +68.9 | run 056 equal_rank_decile annual_returns_pct 2001 |
@@ -280,4 +281,4 @@
 | xfin_dic_t | -0.62 | registry XFIN stage2.paired_delta_ic_tstat |
 | xfin_dsh | -0.082 | registry XFIN stage2.delta_ls_sharpe |
 
-*Keys used by manuscript_src.md: 304.*
+*Keys used by manuscript_src.md: 305.*

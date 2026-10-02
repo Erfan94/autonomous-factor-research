@@ -956,7 +956,7 @@ Other entries:
   The coordinator did not route around the refusal and waited for the owner, who then authorised the coordinator to
   make the moves and composite edits (docs/JOURNAL.md, research/CHANGELOG.md; table 10f).
 
-**Corrections.** 14 findings were corrected append-only (Appendix B3). Among them, the timestamps of
+**Corrections.** 15 findings were corrected append-only (Appendix B3). Among them, the timestamps of
 events rows 219-419 were estimates rather than clock readings; their true bound is the commit that carries them.
 Verifications and confirmed findings are in Appendices B4 and B5.
 
@@ -976,7 +976,7 @@ counts:
 Preflight passes reconcile as follows. There are 105 `preflight_passed` events: 104 single-factor
 events and one for BidAskSpreadFlip. The preflights of AM, Accruals are recorded inside their `factor_translated` events,
 which RECORDS.md treats as an implied pass. The runner logged 51 judgment calls as `decision` events. The
-event log has 1132 rows (Appendix B8).
+event log has 1133 rows (Appendix B8).
 
 **Runs.** 57 runs were started and 56 completed (Appendix B6). Run 046 was
 aborted as superseded, with no result. The completed runs total 21.9 hours of wall time (`runtime_seconds`).
@@ -1695,12 +1695,12 @@ assignments:
 | n_composite_versions | 15 | events composite_updated (one per version v0-v14) |
 | n_config_moves | 1 | events config_changed with a SHA |
 | n_decisions | 11 | docs/DECISIONS.md D headings |
-| n_events | 1132 | research/events.jsonl rows |
+| n_events | 1133 | research/events.jsonl rows |
 | n_fail_by_t | 79 | registry FAIL rows decided_by ic_tstat_nw |
 | n_families | 9 | distinct families in table 04 |
 | n_family_assigned | 24 | events family_assigned |
 | n_feasible | 134 | events inventory_classified n_feasible |
-| n_finding_corrected | 14 | events finding_corrected |
+| n_finding_corrected | 15 | events finding_corrected |
 | n_flip_qualified | 2 | events flip_hypothesis_qualified |
 | n_flip_screens | 1 | registry Stage 1 rows named *Flip |
 | n_fr_data_start | 9 | osap_frontier.yaml rows with class data_start |
@@ -1936,6 +1936,7 @@ assignments:
 | 1083 | 2026-10-01 | run_049_character_lines | ratio 0.106 (decile) / 0.113 (layer) but buffered 0.145, layer_no_buffer 0.070: gross return concave in turnover, buffer raises return per turnover; spread and borrow scale with leverage, impact (\|dw\| … |
 | 1130 | 2026-10-02 | paper_headline_brief | only the declared `layer` row is negative at every AUM in 049 and 057; nine in-window rows are net positive (4 fixed-tier, 5 $100M measured-spread sensitivities, max 0.058), none out of sample (paper … |
 | 1131 | 2026-10-02 | record_internal_inconsistencies | run_completed runtimes sum to 6.17 h for Phase B; 20 alpha_review events before Phase A closed; run 051 block 0.034550 / -3.064867 (rounding); the paper uses the event fields |
+| 1133 | 2026-10-02 | manuscript_draft_audit | five questions (1, 2, 3, 5, 6) in three owner answers (events 9-10, 1097, 1109); hedge term = long market position at ex-ante beta -0.549 in a rising market, the lag to realised -0.836 under-hedged; r … |
 
 ### B4. Verifications
 
@@ -2058,7 +2059,7 @@ assignments:
 
 ### B8. Event counts
 
-*Table 10d_event_counts. research/events.jsonl by event type (1132 rows).*
+*Table 10d_event_counts. research/events.jsonl by event type (1133 rows).*
 
 | event | count |
 |---|---|
@@ -2078,10 +2079,10 @@ assignments:
 | alpha_review | 23 |
 | construction_reported | 18 |
 | composite_updated | 15 |
+| finding_corrected | 15 |
 | registry_rows_written | 15 |
 | batch_closed | 14 |
 | batch_declared | 14 |
-| finding_corrected | 14 |
 | preflight_remeasured | 14 |
 | repository_committed | 10 |
 | harness_changed | 6 |

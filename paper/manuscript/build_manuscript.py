@@ -255,6 +255,7 @@ mfact("erd_ho_gross", fnum(f(L057["equal_rank_decile@100M"], "cut_holdout_gross_
 mfact("l57_budget", fnum(f(L057["layer@100M"], "gross_budget_mean_live"), 2), "run 057 layer@100M gross_budget_mean_live (book 2001-01..2026-09)")
 mfact("hx_hm", FACTS["hx_ts"][0][11:16] + " UTC on 2 October 2026", "events decision holdout_expectations_v14_spend_snapshot ts")
 mfact("ho_first_hm", FACTS["ho_first_ts"][0][11:16] + " UTC", "events run_started 054 ts")
+mfact("l57_iw_fts", fnum(f(L057["layer_fixed_tier_spread@100M"], "cut_inwindow_net_sharpe"), 3), "run 057 layer_fixed_tier_spread@100M cut_inwindow_net_sharpe")
 mfact("tests_n", "476", "pytest tests/ at HARNESS 1271266472a9 (docs/JOURNAL.md, research/session_state.yaml)")
 
 # ============================================================================= tables
@@ -277,7 +278,7 @@ T("participants", "I", "The Participants",
    ["Runner", "Claude Opus (Claude Fable at bootstrap)", "Runs the loop from the standing instruction file: reads the "
     "state, launches sub-agents, runs the harness, logs decisions, commits and tags.", "Decides anything not on the "
     "stop-and-ask list; may not edit a past result or move a stamp while a run is unevaluated."],
-   ["Advisor", "Claude Fable", "Reviews the runner’s whole transcript at phase boundaries, before every acceptance is "
+   ["Advisor", "Claude Fable", "Reviews the runner’s whole transcript at phase boundaries, before a ladder’s acceptances are "
     "committed, before any stop-and-ask, and when a result looks too good.", "Advises only. Advice that changes a "
     "decision is logged."],
    ["osap-fetcher", "Claude Sonnet", "One predictor’s reference code and catalogue row at the pinned commit, written "
@@ -442,7 +443,7 @@ T("rules", "VII", "Rules Committed in Advance and Rulings Made inside the Loop",
     "(Section VI, Appendix C)."],
    ["The hedge reaches one bar only (D11)", "A hedged Stage 1 spread bar and a raw-only guard were both on the table; "
     "the decisions file contradicted itself.", "Found at bootstrap, before any run, and put to the owner as "
-    "stop-and-ask 6: Stage 1 reads the raw spread, the Stage 2 guard the hedged blend."],
+    "stop-and-ask 6: Stage 1 reads the raw spread, the Stage 2 guard the hedged blend; the resolution moved the configuration (question 2), before any run."],
    ["A reversed sign is a second hypothesis", "Flipping a sign after seeing the number doubles the hypotheses. A "
     "flipped screen faces |t| ≥ 2.74 and every other bar, as a separately declared file.",
     f"BidAskSpread failed at t −{FACTS['bas_parent_t'][0]}; its reversal passed at {FACTS['bas_flip_t2'][0]} and was "
@@ -467,7 +468,7 @@ T("rules", "VII", "Rules Committed in Advance and Rulings Made inside the Loop",
     "second look.", f"D8 declared the spend protocol on 30 September; the expectations were logged at "
     f"{FACTS['hx_ts'][0][11:16]} UTC on 2 October and the first holdout run started at {FACTS['ho_first_ts'][0][11:16]} (Section IX)."],
    ["Every turn ends with a run and a decision, never a question", "The only questions the loop may ask are the seven "
-    "stop conditions.", "Standing rule; three of the seven were invoked (3, 5 and 6)."]],
+    "stop conditions.", "Standing rule; five of the seven were put to the author, in three answers (1, 2, 3, 5 and 6)."]],
   widths=[26, 37, 37], size=8.5)
 
 # ---- Table VIII: versions
@@ -811,7 +812,7 @@ FIGS = {
                        "turn ends committed locally, with the state file updated, so the next turn, or the next "
                        "session, starts from the record."),
     "ratchet": dict(num=4, file="fig4_ratchet.png", width=6.5, title="The ratchet by version.",
-                    text="Mean IC rises at almost every acceptance, as the residual bar makes likely. The hedged "
+                    text="Mean IC rises at 10 of the 14 acceptances, as the residual bar makes likely. The hedged "
                          "long-short Sharpe peaks at v4 and stays below that peak through the later ladders. The "
                          "full-window β of the raw long-short falls from −0.14 to −0.75 by v10 and recovers to −0.56 as "
                          "the two positive-β legs join; the hedge removes that exposure ex ante."),

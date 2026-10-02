@@ -1,4 +1,4 @@
-*Table 10d_event_counts. research/events.jsonl by event type (1132 rows).*
+*Table 10d_event_counts. research/events.jsonl by event type (1133 rows).*
 
 | event | count |
 |---|---|
@@ -18,10 +18,10 @@
 | alpha_review | 23 |
 | construction_reported | 18 |
 | composite_updated | 15 |
+| finding_corrected | 15 |
 | registry_rows_written | 15 |
 | batch_closed | 14 |
 | batch_declared | 14 |
-| finding_corrected | 14 |
 | preflight_remeasured | 14 |
 | repository_committed | 10 |
 | harness_changed | 6 |
