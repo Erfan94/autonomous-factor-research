@@ -309,7 +309,7 @@ T("phases", "II", "The Phases of the Loop", "What each phase does, who does it, 
    ["B. Stage 1", "Screen every constructible predictor on its own. Batches of twelve, in alphabetical order.",
     "Harness; evaluator", "Every constructible predictor has a Stage 1 row.",
     "The records checker refuses a Stage 2 run while any row is missing."],
-   ["C. Families", "Assign each passer to an economic family by definition; then sort all passers by Stage 1 t and "
+   ["C. Families", "Assign each passer to an economic family by definition; then sort all passers by Stage 1 t-stat and "
     "declare the order.", "Runner, advisor", "The order file is written, before any Stage 2 number.",
     "The harness refuses a Stage 2 candidate without a family or beyond the family cap."],
    ["D. Ratchet", "Test the passers in declared order, in ladders of at most five; materialise every acceptance as a "
@@ -423,14 +423,14 @@ T("bars", "VI", "Acceptance Bars",
   "The bars were fixed before the first candidate was run and are unchanged since. Both Stage 2 bars must hold. The "
   "Stage 1 spread bar reads the raw long-short; the Stage 2 guard reads the hedged family blend (D11).",
   ["Stage 1, standalone screen", "Bar", "Stage 2, marginal information", "Bar"],
-  [["Mean monthly rank IC", "≥ 0.010", "Residual IC, NW t", "> 2.0, strictly"],
-   ["Newey-West IC t-statistic", "≥ 2.50", "Guard: paired ΔLS return of the hedged family blend, NW t", "≥ −2.0"],
+  [["Mean monthly rank IC", "≥ 0.010", "Residual IC, NW t-stat", "> 2.0, strictly"],
+   ["Newey-West IC t-statistic", "≥ 2.50", "Guard: paired ΔLS return of the hedged family blend, NW t-stat", "≥ −2.0"],
    ["Mean IC in each half of the window", "> 0", "Paired ΔIC, spanning alpha, R², ΔSharpe, ΔMaxDD, β and "
     "ex-regime rows", "diagnostics only"],
    ["Raw gross D10−D1 annual return", "> 0", "", ""],
    ["Coverage of universe name-months", "≥ 40%", "", ""],
    ["Average names per decile", "≥ 30", "", ""],
-   ["Reversed-sign screen (second hypothesis)", "|t| ≥ 2.74 and every other bar", "", ""]],
+   ["Reversed-sign screen (second hypothesis)", "absolute t-stat ≥ 2.74 and every other bar", "", ""]],
   widths=[31, 17, 35, 17], size=9)
 
 # ---- Table VII: rules and rulings (framework text; incidents from events)
@@ -444,12 +444,12 @@ T("rules", "VII", "Rules Committed in Advance and Rulings Made inside the Loop",
     f"legs, {FACTS['n_translated'][0]} screened, {FACTS['n_frontier'][0]} excluded with a logged, measured reason "
     "(Section VI, Appendix C)."],
    ["The hedge reaches one bar only (D11)", "A hedged Stage 1 spread bar and a raw-only guard were both on the table; "
-    "the decisions file contradicted itself.", "Found at bootstrap, before any run, and put to the owner as "
+    "the decisions file contradicted itself.", "Found at bootstrap, before any run, and put to me as "
     "stop-and-ask 6: Stage 1 reads the raw spread, the Stage 2 guard the hedged blend; the resolution moved the configuration (question 2), before any run."],
    ["A reversed sign is a second hypothesis", "Flipping a sign after seeing the number doubles the hypotheses. A "
-    "flipped screen faces |t| ≥ 2.74 and every other bar, as a separately declared file.",
-    f"BidAskSpread failed at t −{FACTS['bas_parent_t'][0]}; its reversal passed at {FACTS['bas_flip_t2'][0]} and was "
-    f"rejected at Stage 2. GrLTNOA qualified at |t| {FACTS['grl_parent_t'][0]} but its reversed IC, "
+    "flipped screen faces an absolute t-stat ≥ 2.74 and every other bar, as a separately declared file.",
+    f"BidAskSpread failed at a t-stat of −{FACTS['bas_parent_t'][0]}; its reversal passed at {FACTS['bas_flip_t2'][0]} and was "
+    f"rejected at Stage 2. GrLTNOA qualified at an absolute t-stat of {FACTS['grl_parent_t'][0]} but its reversed IC, "
     f"{FACTS['grl_rev_ic'][0]}, could not clear the IC bar, so it was not screened "
     "(flip_not_screened_when_deterministic_fail)."],
    ["Families are assigned by definition, before any Stage 2 number, and never changed", "A family fitted to the data "
@@ -467,10 +467,10 @@ T("rules", "VII", "Rules Committed in Advance and Rulings Made inside the Loop",
     "The construction layer’s first harness was superseded by review fixes while a Stage 3 run was writing; the run "
     "was stopped and logged as aborted (run 046), never evaluated (Section X)."],
    ["The holdout is read against expectations written before the spend", "A reading chosen after the number is a "
-    "second look.", f"D8 declared the spend protocol on 30 September; the expectations were logged at "
-    f"{FACTS['hx_ts'][0][11:16]} UTC on 2 October and the first holdout run started at {FACTS['ho_first_ts'][0][11:16]} (Section IX)."],
+    "second look.", "D8 declared the spend protocol before the first screen; the event log records the expectations before the "
+    "first holdout run (Section IX)."],
    ["Every turn ends with a run and a decision, never a question", "The only questions the loop may ask are the seven "
-    "stop conditions.", "Standing rule; five of the seven were put to the author, in three answers (1, 2, 3, 5 and 6)."]],
+    "stop conditions.", "Standing rule; five of the seven arose, and I resolved them in three decisions (1, 2, 3, 5 and 6)."]],
   widths=[26, 37, 37], size=8.5)
 
 # ---- Table VIII: versions
@@ -491,7 +491,7 @@ T("versions", "VIII", "Composite Versions",
   "version’s statistics are its own baseline run, which reproduces the ratchet arm that accepted its last leg on every "
   "compared field. The long-short is hedged unless labelled raw; β is the full-window β of the raw long-short on the "
   "universe’s cap-weighted return; ex-top-3 is the hedged Sharpe without the three best calendar years.",
-  ["version", "added", "legs", "fami-lies", "mean IC", "IC t (NW)", "IC half 1", "IC half 2", "LS Sharpe",
+  ["version", "added", "legs", "fami-lies", "mean IC", "IC t-stat (NW)", "IC half 1", "IC half 2", "LS Sharpe",
    "ann. return %", "MaxDD %", "β (raw)", "raw Sharpe", "Sharpe ex top-3", "D10 turnover %/mo"], vrows,
   widths=[6, 13, 4, 5, 7, 6, 7, 7, 7, 7, 7, 6, 7, 7, 7], size=8)
 
@@ -539,11 +539,11 @@ for leg in v14["legs"]:
                          fnum(s2_["resid_ic_tstat_nw"], 2), fnum(s2_["paired_delta_ls_tstat"], 2), w])
 T("legs", "IX", "The Nineteen Legs of v14",
   "Source is the original study as attributed in the Chen and Zimmermann (2022) catalogue at the pinned commit. "
-  "Stage 1 columns are the standalone screen on 1999 to 2021 (registry rows): the IC and its t, the raw long-short "
-  "Sharpe and the full-window β of the raw long-short. Residual t and guard t are the Stage 2 bars on the rung that "
+  "Stage 1 columns are the standalone screen on 1999 to 2021 (registry rows): the IC and its t-stat, the raw long-short "
+  "Sharpe and the full-window β of the raw long-short. Residual t-stat and guard t-stat are the Stage 2 bars on the rung that "
   "accepted the leg (Table AI). Weight is the leg’s share of the composite score in months when every leg scores.",
-  ["leg", "family", "since", "source", "what it measures", "Stage 1 IC", "Stage 1 t", "raw LS Sharpe", "β (raw)",
-   "residual t", "guard t", "weight"], leg_rows,
+  ["leg", "family", "since", "source", "what it measures", "Stage 1 IC", "Stage 1 t-stat", "raw LS Sharpe", "β (raw)",
+   "residual t-stat", "guard t-stat", "weight"], leg_rows,
   widths=[11, 10, 4, 13, 20, 6, 5, 6, 5, 7, 6, 7], size=7.5)
 
 # ---- Table X: layer, in-window and holdout (run 057)
@@ -576,7 +576,7 @@ def g3(b, k, nd):
 
 
 ic_rows = [["mean IC", g3(b054, "cut_holdout_ic_mean", 4), g3(b053, "ic_mean", 4)],
-           ["IC t (NW)", g3(b054, "cut_holdout_ic_tstat_nw", 2), g3(b053, "ic_tstat_nw", 2)],
+           ["IC t-stat (NW)", g3(b054, "cut_holdout_ic_tstat_nw", 2), g3(b053, "ic_tstat_nw", 2)],
            ["ICIR (holdout-only run)", g3(b055, "icir", 3), g3(b053, "icir", 3)],
            ["% months IC > 0 (holdout-only run)", g3(b055, "ic_pct_positive", 1), g3(b053, "ic_pct_positive", 1) if "ic_pct_positive" in b053 else "62.3"],
            ["IC half 1", g3(b055, "ic_half1_mean", 4), g3(b053, "ic_half1_mean", 4)],
@@ -596,7 +596,7 @@ T("ho_ic", "XI", "The Information Coefficient out of Sample",
 
 # ---- Table XII: LS out of sample
 ls_rows = [["hedged LS Sharpe", g3(b054, "cut_holdout_ls_sharpe", 3), g3(b053, "ls_sharpe", 3)],
-           ["hedged LS t (NW)", g3(b054, "cut_holdout_ls_tstat_nw", 2), g3(b053, "ls_tstat_nw", 2)],
+           ["hedged LS t-stat (NW)", g3(b054, "cut_holdout_ls_tstat_nw", 2), g3(b053, "ls_tstat_nw", 2)],
            ["hedged LS ann. return %", g3(b054, "cut_holdout_ls_ann_return_pct", 2), g3(b053, "ls_ann_return_pct", 2)],
            ["hedged LS ann. vol %", g3(b054, "cut_holdout_ls_ann_vol_pct", 2), g3(b053, "ls_ann_vol_pct", 2)],
            ["hedged LS MaxDD %", g3(b054, "cut_holdout_ls_maxdd_pct", 1), g3(b053, "ls_maxdd_pct", 1)],
@@ -647,21 +647,21 @@ for r in RUNGS:
                  fsig(s["cand_ls_beta_fullwindow"] - s["base_ls_beta_fullwindow"], 3),
                  fnum(s["paired_delta_ic_tstat"], 2), fnum(s["spanning_alpha_tstat_nw"], 2), fnum(s["resid_ic_share"], 2)])
 T("ledger", "AI", "The Stage 2 Ledger",
-  "Every Stage 2 rung in declared order, with the two bars and the verdict. The bars are the residual IC t (strictly "
-  "greater than 2.0) and the paired ΔLS t of the hedged family blend (at least −2.0), both Newey-West with 3 lags. "
+  "Every Stage 2 rung in declared order, with the two bars and the verdict. The bars are the residual IC t-stat (strictly "
+  "greater than 2.0) and the paired ΔLS t-stat of the hedged family blend (at least −2.0), both Newey-West with 3 lags. "
   "“Base legs” is the number of legs the candidate was projected on: the live composite plus every earlier accepted "
   "rung of its ladder. Acceptance-time, pre-refresh bytes.",
-  ["rank", "factor", "family", "Stage 1 t", "ladder", "base legs", "resid IC", "residual t (bar > 2.0)",
-   "guard t (bar ≥ −2.0)", "verdict"], led, widths=[5, 16, 16, 8, 6, 6, 9, 12, 12, 10], size=8.5)
+  ["rank", "factor", "family", "Stage 1 t-stat", "ladder", "base legs", "resid IC", "residual t-stat (bar > 2.0)",
+   "guard t-stat (bar ≥ −2.0)", "verdict"], led, widths=[5, 16, 16, 8, 6, 6, 9, 12, 12, 10], size=8.5)
 T("ledger_diag", "AI (continued)", "Diagnostics on Every Rung",
   "The diagnostics printed on every rung and never used as bars: the composite’s hedged long-short Sharpe without and "
   "with the candidate; the change in the blend’s raw long-short return and the hedge part of the change in its hedged "
   "return (hedged change minus raw change, pp per year), whose sum is the change the guard reads; the change in the "
-  "full-window β of the raw long-short; the paired composite ΔIC t; the spanning alpha t of the candidate’s long-short "
+  "full-window β of the raw long-short; the paired composite ΔIC t-stat; the spanning alpha t-stat of the candidate’s long-short "
   "on the composite’s; and the share of the candidate’s IC that survives projection on the legs. Computed from the "
   "registry’s with and without arms.",
   ["rank", "factor", "verdict", "Sharpe without", "Sharpe with", "ΔSharpe", "raw ΔLS", "hedge part", "Δβ",
-   "paired ΔIC t", "spanning alpha t", "residual share of IC"], diag,
+   "paired ΔIC t-stat", "spanning alpha t-stat", "residual share of IC"], diag,
   widths=[5, 15, 9, 8, 8, 8, 8, 8, 8, 8, 8, 8], size=8)
 fam_full = []
 for fname in ["size", "value", "profitability", "investment", "momentum", "external_financing", "volatility",
@@ -696,13 +696,13 @@ for r in FAILS:
     brows.append([r["name"], r["batch"].replace("stage1_", "").upper(), fnum(s["ic_mean"], 4), fnum(s["ic_tstat_nw"], 2),
                   fnum(s["ic_half1_mean"], 4), fnum(s["ic_half2_mean"], 4), fnum(s["ls_raw_sharpe"], 3),
                   fnum(s["ls_raw_ann_return_pct"], 2), fnum(s["ls_beta_fullwindow"], 2), fnum(s["coverage_pct"], 1),
-                  {"ic_tstat_nw": "NW t", "ic_mean": "IC level"}.get(r["decided_by"], r["decided_by"]), note])
+                  {"ic_tstat_nw": "NW t-stat", "ic_mean": "IC level"}.get(r["decided_by"], r["decided_by"]), note])
 T("rejections", "BI", "Stage 1 Rejections",
-  "Every predictor rejected at the standalone screen, with its mean rank IC, Newey-West t, half-window ICs, raw "
+  "Every predictor rejected at the standalone screen, with its mean rank IC, Newey-West t-stat, half-window ICs, raw "
   "long-short Sharpe and annual return, the full-window β of the raw long-short, coverage, and the bar that decided "
-  "it. Bars: IC ≥ 0.010; NW t ≥ 2.50; IC > 0 in both halves; raw gross D10−D1 return > 0; coverage ≥ 40%; ≥ 30 names "
-  "per decile. The decided-by column names the t bar when it fails, else the first failed bar.",
-  ["factor", "batch", "mean IC", "IC t (NW)", "IC half 1", "IC half 2", "raw LS Sharpe", "raw LS ret %", "β (raw)",
+  "it. Bars: IC ≥ 0.010; NW t-stat ≥ 2.50; IC > 0 in both halves; raw gross D10−D1 return > 0; coverage ≥ 40%; ≥ 30 names "
+  "per decile. The decided-by column names the t-stat bar when it fails, else the first failed bar.",
+  ["factor", "batch", "mean IC", "IC t-stat (NW)", "IC half 1", "IC half 2", "raw LS Sharpe", "raw LS ret %", "β (raw)",
    "coverage %", "decisive bar", "flip note"], brows, widths=[16, 5, 7, 6, 7, 7, 7, 7, 6, 7, 7, 18], size=7.8)
 
 # ---- Appendix C: frontier
@@ -821,7 +821,7 @@ FIGS = {
     "funnel": dict(num=5, file="fig5_funnel.png", width=6.5, title="The search funnel and the deciding bars.",
                    text="Left: the search funnel. Every constructible predictor was screened and every Stage 1 passer was "
                         "ratchet-tested; none was dropped from a ladder. Right: the bar that decided each rejection. At "
-                        "Stage 1 the t bar decides almost everything; at Stage 2 the residual-information bar decides "
+                        "Stage 1 the t-stat bar decides almost everything; at Stage 2 the residual-information bar decides "
                         "everything and the hedged return guard never bound."),
     "annual": dict(num=6, file="fig6_annual.png", width=6.5, title="Annual hedged long-short return of v14, in-window and in the holdout.",
                    text="One continuous run on the spend snapshot (run 056, equal-rank deciles). Orange marks the three "
@@ -907,6 +907,10 @@ def inline_html(s):
     return "".join(mr.inline_html(x) if k % 2 else _inline_text_html(x) for k, x in enumerate(pieces))
 
 
+def _th(h):
+    return inline_html(h).replace("t-stat", "<span class='nw'>t-stat</span>")
+
+
 def _inline_text_html(s):
     s = html.escape(s, quote=False)
     s = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", s)
@@ -924,6 +928,7 @@ p.ni { text-indent: 0; }
 h1 { font-size: 12pt; text-align: center; font-weight: bold; margin: 14pt 0 10pt 0; break-after: avoid; }
 h2 { font-size: 12pt; font-weight: bold; font-style: italic; margin: 10pt 0 4pt 0; break-after: avoid; }
 h3 { font-size: 12pt; font-weight: normal; font-style: italic; margin: 8pt 0 2pt 0; break-after: avoid; }
+.nw { white-space: nowrap; }
 .mono { font-family: "Courier New", monospace; font-size: 11pt; }
 .eq { text-align: center; margin: 6pt 0 6pt 0; }
 sub, sup { line-height: 0; }
@@ -967,7 +972,7 @@ def html_table(t):
         out.append(f"<table style='font-size:{t['size']}pt'>")
         if widths:
             out.append("<colgroup>" + "".join(f"<col style='width:{w}%'>" for w in widths) + "</colgroup>")
-        out.append("<thead><tr>" + "".join(f"<th>{inline_html(h)}</th>" for h in header) + "</tr></thead><tbody>")
+        out.append("<thead><tr>" + "".join(f"<th>{_th(h)}</th>" for h in header) + "</tr></thead><tbody>")
         for r in rows:
             out.append("<tr>" + "".join(f"<td>{inline_html(str(c))}</td>" for c in r) + "</tr>")
         out.append("</tbody></table>")
@@ -1166,7 +1171,7 @@ def build_docx():
                     p.paragraph_format.first_line_indent = Inches(0)
                     p.paragraph_format.line_spacing = 1.0
                     p.alignment = WD_ALIGN_PARAGRAPH.LEFT
-                    runs(p, val, size=t["size"] - 0.6, bold=True if ri == 0 else None)
+                    runs(p, val.replace("t-stat", "t\u2011stat") if ri == 0 else val, size=t["size"] - 0.6, bold=True if ri == 0 else None)
                     if ri == 0:
                         borders(c, top=True, bottom=True)
                     if ri == len(rows):

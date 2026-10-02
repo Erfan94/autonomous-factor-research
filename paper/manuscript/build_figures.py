@@ -100,7 +100,7 @@ def fig1():
         box(ax, x, 0.58, 0.18, 0.11, t, s, kind="agent")
     ax.text(0.02, 0.525, "Measurement and record", fontsize=8, fontweight="bold")
     box(ax, 0.02, 0.36, 0.50, 0.14, "Deterministic harness",
-        "point-in-time universe, within-sector ranks, IC and Newey-West t,\ndeciles, the market hedge (ex-ante β), the "
+        "point-in-time universe, within-sector ranks, IC and Newey-West t-stat,\ndeciles, the market hedge (ex-ante β), the "
         "registered bars;\nfour hashes on every result", kind="harness")
     box(ax, 0.66, 0.37, 0.32, 0.12, "Written record", "registry, event log, manifest,\njournal, tags, session state", kind="files")
     arrow(ax, 0.50, 0.58, 0.50, 0.50); label(ax, 0.55, 0.545, "factor files", ha="left")
@@ -136,9 +136,9 @@ def fig2():
          "closes when every constructible predictor has a row  ·  a Stage 2 run before then is refused"),
         ("C  Families", "every passer", [("Assign a family", "by economic definition", "people"),
                                          ("Advisor review", "at the phase boundary", "people"),
-                                         ("Declare the order", "by Stage 1 t, written once", "people")],
+                                         ("Declare the order", "by Stage 1 t-stat, written once", "people")],
          "closes when the order is written, before any Stage 2 number exists"),
-        ("D  Ratchet", "in declared order", [("Test the next rung", "residual IC t > 2.0\nhedged guard t ≥ −2.0", "harness"),
+        ("D  Ratchet", "in declared order", [("Test the next rung", "residual IC t-stat > 2.0\nhedged guard t-stat ≥ −2.0", "harness"),
                                              ("factor-evaluator", "re-derives the verdict", "agent"),
                                              ("Advisor review", "then commit; each\nacceptance is tagged", "people")],
          "closes when every passer has a Stage 2 row  ·  the order is never re-sorted"),
@@ -252,7 +252,7 @@ def fig5():
         a.text(v + 3, 4 - i, str(v), va="center", fontsize=7)
     a.set_title(f"The funnel ({n('n_frontier')} not tested, each with a logged reason)", fontsize=7.6, loc="left")
     a.grid(axis="x", alpha=0.3, lw=0.5)
-    blabs = ["Stage 1: NW t of the IC", "Stage 1: IC level", "Stage 2: residual IC bar", "Stage 2: hedged return guard"]
+    blabs = ["Stage 1: NW t-stat of the IC", "Stage 1: IC level", "Stage 2: residual IC bar", "Stage 2: hedged return guard"]
     bv = [n("n_fail_by_t"), int(F["n_s1_fail"][0]) - n("n_fail_by_t"), n("n_s2_rej"), n("n_guard_fail")]
     b.barh(range(4)[::-1], bv, color=[BLUE, BLUE, ORANGE, ORANGE], height=0.55)
     b.set_yticks(range(4)[::-1]); b.set_yticklabels(blabs, fontsize=7)
