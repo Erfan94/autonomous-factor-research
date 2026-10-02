@@ -1,0 +1,432 @@
+========================================================================
+  RUN 053  BASELINE  stage 2
+  runner 2.0.0  generated 2026-10-01T23:27:20+00:00
+  HARNESS_SHA   1271266472a9
+  CONFIG_SHA    0d88328d5b10
+  COMPOSITE_SHA 7fe6f001e708   (v14: Size, Value, Profitability, Investment, Momentum, PctAcc, CBOperProf, ShareIss5Y, cfp, XFIN, GP, MaxRet, roaq, RoE, IdioVol3F, STreversal, zerotrade6M, VolumeTrend, TrendFactor)
+  FAMILIES      size:Size|value:Value,cfp|profitability:Profitability,CBOperProf,GP,roaq,RoE|investment:Investment,PctAcc|momentum:Momentum,TrendFactor|external_financing:ShareIss5Y,XFIN|volatility:MaxRet,IdioVol3F|short_term_reversal:STreversal|liquidity:zerotrade6M,VolumeTrend
+  DATA_SHA      42587e08609a
+  UNIVERSE_SHA  1c6512b922a8
+  LIVE_API_SHA  b9691f7899e1  (14 tables vouched for by the live API at run start)
+  Backtest window : 1999-01-01  →  2021-12-31
+
+!! PER-FACTOR SF1 DIMENSION OVERRIDES — these legs were NOT measured under
+!! the project default ART:
+!!   f_roaq: ARQ
+!!   f_shareiss5y: ARQ
+
+** HISTORY GATES IN EFFECT — scored only for names with a trade near the
+** window start: f_ivol3f: 1m, f_maxret: 1m, f_mom: 12m, f_shareiss5y: 65m, f_streversal: 1m, f_trendfactor: 48m, f_voltrend: 59m, f_zt6m: 6m
+========================================================================
+
+STAGE 0 : Snapshot, panel, preflight
+========================================================================
+    rf (TB3MS)      : 1934-01 .. 2026-09 — excess-hedge DIAGNOSTIC fields on (never a bar; the layer reports none)
+    SEP: 45,392,793 rows, 20,992 IDs (0.00% rows without a permaticker, dropped)
+    monthly panel: 2,191,961 ID-months in 70s
+    monthly panel: cached as monthly_panel_cb1792cec15f.parquet
+    rebalances      : 276 months
+
+  Preflight on 3 probe months (mass-point cliff 10%, coverage bar 40%)
+  factor                        signal   univ  cover%          mode  mode% distinct qcut
+  Size                      1998-12-31   2273   100.0       19.8991    0.1     2175   10
+  Value                     1998-12-31   2273    96.1     0.0552992    0.0     2185   10
+  Profitability             1998-12-31   2273    56.0        0.3984    0.1     1273   10
+  Investment                1998-12-31   2273    47.9      0.663998    0.1     1089   10
+  Momentum                  1998-12-31   2273    94.6             0    0.3     2139   10
+  PctAcc                    1998-12-31   2273    51.5     -0.412704    0.1     1171   10
+  CBOperProf                1998-12-31   2273    37.7       0.44374    0.1      858   10
+  ShareIss5Y                1998-12-31   2273     0.0                  nan        0    0
+  cfp                       1998-12-31   2273    51.9     0.0225083    0.1     1180   10
+  XFIN                      1998-12-31   2273    51.9             0    0.3     1178   10
+  GP                        1998-12-31   2273    46.1      0.549728    0.1     1047   10
+  MaxRet                    1998-12-31   2273    99.6      0.115385    0.2     2207   10
+  roaq                      1998-12-31   2273    96.3             0    0.1     2189   10
+  RoE                       1998-12-31   2273    56.0       0.28812    0.1     1272   10
+    ff3 daily: 7,000 days, 6,855 with SMB/HML from 28 June formations (1999-2026), median 4,053 eligible names; dropped 0 stray-date rows; 68s
+    ff3 daily: cached as ff3_daily_f0b6ee185942.parquet
+  IdioVol3F                 1998-12-31   2273     0.0                  nan        0    0
+  STreversal                1998-12-31   2273    99.6             0    0.7     2236   10
+  zerotrade6M               1998-12-31   2273    96.2   0.000113468    0.0     2187   10
+  VolumeTrend               1998-12-31   2273     0.0                  nan        0    0
+    trend monthly: 334 months, 334 regressions, median 2,606 names, first ebar 1999-01-29, first uncensored ebar 2002-12-31; 89s
+    trend monthly: cached as trend_monthly_2a544e7a5e6d.parquet
+  TrendFactor               1998-12-31   2273     0.0                  nan        0    0
+  Size                      2010-06-30   1782   100.0       20.0158    0.1     1753   10
+  Value                     2010-06-30   1782    97.1      0.171922    0.1     1731   10
+  Profitability             2010-06-30   1782    95.2      0.423173    0.1     1697   10
+  Investment                2010-06-30   1782    98.0      0.319634    0.1     1746   10
+  Momentum                  2010-06-30   1782    97.9       1.50342    0.1     1743   10
+  PctAcc                    2010-06-30   1782    97.5     -0.135893    0.1     1738   10
+  CBOperProf                2010-06-30   1782    76.4      0.203183    0.1     1361   10
+  ShareIss5Y                2010-06-30   1782    83.8             0    0.2     1491   10
+  cfp                       2010-06-30   1782    97.5     0.0589458    0.1     1737   10
+  XFIN                      2010-06-30   1782    97.5             0    0.2     1735   10
+  GP                        2010-06-30   1782    76.9      0.398812    0.1     1370   10
+  MaxRet                    2010-06-30   1782    99.9     0.0967742    0.1     1775   10
+  roaq                      2010-06-30   1782    99.4      0.057004    0.1     1772   10
+  RoE                       2010-06-30   1782    95.2      0.301845    0.1     1697   10
+    market daily: 7,000 days, 34,069,096 name-days from 15,710 constituent IDs; dropped 0 stray-date rows, 7025 spike and 430 reversal name-days, 0 other returns |r| > 5, 1,083,235 weights cap > 100000 x ADV; 51s
+    market daily: cached as market_daily_10e248692a50.parquet
+  IdioVol3F                 2010-06-30   1782    99.9     0.0263363    0.1     1780   10
+  STreversal                2010-06-30   1782    99.9             0    0.2     1776   10
+  zerotrade6M               2010-06-30   1782    99.0    2.9349e-05    0.1     1764   10
+  VolumeTrend               2010-06-30   1782    86.2   -0.00300272    0.1     1536   10
+  TrendFactor               2010-06-30   1782    89.7      0.180993    0.1     1599   10
+  Size                      2021-11-30   2312   100.0       20.6573    0.1     2300   10
+  Value                     2021-11-30   2312    93.9     0.0235316    0.0     2171   10
+  Profitability             2021-11-30   2312    87.8      0.144605    0.0     2030   10
+  Investment                2021-11-30   2312    93.2      0.265763    0.0     2154   10
+  Momentum                  2021-11-30   2312    92.8      0.962648    0.0     2145   10
+  PctAcc                    2021-11-30   2312    92.3      -1.86361    0.0     2135   10
+  CBOperProf                2021-11-30   2312    68.2      0.166407    0.1     1576   10
+  ShareIss5Y                2021-11-30   2312    73.2             0    0.2     1690   10
+  cfp                       2021-11-30   2312    92.4    0.00863833    0.0     2136   10
+  XFIN                      2021-11-30   2312    92.1             0    0.1     2128   10
+  GP                        2021-11-30   2312    68.7      0.187174    0.1     1589   10
+  MaxRet                    2021-11-30   2312    99.6     0.0488889    0.1     2301   10
+  roaq                      2021-11-30   2312    99.1     0.0293403    0.0     2292   10
+  RoE                       2021-11-30   2312    87.8        1.1875    0.1     2029   10
+  IdioVol3F                 2021-11-30   2312    99.6     0.0420351    0.0     2303   10
+  STreversal                2021-11-30   2312    99.6             0    0.1     2296   10
+  zerotrade6M               2021-11-30   2312    96.5   3.08493e-05    0.0     2231   10
+  VolumeTrend               2021-11-30   2312    75.0     0.0335498    0.1     1733   10
+  TrendFactor               2021-11-30   2312    78.1      0.234535    0.1     1806   10
+
+  ** Value: lookback 15m reaches 1997-09-30 but the panel starts 1997-12-31 — early months will be null, and coverage will read low in the first years for a data reason.
+  ** Profitability: lookback 15m reaches 1997-09-30 but the panel starts 1997-12-31 — early months will be null, and coverage will read low in the first years for a data reason.
+  ** Investment: lookback 27m reaches 1996-09-30 but the panel starts 1997-12-31 — early months will be null, and coverage will read low in the first years for a data reason.
+  ** PctAcc: lookback 15m reaches 1997-09-30 but the panel starts 1997-12-31 — early months will be null, and coverage will read low in the first years for a data reason.
+  ** CBOperProf: lookback 27m reaches 1996-09-30 but the panel starts 1997-12-31 — early months will be null, and coverage will read low in the first years for a data reason.
+  ** ShareIss5Y: lookback 80m reaches 1992-04-30 but the panel starts 1997-12-31 — early months will be null, and coverage will read low in the first years for a data reason.
+  ** cfp: lookback 15m reaches 1997-09-30 but the panel starts 1997-12-31 — early months will be null, and coverage will read low in the first years for a data reason.
+  ** XFIN: lookback 15m reaches 1997-09-30 but the panel starts 1997-12-31 — early months will be null, and coverage will read low in the first years for a data reason.
+  ** GP: lookback 15m reaches 1997-09-30 but the panel starts 1997-12-31 — early months will be null, and coverage will read low in the first years for a data reason.
+  ** RoE: lookback 15m reaches 1997-09-30 but the panel starts 1997-12-31 — early months will be null, and coverage will read low in the first years for a data reason.
+  ** VolumeTrend: lookback 60m reaches 1993-12-31 but the panel starts 1997-12-31 — early months will be null, and coverage will read low in the first years for a data reason.
+  ** TrendFactor: lookback 60m reaches 1993-12-31 but the panel starts 1997-12-31 — early months will be null, and coverage will read low in the first years for a data reason.
+  ** CBOperProf @ 1998-12-31: coverage 37.7% < 40% Stage 1 bar.
+  ** ShareIss5Y @ 1998-12-31: coverage 0.0% < 40% Stage 1 bar.
+  ** IdioVol3F @ 1998-12-31: coverage 0.0% < 40% Stage 1 bar.
+  ** VolumeTrend @ 1998-12-31: coverage 0.0% < 40% Stage 1 bar.
+  ** TrendFactor @ 1998-12-31: coverage 0.0% < 40% Stage 1 bar.
+
+Building PIT universes + factor columns monthly
+========================================================================
+[░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 1/276  Jan 1999  (0%)  Backtest — 59m 29s left    [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 2/276  Feb 1999  (1%)  Backtest — 36m 47s left    [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 3/276  Mar 1999  (1%)  Backtest — 29m 22s left    [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 4/276  Apr 1999  (1%)  Backtest — 25m 26s left    [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 5/276  May 1999  (2%)  Backtest — 22m 58s left    [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 6/276  Jun 1999  (2%)  Backtest — 21m 19s left    [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 7/276  Jul 1999  (3%)  Backtest — 20m 8s left    [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 8/276  Aug 1999  (3%)  Backtest — 19m 51s left    [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 9/276  Sep 1999  (3%)  Backtest — 19m 37s left    [█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 10/276  Oct 1999  (4%)  Backtest — 19m 20s left    [█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 11/276  Nov 1999  (4%)  Backtest — 19m 7s left    [█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 12/276  Dec 1999  (4%)  Backtest — 18m 55s left    [█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 13/276  Jan 2000  (5%)  Backtest — 18m 46s left    [█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 14/276  Feb 2000  (5%)  Backtest — 18m 34s left    [█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 15/276  Mar 2000  (5%)  Backtest — 18m 23s left    [█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 16/276  Apr 2000  (6%)  Backtest — 18m 14s left    [█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 17/276  May 2000  (6%)  Backtest — 18m 7s left    [█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 18/276  Jun 2000  (7%)  Backtest — 17m 59s left    [██░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 19/276  Jul 2000  (7%)  Backtest — 17m 51s left    [██░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 20/276  Aug 2000  (7%)  Backtest — 17m 44s left    [██░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 21/276  Sep 2000  (8%)  Backtest — 17m 37s left    [██░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 22/276  Oct 2000  (8%)  Backtest — 17m 31s left    [██░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 23/276  Nov 2000  (8%)  Backtest — 17m 24s left    [██░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 24/276  Dec 2000  (9%)  Backtest — 17m 17s left    [██░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 25/276  Jan 2001  (9%)  Backtest — 17m 9s left    [██░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 26/276  Feb 2001  (9%)  Backtest — 17m 3s left    [██░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 27/276  Mar 2001  (10%)  Backtest — 16m 57s left    [███░░░░░░░░░░░░░░░░░░░░░░░░░░░] 28/276  Apr 2001  (10%)  Backtest — 16m 51s left    [███░░░░░░░░░░░░░░░░░░░░░░░░░░░] 29/276  May 2001  (11%)  Backtest — 16m 44s left    [███░░░░░░░░░░░░░░░░░░░░░░░░░░░] 30/276  Jun 2001  (11%)  Backtest — 16m 39s left    [███░░░░░░░░░░░░░░░░░░░░░░░░░░░] 31/276  Jul 2001  (11%)  Backtest — 16m 34s left    [███░░░░░░░░░░░░░░░░░░░░░░░░░░░] 32/276  Aug 2001  (12%)  Backtest — 16m 27s left    [███░░░░░░░░░░░░░░░░░░░░░░░░░░░] 33/276  Sep 2001  (12%)  Backtest — 16m 22s left    [███░░░░░░░░░░░░░░░░░░░░░░░░░░░] 34/276  Oct 2001  (12%)  Backtest — 16m 17s left    [███░░░░░░░░░░░░░░░░░░░░░░░░░░░] 35/276  Nov 2001  (13%)  Backtest — 16m 11s left    [███░░░░░░░░░░░░░░░░░░░░░░░░░░░] 36/276  Dec 2001  (13%)  Backtest — 16m 7s left    [████░░░░░░░░░░░░░░░░░░░░░░░░░░] 37/276  Jan 2002  (13%)  Backtest — 16m 2s left    [████░░░░░░░░░░░░░░░░░░░░░░░░░░] 38/276  Feb 2002  (14%)  Backtest — 15m 56s left    [████░░░░░░░░░░░░░░░░░░░░░░░░░░] 39/276  Mar 2002  (14%)  Backtest — 15m 50s left    [████░░░░░░░░░░░░░░░░░░░░░░░░░░] 40/276  Apr 2002  (14%)  Backtest — 15m 44s left    [████░░░░░░░░░░░░░░░░░░░░░░░░░░] 41/276  May 2002  (15%)  Backtest — 15m 39s left    [████░░░░░░░░░░░░░░░░░░░░░░░░░░] 42/276  Jun 2002  (15%)  Backtest — 15m 33s left    [████░░░░░░░░░░░░░░░░░░░░░░░░░░] 43/276  Jul 2002  (16%)  Backtest — 15m 28s left    [████░░░░░░░░░░░░░░░░░░░░░░░░░░] 44/276  Aug 2002  (16%)  Backtest — 15m 22s left    [████░░░░░░░░░░░░░░░░░░░░░░░░░░] 45/276  Sep 2002  (16%)  Backtest — 15m 17s left    [█████░░░░░░░░░░░░░░░░░░░░░░░░░] 46/276  Oct 2002  (17%)  Backtest — 15m 11s left    [█████░░░░░░░░░░░░░░░░░░░░░░░░░] 47/276  Nov 2002  (17%)  Backtest — 15m 6s left    [█████░░░░░░░░░░░░░░░░░░░░░░░░░] 48/276  Dec 2002  (17%)  Backtest — 15m 1s left    [█████░░░░░░░░░░░░░░░░░░░░░░░░░] 49/276  Jan 2003  (18%)  Backtest — 15m 22s left    [█████░░░░░░░░░░░░░░░░░░░░░░░░░] 50/276  Feb 2003  (18%)  Backtest — 15m 44s left    [█████░░░░░░░░░░░░░░░░░░░░░░░░░] 51/276  Mar 2003  (18%)  Backtest — 16m 4s left    [█████░░░░░░░░░░░░░░░░░░░░░░░░░] 52/276  Apr 2003  (19%)  Backtest — 16m 23s left    [█████░░░░░░░░░░░░░░░░░░░░░░░░░] 53/276  May 2003  (19%)  Backtest — 16m 42s left    [█████░░░░░░░░░░░░░░░░░░░░░░░░░] 54/276  Jun 2003  (20%)  Backtest — 16m 59s left    [█████░░░░░░░░░░░░░░░░░░░░░░░░░] 55/276  Jul 2003  (20%)  Backtest — 17m 15s left    [██████░░░░░░░░░░░░░░░░░░░░░░░░] 56/276  Aug 2003  (20%)  Backtest — 17m 31s left    [██████░░░░░░░░░░░░░░░░░░░░░░░░] 57/276  Sep 2003  (21%)  Backtest — 17m 46s left    [██████░░░░░░░░░░░░░░░░░░░░░░░░] 58/276  Oct 2003  (21%)  Backtest — 17m 59s left    [██████░░░░░░░░░░░░░░░░░░░░░░░░] 59/276  Nov 2003  (21%)  Backtest — 18m 14s left    [██████░░░░░░░░░░░░░░░░░░░░░░░░] 60/276  Dec 2003  (22%)  Backtest — 18m 25s left    [██████░░░░░░░░░░░░░░░░░░░░░░░░] 61/276  Jan 2004  (22%)  Backtest — 18m 37s left    [██████░░░░░░░░░░░░░░░░░░░░░░░░] 62/276  Feb 2004  (22%)  Backtest — 18m 47s left    [██████░░░░░░░░░░░░░░░░░░░░░░░░] 63/276  Mar 2004  (23%)  Backtest — 18m 57s left    [██████░░░░░░░░░░░░░░░░░░░░░░░░] 64/276  Apr 2004  (23%)  Backtest — 19m 6s left    [███████░░░░░░░░░░░░░░░░░░░░░░░] 65/276  May 2004  (24%)  Backtest — 19m 14s left    [███████░░░░░░░░░░░░░░░░░░░░░░░] 66/276  Jun 2004  (24%)  Backtest — 19m 22s left    [███████░░░░░░░░░░░░░░░░░░░░░░░] 67/276  Jul 2004  (24%)  Backtest — 19m 30s left    [███████░░░░░░░░░░░░░░░░░░░░░░░] 68/276  Aug 2004  (25%)  Backtest — 19m 37s left    [███████░░░░░░░░░░░░░░░░░░░░░░░] 69/276  Sep 2004  (25%)  Backtest — 19m 43s left    [███████░░░░░░░░░░░░░░░░░░░░░░░] 70/276  Oct 2004  (25%)  Backtest — 19m 49s left    [███████░░░░░░░░░░░░░░░░░░░░░░░] 71/276  Nov 2004  (26%)  Backtest — 19m 55s left    [███████░░░░░░░░░░░░░░░░░░░░░░░] 72/276  Dec 2004  (26%)  Backtest — 20m 0s left    [███████░░░░░░░░░░░░░░░░░░░░░░░] 73/276  Jan 2005  (26%)  Backtest — 20m 4s left    [████████░░░░░░░░░░░░░░░░░░░░░░] 74/276  Feb 2005  (27%)  Backtest — 20m 8s left    [████████░░░░░░░░░░░░░░░░░░░░░░] 75/276  Mar 2005  (27%)  Backtest — 20m 12s left    [████████░░░░░░░░░░░░░░░░░░░░░░] 76/276  Apr 2005  (28%)  Backtest — 20m 15s left    [████████░░░░░░░░░░░░░░░░░░░░░░] 77/276  May 2005  (28%)  Backtest — 20m 18s left    [████████░░░░░░░░░░░░░░░░░░░░░░] 78/276  Jun 2005  (28%)  Backtest — 20m 21s left    [████████░░░░░░░░░░░░░░░░░░░░░░] 79/276  Jul 2005  (29%)  Backtest — 20m 23s left    [████████░░░░░░░░░░░░░░░░░░░░░░] 80/276  Aug 2005  (29%)  Backtest — 20m 25s left    [████████░░░░░░░░░░░░░░░░░░░░░░] 81/276  Sep 2005  (29%)  Backtest — 20m 26s left    [████████░░░░░░░░░░░░░░░░░░░░░░] 82/276  Oct 2005  (30%)  Backtest — 20m 28s left    [█████████░░░░░░░░░░░░░░░░░░░░░] 83/276  Nov 2005  (30%)  Backtest — 20m 29s left    [█████████░░░░░░░░░░░░░░░░░░░░░] 84/276  Dec 2005  (30%)  Backtest — 20m 29s left    [█████████░░░░░░░░░░░░░░░░░░░░░] 85/276  Jan 2006  (31%)  Backtest — 20m 30s left    [█████████░░░░░░░░░░░░░░░░░░░░░] 86/276  Feb 2006  (31%)  Backtest — 20m 30s left    [█████████░░░░░░░░░░░░░░░░░░░░░] 87/276  Mar 2006  (32%)  Backtest — 20m 30s left    [█████████░░░░░░░░░░░░░░░░░░░░░] 88/276  Apr 2006  (32%)  Backtest — 20m 30s left    [█████████░░░░░░░░░░░░░░░░░░░░░] 89/276  May 2006  (32%)  Backtest — 20m 30s left    [█████████░░░░░░░░░░░░░░░░░░░░░] 90/276  Jun 2006  (33%)  Backtest — 20m 29s left    [█████████░░░░░░░░░░░░░░░░░░░░░] 91/276  Jul 2006  (33%)  Backtest — 20m 29s left    [██████████░░░░░░░░░░░░░░░░░░░░] 92/276  Aug 2006  (33%)  Backtest — 20m 28s left    [██████████░░░░░░░░░░░░░░░░░░░░] 93/276  Sep 2006  (34%)  Backtest — 20m 27s left    [██████████░░░░░░░░░░░░░░░░░░░░] 94/276  Oct 2006  (34%)  Backtest — 20m 26s left    [██████████░░░░░░░░░░░░░░░░░░░░] 95/276  Nov 2006  (34%)  Backtest — 20m 25s left    [██████████░░░░░░░░░░░░░░░░░░░░] 96/276  Dec 2006  (35%)  Backtest — 20m 23s left    [██████████░░░░░░░░░░░░░░░░░░░░] 97/276  Jan 2007  (35%)  Backtest — 20m 21s left    [██████████░░░░░░░░░░░░░░░░░░░░] 98/276  Feb 2007  (36%)  Backtest — 20m 19s left    [██████████░░░░░░░░░░░░░░░░░░░░] 99/276  Mar 2007  (36%)  Backtest — 20m 17s left    [██████████░░░░░░░░░░░░░░░░░░░░] 100/276  Apr 2007  (36%)  Backtest — 20m 15s left    [██████████░░░░░░░░░░░░░░░░░░░░] 101/276  May 2007  (37%)  Backtest — 20m 13s left    [███████████░░░░░░░░░░░░░░░░░░░] 102/276  Jun 2007  (37%)  Backtest — 20m 10s left    [███████████░░░░░░░░░░░░░░░░░░░] 103/276  Jul 2007  (37%)  Backtest — 20m 7s left    [███████████░░░░░░░░░░░░░░░░░░░] 104/276  Aug 2007  (38%)  Backtest — 20m 5s left    [███████████░░░░░░░░░░░░░░░░░░░] 105/276  Sep 2007  (38%)  Backtest — 20m 2s left    [███████████░░░░░░░░░░░░░░░░░░░] 106/276  Oct 2007  (38%)  Backtest — 19m 58s left    [███████████░░░░░░░░░░░░░░░░░░░] 107/276  Nov 2007  (39%)  Backtest — 19m 55s left    [███████████░░░░░░░░░░░░░░░░░░░] 108/276  Dec 2007  (39%)  Backtest — 19m 51s left    [███████████░░░░░░░░░░░░░░░░░░░] 109/276  Jan 2008  (39%)  Backtest — 19m 48s left    [███████████░░░░░░░░░░░░░░░░░░░] 110/276  Feb 2008  (40%)  Backtest — 19m 44s left    [████████████░░░░░░░░░░░░░░░░░░] 111/276  Mar 2008  (40%)  Backtest — 19m 40s left    [████████████░░░░░░░░░░░░░░░░░░] 112/276  Apr 2008  (41%)  Backtest — 19m 37s left    [████████████░░░░░░░░░░░░░░░░░░] 113/276  May 2008  (41%)  Backtest — 19m 32s left    [████████████░░░░░░░░░░░░░░░░░░] 114/276  Jun 2008  (41%)  Backtest — 19m 28s left    [████████████░░░░░░░░░░░░░░░░░░] 115/276  Jul 2008  (42%)  Backtest — 19m 24s left    [████████████░░░░░░░░░░░░░░░░░░] 116/276  Aug 2008  (42%)  Backtest — 19m 20s left    [████████████░░░░░░░░░░░░░░░░░░] 117/276  Sep 2008  (42%)  Backtest — 19m 15s left    [████████████░░░░░░░░░░░░░░░░░░] 118/276  Oct 2008  (43%)  Backtest — 19m 11s left    [████████████░░░░░░░░░░░░░░░░░░] 119/276  Nov 2008  (43%)  Backtest — 19m 7s left    [█████████████░░░░░░░░░░░░░░░░░] 120/276  Dec 2008  (43%)  Backtest — 19m 2s left    [█████████████░░░░░░░░░░░░░░░░░] 121/276  Jan 2009  (44%)  Backtest — 18m 58s left    [█████████████░░░░░░░░░░░░░░░░░] 122/276  Feb 2009  (44%)  Backtest — 18m 53s left    [█████████████░░░░░░░░░░░░░░░░░] 123/276  Mar 2009  (45%)  Backtest — 18m 48s left    [█████████████░░░░░░░░░░░░░░░░░] 124/276  Apr 2009  (45%)  Backtest — 18m 44s left    [█████████████░░░░░░░░░░░░░░░░░] 125/276  May 2009  (45%)  Backtest — 18m 39s left    [█████████████░░░░░░░░░░░░░░░░░] 126/276  Jun 2009  (46%)  Backtest — 18m 34s left    [█████████████░░░░░░░░░░░░░░░░░] 127/276  Jul 2009  (46%)  Backtest — 18m 29s left    [█████████████░░░░░░░░░░░░░░░░░] 128/276  Aug 2009  (46%)  Backtest — 18m 24s left    [██████████████░░░░░░░░░░░░░░░░] 129/276  Sep 2009  (47%)  Backtest — 18m 19s left    [██████████████░░░░░░░░░░░░░░░░] 130/276  Oct 2009  (47%)  Backtest — 18m 13s left    [██████████████░░░░░░░░░░░░░░░░] 131/276  Nov 2009  (47%)  Backtest — 18m 8s left    [██████████████░░░░░░░░░░░░░░░░] 132/276  Dec 2009  (48%)  Backtest — 18m 2s left    [██████████████░░░░░░░░░░░░░░░░] 133/276  Jan 2010  (48%)  Backtest — 17m 57s left    [██████████████░░░░░░░░░░░░░░░░] 134/276  Feb 2010  (49%)  Backtest — 17m 51s left    [██████████████░░░░░░░░░░░░░░░░] 135/276  Mar 2010  (49%)  Backtest — 17m 46s left    [██████████████░░░░░░░░░░░░░░░░] 136/276  Apr 2010  (49%)  Backtest — 17m 40s left    [██████████████░░░░░░░░░░░░░░░░] 137/276  May 2010  (50%)  Backtest — 17m 34s left    [███████████████░░░░░░░░░░░░░░░] 138/276  Jun 2010  (50%)  Backtest — 17m 28s left    [███████████████░░░░░░░░░░░░░░░] 139/276  Jul 2010  (50%)  Backtest — 17m 23s left    [███████████████░░░░░░░░░░░░░░░] 140/276  Aug 2010  (51%)  Backtest — 17m 17s left    [███████████████░░░░░░░░░░░░░░░] 141/276  Sep 2010  (51%)  Backtest — 17m 11s left    [███████████████░░░░░░░░░░░░░░░] 142/276  Oct 2010  (51%)  Backtest — 17m 5s left    [███████████████░░░░░░░░░░░░░░░] 143/276  Nov 2010  (52%)  Backtest — 16m 58s left    [███████████████░░░░░░░░░░░░░░░] 144/276  Dec 2010  (52%)  Backtest — 16m 52s left    [███████████████░░░░░░░░░░░░░░░] 145/276  Jan 2011  (53%)  Backtest — 16m 46s left    [███████████████░░░░░░░░░░░░░░░] 146/276  Feb 2011  (53%)  Backtest — 16m 40s left    [███████████████░░░░░░░░░░░░░░░] 147/276  Mar 2011  (53%)  Backtest — 16m 33s left    [████████████████░░░░░░░░░░░░░░] 148/276  Apr 2011  (54%)  Backtest — 16m 27s left    [████████████████░░░░░░░░░░░░░░] 149/276  May 2011  (54%)  Backtest — 16m 21s left    [████████████████░░░░░░░░░░░░░░] 150/276  Jun 2011  (54%)  Backtest — 16m 14s left    [████████████████░░░░░░░░░░░░░░] 151/276  Jul 2011  (55%)  Backtest — 16m 7s left    [████████████████░░░░░░░░░░░░░░] 152/276  Aug 2011  (55%)  Backtest — 16m 1s left    [████████████████░░░░░░░░░░░░░░] 153/276  Sep 2011  (55%)  Backtest — 15m 54s left    [████████████████░░░░░░░░░░░░░░] 154/276  Oct 2011  (56%)  Backtest — 15m 48s left    [████████████████░░░░░░░░░░░░░░] 155/276  Nov 2011  (56%)  Backtest — 15m 41s left    [████████████████░░░░░░░░░░░░░░] 156/276  Dec 2011  (57%)  Backtest — 15m 34s left    [█████████████████░░░░░░░░░░░░░] 157/276  Jan 2012  (57%)  Backtest — 15m 27s left    [█████████████████░░░░░░░░░░░░░] 158/276  Feb 2012  (57%)  Backtest — 15m 20s left    [█████████████████░░░░░░░░░░░░░] 159/276  Mar 2012  (58%)  Backtest — 15m 14s left    [█████████████████░░░░░░░░░░░░░] 160/276  Apr 2012  (58%)  Backtest — 15m 7s left    [█████████████████░░░░░░░░░░░░░] 161/276  May 2012  (58%)  Backtest — 15m 0s left    [█████████████████░░░░░░░░░░░░░] 162/276  Jun 2012  (59%)  Backtest — 14m 53s left    [█████████████████░░░░░░░░░░░░░] 163/276  Jul 2012  (59%)  Backtest — 14m 46s left    [█████████████████░░░░░░░░░░░░░] 164/276  Aug 2012  (59%)  Backtest — 14m 39s left    [█████████████████░░░░░░░░░░░░░] 165/276  Sep 2012  (60%)  Backtest — 14m 32s left    [██████████████████░░░░░░░░░░░░] 166/276  Oct 2012  (60%)  Backtest — 14m 25s left    [██████████████████░░░░░░░░░░░░] 167/276  Nov 2012  (61%)  Backtest — 14m 18s left    [██████████████████░░░░░░░░░░░░] 168/276  Dec 2012  (61%)  Backtest — 14m 11s left    [██████████████████░░░░░░░░░░░░] 169/276  Jan 2013  (61%)  Backtest — 14m 4s left    [██████████████████░░░░░░░░░░░░] 170/276  Feb 2013  (62%)  Backtest — 13m 57s left    [██████████████████░░░░░░░░░░░░] 171/276  Mar 2013  (62%)  Backtest — 13m 50s left    [██████████████████░░░░░░░░░░░░] 172/276  Apr 2013  (62%)  Backtest — 13m 43s left    [██████████████████░░░░░░░░░░░░] 173/276  May 2013  (63%)  Backtest — 13m 36s left    [██████████████████░░░░░░░░░░░░] 174/276  Jun 2013  (63%)  Backtest — 13m 28s left    [███████████████████░░░░░░░░░░░] 175/276  Jul 2013  (63%)  Backtest — 13m 21s left    [███████████████████░░░░░░░░░░░] 176/276  Aug 2013  (64%)  Backtest — 13m 14s left    [███████████████████░░░░░░░░░░░] 177/276  Sep 2013  (64%)  Backtest — 13m 7s left    [███████████████████░░░░░░░░░░░] 178/276  Oct 2013  (64%)  Backtest — 13m 0s left    [███████████████████░░░░░░░░░░░] 179/276  Nov 2013  (65%)  Backtest — 12m 52s left    [███████████████████░░░░░░░░░░░] 180/276  Dec 2013  (65%)  Backtest — 12m 45s left    [███████████████████░░░░░░░░░░░] 181/276  Jan 2014  (66%)  Backtest — 12m 38s left    [███████████████████░░░░░░░░░░░] 182/276  Feb 2014  (66%)  Backtest — 12m 30s left    [███████████████████░░░░░░░░░░░] 183/276  Mar 2014  (66%)  Backtest — 12m 23s left    [████████████████████░░░░░░░░░░] 184/276  Apr 2014  (67%)  Backtest — 12m 16s left    [████████████████████░░░░░░░░░░] 185/276  May 2014  (67%)  Backtest — 12m 8s left    [████████████████████░░░░░░░░░░] 186/276  Jun 2014  (67%)  Backtest — 12m 1s left    [████████████████████░░░░░░░░░░] 187/276  Jul 2014  (68%)  Backtest — 11m 53s left    [████████████████████░░░░░░░░░░] 188/276  Aug 2014  (68%)  Backtest — 11m 46s left    [████████████████████░░░░░░░░░░] 189/276  Sep 2014  (68%)  Backtest — 11m 38s left    [████████████████████░░░░░░░░░░] 190/276  Oct 2014  (69%)  Backtest — 11m 31s left    [████████████████████░░░░░░░░░░] 191/276  Nov 2014  (69%)  Backtest — 11m 24s left    [████████████████████░░░░░░░░░░] 192/276  Dec 2014  (70%)  Backtest — 11m 16s left    [████████████████████░░░░░░░░░░] 193/276  Jan 2015  (70%)  Backtest — 11m 9s left    [█████████████████████░░░░░░░░░] 194/276  Feb 2015  (70%)  Backtest — 11m 1s left    [█████████████████████░░░░░░░░░] 195/276  Mar 2015  (71%)  Backtest — 10m 54s left    [█████████████████████░░░░░░░░░] 196/276  Apr 2015  (71%)  Backtest — 10m 46s left    [█████████████████████░░░░░░░░░] 197/276  May 2015  (71%)  Backtest — 10m 39s left    [█████████████████████░░░░░░░░░] 198/276  Jun 2015  (72%)  Backtest — 10m 31s left    [█████████████████████░░░░░░░░░] 199/276  Jul 2015  (72%)  Backtest — 10m 24s left    [█████████████████████░░░░░░░░░] 200/276  Aug 2015  (72%)  Backtest — 10m 16s left    [█████████████████████░░░░░░░░░] 201/276  Sep 2015  (73%)  Backtest — 10m 9s left    [█████████████████████░░░░░░░░░] 202/276  Oct 2015  (73%)  Backtest — 10m 1s left    [██████████████████████░░░░░░░░] 203/276  Nov 2015  (74%)  Backtest — 9m 53s left    [██████████████████████░░░░░░░░] 204/276  Dec 2015  (74%)  Backtest — 9m 46s left    [██████████████████████░░░░░░░░] 205/276  Jan 2016  (74%)  Backtest — 9m 38s left    [██████████████████████░░░░░░░░] 206/276  Feb 2016  (75%)  Backtest — 9m 30s left    [██████████████████████░░░░░░░░] 207/276  Mar 2016  (75%)  Backtest — 9m 22s left    [██████████████████████░░░░░░░░] 208/276  Apr 2016  (75%)  Backtest — 9m 15s left    [██████████████████████░░░░░░░░] 209/276  May 2016  (76%)  Backtest — 9m 7s left    [██████████████████████░░░░░░░░] 210/276  Jun 2016  (76%)  Backtest — 8m 59s left    [██████████████████████░░░░░░░░] 211/276  Jul 2016  (76%)  Backtest — 8m 51s left    [███████████████████████░░░░░░░] 212/276  Aug 2016  (77%)  Backtest — 8m 44s left    [███████████████████████░░░░░░░] 213/276  Sep 2016  (77%)  Backtest — 8m 36s left    [███████████████████████░░░░░░░] 214/276  Oct 2016  (78%)  Backtest — 8m 28s left    [███████████████████████░░░░░░░] 215/276  Nov 2016  (78%)  Backtest — 8m 20s left    [███████████████████████░░░░░░░] 216/276  Dec 2016  (78%)  Backtest — 8m 12s left    [███████████████████████░░░░░░░] 217/276  Jan 2017  (79%)  Backtest — 8m 4s left    [███████████████████████░░░░░░░] 218/276  Feb 2017  (79%)  Backtest — 7m 56s left    [███████████████████████░░░░░░░] 219/276  Mar 2017  (79%)  Backtest — 7m 48s left    [███████████████████████░░░░░░░] 220/276  Apr 2017  (80%)  Backtest — 7m 41s left    [████████████████████████░░░░░░] 221/276  May 2017  (80%)  Backtest — 7m 33s left    [████████████████████████░░░░░░] 222/276  Jun 2017  (80%)  Backtest — 7m 25s left    [████████████████████████░░░░░░] 223/276  Jul 2017  (81%)  Backtest — 7m 17s left    [████████████████████████░░░░░░] 224/276  Aug 2017  (81%)  Backtest — 7m 9s left    [████████████████████████░░░░░░] 225/276  Sep 2017  (82%)  Backtest — 7m 1s left    [████████████████████████░░░░░░] 226/276  Oct 2017  (82%)  Backtest — 6m 53s left    [████████████████████████░░░░░░] 227/276  Nov 2017  (82%)  Backtest — 6m 45s left    [████████████████████████░░░░░░] 228/276  Dec 2017  (83%)  Backtest — 6m 37s left    [████████████████████████░░░░░░] 229/276  Jan 2018  (83%)  Backtest — 6m 29s left    [█████████████████████████░░░░░] 230/276  Feb 2018  (83%)  Backtest — 6m 21s left    [█████████████████████████░░░░░] 231/276  Mar 2018  (84%)  Backtest — 6m 13s left    [█████████████████████████░░░░░] 232/276  Apr 2018  (84%)  Backtest — 6m 5s left    [█████████████████████████░░░░░] 233/276  May 2018  (84%)  Backtest — 5m 57s left    [█████████████████████████░░░░░] 234/276  Jun 2018  (85%)  Backtest — 5m 49s left    [█████████████████████████░░░░░] 235/276  Jul 2018  (85%)  Backtest — 5m 41s left    [█████████████████████████░░░░░] 236/276  Aug 2018  (86%)  Backtest — 5m 33s left    [█████████████████████████░░░░░] 237/276  Sep 2018  (86%)  Backtest — 5m 25s left    [█████████████████████████░░░░░] 238/276  Oct 2018  (86%)  Backtest — 5m 16s left    [█████████████████████████░░░░░] 239/276  Nov 2018  (87%)  Backtest — 5m 8s left    [██████████████████████████░░░░] 240/276  Dec 2018  (87%)  Backtest — 5m 0s left    [██████████████████████████░░░░] 241/276  Jan 2019  (87%)  Backtest — 4m 52s left    [██████████████████████████░░░░] 242/276  Feb 2019  (88%)  Backtest — 4m 44s left    [██████████████████████████░░░░] 243/276  Mar 2019  (88%)  Backtest — 4m 36s left    [██████████████████████████░░░░] 244/276  Apr 2019  (88%)  Backtest — 4m 27s left    [██████████████████████████░░░░] 245/276  May 2019  (89%)  Backtest — 4m 19s left    [██████████████████████████░░░░] 246/276  Jun 2019  (89%)  Backtest — 4m 11s left    [██████████████████████████░░░░] 247/276  Jul 2019  (89%)  Backtest — 4m 3s left    [██████████████████████████░░░░] 248/276  Aug 2019  (90%)  Backtest — 3m 55s left    [███████████████████████████░░░] 249/276  Sep 2019  (90%)  Backtest — 3m 46s left    [███████████████████████████░░░] 250/276  Oct 2019  (91%)  Backtest — 3m 38s left    [███████████████████████████░░░] 251/276  Nov 2019  (91%)  Backtest — 3m 30s left    [███████████████████████████░░░] 252/276  Dec 2019  (91%)  Backtest — 3m 21s left    [███████████████████████████░░░] 253/276  Jan 2020  (92%)  Backtest — 3m 13s left    [███████████████████████████░░░] 254/276  Feb 2020  (92%)  Backtest — 3m 5s left    [███████████████████████████░░░] 255/276  Mar 2020  (92%)  Backtest — 2m 56s left    [███████████████████████████░░░] 256/276  Apr 2020  (93%)  Backtest — 2m 48s left    [███████████████████████████░░░] 257/276  May 2020  (93%)  Backtest — 2m 40s left    [████████████████████████████░░] 258/276  Jun 2020  (93%)  Backtest — 2m 31s left    [████████████████████████████░░] 259/276  Jul 2020  (94%)  Backtest — 2m 23s left    [████████████████████████████░░] 260/276  Aug 2020  (94%)  Backtest — 2m 15s left    [████████████████████████████░░] 261/276  Sep 2020  (95%)  Backtest — 2m 6s left    [████████████████████████████░░] 262/276  Oct 2020  (95%)  Backtest — 1m 58s left    [████████████████████████████░░] 263/276  Nov 2020  (95%)  Backtest — 1m 50s left    [████████████████████████████░░] 264/276  Dec 2020  (96%)  Backtest — 1m 41s left    [████████████████████████████░░] 265/276  Jan 2021  (96%)  Backtest — 1m 33s left    [████████████████████████████░░] 266/276  Feb 2021  (96%)  Backtest — 1m 24s left    [█████████████████████████████░] 267/276  Mar 2021  (97%)  Backtest — 1m 16s left    [█████████████████████████████░] 268/276  Apr 2021  (97%)  Backtest — 1m 7s left    [█████████████████████████████░] 269/276  May 2021  (97%)  Backtest — 0m 59s left    [█████████████████████████████░] 270/276  Jun 2021  (98%)  Backtest — 0m 51s left    [█████████████████████████████░] 271/276  Jul 2021  (98%)  Backtest — 0m 42s left    [█████████████████████████████░] 272/276  Aug 2021  (99%)  Backtest — 0m 34s left    [█████████████████████████████░] 273/276  Sep 2021  (99%)  Backtest — 0m 25s left    [█████████████████████████████░] 274/276  Oct 2021  (99%)  Backtest — 0m 17s left    [█████████████████████████████░] 275/276  Nov 2021  (100%)  Backtest — 0m 8s left    [██████████████████████████████] 276/276  Dec 2021  (100%)  Backtest — done    
+
+Scoring and reporting
+========================================================================
+
+  Family blend: 9 families, 1/9 each, equal within (two-level, renormalised)
+      size             1/9 -> Size  (1/9 each)
+      value            1/9 -> Value, cfp  (1/18 each)
+      profitability    1/9 -> Profitability, CBOperProf, GP, roaq, RoE  (1/45 each)
+      investment       1/9 -> Investment, PctAcc  (1/18 each)
+      momentum         1/9 -> Momentum, TrendFactor  (1/18 each)
+      external_financing 1/9 -> ShareIss5Y, XFIN  (1/18 each)
+      volatility       1/9 -> MaxRet, IdioVol3F  (1/18 each)
+      short_term_reversal 1/9 -> STreversal  (1/9 each)
+      liquidity        1/9 -> zerotrade6M, VolumeTrend  (1/18 each)
+
+======================================================================
+  US UNIVERSE  —  19-factor composite v14, family blend
+  D1 = worst | D10 = best | LS = D10 − D1
+======================================================================
+             Avg Monthly Return (%)  Avg N Companies  t-stat
+D1                            0.261            196.0     NaN
+D2                            0.562            196.0     NaN
+D3                            0.761            196.0     NaN
+D4                            0.782            196.0     NaN
+D5                            1.022            196.0     NaN
+D6                            1.067            196.0     NaN
+D7                            1.114            196.0     NaN
+D8                            1.259            196.0     NaN
+D9                            1.350            196.0     NaN
+D10                           1.504            196.0     NaN
+LS (D10−D1)                   1.362              NaN  4.7787
+
+  --- IC Summary (Spearman, continuous score) ---
+  Mean IC   : 0.0389
+  Std IC    : 0.1006
+  ICIR      : 0.3870
+  t-stat    : 6.4286   (Newey-West 3 lags: 5.6812)
+  % Positive: 62.3%
+  Halves    : first 138m +0.0496 | second 138m +0.0283
+  Months    : 276
+  Decay     : h1=+0.0269  h2=+0.0226  h3=+0.0247  h6=+0.0197  h12=+0.0235
+
+  --- LS Portfolio Economics (equal-weight D10−D1, gross) ---
+  Ann. Return     : 16.34%
+  Ann. Volatility : 16.40%
+  Sharpe Ratio    : 0.9964   (LS t NW: 3.96)
+  Max Drawdown    : -43.23%
+  Calmar Ratio    : 0.3780
+  Hit Rate        : 62.7%  (173/276 months)
+  LS Months       : 276 of 276 (0 with no D10−D1)
+  Avg D10 Turnover: 58.1% per month
+  Avg D1  Turnover: 54.5% per month
+  LS in Down Mkt  : 1.77%  (avg over 62 months where mkt < -3%)
+
+  --- Market hedge (ex-ante trailing beta on the universe's cap-weighted return) ---
+  Hedge           : ON — window 36m, min 12m; 264 of 276 months hedged (beta = 0 before the minimum history). Every LS figure above is the HEDGED series.
+  Raw LS          : 14.91%/yr  vol 18.87%  Sharpe 0.7902  MaxDD -44.93%
+  Beta            : trailing mean -0.540  last -0.184  full-window OLS of the raw LS -0.556
+  Excess hedge    : hedged + beta x rf (rf = TB3MS/1200 of the holding month; a diagnostic, never a bar) — 15.09%/yr  Sharpe 0.9285  t NW 3.75  MaxDD -43.34%  rf credit -1.25 pp/yr  (276 of 276 months carry an rf)
+                    Sharpe ex top-3 EXCESS years 0.6045 (years 2000,2001,2021; the declared ex-years below read the hedged series)
+
+  --- Regime diagnostics (date-free; never a bar) ---
+  Sharpe ex top-3 LS years : 0.6665  (years 2000,2001,2021; they carry 54% of the summed LS return)
+  Sharpe by market state    : bear 1.2566 (64 m)  bull 1.1151 (200 m)   (state = sign of the trailing 12m market return, ex ante)
+
+  --- Annual IC ---
+      Mean IC  Std IC    ICIR
+DATE                         
+1999   0.0178  0.0923  0.1933
+2000   0.1217  0.1566  0.7775
+2001   0.1089  0.1623  0.6711
+2002   0.1177  0.1456  0.8084
+2003  -0.0003  0.0803 -0.0038
+2004   0.0405  0.0546  0.7422
+2005   0.0263  0.0791  0.3329
+2006   0.0401  0.0908  0.4415
+2007  -0.0159  0.0676 -0.2353
+2008   0.0811  0.0684  1.1858
+2009   0.0028  0.0884  0.0322
+2010   0.0317  0.0557  0.5693
+2011   0.0594  0.0556  1.0685
+2012   0.0186  0.0660  0.2826
+2013   0.0191  0.0523  0.3645
+2014   0.0407  0.1090  0.3736
+2015   0.0403  0.0645  0.6244
+2016   0.0304  0.0988  0.3078
+2017   0.0012  0.0370  0.0314
+2018   0.0391  0.0800  0.4889
+2019   0.0089  0.0955  0.0931
+2020  -0.0489  0.0859 -0.5693
+2021   0.1142  0.1450  0.7873
+
+  --- Annual LS Return (%) ---
+DATE
+1999    -23.48
+2000    118.35
+2001     68.90
+2002     44.27
+2003     33.11
+2004     24.90
+2005     14.96
+2006     26.38
+2007     -2.72
+2008      7.86
+2009     -2.61
+2010     22.04
+2011     26.21
+2012      5.55
+2013      6.08
+2014      4.58
+2015     17.28
+2016     19.30
+2017      4.55
+2018      8.54
+2019      3.44
+2020    -40.67
+2021     76.39
+
+
+  Per-(region × liq_tier) diagnostics
+========================================================================
+
+  IC + LS economics by (region × tier)
+  -- LS uses bucket-internal deciles (D10−D1 within bucket), RAW (unhedged) --
+
+region  tier  months  ls_months  avg_N  mean_IC   ICIR  IC_tstat  %_pos  LS_ann_%  LS_vol_%  LS_Sharpe  LS_MaxDD_%  LS_hit_%
+    US  MEGA     276        276    392   0.0335 0.2305      3.83   55.1      7.11     25.81      0.275      -68.36      54.7
+    US   MID     276        276    587   0.0347 0.3193      5.31   56.2     12.95     20.59      0.629      -44.88      55.1
+    US SMALL     276        276    978   0.0412 0.4403      7.31   62.7     16.44     17.84      0.922      -42.93      59.1
+   ALL   ALL     276        276   1958   0.0389 0.3870      6.43   62.3     14.91     18.87      0.790      -44.93      58.3
+
+  ICIR pivot:
+tier    MEGA    MID  SMALL    ALL
+region                           
+US      0.23  0.319   0.44    NaN
+ALL      NaN    NaN    NaN  0.387
+
+  LS_Sharpe pivot:
+tier     MEGA    MID  SMALL   ALL
+region                           
+US      0.275  0.629  0.922   NaN
+ALL       NaN    NaN    NaN  0.79
+
+  LS_ann_% pivot:
+tier    MEGA    MID  SMALL    ALL
+region                           
+US      7.11  12.95  16.44    NaN
+ALL      NaN    NaN    NaN  14.91
+
+  avg_N pivot:
+tier     MEGA    MID  SMALL     ALL
+region                             
+US      392.0  587.0  978.0     NaN
+ALL       NaN    NaN    NaN  1958.0
+
+
+  --- Per-leg coverage (% of universe-months with a non-null leg) ---
+    f_shareiss5y                  62.64%  ################
+    f_voltrend                    66.32%  #################
+    f_trendfactor                 68.74%  #################
+    f_cbop                        73.43%  ##################
+    f_gp                          74.39%  ###################
+    f_roe                         93.14%  #######################
+    f_prof                        93.15%  #######################
+    f_inv                         95.35%  ########################
+    f_pctacc                      95.59%  ########################
+    f_xfin                        95.64%  ########################
+    f_cfp                         95.68%  ########################
+    f_mom                         96.11%  ########################
+    f_roaq                        96.30%  ########################
+    f_value                       96.35%  ########################
+    f_ivol3f                      96.73%  ########################
+    f_zt6m                        97.60%  ########################
+    f_maxret                      99.80%  #########################
+    f_streversal                  99.80%  #########################
+    f_size                       100.00%  #########################
+
+    Legs per scored name: mean 16.97 of 19
+    Names scored on ALL legs      :  45.42%
+    Names scored on HALF or fewer :   3.89%
+
+  Coverage by sector (worst-covered sector first):
+                        f_size  f_value  f_prof  f_inv  f_mom  f_pctacc  f_cbop  f_shareiss5y  f_cfp  f_xfin   f_gp  f_maxret  f_roaq  f_roe  f_ivol3f  f_streversal  f_zt6m  f_voltrend  f_trendfactor
+sector                                                                                                                                                                                                 
+Financial Services       100.0     98.8    96.2   96.5   97.4      96.5     3.4          66.2   96.6    96.6    3.4      99.9    96.9   96.2      96.6          99.9    98.2        70.1           72.3
+Real Estate              100.0     98.4    96.4   97.3   97.6      97.3     1.8          67.6   97.3    97.3    2.0      99.9    97.1   96.4      97.5          99.9    98.3        71.2           74.0
+Communication Services   100.0     89.1    83.3   91.6   92.0      92.3    80.1          48.8   92.1    92.5   87.0      99.6    95.5   83.3      95.1          99.6    95.4        53.0           56.6
+Technology               100.0     96.4    91.2   91.7   92.8      93.1    87.6          53.1   93.3    93.1   91.6      99.7    95.4   91.2      96.0          99.7    95.7        56.6           59.2
+Healthcare               100.0     95.8    92.7   95.2   95.9      95.7    87.4          60.0   95.7    95.7   76.1      99.8    95.9   92.7      97.5          99.8    97.6        64.0           67.1
+Consumer Cyclical        100.0     94.0    91.2   96.5   97.0      96.3    90.3          65.4   96.5    96.5   96.1      99.8    96.7   91.2      96.6          99.8    98.4        68.7           70.7
+Energy                   100.0     97.4    94.4   95.9   96.8      95.3    93.2          64.3   95.4    95.4   94.1      99.8    96.1   94.4      97.9          99.8    97.6        68.6           71.8
+Consumer Defensive       100.0     94.7    92.3   96.3   97.5      96.1    91.4          66.3   96.2    96.2   96.5      99.9    95.8   92.3      96.7          99.9    97.9        70.6           72.5
+Basic Materials          100.0     97.4    94.6   96.4   97.1      96.0    92.3          65.8   96.1    96.0   93.6      99.9    95.8   94.5      96.6          99.9    98.3        69.4           71.4
+Industrials              100.0     97.3    95.1   96.9   97.5      96.9    93.5          69.4   97.0    97.0   95.2      99.9    96.9   95.0      96.9          99.9    98.4        72.5           74.2
+Utilities                100.0     99.4    97.5   97.4   98.4      97.4    96.8          69.0   97.6    97.6   97.7      99.9    97.5   97.5      96.4          99.9    98.7        72.4           73.5
+
+  --- Forward-return composition ---
+    full                                538,173   99.56%
+    partial_delisted_merger               2,342    0.43%
+    partial_delisted_performance             21    0.00%
+
+
+  --- Survivorship-bias check ---
+
+  Names appearing in year-Y but ABSENT in 2021
+  (= delisted/merged/acquired — confirms NO survivorship bias)
+
+    Year   Total IDs      Gone by 2021       %
+  ------  ----------  ----------------  ------
+    1999       3,222             2,445   75.9%
+    2003       2,304             1,420   61.6%
+    2008       2,166             1,073   49.5%
+    2015       2,272               744   32.7%
+    2020       2,284               157    6.9%
+
+  >5% gone confirms delisted names ARE retained at historical dates.
+  (a universe accidentally built from TODAY's tickers would show ~0%)
+
+========================================================================
+  DONE — total runtime: 44m 59s   (1 result block(s))
+========================================================================
+
+--- BEGIN RESULT BLOCK ---
+stage: baseline
+factor: BASELINE_v14
+composite_sha: 7fe6f001e708
+composite_version: v14
+composite_legs: Size,Value,Profitability,Investment,Momentum,PctAcc,CBOperProf,ShareIss5Y,cfp,XFIN,GP,MaxRet,roaq,RoE,IdioVol3F,STreversal,zerotrade6M,VolumeTrend,TrendFactor
+composite_families: size:Size|value:Value,cfp|profitability:Profitability,CBOperProf,GP,roaq,RoE|investment:Investment,PctAcc|momentum:Momentum,TrendFactor|external_financing:ShareIss5Y,XFIN|volatility:MaxRet,IdioVol3F|short_term_reversal:STreversal|liquidity:zerotrade6M,VolumeTrend
+harness_sha: 1271266472a9
+config_sha: 0d88328d5b10
+data_sha: 42587e08609a
+universe_sha: 1c6512b922a8
+eval_start: 1999-01-01
+eval_end: 2021-12-31
+include_holdout: False
+dimension_overrides: {'f_shareiss5y': 'ARQ', 'f_roaq': 'ARQ'}
+history_gates: {'f_mom': 12, 'f_shareiss5y': 65, 'f_maxret': 1, 'f_ivol3f': 1, 'f_streversal': 1, 'f_zt6m': 6, 'f_voltrend': 59, 'f_trendfactor': 48}
+coverage_pct: 100.000000
+ic_mean: 0.038935
+ic_std: 0.100617
+icir: 0.386958
+ic_tstat: 6.428632
+ic_tstat_nw: 5.681156
+ic_pct_positive: 62.318841
+n_months: 276
+ic_half1_mean: 0.049594
+ic_half2_mean: 0.028275
+ic_half_min: 0.028275
+ls_mean_monthly: 0.013620
+ls_tstat: 4.778733
+ls_tstat_nw: 3.960060
+ls_ann_return_pct: 16.344422
+ls_ann_vol_pct: 16.402903
+ls_sharpe: 0.996435
+ls_maxdd_pct: -43.233708
+ls_calmar: 0.378048
+ls_hit_rate_pct: 62.681159
+ls_n_months: 276
+ls_n_months_missing: 0
+turnover_d10_pct: 58.093391
+turnover_d1_pct: 54.453665
+ls_down_mkt_pct: 1.773472
+n_down_months: 62
+avg_names_per_decile: 195.846377
+decile_avg_ret_pct: 0.261,0.562,0.761,0.782,1.022,1.067,1.114,1.259,1.350,1.504
+ls_raw_ann_return_pct: 14.910787
+ls_raw_ann_vol_pct: 18.868909
+ls_raw_sharpe: 0.790230
+ls_raw_maxdd_pct: -44.933514
+ls_beta_mean: -0.539829
+ls_beta_last: -0.184315
+ls_beta_fullwindow: -0.555989
+ls_hedged_months: 264
+hedge_on: True
+ls_excess_n_months: 276
+ls_excess_sharpe: 0.928451
+ls_excess_ann_return_pct: 15.090710
+ls_excess_maxdd_pct: -43.335179
+ls_excess_tstat_nw: 3.749137
+ls_excess_sharpe_ex_top_years: 0.604530
+ls_excess_top_years: 2000,2001,2021
+ls_rf_credit_pp: -1.253712
+ls_sharpe_ex_top_years: 0.666471
+ls_top_years: 2000,2001,2021
+ls_top_years_share_pct: 53.623582
+ls_sharpe_bear: 1.256611
+ls_sharpe_bull: 1.115107
+n_bear_months: 64
+n_bull_months: 200
+ic_decay_h1: 0.026858
+ic_decay_h2: 0.022593
+ic_decay_h3: 0.024731
+ic_decay_h6: 0.019706
+ic_decay_h12: 0.023460
+tier_MEGA_ic_mean: 0.033500
+tier_MEGA_ls_sharpe: 0.275000
+tier_MEGA_avg_n: 392
+tier_MID_ic_mean: 0.034700
+tier_MID_ls_sharpe: 0.629000
+tier_MID_avg_n: 587
+tier_SMALL_ic_mean: 0.041200
+tier_SMALL_ls_sharpe: 0.922000
+tier_SMALL_avg_n: 978
+leg_coverage_worst_leg: f_shareiss5y
+leg_coverage_worst_pct: 62.636161
+leg_coverage_mean_legs: 16.967630
+leg_coverage_pct_full: 45.415476
+leg_coverage_pct_half_or_less: 3.890953
+leg_coverage_worst_sector: Financial Services
+leg_coverage_worst_sector_mean_pct: 83.239503
+delisting_adjusted_pct: 0.437159
+survivorship_max_gone_pct: 75.884544
+--- END RESULT BLOCK ---
+
+Written to research/results/053_BASELINE_stage2_2026-10-01.txt

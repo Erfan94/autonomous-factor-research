@@ -65,3 +65,9 @@ and ids, not essays; the reasoning lives in DECISIONS.md and events.jsonl.
 - Run 049 (`--baseline --construction-layer`, 2473.6 s, 33 blocks, in-window): stamps and layer pin verified, 0 validation warnings, every guard held. layer@$100M gross 4.08%/yr (Sharpe 0.86, t 3.27), costs 4.36 (spread 3.39), net -0.29 (Sharpe -0.06); -0.41 at $1B, -0.87 at $5B; fixed tier spreads +0.50 / +0.16 / -0.32. Ex-post beta -0.10 against ex-ante 0; risk model underpredicts about 2.4x; return front-loaded (2003-2020 net -36% compounded).
 - Decided: nothing is gated; the layer is frozen as run and recorded in the manifest's v14 `construction_layer` block. Next: the advisor, then stop-and-ask 3 (snapshot refresh) and 5 (holdout).
 - Cost: about 2.8 h of run wall time (045, 047, 048, 049 at 40-41 min each; 046 stopped after 7 min), 2 HARNESS_SHA moves, 0 config/composite/data moves.
+
+## 2026-10-01 — D8 refresh and step 2 (owner approved stop-and-ask 3: "approve both, use TB3MS for rf")
+- rf as a diagnostic beside the declared hedge (moving market_hedge would be stop-and-ask 2): harness 8d1895a, run 052 reproduced 042 on the old bytes.
+- Refresh: DATA_SHA 198b281de1a0 -> 42587e08609a (d477021); SEP to 2026-10-01 incl. 2026-09-30; TB3MS 1934-01..2026-09.
+- Step 2 (run 053): 54 fields restated, IC -9e-6, hedged Sharpe +0.014; no Stage 2 verdict can move against the thinnest margins. Excess-of-rf Sharpe 0.928 vs hedged 0.996 (rf credit 1.25 pp/yr). Holdout expectations restated on the spend snapshot before any OOS number.
+- Earlier the same day: skip1 diagnostic (run 051) and the whole-model audit; stop-and-ask 5 is next.
