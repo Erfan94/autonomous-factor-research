@@ -1,0 +1,6 @@
+*Table 07d_d7_changes. The D7 layer changes and the alpha-review fixes. Source: events `harness_changed` (text truncated at 420 characters).*
+
+| events line | ts | old HARNESS | new HARNESS | tests | reason (record text) |
+|---|---|---|---|---|---|
+| 1060 | 2026-10-01T17:04:10Z | 73a95d352942 | 471f70782486 | 441 passed (434 - 1 replaced + 8 new) | D7 construction layer: (1) sector+market-beta neutrality via a constraint matrix [sector dummies \| beta_i], beta_i trailing 36m on D4's M (min 12, sector-month median fill), held by steps 1,2,5 per CONSTRUCTION.md 9.5, final book \|beta'w\|<=1e-10; reference row layer_no_beta_constraint; (2) Corwin-Schultz spread built in harness/data_layer.py (bit-exact vs BidAskSpread candidate raw on 1984 real name-months), no leg c … |
+| 1071 | 2026-10-01T18:44:13Z | 471f70782486 | 3561590b660a | 445 passed | alpha_review fixes to the D7 layer (layer path only): declared vs effective ex-years fields (2000 precedes book_start; effective 2001,2021); name_cap_excess carried to summary; LayerRefused if spread join < costs.spread_measured_min_pct 95 (real 99.938% in-window, worst 99.58% 2021-02) or a sector_beta_neutral book month lacks beta; CS PIT test replaced with a non-vacuous one; _cs_builder_sha hashes Snapshot.table/ti … |

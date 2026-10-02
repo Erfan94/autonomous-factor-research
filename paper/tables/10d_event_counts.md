@@ -1,0 +1,43 @@
+*Table 10d_event_counts. research/events.jsonl by event type (1131 rows).*
+
+| event | count |
+|---|---|
+| spec_written | 207 |
+| factor_evaluated | 132 |
+| factor_translated | 108 |
+| preflight_passed | 105 |
+| factor_infeasible | 71 |
+| run_started | 57 |
+| provenance_verified | 56 |
+| run_completed | 56 |
+| decision | 51 |
+| process_finding | 31 |
+| preflight_failed | 29 |
+| fields_verified | 27 |
+| family_assigned | 24 |
+| alpha_review | 23 |
+| construction_reported | 18 |
+| composite_updated | 15 |
+| registry_rows_written | 15 |
+| batch_closed | 14 |
+| batch_declared | 14 |
+| finding_corrected | 14 |
+| preflight_remeasured | 14 |
+| repository_committed | 10 |
+| harness_changed | 6 |
+| verification_completed | 6 |
+| validation_warning | 5 |
+| finding_confirmed | 4 |
+| phase_completed | 4 |
+| config_changed | 2 |
+| flip_hypothesis_qualified | 2 |
+| snapshot_recorded | 2 |
+| batch_amended | 1 |
+| factor_dropped | 1 |
+| holdout_spent | 1 |
+| inventory_classified | 1 |
+| project_initialized | 1 |
+| repository_initialized | 1 |
+| rule_conflict_found | 1 |
+| run_aborted | 1 |
+| stage2_order_declared | 1 |

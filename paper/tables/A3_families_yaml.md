@@ -1,0 +1,76 @@
+*Table A3_families_yaml. research/families.yaml, verbatim.*
+
+```yaml
+# Family assignments — Phase C. Written ONCE per Stage 1 passer, after its
+# screen and before ANY Stage 2 number exists, by economic definition (the
+# OSAP SignalDoc Cat.Economic label is the reference; the predictor's own
+# construction decides when the label is "other"). Fewer than ten families
+# in total (config search.families_max). Never changed after assignment:
+# a wrong family is a logged limitation, not an edit.
+#
+# The five seed families are fixed by v0: size, value, profitability,
+# investment, momentum. A passer joins one of them or opens a new one.
+#
+# families:
+#   value:
+#     definition: "price relative to a fundamental anchor"
+#     members: [Value]                 # seeds first, passers appended in assignment order
+#   <new_family>:
+#     definition: "..."
+#     members: [...]
+# assignments:
+#   - {factor: <Name>, family: <family>, cat_economic: "<SignalDoc label>", assigned: "YYYY-MM-DD", event_ts: "..."}
+families:
+  size:
+    definition: market capitalisation (small = attractive)
+    members: [Size]
+  value:
+    definition: price relative to a fundamental anchor
+    members: [Value, CF, NetPayoutYield, cfp]
+  profitability:
+    definition: earning power relative to capital
+    members: [Profitability, CBOperProf, GP, OperProfRD, RoE, roaq]
+  investment:
+    definition: growth of the asset base or of investment
+    members: [Investment, PctAcc]
+  momentum:
+    definition: continuation of past returns
+    members: [Momentum, TrendFactor]
+  volatility:
+    definition: dispersion or tail size of a stock's own returns (total, idiosyncratic, extreme daily); low = attractive
+    members: [IdioVol3F, IdioVolAHT, MaxRet, RealizedVol]
+  external_financing:
+    definition: net capital raised from or returned to investors (share issuance, net equity and debt financing)
+    members: [NetEquityFinance, ShareIss1Y, ShareIss5Y, XFIN]
+  short_term_reversal:
+    definition: reversal of the most recent month's return
+    members: [STreversal]
+  liquidity:
+    definition: trading activity and trading cost (turnover, zero-volume days, bid-ask spread, volume trend)
+    members: [VolumeTrend, zerotrade12M, zerotrade1M, zerotrade6M, BidAskSpreadFlip]
+assignments:
+  - {"factor": "CBOperProf", "family": "profitability", "cat_economic": "profitability", "assigned": "2026-10-01", "event_ts": "2026-10-01T05:45:32Z"}
+  - {"factor": "CF", "family": "value", "cat_economic": "valuation", "assigned": "2026-10-01", "event_ts": "2026-10-01T05:45:32Z"}
+  - {"factor": "GP", "family": "profitability", "cat_economic": "profitability", "assigned": "2026-10-01", "event_ts": "2026-10-01T05:45:32Z"}
+  - {"factor": "IdioVol3F", "family": "volatility", "cat_economic": "volatility", "assigned": "2026-10-01", "event_ts": "2026-10-01T05:45:32Z"}
+  - {"factor": "IdioVolAHT", "family": "volatility", "cat_economic": "volatility", "assigned": "2026-10-01", "event_ts": "2026-10-01T05:45:32Z"}
+  - {"factor": "MaxRet", "family": "volatility", "cat_economic": "volatility", "assigned": "2026-10-01", "event_ts": "2026-10-01T05:45:32Z"}
+  - {"factor": "NetEquityFinance", "family": "external_financing", "cat_economic": "external financing", "assigned": "2026-10-01", "event_ts": "2026-10-01T05:45:32Z"}
+  - {"factor": "NetPayoutYield", "family": "value", "cat_economic": "valuation", "assigned": "2026-10-01", "event_ts": "2026-10-01T05:45:32Z"}
+  - {"factor": "OperProfRD", "family": "profitability", "cat_economic": "profitability", "assigned": "2026-10-01", "event_ts": "2026-10-01T05:45:32Z"}
+  - {"factor": "PctAcc", "family": "investment", "cat_economic": "accruals", "assigned": "2026-10-01", "event_ts": "2026-10-01T05:45:32Z"}
+  - {"factor": "RealizedVol", "family": "volatility", "cat_economic": "volatility", "assigned": "2026-10-01", "event_ts": "2026-10-01T05:45:32Z"}
+  - {"factor": "RoE", "family": "profitability", "cat_economic": "profitability", "assigned": "2026-10-01", "event_ts": "2026-10-01T05:45:32Z"}
+  - {"factor": "STreversal", "family": "short_term_reversal", "cat_economic": "short-term reversal", "assigned": "2026-10-01", "event_ts": "2026-10-01T05:45:32Z"}
+  - {"factor": "ShareIss1Y", "family": "external_financing", "cat_economic": "external financing", "assigned": "2026-10-01", "event_ts": "2026-10-01T05:45:32Z"}
+  - {"factor": "ShareIss5Y", "family": "external_financing", "cat_economic": "external financing", "assigned": "2026-10-01", "event_ts": "2026-10-01T05:45:32Z"}
+  - {"factor": "TrendFactor", "family": "momentum", "cat_economic": "momentum", "assigned": "2026-10-01", "event_ts": "2026-10-01T05:45:32Z"}
+  - {"factor": "VolumeTrend", "family": "liquidity", "cat_economic": "volume", "assigned": "2026-10-01", "event_ts": "2026-10-01T05:45:32Z"}
+  - {"factor": "XFIN", "family": "external_financing", "cat_economic": "external financing", "assigned": "2026-10-01", "event_ts": "2026-10-01T05:45:32Z"}
+  - {"factor": "cfp", "family": "value", "cat_economic": "valuation", "assigned": "2026-10-01", "event_ts": "2026-10-01T05:45:32Z"}
+  - {"factor": "roaq", "family": "profitability", "cat_economic": "profitability", "assigned": "2026-10-01", "event_ts": "2026-10-01T05:45:32Z"}
+  - {"factor": "zerotrade12M", "family": "liquidity", "cat_economic": "liquidity", "assigned": "2026-10-01", "event_ts": "2026-10-01T05:45:32Z"}
+  - {"factor": "zerotrade1M", "family": "liquidity", "cat_economic": "liquidity", "assigned": "2026-10-01", "event_ts": "2026-10-01T05:45:32Z"}
+  - {"factor": "zerotrade6M", "family": "liquidity", "cat_economic": "liquidity", "assigned": "2026-10-01", "event_ts": "2026-10-01T05:45:32Z"}
+  - {"factor": "BidAskSpreadFlip", "family": "liquidity", "cat_economic": "liquidity", "assigned": "2026-10-01", "event_ts": "2026-10-01T05:45:32Z"}
+```
