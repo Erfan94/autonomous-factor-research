@@ -907,6 +907,10 @@ def inline_html(s):
     return "".join(mr.inline_html(x) if k % 2 else _inline_text_html(x) for k, x in enumerate(pieces))
 
 
+def _link_urls(h):
+    return re.sub(r"(https://[^\s<]+[^\s<.,;)])", r"<a href='\1'>\1</a>", h)
+
+
 def _th(h):
     return inline_html(h).replace("t-stat", "<span class='nw'>t-stat</span>")
 
@@ -958,6 +962,7 @@ tr { break-inside: avoid; }
 .abs p.kw { text-indent: 0; }
 .abs p.kw.first { margin-top: 30pt; }
 .fn { position: absolute; bottom: 0; left: 0; right: 0; font-size: 9pt; line-height: 1.25; text-align: justify; }
+.fn a { color: #000; text-decoration: none; }
 .fn hr { width: 2in; margin: 0 0 4pt 0; border: 0; border-top: 1px solid #000; }
 .refs p { text-indent: -0.5in; padding-left: 0.5in; line-height: 1.5; text-align: left; margin: 0 0 4pt 0; }
 """
@@ -998,7 +1003,7 @@ def build_html():
         f"<div class='abs'>{abstract}"
         f"<p class='kw first'><i>JEL classification:</i> {inline_html(fm['jel'])}</p>"
         f"<p class='kw'><i>Keywords:</i> {inline_html(fm['keywords'])}</p></div>"
-        f"<div class='fn'><hr><sup>*</sup>{inline_html(fm['footnote'])}</div></div>")
+        f"<div class='fn'><hr><sup>*</sup>{_link_urls(inline_html(fm['footnote']))}</div></div>")
     in_refs = False
     for kind, val in BLOCKS:
         if kind == "h1":
@@ -1079,6 +1084,15 @@ def build_docx():
     pf.line_spacing = 2.0
     pf.space_before = Pt(0)
     pf.space_after = Pt(0)
+
+    def add_hyperlink(p, url, text, size=None):
+        rid = p.part.relate_to(url, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink", is_external=True)
+        h = OxmlElement("w:hyperlink"); h.set(qn("r:id"), rid)
+        r = OxmlElement("w:r"); rpr = OxmlElement("w:rPr")
+        if size:
+            sz = OxmlElement("w:sz"); sz.set(qn("w:val"), str(int(size * 2))); rpr.append(sz)
+        r.append(rpr); t_ = OxmlElement("w:t"); t_.text = text; t_.set(qn("xml:space"), "preserve"); r.append(t_)
+        h.append(r); p._p.append(h)
 
     def runs(p, text, size=None, bold=None, italic=None):
         tokens = re.split(r"(\\\(.+?\\\)|\*\*.+?\*\*|(?<![\w*])\*(?!\s).+?(?<!\s)\*(?![\w*])|`.+?`)", text)
@@ -1234,7 +1248,11 @@ def build_docx():
     ff.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
     r = ff.add_run("_" * 30 + "\n"); r.font.size = Pt(9)
     r = ff.add_run("*"); r.font.superscript = True; r.font.size = Pt(9)
-    runs(ff, fm["footnote"], size=9)
+    for k, piece in enumerate(re.split(r"(https://[^\s]+[^\s.,;)])", fm["footnote"])):
+        if k % 2:
+            add_hyperlink(ff, piece, piece, size=9)
+        elif piece:
+            runs(ff, piece, size=9)
     fp = sec.footer.paragraphs[0]
     fp.alignment = WD_ALIGN_PARAGRAPH.CENTER
     for tag, text in (("begin", None), (None, "PAGE"), ("end", None)):
