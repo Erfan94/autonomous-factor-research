@@ -976,7 +976,7 @@ counts:
 Preflight passes reconcile as follows. There are 105 `preflight_passed` events: 104 single-factor
 events and one for BidAskSpreadFlip. The preflights of AM, Accruals are recorded inside their `factor_translated` events,
 which RECORDS.md treats as an implied pass. The runner logged 51 judgment calls as `decision` events. The
-event log has 1133 rows (Appendix B8).
+event log has 1134 rows (Appendix B8).
 
 **Runs.** 57 runs were started and 56 completed (Appendix B6). Run 046 was
 aborted as superseded, with no result. The completed runs total 21.9 hours of wall time (`runtime_seconds`).
@@ -1695,7 +1695,7 @@ assignments:
 | n_composite_versions | 15 | events composite_updated (one per version v0-v14) |
 | n_config_moves | 1 | events config_changed with a SHA |
 | n_decisions | 11 | docs/DECISIONS.md D headings |
-| n_events | 1133 | research/events.jsonl rows |
+| n_events | 1134 | research/events.jsonl rows |
 | n_fail_by_t | 79 | registry FAIL rows decided_by ic_tstat_nw |
 | n_families | 9 | distinct families in table 04 |
 | n_family_assigned | 24 | events family_assigned |
@@ -2059,7 +2059,7 @@ assignments:
 
 ### B8. Event counts
 
-*Table 10d_event_counts. research/events.jsonl by event type (1133 rows).*
+*Table 10d_event_counts. research/events.jsonl by event type (1134 rows).*
 
 | event | count |
 |---|---|
@@ -2098,6 +2098,7 @@ assignments:
 | holdout_spent | 1 |
 | inventory_classified | 1 |
 | project_initialized | 1 |
+| repo_published | 1 |
 | repository_initialized | 1 |
 | rule_conflict_found | 1 |
 | run_aborted | 1 |

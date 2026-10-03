@@ -211,7 +211,7 @@
 | n_composite_versions | 15 | events composite_updated (one per version v0-v14) |
 | n_config_moves | 1 | events config_changed with a SHA |
 | n_decisions | 11 | docs/DECISIONS.md D headings |
-| n_events | 1133 | research/events.jsonl rows |
+| n_events | 1134 | research/events.jsonl rows |
 | n_fail_by_t | 79 | registry FAIL rows decided_by ic_tstat_nw |
 | n_families | 9 | distinct families in table 04 |
 | n_family_assigned | 24 | events family_assigned |

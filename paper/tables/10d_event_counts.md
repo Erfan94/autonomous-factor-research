@@ -1,4 +1,4 @@
-*Table 10d_event_counts. research/events.jsonl by event type (1133 rows).*
+*Table 10d_event_counts. research/events.jsonl by event type (1134 rows).*
 
 | event | count |
 |---|---|
@@ -37,6 +37,7 @@
 | holdout_spent | 1 |
 | inventory_classified | 1 |
 | project_initialized | 1 |
+| repo_published | 1 |
 | repository_initialized | 1 |
 | rule_conflict_found | 1 |
 | run_aborted | 1 |
