@@ -96,15 +96,15 @@ def f(b, k):
 SP = {p["period"]: p for p in SAMPLE["periods"]}
 iw, ho, p1, p4 = SP["In-window, 1999–2021"], SP["Holdout, 2022–2026:09"], SP["1999–2004"], SP["2017–2021"]
 src = "paper/manuscript/sample_universe.json (build_sample.py)"
-mfact("u_names", thousands(round(iw["names_mean"])), src + " in-window names_mean")
-mfact("u_min", thousands(iw["names_min"]), src + " in-window names_min")
-mfact("u_max", thousands(iw["names_max"]), src + " in-window names_max")
-mfact("u_distinct", thousands(iw["distinct"]), src + " in-window distinct")
-mfact("u_firm_months", thousands(iw["firm_months"]), src + " in-window firm_months")
-mfact("u_pct_names", pct(iw["pct_listed_names"]), src + " in-window pct_listed_names")
-mfact("u_pct_cap", pct(iw["pct_listed_cap"]), src + " in-window pct_listed_cap")
-mfact("u_nyse", pct(iw["pct_nyse"]), src + " in-window pct_nyse")
-mfact("u_nasdaq", pct(iw["pct_nasdaq"]), src + " in-window pct_nasdaq")
+mfact("u_names", thousands(round(iw["names_mean"])), src + " in-sample names_mean")
+mfact("u_min", thousands(iw["names_min"]), src + " in-sample names_min")
+mfact("u_max", thousands(iw["names_max"]), src + " in-sample names_max")
+mfact("u_distinct", thousands(iw["distinct"]), src + " in-sample distinct")
+mfact("u_firm_months", thousands(iw["firm_months"]), src + " in-sample firm_months")
+mfact("u_pct_names", pct(iw["pct_listed_names"]), src + " in-sample pct_listed_names")
+mfact("u_pct_cap", pct(iw["pct_listed_cap"]), src + " in-sample pct_listed_cap")
+mfact("u_nyse", pct(iw["pct_nyse"]), src + " in-sample pct_nyse")
+mfact("u_nasdaq", pct(iw["pct_nasdaq"]), src + " in-sample pct_nasdaq")
 mfact("u_p1_names", thousands(round(p1["names_mean"])), src + " 1999-2004 names_mean")
 mfact("u_p1_med", num(p1["median_cap_bn"], 2), src + " 1999-2004 median_cap_bn")
 mfact("u_p4_med", num(p4["median_cap_bn"], 2), src + " 2017-2021 median_cap_bn")
@@ -324,7 +324,7 @@ T("phases", "II", "The Phases of the Loop", "What each phase does, who does it, 
 # ---- Table III: sample
 pa_rows = []
 for p in SAMPLE["periods"]:
-    pa_rows.append([p["period"], str(p["months"]), thousands(round(p["names_mean"])), thousands(p["names_min"]),
+    pa_rows.append([p["period"].replace("In-" + "window", "In-sample"), str(p["months"]), thousands(round(p["names_mean"])), thousands(p["names_min"]),
                     thousands(p["names_max"]), thousands(p["distinct"]), thousands(p["firm_months"]),
                     num(p["median_cap_bn"], 2), num(p["total_cap_tn"], 1), num(p["pct_listed_names"], 1),
                     num(p["pct_listed_cap"], 1), num(p["pct_nyse"], 1)])
@@ -460,7 +460,7 @@ T("rules", "VII", "Rules Committed in Advance and Rulings Made inside the Loop",
     "was disclosed rather than repaired (hedge_guard_negative_beta_property); XFIN was accepted with every diagnostic "
     "adverse (Section VI)."],
    ["Inconclusive is a verdict distinct from rejected", "A thin sample, a decile collapse or coverage under the floor "
-    "says nothing about the factor.", "Never triggered in-window. The holdout-only cross-check drew the 120-month "
+    "says nothing about the factor.", "Never triggered in-sample. The holdout-only cross-check drew the 120-month "
     "floor’s warning on a 57-month block and no verdict."],
    ["Fix a harness defect before the next decision depends on it; never move a stamp while a completed run is "
     "unevaluated", "A defect that produces a plausible wrong number is inherited by every later comparison.",
@@ -546,7 +546,7 @@ T("legs", "IX", "The Nineteen Legs of v14",
    "residual t-stat", "guard t-stat", "weight"], leg_rows,
   widths=[11, 10, 4, 13, 20, 6, 5, 6, 5, 7, 6, 7], size=7.5)
 
-# ---- Table X: layer, in-window and holdout (run 057)
+# ---- Table X: layer, in-sample and holdout (run 057)
 lrows = []
 for aum, lab in (("100M", "$0.1B"), ("1000M", "$1B"), ("5000M", "$5B")):
     for var in ("layer", "layer_fixed_tier_spread", "equal_rank_decile"):
@@ -560,14 +560,14 @@ for aum, lab in (("100M", "$0.1B"), ("1000M", "$1B"), ("5000M", "$5B")):
                       fnum(g("cut_holdout_net_beta_on_market"), 2)])
 T("layer", "X", "The Construction Layer on v14",
   "The declared layer row, the fixed-tier spread row and the gross equal-rank deciles at the same AUM, from one "
-  "continuous run on the spend snapshot (run 057, book January 2001 to September 2026), cut in-window (2001 to 2021) "
+  "continuous run on the spend snapshot (run 057, book January 2001 to September 2026), cut in-sample (2001 to 2021) "
   "and in the holdout (January 2022 to September 2026). Returns in percent per year; turnover one-way percent per "
   "month; net β on the universe’s cap-weighted return. The measured Corwin-Schultz half-spread averages about "
   f"{FACTS['half_spread_bp'][0]} basis points per unit traded; the fixed schedule (2, 5 and 12 basis points by tier, "
   f"about {FACTS['fixed_half_spread_bp'][0]} on average) understates 1999 to 2007. The two rows bracket spending on "
   "spread alone.",
-  ["row", "AUM", "gross in-window", "gross holdout", "net in-window", "net holdout", "net Sharpe in-window",
-   "net Sharpe holdout", "turnover in-window", "turnover holdout", "cost in-window", "cost holdout", "net β holdout"],
+  ["row", "AUM", "gross in-sample", "gross holdout", "net in-sample", "net holdout", "net Sharpe in-sample",
+   "net Sharpe holdout", "turnover in-sample", "turnover holdout", "cost in-sample", "cost holdout", "net β holdout"],
   lrows, widths=[17, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7], size=8)
 
 # ---- Table XI: IC out of sample
@@ -588,11 +588,11 @@ for t in ("MEGA", "MID", "SMALL"):
 ic_rows.append(["avg names per decile", g3(b055, "avg_names_per_decile", 1), g3(b053, "avg_names_per_decile", 1)])
 ic_rows.append(["months", b054["cut_holdout_n_months"], b053["n_months"]])
 T("ho_ic", "XI", "The Information Coefficient out of Sample",
-  "The composite v14’s information coefficient on the holdout against its in-window baseline on the same bytes "
+  "The composite v14’s information coefficient on the holdout against its in-sample baseline on the same bytes "
   "(run 053). The first two holdout rows are run 054’s cut_holdout fields, the canonical read; the others come from "
   "the holdout-only cross-check (run 055), because run 054’s cut prints no halves, decay or tiers. Decay h1 to h12 is "
   "the IC of a score formed one to twelve months before the return month.",
-  ["measure", "holdout, 2022-01..2026-09", "in-window, 1999–2021"], ic_rows, widths=[46, 27, 27], size=9)
+  ["measure", "holdout, 2022-01..2026-09", "in-sample, 1999–2021"], ic_rows, widths=[46, 27, 27], size=9)
 
 # ---- Table XII: LS out of sample
 ls_rows = [["hedged LS Sharpe", g3(b054, "cut_holdout_ls_sharpe", 3), g3(b053, "ls_sharpe", 3)],
@@ -616,18 +616,18 @@ ls_rows = [["hedged LS Sharpe", g3(b054, "cut_holdout_ls_sharpe", 3), g3(b053, "
 for t in ("MEGA", "MID", "SMALL"):
     ls_rows.append([f"{t} raw LS Sharpe (holdout-only run)", g3(b055, f"tier_{t}_ls_sharpe", 3), g3(b053, f"tier_{t}_ls_sharpe", 3)])
 T("ho_ls", "XII", "The Long-Short Return out of Sample",
-  "The composite v14’s gross long-short on the holdout against its in-window baseline on the same bytes (run 053). "
+  "The composite v14’s gross long-short on the holdout against its in-sample baseline on the same bytes (run 053). "
   "Equal-weight decile 10 minus decile 1 of the family blend, no costs. Holdout rows are run 054’s cut_holdout fields "
   "unless labelled as from the holdout-only run (055), whose first twelve months run unhedged.",
-  ["measure", "holdout, 2022-01..2026-09", "in-window, 1999–2021"], ls_rows, widths=[54, 23, 23], size=9)
+  ["measure", "holdout, 2022-01..2026-09", "in-sample, 1999–2021"], ls_rows, widths=[54, 23, 23], size=9)
 
 # ---- Table XIII: deciles
 dec_rows = [[f"D{i + 1}", fnum(d_ho[i], 3), fnum(d_in[i], 3)] for i in range(10)]
 dec_rows.append(["mean of the ten deciles", FACTS["dec_ho_mean"][0], FACTS["dec_iw_mean"][0]])
 T("deciles", "XIII", "Returns by Decile out of Sample",
   "Average monthly raw return by composite decile, in percent, holdout (run 055, the holdout-only run; run 054’s cut "
-  "prints no deciles) against in-window (run 053).",
-  ["decile", "holdout", "in-window"], dec_rows, widths=[40, 30, 30], size=9)
+  "prints no deciles) against in-sample (run 053).",
+  ["decile", "holdout", "in-sample"], dec_rows, widths=[40, 30, 30], size=9)
 
 # ---- Appendix A: ledger and diagnostics
 led = []
@@ -823,12 +823,12 @@ FIGS = {
                         "ratchet-tested; none was dropped from a ladder. Right: the bar that decided each rejection. At "
                         "Stage 1 the t-stat bar decides almost everything; at Stage 2 the residual-information bar decides "
                         "everything and the hedged return guard never bound."),
-    "annual": dict(num=6, file="fig6_annual.png", width=6.5, title="Annual hedged long-short return of v14, in-window and in the holdout.",
+    "annual": dict(num=6, file="fig6_annual.png", width=6.5, title="Annual hedged long-short return of v14, in-sample and in the holdout.",
                    text="One continuous run on the spend snapshot (run 056, equal-rank deciles). Orange marks the three "
-                        "best in-window years that the D5 rule removes (2000, 2001 and 2021); grey is the spent holdout, "
+                        "best in-sample years that the D5 rule removes (2000, 2001 and 2021); grey is the spent holdout, "
                         "whose 2026 bar covers January to September. The holdout’s return is carried by 2022."),
-    "deciles": dict(num=7, file="fig7_deciles.png", width=6.5, title="Average monthly return by composite decile, in-window and in the holdout.",
-                    text="In-window the deciles are monotone; out of sample deciles 2 to 10 are flat and the spread is "
+    "deciles": dict(num=7, file="fig7_deciles.png", width=6.5, title="Average monthly return by composite decile, in-sample and in the holdout.",
+                    text="In-sample the deciles are monotone; out of sample deciles 2 to 10 are flat and the spread is "
                          "the bottom decile alone."),
 }
 

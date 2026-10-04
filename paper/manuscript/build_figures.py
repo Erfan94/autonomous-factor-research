@@ -279,7 +279,7 @@ def fig6():
     ax.axvline(2021.5, color="#555", lw=0.8, ls=":")
     ax.text(2021.65, max(vs) * 0.92, "holdout →", fontsize=6.8)
     ax.set_ylabel("D10 − D1 hedged, % per year", fontsize=7)
-    ax.set_title("v14 annual hedged long-short (run 056). Orange: the three best in-window years. Grey: the spent "
+    ax.set_title("v14 annual hedged long-short (run 056). Orange: the three best in-sample years. Grey: the spent "
                  "holdout, 2022–2026:09.", fontsize=7.4, loc="left")
     ax.grid(axis="y", alpha=0.3, lw=0.5)
     ax.set_xticks(range(1999, 2027, 3))
@@ -294,11 +294,11 @@ def fig7():
     d_ho = [float(x) for x in bt.b055["decile_avg_ret_pct"].split(",")]
     fig, ax = plt.subplots(figsize=(7.0, 2.4))
     x = list(range(10))
-    ax.bar([i - 0.19 for i in x], d_in, width=0.38, color=BLUE, label="in-window 1999–2021 (276 months, run 053)")
+    ax.bar([i - 0.19 for i in x], d_in, width=0.38, color=BLUE, label="in-sample 1999–2021 (276 months, run 053)")
     ax.bar([i + 0.19 for i in x], d_ho, width=0.38, color=ORANGE, label="holdout 2022-01..2026-09 (57 months, run 055)")
     ax.set_xticks(x); ax.set_xticklabels([f"D{i + 1}" for i in x], fontsize=7)
     ax.set_ylabel("average monthly return, %", fontsize=7)
-    ax.set_title("v14 decile average returns: monotone in-window, flat above the bottom decile out of sample",
+    ax.set_title("v14 decile average returns: monotone in-sample, flat above the bottom decile out of sample",
                  fontsize=7.4, loc="left")
     ax.legend(fontsize=6.6, frameon=False, loc="upper left")
     ax.grid(axis="y", alpha=0.3, lw=0.5)

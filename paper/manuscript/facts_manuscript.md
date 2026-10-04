@@ -231,19 +231,19 @@
 | ts_phase_d | 2026-10-01T15:57:46Z | events phase_completed D ts |
 | ts_phase_e | 2026-10-02T04:55:33Z | events phase_completed E ts |
 | ts_snap1 | 2026-09-30T16:41:44Z | events snapshot_recorded #1 ts |
-| u_distinct | 7,499 | paper/manuscript/sample_universe.json (build_sample.py) in-window distinct |
-| u_firm_months | 540,536 | paper/manuscript/sample_universe.json (build_sample.py) in-window firm_months |
+| u_distinct | 7,499 | paper/manuscript/sample_universe.json (build_sample.py) in-sample distinct |
+| u_firm_months | 540,536 | paper/manuscript/sample_universe.json (build_sample.py) in-sample firm_months |
 | u_ho_names | 1,928 | paper/manuscript/sample_universe.json (build_sample.py) holdout names_mean |
-| u_max | 2,858 | paper/manuscript/sample_universe.json (build_sample.py) in-window names_max |
-| u_min | 1,730 | paper/manuscript/sample_universe.json (build_sample.py) in-window names_min |
-| u_names | 1,958 | paper/manuscript/sample_universe.json (build_sample.py) in-window names_mean |
-| u_nasdaq | 39.3 | paper/manuscript/sample_universe.json (build_sample.py) in-window pct_nasdaq |
-| u_nyse | 60.3 | paper/manuscript/sample_universe.json (build_sample.py) in-window pct_nyse |
+| u_max | 2,858 | paper/manuscript/sample_universe.json (build_sample.py) in-sample names_max |
+| u_min | 1,730 | paper/manuscript/sample_universe.json (build_sample.py) in-sample names_min |
+| u_names | 1,958 | paper/manuscript/sample_universe.json (build_sample.py) in-sample names_mean |
+| u_nasdaq | 39.3 | paper/manuscript/sample_universe.json (build_sample.py) in-sample pct_nasdaq |
+| u_nyse | 60.3 | paper/manuscript/sample_universe.json (build_sample.py) in-sample pct_nyse |
 | u_p1_med | 1.24 | paper/manuscript/sample_universe.json (build_sample.py) 1999-2004 median_cap_bn |
 | u_p1_names | 2,207 | paper/manuscript/sample_universe.json (build_sample.py) 1999-2004 names_mean |
 | u_p4_med | 4.13 | paper/manuscript/sample_universe.json (build_sample.py) 2017-2021 median_cap_bn |
-| u_pct_cap | 96.5 | paper/manuscript/sample_universe.json (build_sample.py) in-window pct_listed_cap |
-| u_pct_names | 41.5 | paper/manuscript/sample_universe.json (build_sample.py) in-window pct_listed_names |
+| u_pct_cap | 96.5 | paper/manuscript/sample_universe.json (build_sample.py) in-sample pct_listed_cap |
+| u_pct_names | 41.5 | paper/manuscript/sample_universe.json (build_sample.py) in-sample pct_listed_names |
 | v0_h2 | 0.0016 | manifest v0 baseline.ic.ic_half2_mean |
 | v0_mdd | -45.56 | manifest v0 baseline.ls_hedged.ls_maxdd_pct |
 | v0_raw | 0.719 | manifest v0 baseline.ls_raw.ls_raw_sharpe (run 001) |
