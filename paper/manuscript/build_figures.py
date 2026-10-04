@@ -78,7 +78,7 @@ def canvas(w, h):
 
 def fig1():
     fig, ax = canvas(6.5, 5.6)
-    legend(ax, 0.975, [("agent", "sub-agent (language model)"), ("harness", "harness (fixed, rule-based code)"),
+    legend(ax, 0.975, [("agent", "sub-agent (LLM)"), ("harness", "harness (fixed, rule-based code)"),
                        ("people", "runner, advisor or human"), ("files", "files and rules")])
     ax.text(0.02, 0.905, "Orchestration: what to do next", fontsize=8, fontweight="bold")
     box(ax, 0.02, 0.76, 0.26, 0.12, "Human", "the author: data licence,\ndesign rules; answers the\nstop-and-ask questions")
@@ -121,7 +121,7 @@ def fig1():
 
 def fig2():
     fig, ax = canvas(6.5, 6.6)
-    legend(ax, 0.985, [("agent", "sub-agent (language model)"), ("harness", "harness (fixed, rule-based code)"),
+    legend(ax, 0.985, [("agent", "sub-agent (LLM)"), ("harness", "harness (fixed, rule-based code)"),
                        ("people", "runner, advisor or human")])
     rows = [
         ("0  Setup", "one time", [("Freeze the dataset", "frozen by its manifest", "harness"),
@@ -175,7 +175,7 @@ def fig2():
 
 def fig3():
     fig, ax = canvas(6.5, 2.9)
-    legend(ax, 0.96, [("agent", "sub-agent (language model)"), ("harness", "harness (fixed, rule-based code)"),
+    legend(ax, 0.96, [("agent", "sub-agent (LLM)"), ("harness", "harness (fixed, rule-based code)"),
                       ("people", "runner, advisor or human")])
     w, h = 0.20, 0.24
     xs = [0.02, 0.27, 0.52, 0.77]
