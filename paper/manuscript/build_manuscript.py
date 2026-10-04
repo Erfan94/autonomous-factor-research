@@ -464,8 +464,9 @@ T("rules", "VII", "Rules Committed in Advance and Rulings Made inside the Loop",
     "floor’s warning on a 57-month block and no verdict."],
    ["Fix a harness defect before the next decision depends on it; never move a stamp while a completed run is "
     "unevaluated", "A defect that produces a plausible wrong number is inherited by every later comparison.",
-    "The construction layer’s first harness was superseded by review fixes while a Stage 3 run was writing; the run "
-    "was stopped and logged as aborted (run 046), never evaluated (Section X)."],
+    f"HARNESS_SHA moved {FACTS['n_harness_moves'][0]} times, never between the first screen and the close of the "
+    "ratchet, and every harness that later produced a number first reproduced the live composite (Section II.G, "
+    "Appendix E)."],
    ["The holdout is read against expectations written before the spend", "A reading chosen after the number is a "
     "second look.", "D8 declared the spend protocol before the first screen; the event log records the expectations before the "
     "first holdout run (Section IX)."],
@@ -765,7 +766,7 @@ T("labour", "DI", "Division of Labour between Agents and Mechanism",
 stamps = b054
 T("repo", "EI", "The Repository at the Spend",
   "The state of the repository when the holdout was spent (run 054’s stamps). Every composite version has one "
-  "annotated tag, from v0-baseline to v14-add-TrendFactor; the v1 tag annotates the wrong commit (Section X).",
+  "annotated tag, from v0-baseline to v14-add-TrendFactor; the v1 tag annotates the commit before v1.",
   ["Stamp at the spend", "Value"],
   [["HARNESS_SHA", stamps["harness_sha"]],
    ["CONFIG_SHA", f"{stamps['config_sha']} (never moved by a run)"],

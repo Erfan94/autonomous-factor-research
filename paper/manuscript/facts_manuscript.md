@@ -281,4 +281,4 @@
 | xfin_dic_t | -0.62 | registry XFIN stage2.paired_delta_ic_tstat |
 | xfin_dsh | -0.082 | registry XFIN stage2.delta_ls_sharpe |
 
-*Keys used by manuscript_src.md: 300.*
+*Keys used by manuscript_src.md: 295.*
