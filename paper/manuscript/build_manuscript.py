@@ -285,26 +285,26 @@ T("participants", "I", "The Participants",
     "decision is logged."],
    ["osap-fetcher", "Claude Sonnet", "One predictor’s reference code and catalogue row at the pinned commit, written "
     "up as a construction-only specification.", "Pinned commit only; no outcome from anywhere."],
-   ["sharadar-field-checker", "Claude Sonnet", "Verifies each field a factor needs by querying the snapshot’s bytes: "
+   ["sharadar-field-checker", "Claude Sonnet", "Verifies each field a factor needs by querying the data files: "
     "existence, units, null semantics, point-in-time shape.", "Read-only queries; one writer of the field map at a time."],
-   ["sharadar-translator", "Claude Sonnet", "Turns a specification into one factor file and runs preflight on it.",
+   ["sharadar-translator", "Claude Sonnet", "Turns a specification into one factor file and runs the pre-screen data checks on it.",
     "No universe, dates, rebalancing, sector ranking, hedging or statistics in a factor; family left unset."],
    ["alpha-reviewer", "inherits the runner’s", "Adversarial audit of every translated batch and every harness change "
     "for look-ahead, survivorship and point-in-time errors.", "Read-only; reports, never fixes."],
    ["factor-evaluator", "inherits the runner’s", "Checks the four stamps, applies the bars, re-derives every verdict, "
-    "explains the numbers, writes every record, and materialises each acceptance.", "Refuses a mismatched stamp; its "
+    "explains the numbers, writes every record, and implements each acceptance.", "Refuses a mismatched stamp; its "
     "verdict must equal the harness’s."]],
   widths=[19, 17, 36, 28])
 
 # ---- Table II: phases
 T("phases", "II", "The Phases of the Loop", "What each phase does, who does it, what closes it, and what enforces the close.",
   ["Phase", "Work", "Who does it", "Closes when", "Enforced by"],
-  [["0. Setup", "Record the snapshot, prove it matches the vendor’s API, measure the baseline and tag it.",
+  [["0. Setup", "Download and freeze the data, prove they match the vendor’s live database, measure the baseline and tag it.",
     "Human and a bootstrap session", "The baseline is measured, recorded and tagged before any candidate exists.",
     "The data hash and the baseline tag."],
-   ["A. Inventory", "For every catalogue predictor: fetch, check fields, translate, preflight; review every batch. "
+   ["A. Inventory", "For every catalogue predictor: fetch, check fields, translate, run the pre-screen data checks; review every batch. "
     "Batches of eight, in alphabetical order.", "Fetcher, field checker, translator, reviewer",
-    "Every predictor has a preflight-passed file or a logged, measured reason.",
+    "Every predictor has a file that passed the pre-screen checks or a logged, measured reason.",
     "The records checker reconciles the catalogue against files and exclusions; none may be unaccounted."],
    ["B. Stage 1", "Screen every constructible predictor on its own. Batches of twelve, in alphabetical order.",
     "Harness; evaluator", "Every constructible predictor has a Stage 1 row.",
@@ -312,13 +312,13 @@ T("phases", "II", "The Phases of the Loop", "What each phase does, who does it, 
    ["C. Families", "Assign each passer to an economic family by definition; then sort all passers by Stage 1 t-stat and "
     "declare the order.", "Runner, advisor", "The order file is written, before any Stage 2 number.",
     "The harness refuses a Stage 2 candidate without a family or beyond the family cap."],
-   ["D. Ratchet", "Test the passers in declared order, in ladders of at most five; materialise every acceptance as a "
+   ["D. Ratchet", "Test the passers in declared order, in ladders of at most five; implement every acceptance as a "
     "tagged version.", "Harness; evaluator; advisor before each commit", "Every passer has a Stage 2 row.",
     "The order is never re-sorted; the harness hash may not move inside a ladder."],
-   ["E. Construction and holdout", "Build the construction layer on the frozen composite; refresh the snapshot; ask to "
-    "declare the search finished; spend the holdout once; write the paper.", "Runner, advisor, human",
-    "The holdout is spent.", "A result block reaching 2022 is an out-of-sample breach unless it is the final "
-    "validation; the permission layer asks before either holdout flag is used."]],
+   ["E. Construction and holdout", "Build the construction layer on the frozen composite; update the data; ask to "
+    "declare the search finished; evaluate the holdout once; write the paper.", "Runner, advisor, human",
+    "The holdout is evaluated.", "A result extending into 2022 is an out-of-sample breach unless it is the final "
+    "validation; the permission layer asks before the out-of-sample test is run."]],
   widths=[14, 27, 17, 20, 22])
 
 # ---- Table III: sample
@@ -341,15 +341,15 @@ for name in sorted(SNAP["tables"]):
     pb_rows.append([name, CONTENT.get(name, ""), thousands(t["rows"]), t.get("min_date", "—") or "—",
                     t.get("max_date", "—") or "—"])
 T("sample", "III", "The Sample",
-  "Panel A describes the investable universe month by month, built by the harness’s own screens on the spend snapshot "
+  "Panel A describes the investable universe month by month, built by the harness’s own screens on the updated data "
   f"(DATA {SAMPLE['data_sha']}) and grouped by period (paper/manuscript/build_sample.py). Names per month are the mean, "
   "minimum and maximum over the period’s months. Market capitalisation is in dollars: the median is the time-series "
   "mean of each month’s cross-sectional median, and the total is the mean of each month’s sum. “Listed” is the same "
   "month’s cross-section after the absolute screens alone (exchange, domestic common stock, a price of at least one "
   "dollar, a trade within seven days, a market capitalisation and a dollar volume), before the size and liquidity "
-  "cuts. The exchange share is of names; NASDAQ and NYSE American hold the rest. The holdout row is descriptive and "
-  "carries no model statistic. Panel B lists every table in the spend snapshot with its rows and the dates it spans; "
-  "tables without a date column show none. TB3MS is the one external table, added by the D8 refresh.",
+  "screens. The exchange share is of names; NASDAQ and NYSE American hold the rest. The holdout row is descriptive and "
+  "carries no model statistic. Panel B lists every table in the updated dataset with its rows and the dates it spans; "
+  "tables without a date column show none. TB3MS is the one external table, added by the D8 data update.",
   None, None, panels=[
       ("Panel A. The Universe by Period",
        ["period", "months", "names per month", "min", "max", "distinct firms", "firm-months", "median cap, $bn",
@@ -386,21 +386,21 @@ T("families", "IV", "The Nine Factor Families",
 # ---- Table V: fixed harness
 T("harness", "V", "The Fixed Harness",
   "The measurement settings every candidate is tested under, from config/test_config.yaml (CONFIG_SHA "
-  f"{FACTS['config_sha'][0]}). Changing any row is a re-baseline, which is a human decision.",
+  f"{FACTS['config_sha'][0]}). Changing any row changes the pre-registered specification, which is a human decision.",
   ["Element", "Specification"],
   [["Data", "Thirteen Sharadar tables, full history, frozen by a manifest (DATA_SHA). A live check at every run start "
-    "proves the frozen bytes still match the API. Refreshed once, under D8, before the holdout spend; the refresh "
+    "proves the frozen data still match the vendor’s live database. Updated once, under D8, before the out-of-sample evaluation; the update "
     "added the three-month Treasury bill rate (TB3MS) for a diagnostic."],
    ["Universe", "US common stock on NYSE, NASDAQ and NYSE American, price ≥ $1. Entry at the NYSE 20th percentile of "
-    "market cap and the 20th percentile of dollar volume; exit below the 15th percentiles. Rebuilt monthly; the chain "
-    "starts cold at the first panel month."],
+    "market cap and the 20th percentile of dollar volume; exit below the 15th percentiles. Rebuilt monthly; the membership rule "
+    "starts from scratch at the first month of the data."],
    ["Decision window", f"January 1999 to December 2021, {FACTS['iw_n'][0]} monthly rebalances, fixed and absolute."],
-   ["Out-of-sample block", f"January 2022 to September 2026, {FACTS['ho_n'][0]} months. Reserved; a result block "
-    "reaching it is an out-of-sample breach unless it is the final validation; spent once on the finished composite."],
+   ["Out-of-sample period", f"January 2022 to September 2026, {FACTS['ho_n'][0]} months. Reserved; a result "
+    "extending into it is an out-of-sample breach unless it is the final validation; evaluated once on the finished composite."],
    ["Rebalance", "Monthly. Signal observed at the prior business month-end and held for the following month."],
-   ["Point-in-time fundamentals", "Sharadar’s as-reported trailing-twelve-month dimension (ART), most recent filing "
+   ["Point-in-time fundamentals", "Sharadar’s as-reported trailing-twelve-month reporting basis (ART), most recent filing "
     "as of the signal date, at most 15 months old; a factor that needs quarterly or annual data declares the "
-    "override in its file."],
+    "exception in its file."],
    ["Returns", "Sharadar’s adjusted close; Shumway delisting convention by reason (−30% on performance delistings, "
     "last price otherwise)."],
    ["Signal construction", "Winsorised at the 1st and 99th percentiles, then percentile-ranked within the name’s "
@@ -438,7 +438,7 @@ T("rules", "VII", "Rules Committed in Advance and Rulings Made inside the Loop",
   "Each rule fixed before the search and each ruling made during it, with the incident behind it. D-numbers refer to "
   "the decisions file in the repository; other ids are decision events in research/events.jsonl.",
   ["Rule", "Why it exists", "Where it was triggered"],
-  [["Inventory everything first; exclude only for a measured reason", "A file-based frontier silently leaves "
+  [["Inventory everything first; exclude only for a measured reason", "A candidate list built from whichever files exist silently leaves "
     "predictors unexamined, and a search that proposes its own candidates is selecting before it screens.",
     f"Phase A closed with every one of the {FACTS['n_osap'][0]} predictors accounted for: {FACTS['n_seed'][0]} seed "
     f"legs, {FACTS['n_translated'][0]} screened, {FACTS['n_frontier'][0]} excluded with a logged, measured reason "
@@ -461,14 +461,14 @@ T("rules", "VII", "Rules Committed in Advance and Rulings Made inside the Loop",
     "adverse (Section VI)."],
    ["Inconclusive is a verdict distinct from rejected", "A thin sample, a decile collapse or coverage under the floor "
     "says nothing about the factor.", "Never triggered in-sample. The holdout-only cross-check drew the 120-month "
-    "floor’s warning on a 57-month block and no verdict."],
+    "floor’s warning on a 57-month period and no verdict."],
    ["Fix a harness defect before the next decision depends on it; never move a stamp while a completed run is "
     "unevaluated", "A defect that produces a plausible wrong number is inherited by every later comparison.",
     f"HARNESS_SHA moved {FACTS['n_harness_moves'][0]} times, never between the first screen and the close of the "
     "ratchet, and every harness that later produced a number first reproduced the live composite (Section II.G, "
     "Appendix E)."],
-   ["The holdout is read against expectations written before the spend", "A reading chosen after the number is a "
-    "second look.", "D8 declared the spend protocol before the first screen; the event log records the expectations before the "
+   ["The holdout is read against expectations written before the out-of-sample evaluation", "A reading chosen after the number is "
+    "data snooping.", "D8 declared the out-of-sample protocol before the first screen; the event log records the expectations before the "
     "first holdout run (Section IX)."],
    ["Every turn ends with a run and a decision, never a question", "The only questions the loop may ask are the seven "
     "stop conditions.", "Standing rule; five of the seven arose, and I resolved them in three decisions (1, 2, 3, 5 and 6)."]],
@@ -488,9 +488,9 @@ for v in VORDER:
                   fnum(B["breadth"]["turnover_d10_pct"], 1)])
 T("versions", "VIII", "Composite Versions",
   f"Statistics for 1999 to 2021, {FACTS['iw_n'][0]} months, gross of costs, equal-weight decile 10 minus decile 1 of "
-  "the family blend, acceptance-time (runs 001–042, DATA 198b281de1a0, the bytes every verdict was taken on). Each "
-  "version’s statistics are its own baseline run, which reproduces the ratchet arm that accepted its last leg on every "
-  "compared field. The long-short is hedged unless labelled raw; β is the full-window β of the raw long-short on the "
+  "the family blend, on the original data (runs 001–042, DATA 198b281de1a0, the data every verdict was taken on). Each "
+  "version’s statistics are its own baseline run, which reproduces the with-candidate model tested on the rung that accepted its last leg in every "
+  "compared statistic. The long-short is hedged unless labelled raw; β is the full-window β of the raw long-short on the "
   "universe’s cap-weighted return; ex-top-3 is the hedged Sharpe without the three best calendar years.",
   ["version", "added", "legs", "fami-lies", "mean IC", "IC t-stat (NW)", "IC half 1", "IC half 2", "LS Sharpe",
    "ann. return %", "MaxDD %", "β (raw)", "raw Sharpe", "Sharpe ex top-3", "D10 turnover %/mo"], vrows,
@@ -561,7 +561,7 @@ for aum, lab in (("100M", "$0.1B"), ("1000M", "$1B"), ("5000M", "$5B")):
                       fnum(g("cut_holdout_net_beta_on_market"), 2)])
 T("layer", "X", "The Construction Layer on v14",
   "The declared layer row, the fixed-tier spread row and the gross equal-rank deciles at the same AUM, from one "
-  "continuous run on the spend snapshot (run 057, book January 2001 to September 2026), cut in-sample (2001 to 2021) "
+  "continuous run on the updated data (run 057, book January 2001 to September 2026), split into in-sample (2001 to 2021) "
   "and in the holdout (January 2022 to September 2026). Returns in percent per year; turnover one-way percent per "
   "month; net β on the universe’s cap-weighted return. The measured Corwin-Schultz half-spread averages about "
   f"{FACTS['half_spread_bp'][0]} basis points per unit traded; the fixed schedule (2, 5 and 12 basis points by tier, "
@@ -589,9 +589,9 @@ for t in ("MEGA", "MID", "SMALL"):
 ic_rows.append(["avg names per decile", g3(b055, "avg_names_per_decile", 1), g3(b053, "avg_names_per_decile", 1)])
 ic_rows.append(["months", b054["cut_holdout_n_months"], b053["n_months"]])
 T("ho_ic", "XI", "The Information Coefficient out of Sample",
-  "The composite v14’s information coefficient on the holdout against its in-sample baseline on the same bytes "
-  "(run 053). The first two holdout rows are run 054’s cut_holdout fields, the canonical read; the others come from "
-  "the holdout-only cross-check (run 055), because run 054’s cut prints no halves, decay or tiers. Decay h1 to h12 is "
+  "The composite v14’s information coefficient on the holdout against its in-sample baseline on the same data "
+  "(run 053). The first two holdout rows are run 054’s holdout-period statistics, the primary estimate; the others come from "
+  "the holdout-only cross-check (run 055), because run 054’s holdout-period statistics include no halves, decay or tiers. Decay h1 to h12 is "
   "the IC of a score formed one to twelve months before the return month.",
   ["measure", "holdout, 2022-01..2026-09", "in-sample, 1999–2021"], ic_rows, widths=[46, 27, 27], size=9)
 
@@ -617,8 +617,8 @@ ls_rows = [["hedged LS Sharpe", g3(b054, "cut_holdout_ls_sharpe", 3), g3(b053, "
 for t in ("MEGA", "MID", "SMALL"):
     ls_rows.append([f"{t} raw LS Sharpe (holdout-only run)", g3(b055, f"tier_{t}_ls_sharpe", 3), g3(b053, f"tier_{t}_ls_sharpe", 3)])
 T("ho_ls", "XII", "The Long-Short Return out of Sample",
-  "The composite v14’s gross long-short on the holdout against its in-sample baseline on the same bytes (run 053). "
-  "Equal-weight decile 10 minus decile 1 of the family blend, no costs. Holdout rows are run 054’s cut_holdout fields "
+  "The composite v14’s gross long-short on the holdout against its in-sample baseline on the same data (run 053). "
+  "Equal-weight decile 10 minus decile 1 of the family blend, no costs. Holdout rows are run 054’s holdout-period statistics "
   "unless labelled as from the holdout-only run (055), whose first twelve months run unhedged.",
   ["measure", "holdout, 2022-01..2026-09", "in-sample, 1999–2021"], ls_rows, widths=[54, 23, 23], size=9)
 
@@ -626,8 +626,8 @@ T("ho_ls", "XII", "The Long-Short Return out of Sample",
 dec_rows = [[f"D{i + 1}", fnum(d_ho[i], 3), fnum(d_in[i], 3)] for i in range(10)]
 dec_rows.append(["mean of the ten deciles", FACTS["dec_ho_mean"][0], FACTS["dec_iw_mean"][0]])
 T("deciles", "XIII", "Returns by Decile out of Sample",
-  "Average monthly raw return by composite decile, in percent, holdout (run 055, the holdout-only run; run 054’s cut "
-  "prints no deciles) against in-sample (run 053).",
+  "Average monthly raw return by composite decile, in percent, holdout (run 055, the holdout-only run; run 054’s holdout-period "
+  "statistics include no deciles) against in-sample (run 053).",
   ["decile", "holdout", "in-sample"], dec_rows, widths=[40, 30, 30], size=9)
 
 # ---- Appendix A: ledger and diagnostics
@@ -651,7 +651,7 @@ T("ledger", "AI", "The Stage 2 Ledger",
   "Every Stage 2 rung in declared order, with the two bars and the verdict. The bars are the residual IC t-stat (strictly "
   "greater than 2.0) and the paired ΔLS t-stat of the hedged family blend (at least −2.0), both Newey-West with 3 lags. "
   "“Base legs” is the number of legs the candidate was projected on: the live composite plus every earlier accepted "
-  "rung of its ladder. Acceptance-time, pre-refresh bytes.",
+  "rung of its ladder. Original data, before the D8 update.",
   ["rank", "factor", "family", "Stage 1 t-stat", "ladder", "base legs", "resid IC", "residual t-stat (bar > 2.0)",
    "guard t-stat (bar ≥ −2.0)", "verdict"], led, widths=[5, 16, 16, 8, 6, 6, 9, 12, 12, 10], size=8.5)
 T("ledger_diag", "AI (continued)", "Diagnostics on Every Rung",
@@ -707,19 +707,21 @@ T("rejections", "BI", "Stage 1 Rejections",
    "coverage %", "decisive bar", "flip note"], brows, widths=[16, 5, 7, 6, 7, 7, 7, 7, 6, 7, 7, 18], size=7.8)
 
 # ---- Appendix C: frontier
-CLS = {"data_unavailable": "data unavailable", "preflight_failed": "preflight", "data_start": "data start"}
+CLS = {"data_unavailable": "data unavailable", "preflight_failed": "pre-screen checks", "data_start": "data start"}
 crow = []
 for cls in ("data_unavailable", "preflight_failed", "data_start"):
     for k in sorted((k for k, v in FRONT.items() if v["class"] == cls), key=str.lower):
         reason = FRONT[k]["reason"].replace("\n", " ")
+        for a, b in (("snapshot", "dataset"), ("gates", "filters"), ("gate", "filter")):
+            reason = reason.replace(a, b)
         if len(reason) > 150:
             reason = reason[:150].rsplit(" ", 1)[0] + " …"
         crow.append([k, CLS[cls], reason])
 T("frontier", "CI", "Predictors Not Screened",
   f"The {FACTS['n_frontier'][0]} OSAP predictors (Chen and Zimmermann (2022)) not screened, grouped by class, each "
   "with the measured or structural reason recorded at the inventory (osap_source/osap_frontier.yaml, text shortened "
-  "where marked). “Data unavailable” means an input Sharadar does not publish; “preflight” means a coverage, "
-  "mass-point, discrete-value or binary-indicator failure measured on this snapshot; “data start” means the data begin "
+  "where marked). “Data unavailable” means an input Sharadar does not publish; “pre-screen checks” means a coverage, "
+  "mass-point, discrete-value or binary-indicator failure measured on this dataset; “data start” means the data begin "
   f"too late for the {FACTS['min_months'][0]}-month minimum.",
   ["predictor", "class", "reason recorded at the inventory"], crow, widths=[22, 14, 64], size=8)
 
@@ -737,25 +739,25 @@ T("labour", "DI", "Division of Labour between Agents and Mechanism",
    ["osap-fetcher", "Fetches one predictor’s reference code and catalogue row at the pinned commit and writes a "
     "construction-only specification with its Sharadar field mappings.", "May never pull from the catalogue’s main "
     "branch. The specification carries no verdict from anywhere."],
-   ["sharadar-field-checker", "Verifies that every field a factor will use exists in the snapshot with the expected "
-    "meaning, units and null semantics, by querying the parquet bytes.", "Writes the field map; one writer at a time. A "
+   ["sharadar-field-checker", "Verifies that every field a factor will use exists in the dataset with the expected "
+    "meaning, units and null semantics, by querying the data files.", "Writes the field map; one writer at a time. A "
     "field that exists but means something subtly different is the failure mode it exists for."],
-   ["sharadar-translator", "Turns a reviewed specification into one factor file and runs preflight on it.",
+   ["sharadar-translator", "Turns a reviewed specification into one factor file and runs the pre-screen data checks on it.",
     "May not write universe filters, dates, rebalance logic, sector ranking, hedging or statistics. Leaves the family "
     "unset."],
    ["alpha-reviewer", "Adversarial audit of a factor or harness change for look-ahead, survivorship and point-in-time "
     "errors.", "Read-only. Invoked after every translated batch, after any change to the data layer, and whenever a "
     "result looks too good."],
    ["factor-evaluator", "Parses a completed run, checks the four stamps against the repository, applies the bars, "
-    "explains the numbers, writes every record; on an acceptance, materialises the new version.", "Refuses a "
+    "explains the numbers, writes every record; on an acceptance, implements the new version.", "Refuses a "
     "mismatched stamp. Its verdict must equal the stamped one; a disagreement is a harness defect. Reports the "
     "construction layer and never judges it."],
-   ["Records checker and hooks", "Rebuilds the registry index, enforces the phase gates, reconciles the frontier "
-    "against the catalogue, refuses snapshot bytes, credentials, an unproven harness change, an incomplete results "
-    "file and any edit to a committed result.", "Enforced by the bytes, not by conduct."],
-   ["Written record", "One registry row per candidate; events.jsonl (append-only); MODEL_MANIFEST.yaml (one block per "
-    "version, never edited); the decisions file; the journal; every run’s report and result blocks; one git tag per "
-    "version.", "Past blocks are never edited; a correction is a new event or block that says what it corrects."],
+   ["Records checker and hooks", "Rebuilds the registry index, enforces the phase checkpoints, reconciles the list of untested predictors "
+    "against the catalogue, refuses the vendor data files, credentials, an unproven harness change, an incomplete results "
+    "file and any edit to a committed result.", "Enforced by code, not by conduct."],
+   ["Written record", "One registry row per candidate; events.jsonl (append-only); MODEL_MANIFEST.yaml (one entry per "
+    "version, never edited); the decisions file; the journal; every run’s report and results; one git tag per "
+    "version.", "Past results are never edited; a correction is a new event or entry that says what it corrects."],
    ["Test suite", f"{FACTS['tests_n'][0]} tests over the data layer, analytics, portfolio construction, the runner, "
     "the family blend, the within-sector ranks, the market hedge and the construction layer.", "Runs before every "
     "commit that touches the harness, a factor or the configuration; a change without a passing run is refused by the "
@@ -764,32 +766,32 @@ T("labour", "DI", "Division of Labour between Agents and Mechanism",
 
 # ---- Appendix E: repository at the spend and reproduction proofs
 stamps = b054
-T("repo", "EI", "The Repository at the Spend",
-  "The state of the repository when the holdout was spent (run 054’s stamps). Every composite version has one "
+T("repo", "EI", "The Repository at the Out-of-Sample Test",
+  "The state of the repository when the holdout was evaluated (run 054’s stamps). Every composite version has one "
   "annotated tag, from v0-baseline to v14-add-TrendFactor; the v1 tag annotates the commit before v1.",
-  ["Stamp at the spend", "Value"],
+  ["Stamp at the out-of-sample test", "Value"],
   [["HARNESS_SHA", stamps["harness_sha"]],
    ["CONFIG_SHA", f"{stamps['config_sha']} (never moved by a run)"],
    ["COMPOSITE_SHA", f"{stamps['composite_sha']} (v14, tag v14-add-TrendFactor)"],
-   ["DATA_SHA", f"{stamps['data_sha']} (moved once, from {FACTS['data_sha_1'][0]}, by the D8 refresh)"],
+   ["DATA_SHA", f"{stamps['data_sha']} (moved once, from {FACTS['data_sha_1'][0]}, by the D8 data update)"],
    ["UNIVERSE_SHA", stamps["universe_sha"]],
    ["LAYER_SHA", L057["layer@100M"]["layer_sha"]],
    ["OSAP source", f"github.com/OpenSourceAP/CrossSection at commit {CFG['osap_source']['ref']}"]],
   widths=[30, 70], size=9)
 T("repro", "EII", "Reproduction Proofs",
-  "Each harness or snapshot move that preceded a later number was first shown to reproduce the live composite. "
-  "Sources: events phase_completed D, docs/JOURNAL.md (Phase E entries), the result blocks of the runs named.",
+  "Each harness or data move that preceded a later number was first shown to reproduce the live composite. "
+  "Sources: events phase_completed D, docs/JOURNAL.md (Phase E entries), the results of the runs named.",
   ["run", "against", "what was compared", "result"],
-  [["013, 015, …, 042: each version’s own baseline", "the ratchet arm that accepted its last leg", "every compared "
-    "field, to six places", f"{FACTS['repro_fields'][0]} on every version"],
-   ["045 (Stage 2) under HARNESS 471f70782486", "042 (v14 Stage 2)", "every field", "equal except harness_sha"],
-   ["047, 048 (Stage 2, Stage 3) under HARNESS 3561590b660a", "042, 043", "every field", "equal except harness_sha"],
-   ["052 (Stage 2) under the rf diagnostic harness", "042", "every field the old harness prints", "equal; run 052 adds "
-    "the excess-of-rf fields"],
+  [["013, 015, …, 042: each version’s own baseline", "the with-candidate model tested on the rung that accepted its last leg", "every compared "
+    "statistic, to six decimal places", f"{FACTS['repro_fields'][0]} on every version"],
+   ["045 (Stage 2) under HARNESS 471f70782486", "042 (v14 Stage 2)", "every statistic", "equal except harness_sha"],
+   ["047, 048 (Stage 2, Stage 3) under HARNESS 3561590b660a", "042, 043", "every statistic", "equal except harness_sha"],
+   ["052 (Stage 2) under the rf diagnostic harness", "042", "every statistic the old harness prints", "equal; run 052 adds "
+    "the excess-of-rf statistics"],
    ["053 (Stage 2) on DATA 42587e08609a", "052 on DATA 198b281de1a0", "the D8 restatement",
-    f"{FACTS['restate_same'][0]} fields identical, {FACTS['restate_moved'][0]} restated; IC moved by {FACTS['restate_dic'][0]}"],
-   ["054 cut_inwindow_*", "053", "every shared field", f"{FACTS['cont_same'][0]} of {FACTS['cont_n'][0]} equal to six places"],
-   ["057 equal_rank_decile@100M cut_holdout gross", "054 cut_holdout raw LS", "annual return",
+    f"{FACTS['restate_same'][0]} statistics identical, {FACTS['restate_moved'][0]} restated; IC moved by {FACTS['restate_dic'][0]}"],
+   ["054, in-sample portion", "053", "every shared statistic", f"{FACTS['cont_same'][0]} of {FACTS['cont_n'][0]} equal to six decimal places"],
+   ["057 equal-rank deciles at $100M, holdout portion, gross", "054 holdout portion, raw long-short", "annual return",
     f"{FACTS['erd_ho_gross'][0]} against {FACTS['ho_raw_ret'][0]}"]],
   widths=[30, 22, 24, 24], size=8.5)
 
@@ -807,11 +809,11 @@ FIGS = {
     "phases": dict(num=2, file="fig2_phases.png", width=6.5, title="The phase machine.",
                    text="Each row is a phase, read left to right; the bar between two rows is the condition that closes "
                         "the phase above, and no phase starts before it holds. Colour shows who does each step: a "
-                        "sub-agent, the deterministic harness, or the runner, advisor or human. In the ratchet, each "
+                        "sub-agent, the fixed, rule-based harness, or the runner, advisor or human. In the ratchet, each "
                         "rung is tested against the composite the previous rung left."),
     "cycle": dict(num=3, file="fig3_cycle.png", width=6.5, title="The inner cycle, one turn of the loop that measures something.",
                   text="Steps 1 to 4 run on every such turn. An acceptance adds the advisor’s review and the "
-                       "materialisation of a new version (steps 5 and 6); a rejection goes straight to the commit. Every "
+                       "implementation of a new version (steps 5 and 6); a rejection goes straight to the commit. Every "
                        "turn ends committed locally, with the state file updated, so the next turn, or the next "
                        "session, starts from the record."),
     "ratchet": dict(num=4, file="fig4_ratchet.png", width=6.5, title="The ratchet by version.",
@@ -825,8 +827,8 @@ FIGS = {
                         "Stage 1 the t-stat bar decides almost everything; at Stage 2 the residual-information bar decides "
                         "everything and the hedged return guard never bound."),
     "annual": dict(num=6, file="fig6_annual.png", width=6.5, title="Annual hedged long-short return of v14, in-sample and in the holdout.",
-                   text="One continuous run on the spend snapshot (run 056, equal-rank deciles). Orange marks the three "
-                        "best in-sample years that the D5 rule removes (2000, 2001 and 2021); grey is the spent holdout, "
+                   text="One continuous run on the updated data (run 056, equal-rank deciles). Orange marks the three "
+                        "best in-sample years that the D5 rule removes (2000, 2001 and 2021); grey is the holdout, "
                         "whose 2026 bar covers January to September. The holdout’s return is carried by 2022."),
     "deciles": dict(num=7, file="fig7_deciles.png", width=6.5, title="Average monthly return by composite decile, in-sample and in the holdout.",
                     text="In-sample the deciles are monotone; out of sample deciles 2 to 10 are flat and the spread is "

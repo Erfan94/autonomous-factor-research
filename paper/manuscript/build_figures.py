@@ -78,7 +78,7 @@ def canvas(w, h):
 
 def fig1():
     fig, ax = canvas(6.5, 5.6)
-    legend(ax, 0.975, [("agent", "sub-agent (language model)"), ("harness", "harness (deterministic code)"),
+    legend(ax, 0.975, [("agent", "sub-agent (language model)"), ("harness", "harness (fixed, rule-based code)"),
                        ("people", "runner, advisor or human"), ("files", "files and rules")])
     ax.text(0.02, 0.905, "Orchestration: what to do next", fontsize=8, fontweight="bold")
     box(ax, 0.02, 0.76, 0.26, 0.12, "Human", "the author: data licence,\ndesign rules; answers the\nstop-and-ask questions")
@@ -89,8 +89,8 @@ def fig1():
     ax.text(0.02, 0.705, "Sub-agents: specialised judgement", fontsize=8, fontweight="bold", zorder=5,
             bbox=dict(fc="white", ec="none", pad=0.8))
     xs = [0.02, 0.215, 0.41, 0.605, 0.80]
-    names = [("osap-fetcher", "catalogue code to a\nconstruction spec"), ("field-checker", "verifies each field\non the data bytes"),
-             ("translator", "spec to a factor file;\nruns preflight"), ("alpha-reviewer", "read-only audit of\neach batch"),
+    names = [("osap-fetcher", "catalogue code to a\nconstruction spec"), ("field-checker", "verifies each field\nin the data files"),
+             ("translator", "spec to a factor file;\nruns pre-screen checks"), ("alpha-reviewer", "read-only audit of\neach batch"),
              ("factor-evaluator", "checks stamps,\nwrites records")]
     ax.plot([0.5, 0.5], [0.76, 0.735], color="#333", lw=0.8)
     ax.plot([xs[0] + 0.09, xs[-1] + 0.09], [0.735, 0.735], color="#333", lw=0.8)
@@ -99,7 +99,7 @@ def fig1():
         arrow(ax, x + 0.09, 0.735, x + 0.09, 0.69)
         box(ax, x, 0.58, 0.18, 0.11, t, s, kind="agent")
     ax.text(0.02, 0.525, "Measurement and record", fontsize=8, fontweight="bold")
-    box(ax, 0.02, 0.36, 0.50, 0.14, "Deterministic harness",
+    box(ax, 0.02, 0.36, 0.50, 0.14, "Rule-based harness",
         "point-in-time universe, within-sector ranks, IC and Newey-West t-stat,\ndeciles, the market hedge (ex-ante β), the "
         "registered bars;\nfour hashes on every result", kind="harness")
     box(ax, 0.66, 0.37, 0.32, 0.12, "Written record", "registry, event log, manifest,\njournal, tags, session state", kind="files")
@@ -110,7 +110,7 @@ def fig1():
     arrow(ax, 0.50, 0.93, 0.50, 0.88)
     label(ax, 0.72, 0.93, "read back at the start of every session")
     ax.text(0.02, 0.29, "Enforced in code, not by instruction", fontsize=8, fontweight="bold")
-    box(ax, 0.02, 0.12, 0.30, 0.13, "Phase gates", "records.py check refuses\na run out of phase order", kind="files")
+    box(ax, 0.02, 0.12, 0.30, 0.13, "Phase checkpoints", "records.py check refuses\na run out of phase order", kind="files")
     box(ax, 0.35, 0.12, 0.30, 0.13, "Git hooks", "tests must pass; no credentials;\nno edit to a committed result", kind="files")
     box(ax, 0.68, 0.12, 0.30, 0.13, "Permission tiers", "ask before the holdout, a config\nedit or a download", kind="files")
     ax.set_ylim(0.10, 1.0)
@@ -121,15 +121,15 @@ def fig1():
 
 def fig2():
     fig, ax = canvas(6.5, 6.6)
-    legend(ax, 0.985, [("agent", "sub-agent (language model)"), ("harness", "harness (deterministic code)"),
+    legend(ax, 0.985, [("agent", "sub-agent (language model)"), ("harness", "harness (fixed, rule-based code)"),
                        ("people", "runner, advisor or human")])
     rows = [
-        ("0  Setup", "one time", [("Record the snapshot", "frozen by its manifest", "harness"),
+        ("0  Setup", "one time", [("Freeze the dataset", "frozen by its manifest", "harness"),
                                    ("Check against the API", "live proof at run start", "harness"),
                                    ("Measure the baseline", "v0 recorded and tagged", "harness")],
          "closes when v0 is tagged, before any candidate exists"),
-        ("A  Inventory", "every predictor", [("osap-fetcher", "writes the spec", "agent"), ("field-checker", "fields on the bytes", "agent"),
-                                             ("translator", "factor file, preflight", "agent"), ("alpha-reviewer", "audits each batch", "agent")],
+        ("A  Inventory", "every predictor", [("osap-fetcher", "writes the spec", "agent"), ("field-checker", "fields in the data", "agent"),
+                                             ("translator", "factor file;\npre-screen checks", "agent"), ("alpha-reviewer", "audits each batch", "agent")],
          "closes when every predictor has a file or a measured reason  ·  records.py check"),
         ("B  Stage 1", "every constructible", [("Standalone screen", "batches of twelve; raw spread bar", "harness"),
                                                ("factor-evaluator", "checks stamps, writes one row each", "agent")],
@@ -143,8 +143,8 @@ def fig2():
                                              ("Advisor review", "then commit; each\nacceptance is tagged", "people")],
          "closes when every passer has a Stage 2 row  ·  the order is never re-sorted"),
         ("E  Construction", "and the holdout", [("Construction", "Stage 3; β-neutral layer", "harness"),
-                                                ("Human approves", "refresh; search finished", "people"),
-                                                ("Holdout, once", "read from its cuts", "harness"),
+                                                ("Human approves", "data update;\nsearch finished", "people"),
+                                                ("Holdout, once", "holdout-period results", "harness"),
                                                 ("The paper", "every row reported", "people")], None)]
     n = len(rows)
     top, rowh, gap = 0.94, 0.105, 0.052
@@ -175,7 +175,7 @@ def fig2():
 
 def fig3():
     fig, ax = canvas(6.5, 2.9)
-    legend(ax, 0.96, [("agent", "sub-agent (language model)"), ("harness", "harness (deterministic code)"),
+    legend(ax, 0.96, [("agent", "sub-agent (language model)"), ("harness", "harness (fixed, rule-based code)"),
                       ("people", "runner, advisor or human")])
     w, h = 0.20, 0.24
     xs = [0.02, 0.27, 0.52, 0.77]
@@ -187,7 +187,7 @@ def fig3():
     for i in range(3):
         arrow(ax, xs[i] + w, 0.70, xs[i + 1], 0.70)
     bot = [("7  Commit and tag", "four stamps in message,\nlocal only; state, reply", "people"),
-           ("6  Materialise", "the evaluator adds the\nleg and re-measures", "agent"),
+           ("6  Implement", "the evaluator adds the\nleg and re-measures", "agent"),
            ("5  Advisor review", "before any acceptance\nis committed", "people")]
     bx = [0.02, 0.27, 0.52]
     for x, (t, s, k) in zip(bx, bot):
@@ -279,7 +279,7 @@ def fig6():
     ax.axvline(2021.5, color="#555", lw=0.8, ls=":")
     ax.text(2021.65, max(vs) * 0.92, "holdout →", fontsize=6.8)
     ax.set_ylabel("D10 − D1 hedged, % per year", fontsize=7)
-    ax.set_title("v14 annual hedged long-short (run 056). Orange: the three best in-sample years. Grey: the spent "
+    ax.set_title("v14 annual hedged long-short. Orange: the three best in-sample years. Grey: the "
                  "holdout, 2022–2026:09.", fontsize=7.4, loc="left")
     ax.grid(axis="y", alpha=0.3, lw=0.5)
     ax.set_xticks(range(1999, 2027, 3))
@@ -294,8 +294,8 @@ def fig7():
     d_ho = [float(x) for x in bt.b055["decile_avg_ret_pct"].split(",")]
     fig, ax = plt.subplots(figsize=(7.0, 2.4))
     x = list(range(10))
-    ax.bar([i - 0.19 for i in x], d_in, width=0.38, color=BLUE, label="in-sample 1999–2021 (276 months, run 053)")
-    ax.bar([i + 0.19 for i in x], d_ho, width=0.38, color=ORANGE, label="holdout 2022-01..2026-09 (57 months, run 055)")
+    ax.bar([i - 0.19 for i in x], d_in, width=0.38, color=BLUE, label="in-sample 1999–2021 (276 months)")
+    ax.bar([i + 0.19 for i in x], d_ho, width=0.38, color=ORANGE, label="holdout 2022-01..2026-09 (57 months)")
     ax.set_xticks(x); ax.set_xticklabels([f"D{i + 1}" for i in x], fontsize=7)
     ax.set_ylabel("average monthly return, %", fontsize=7)
     ax.set_title("v14 decile average returns: monotone in-sample, flat above the bottom decile out of sample",
