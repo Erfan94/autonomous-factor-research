@@ -50,6 +50,10 @@ def mfact(name, value, source):
     MS_FACTS.append(name)
 
 
+def famlabel(name):
+    return name.replace("_", " ").replace("short term", "short-term")
+
+
 def pct(x, nd=1):
     return fnum(x, nd)
 
@@ -239,6 +243,9 @@ mfact("dec_ho_mean", fnum(sum(d_ho) / 10, 2), "mean of run 055 decile_avg_ret_pc
 mfact("dec_iw_d1", fnum(d_in[0], 3), "run 053 decile_avg_ret_pct D1")
 mfact("dec_iw_d10", fnum(d_in[9], 3), "run 053 decile_avg_ret_pct D10")
 mfact("dec_ho_d10", fnum(d_ho[9], 3), "run 055 decile_avg_ret_pct D10")
+mfact("v0_beta2", fnum(float(FACTS["v0_beta"][0]), 2), "manifest v0 baseline.beta.ls_beta_fullwindow, two decimals")
+mfact("ho_h_mdd1", fnum(float(bt.b054["cut_holdout_ls_maxdd_pct"]), 1), "run 054 cut_holdout_ls_maxdd_pct, one decimal")
+mfact("ho_rf_credit_abs", fnum(abs(float(FACTS["ho_rf_credit"][0])), 2), "abs of run 054 cut_holdout_ls_rf_credit_pp")
 ann056 = bt.annual_pairs(B056["equal_rank_decile"]["annual_returns_pct"])
 A56 = dict(ann056)
 for y in (2000, 2001, 2020, 2021, 2022, 2023, 2024, 2025, 2026):
@@ -349,7 +356,8 @@ T("sample", "III", "The Sample",
   "dollar, a trade within seven days, a market capitalisation and a dollar volume), before the size and liquidity "
   "screens. The exchange share is of names; NASDAQ and NYSE American hold the rest. The holdout row is descriptive and "
   "carries no model statistic. Panel B lists every table in the updated dataset with its rows and the dates it spans; "
-  "tables without a date column show none. TB3MS is the one external table, added by the D8 data update.",
+  "tables without a date column show none. TB3MS is the one external table, added by the D8 data update. ACTIONS also lists corporate actions "
+  "scheduled for dates after the download, which fall outside the holdout.",
   None, None, panels=[
       ("Panel A. The Universe by Period",
        ["period", "months", "names per month", "min", "max", "distinct firms", "firm-months", "median cap, $bn",
@@ -371,7 +379,7 @@ for fname in ["size", "value", "profitability", "investment", "momentum", "exter
               "short_term_reversal", "liquidity"]:
     fd = fams[fname]
     members = fd.get("members") or []
-    fam_rows.append([fname.replace("_", " "), FAM_ORIGIN.get(fname, "opened in Phase C"), fd["definition"],
+    fam_rows.append([famlabel(fname), FAM_ORIGIN.get(fname, "opened in Phase C"), fd["definition"],
                      str(len(members)), ", ".join(v14_fam.get(fname, [])) or "none",
                      num(1 / len(v14_fam), 4) if fname in v14_fam else "0"])
 T("families", "IV", "The Nine Factor Families",
@@ -508,7 +516,7 @@ CITE = {"PctAcc": "Hafzalla, Lundholm, and Van Winkle (2011)", "CBOperProf": "Ba
         "MaxRet": "Bali, Cakici, and Whitelaw (2011)", "roaq": "Balakrishnan, Bartov, and Faurel (2010)",
         "RoE": "Haugen and Baker (1996)", "IdioVol3F": "Ang et al. (2006)", "STreversal": "Jegadeesh (1990)",
         "zerotrade6M": "Liu (2006)", "VolumeTrend": "Haugen and Baker (1996)", "TrendFactor": "Han, Zhou, and Zhu (2016)"}
-WHAT = {"PctAcc": "(net income − operating cash flow) / |net income|; low is attractive",
+WHAT = {"PctAcc": "(income before extraordinary items − operating cash flow) / |income|; low is attractive",
         "CBOperProf": "cash-based operating profit / assets; high is attractive",
         "ShareIss5Y": "5-year growth in split-adjusted shares; low is attractive",
         "cfp": "operating cash flow / market capitalisation; high is attractive",
@@ -531,11 +539,11 @@ for leg in v14["legs"]:
     w = num(1 / nF / fam_n[fam], 4)
     since = "v0" if n in SEED else VERSION_OF[n]
     if n in SEED:
-        leg_rows.append([n, fam.replace("_", " "), since, SEED[n][0], SEED[n][1], "—", "—", "—", "—", "—", "—", w])
+        leg_rows.append([n, famlabel(fam), since, SEED[n][0], SEED[n][1], "—", "—", "—", "—", "—", "—", w])
     else:
         s1_ = REG[n]["stage1"]
         s2_ = REG[n]["stage2"]
-        leg_rows.append([n, fam.replace("_", " "), since, CITE[n], WHAT[n], fnum(s1_["ic_mean"], 4),
+        leg_rows.append([n, famlabel(fam), since, CITE[n], WHAT[n], fnum(s1_["ic_mean"], 4),
                          fnum(s1_["ic_tstat_nw"], 2), fnum(s1_["ls_raw_sharpe"], 2), fnum(s1_["ls_beta_fullwindow"], 2),
                          fnum(s2_["resid_ic_tstat_nw"], 2), fnum(s2_["paired_delta_ls_tstat"], 2), w])
 T("legs", "IX", "The Nineteen Legs of v14",
@@ -561,8 +569,8 @@ for aum, lab in (("100M", "$0.1B"), ("1000M", "$1B"), ("5000M", "$5B")):
                       fnum(g("cut_holdout_net_beta_on_market"), 2)])
 T("layer", "X", "The Construction Layer on v14",
   "The declared layer row, the fixed-tier spread row and the gross equal-rank deciles at the same AUM, from one "
-  "continuous run on the updated data (run 057, book January 2001 to September 2026), split into in-sample (2001 to 2021) "
-  "and in the holdout (January 2022 to September 2026). Returns in percent per year; turnover one-way percent per "
+  "continuous run on the updated data (run 057, book January 2001 to September 2026), split into the in-sample period (2001 to 2021) "
+  "and the holdout (January 2022 to September 2026). Returns in percent per year; turnover one-way percent per "
   "month; net β on the universe’s cap-weighted return. The measured Corwin-Schultz half-spread averages about "
   f"{FACTS['half_spread_bp'][0]} basis points per unit traded; the fixed schedule (2, 5 and 12 basis points by tier, "
   f"about {FACTS['fixed_half_spread_bp'][0]} on average) understates 1999 to 2007. The two rows bracket spending on "
@@ -637,7 +645,7 @@ for r in RUNGS:
     s = r["stage2"]
     ladder = {"012": "L1", "023": "L2", "032": "L3", "037": "L4", "044": "L5"}[r["stage2_run"]]
     nbase = len(s["base_legs"].split(","))
-    led.append([str(RANK[r["name"]]), r["name"], r["family"].replace("_", " "), fnum(r["stage1"]["ic_tstat_nw"], 3),
+    led.append([str(RANK[r["name"]]), r["name"], famlabel(r["family"]), fnum(r["stage1"]["ic_tstat_nw"], 3),
                 ladder, str(nbase), fnum(s["resid_ic_mean"], 4), fnum(s["resid_ic_tstat_nw"], 3),
                 fnum(s["paired_delta_ls_tstat"], 3), "accepted" if s["ratchet_decision"] == "PASS" else "rejected"])
     raw_d = s["cand_ls_raw_ann_return_pct"] - s["base_ls_raw_ann_return_pct"]
@@ -677,7 +685,7 @@ for fname in ["size", "value", "profitability", "investment", "momentum", "exter
             mem.append(f"{m} [{cat}] ({verdict})")
         else:
             mem.append(f"{m} (v0 seed)")
-    fam_full.append([fname.replace("_", " "), fd["definition"], "; ".join(mem), ", ".join(v14_fam.get(fname, [])),
+    fam_full.append([famlabel(fname), fd["definition"], "; ".join(mem), ", ".join(v14_fam.get(fname, [])),
                      num(1 / nF, 4)])
 T("families_full", "AII", "The Declared Families",
   "The nine declared families, their definitions, every member in assignment order with the catalogue’s economic "
@@ -713,7 +721,7 @@ for cls in ("data_unavailable", "preflight_failed", "data_start"):
     for k in sorted((k for k, v in FRONT.items() if v["class"] == cls), key=str.lower):
         reason = FRONT[k]["reason"].replace("\n", " ")
         for a, b in (("snapshot", "dataset"), ("gates", "filters"), ("gate", "filter")):
-            reason = reason.replace(a, b)
+            reason = re.sub(r"\b" + a + r"\b", b, reason)
         if len(reason) > 150:
             reason = reason[:150].rsplit(" ", 1)[0] + " …"
         crow.append([k, CLS[cls], reason])

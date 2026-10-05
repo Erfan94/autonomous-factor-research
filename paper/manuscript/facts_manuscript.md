@@ -66,7 +66,9 @@
 | ho_down | 3.62 | run 055 ls_down_mkt_pct |
 | ho_down_n | 15 | run 055 n_down_months |
 | ho_first_hm | 01:09 UTC | events run_started 054 ts |
+| ho_h_mdd1 | -35.6 | run 054 cut_holdout_ls_maxdd_pct, one decimal |
 | ho_ic_pos | 63.2 | run 055 ic_pct_positive |
+| ho_rf_credit_abs | 2.26 | abs of run 054 cut_holdout_ls_rf_credit_pp |
 | hx_hm | 00:14 UTC on 2 October 2026 | events decision holdout_expectations_v14_spend_snapshot ts |
 | iw_ic_pos | 62.3 | run 053 ic_pct_positive |
 | l1_rt_max | 4.67 | max registry stage2.resid_ic_tstat_nw, run 012 |
@@ -244,6 +246,7 @@
 | u_p4_med | 4.13 | paper/manuscript/sample_universe.json (build_sample.py) 2017-2021 median_cap_bn |
 | u_pct_cap | 96.5 | paper/manuscript/sample_universe.json (build_sample.py) in-sample pct_listed_cap |
 | u_pct_names | 41.5 | paper/manuscript/sample_universe.json (build_sample.py) in-sample pct_listed_names |
+| v0_beta2 | -0.14 | manifest v0 baseline.beta.ls_beta_fullwindow, two decimals |
 | v0_h2 | 0.0016 | manifest v0 baseline.ic.ic_half2_mean |
 | v0_mdd | -45.56 | manifest v0 baseline.ls_hedged.ls_maxdd_pct |
 | v0_raw | 0.719 | manifest v0 baseline.ls_raw.ls_raw_sharpe (run 001) |
@@ -281,4 +284,4 @@
 | xfin_dic_t | -0.62 | registry XFIN stage2.paired_delta_ic_tstat |
 | xfin_dsh | -0.082 | registry XFIN stage2.delta_ls_sharpe |
 
-*Keys used by manuscript_src.md: 293.*
+*Keys used by manuscript_src.md: 294.*
