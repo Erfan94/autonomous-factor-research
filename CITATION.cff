@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite the paper."
+title: "Agents Propose, Code Decides: An Autonomous Research Loop Framework to Build an Equity Alpha Model"
+authors:
+  - family-names: Sadeghi
+    given-names: Erfan
+repository-code: "https://github.com/Erfan94/autonomous-factor-research"
+url: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7568638"
+keywords:
+  - factor investing
+  - asset pricing
+  - large language models
+  - AI agents
+  - pre-registration
+  - reproducibility
+preferred-citation:
+  type: report
+  title: "Agents Propose, Code Decides: An Autonomous Research Loop Framework to Build an Equity Alpha Model"
+  authors:
+    - family-names: Sadeghi
+      given-names: Erfan
+  year: 2026
+  url: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7568638"
+  notes: "SSRN working paper, abstract id 7568638"
