@@ -45,3 +45,8 @@ __pycache__/
 # transient
 data/download.log
 .claude/worktrees/
+
+# Paper: only the current PDF is published. The Word file is a local build output for editing,
+# and earlier drafts stay local.
+paper/*.docx
+paper/*Previous Version*

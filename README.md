@@ -11,6 +11,7 @@ The agents decide **what** to test; the code decides **how it is measured**.
 
 > **Paper:** *Agents Propose, Code Decides: An Autonomous Research Loop Framework to Build an Equity Alpha Model*,
 > Erfan Sadeghi (2026). SSRN working paper: <https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7568638>
+> · [Read the paper (PDF)](paper/Alpha_Model_Autonomous_Research_Loop_Sadeghi_2026.pdf)
 
 ---
 
@@ -169,7 +170,7 @@ reference code from the Open Source Asset Pricing project by Andrew Y. Chen and 
 (`osap_source/cache/`), which is itself distributed under GPL-2.0, and the factor translations in `factors/` follow
 those constructions. Sharadar data are not included and remain subject to Sharadar's terms.
 
-The paper itself is not covered by the GPL. The manuscript text and the paper files (`paper/manuscript/manuscript_src.md`, `paper/*.pdf`, `paper/*.docx`) are © 2026 Erfan Sadeghi, all rights reserved: they may be read and downloaded, but not redistributed or adapted without permission. The scripts that build the paper from the records are code and fall under the GPL with the rest of the repository.
+The paper itself is not covered by the GPL. The manuscript text and the paper files (`paper/manuscript/manuscript_src.md` and the paper PDF in `paper/`) are © 2026 Erfan Sadeghi, all rights reserved: they may be read and downloaded, but not redistributed or adapted without permission. The scripts that build the paper from the records are code and fall under the GPL with the rest of the repository.
 
 This repository is for research only and is not investment advice.
 
