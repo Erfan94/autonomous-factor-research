@@ -161,6 +161,10 @@ A snapshot pulled at a different time will carry a different `DATA_SHA`, because
 harness reports the stamps on every result so any difference is visible. The out-of-sample block has been spent:
 re-running it on this snapshot would be a second look, and a new hypothesis needs a new window.
 
+## History note
+
+On 7 October 2026 the git history was rewritten once, after the search had finished: the co-author lines naming the Claude models were removed from commit messages, and the Word version of the paper was removed from every commit. No other file changed; every tag points to a commit with exactly the same files as before, and every commit keeps its stamp lines. Records written before that date cite the old commit hashes; [`docs/COMMIT_MAP.tsv`](docs/COMMIT_MAP.tsv) maps each one to its new commit. The role of the agents is described in the paper and in the acknowledgements below.
+
 ## License
 
 Copyright (C) 2026 Erfan Sadeghi.

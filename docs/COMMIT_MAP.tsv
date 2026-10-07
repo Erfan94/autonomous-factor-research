@@ -1,0 +1,137 @@
+# Commit map for the history rewrite of 2026-10-07 (git filter-repo).
+# Records written before that date cite the old hashes; each maps to the new commit with the same
+# files, except that commits which carried the paper's Word file no longer contain it.
+old_commit	new_commit	date_and_subject
+02628315f6cd0fee16d0eb3f313a9d8b999dee69	7997194c2859a1bf549205ce01311ff94fc9104e	2026-10-01 construct: run 049 construction layer on v14 reported — gross Sharpe 0.86 (t 3.27), net -0.06 @100M
+03897b7fec11d273b14e6d432fbaa913f5677f39	047bd34696de7b4c5b5c02fbec2c370139018f5c	2026-10-07 docs: README links the SSRN paper (abstract 7568638) in the header and the citation, states that th
+03a6334a546ef933626681cd0e31deaf20375cd1	347fa63700dca62c44a1af8aa3bb9aaa9b56e379	2026-09-30 probe: Phase A final batches — TotalAccruals, TrendFactor, VarCF, zerotrade1M/6M/12M translated and
+050c4c61cc00e74b2130d8d53ffb7c75e4288f4d	2e78fc622d643b7255fec490ca78b5cdf67ee514	2026-09-30 probe: Phase A batch 15 closed — MomSeason, MomSeason06YrPlus translated and preflight-passed; MomS
+06e23e9e96ea25296edcab64c457a15714103e1b	70b3367fa26eb110498e5e461ada0d74a80fb8da	2026-09-30 probe: Phase A batch 03 translated and reviewed; batch 04 specs, fields, translations and preflight
+088514e29a5e7e89d7e337b5a4dd284301597249	ecf94b5cf47f726af29da25c5c104c6eb37baa6a	2026-09-30 chore: records.py — baseline stage-2 runs do not open the phase gate; the frontier matches rows on 
+0d52a33dea348a16760d38517432970980ee9849	5b45c4067e0ea0f80979b65be7d7ea0ef5bb1338	2026-10-01 ratchet: v1 = v0 + PctAcc (run 012 rung 1: resid t 4.67, guard t 0.09); baseline run 013 reproduces
+0f319d1dac099e1c3f097b8d42a148240ffb281a	aa8ccf1b1489a3c24da0f89af9e391bc1d841dc3	2026-09-30 probe: Phase A batch 23 part 2 — VolMkt, VolSD, VolumeTrend, XFIN translated and preflight-passed
+0fb31d59ea66646fc1f7ccaebbbdb80663f0ecb2	f1e1788cb78aeed5213a214808c17a05409a693d	2026-10-01 chore: record that tag v1-add-PctAcc mis-points at 3cdb255 (v1 is 5b45c40); tag left unmoved for th
+102a191f09bfb3a69bfaadca50ba584adf9289d5	56ec63e9504b5e5fb66db808bbf1ac57511253d3	2026-09-30 probe: Phase A batch 20 part 2 — RealizedVol translated and preflight-passed; RIO_Volatility (data 
+121bf5accebf097ecea02e565afc5f62acb8fb02	edc3dca8e952581d3c122c4af790081b6a3c94bb	2026-09-30 chore: log repository_initialized and the first commit
+121d63bedd940aa2677fb5ab43ba250835e3f5ed	dcd8b9710d424b09e6362deca3a2417cf2d6f7dc	2026-09-30 probe: Phase A batch 19 closed — PriceDelaySlope, PriceDelayTstat translated and preflight-passed; 
+12fef84fee204cbace7b480a53244cde7bb58909	7132da579baeb30ed569262e7de90333895ef3b4	2026-10-01 data: D8 step 2 — run 053 (v14 in-window on 42587e08609a) vs 052: 54 fields restated, IC -9e-6, hed
+1433162cb0aebf1d5857d913e40b4583c4f735cc	d55984b74b96062e2ed4a155bac527f688d72e17	2026-10-04 docs: manuscript corrects factual discrepancies found in the pre-SSRN review (holdout decile vs mea
+147a29dbdb66bc6cb4f35409df4f377889117175	3b21c41a456703cdaa19b203a64563b7b20b4e13	2026-10-01 ratchet: ladder 5 declared (run 044: BidAskSpreadFlip, IdioVolAHT, zerotrade1M, NetPayoutYield vs v
+158425db43d91c673b1a205adf155d8b88378f7c	df872eb68184d53edd63512866702b3c6963931e	2026-09-30 screen: Phase B declared — Stage 1 batch plan (9 batches, codepoint order) fixed before run 1; phas
+15a522eeb4c0cd7bbb711938390e3feb3991c54b	4efc43f5429df3cf0a49e39979f609e811404d80	2026-09-30 probe: Phase A batch 18 part 2 — PctTotAcc, Price, PriceDelayRsq translated and preflight-passed; P
+169e8e1e9bcc29077e9e6f5f7059c45bd1e8539d	bb92bae1689223c74380bd2b44c5fea905be86c2	2026-09-30 probe: Phase A batch 21 closed — ResidualMomentum, ReturnSkew, ReturnSkew3F, RevenueSurprise transl
+1c7324c927a3e875c55f3a5612144bba30514e9a	3ff9d6f1c6d7c01907774c664d9733d2b9b758f9	2026-09-30 probe: batch 19 review applied — PriceDelay* docstring/spec annotations
+1f3753b31b5ccd36fc30dc74e2748be97e9e3eb1	20bed597a288c42565bd80fb86bb4549a1738daa	2026-09-30 probe: Phase A batch 24 part 2 — grcapx translated and preflight-passed; dVolCall, dVolPut, fgr5yrL
+2143bdd568d20204f2d4aab49f2be593a1a8e825	ff6e4a57a6ca53a26e5e2639aabbffaa0bd446f4	2026-10-02 docs: manuscript introduction paragraph on why an agent makes the search's failures more likely, re
+21fe3ad4f72573ed2c4b33a6120f1a2d7f8f4ebb	647179516598d0c5c42b7aebc4bea8d73b129022	2026-09-30 probe: batches 05-07 review fixes, debtc gate on five SF1.debt readers, batch 08 specs, DolVol tran
+2d796fa34861b4450b4b06089de17e4a58f85af0	d8a04cb96ae31de10f53e712832215907481c4ae	2026-10-03 Merge branch 'release': public README and GPL-2.0 LICENSE into main (paper commits stay local; rele
+2dbdfd1676830f2ae44f360207eacde7307a22c3	d36007ecd9bdcf39b657b718b9f4fcaea8da0895	2026-09-30 probe: batches 15-16 review applied — NetDebtFinance tie rule narrowed and ASC 842 break declared; 
+2e37d4bbcea9e0228aade37e9037a07d504f0340	3cdb25565e1a469654183fead655b323b30df567	2026-10-01 ratchet: Stage 2 ladder 1 (run 012) evaluated — PctAcc, CBOperProf, ShareIss5Y, cfp, XFIN all pass 
+2e4e543b4f16fd5b77ea296e35005162fa78fa42	7b0f264b5fa58a4c5eb854ea2416fa6d5eb83ebc	2026-10-01 ratchet: v11 = v10 + STreversal (run 032 rung 5: resid t 3.81, guard t -0.54; opens short_term_reve
+2f2b7395fe064950b576093d4ac3bac89efd09a6	5f64a397810dfcbfc3384a93f9638473c01f5053	2026-09-30 probe: batch 18 review applied — PriceDelayRsq history_months=13 (hard rule); PctTotAcc docstring
+339a1df88ce0549936cb8c8699d7f0c735942fe7	7665fdbcf46872bdc02589c9dfd99b0bb734aa3d	2026-09-30 probe: Phase A batch 14 closed — MRreversal, MaxRet, MeanRankRevGrowth translated and preflight-pas
+33f169e83bf5d4c43ed2930fd66168aa65b9a3ab	7514083a38f195c02bd974e0d3b15952df1b925e	2026-09-30 probe: Phase A batch 22 closed — ShareIss5Y translated and preflight-passed; ShareRepurchase, Share
+38400157eebfd365e9432ac847b80f7f4fdf967a	757c2ed21fa0884f8bd1c1e7a34971a18233d982	2026-09-30 probe: batch 12 review applied — IntanBM spec addendum and first scorable month (2002-12); IntMom a
+3997b9cafded79ed4e964f89a96dfb0c5c49b525	7d302c813b94dcf5faa9cf0a02cc60983be106d3	2026-09-30 screen: Stage 1 batch 2 (run 004) — CF passes (IC 0.0201, NW t 3.03); 11 rejected (ChNNCOA on ic_me
+3d17a67b76c33cd84ca6cdc7a526178bddac5a8e	d50920aa4b4602066372d43e87aa19f53c8750cf	2026-10-01 docs: D8 holdout expectations for v14 written before any out-of-sample number; D8 predecessor resta
+3eca9560bc4b217d841c8002b42cf30a0ce619f5	d465979fa05af21665d25d4cd8a04ee06b6da7bd	2026-09-30 chore: log repository_committed for D11
+3ef5ea4d0b0982150c62693b9f24311abe3a4e37	f06719982e3ab0e79e92d215e001020c6a13dbe5	2026-09-30 probe: Phase A batch 22 part 2 — SmileSlope, Tax (data), Spinoff, SurpriseRD (preflight) to the fro
+3fce5981ebc999498d8976f87dd280c3eb365ce8	983d995a060dce2393d57fa8107c4cab4b4e3c2d	2026-09-30 screen: Stage 1 batch 6 (run 008) — NetEquityFinance (t 3.03) and NetPayoutYield (t 2.60) pass; 10 
+41edba9f033de05a87178474cc5a5ae9d498580c	94dff4c98f373bc11d70a12608903f8c6997b267	2026-10-01 harness: D7 construction layer — sector+market-beta neutral optimiser, harness-built Corwin-Schultz
+42d73d30309799a0364a31d606387a62f2d49c2a	c645748f906f8d9649fd56b6aac66c1b968afd54	2026-09-30 data: record the first Sharadar snapshot — 13 tables, full history, DATA_SHA 198b281de1a0
+431e8c8f265aeafe267fa399b6a87c1ad3d52dc5	a418ecfcbd1ceac38b924e35696afd44545d8d13	2026-09-30 probe: Phase A closed — final alpha-review clear_to_screen (0 critical, 0 major); inventory_classif
+463a052fba52d5ff8778429c0a2c64ca274b5b4d	43b4038d712b4ed8eb04e1ae9665038199d41a24	2026-09-30 probe: Phase A batch 13 part 2 — InvestmentTWX (OSAP Investment), LRreversal, Leverage translated a
+49501a8656723324ef01944eeaf3718e21100d61	27de115196c02e31ed222518a508ac4a749da15c	2026-10-01 screen: Phase C closed — 24 passers in 9 families (volatility, liquidity, external_financing, short
+4a6ade91b454a4a48148fdbbe4f487bafdacf440	60ca6cf362621ef870c9dfb0c61fbbd5e023c6a1	2026-10-01 ratchet: v14 = v13 + TrendFactor (run 037 rung 5: resid t 2.140869, guard t -0.005; first momentum 
+4ca9bd53289e20a22c0b7cb32136e2adbd1cb6f5	c366fef4a2ddff9c2f48a644e98124e70238e81f	2026-10-01 docs: remove predecessor-outcome clause from CONSTRUCTION.md, annotate D7 (alpha_review of 94dff4c)
+4ea1ebfa3f5603cc5982e4474fee398bfd59adcf	f27e4c3d400f9a24b096139bd9c9bebf58f81220	2026-10-01 ratchet: Stage 2 ladder 5 (run 044) evaluated — BidAskSpreadFlip (1.77), IdioVolAHT (1.92, closest 
+4ec5b95d1af59b1fd8ca370242d450b4cf8f4c16	7f0f97b88dc334c6d3a909a1e659565a599d577f	2026-09-30 probe: Phase A batch 04 reviewed; batches 05-06 specs, fields, translations and preflight
+51058d98449c75854bad75175d82e712572760f1	384dc67fbdd9854bbab627d2ae192b8ccc0abab7	2026-09-30 probe: batch 14 review applied — MeanRankRevGrowth growth pairs aligned by reportperiod; MaxRet/Mom
+519f0ca0856e6e59f70b7cc5126e626dd567a08b	9d2abfafb168390c3dab3211fe7197df9a7815d2	2026-09-30 probe: Phase A batch 11 closed — HerfAsset, HerfBE, High52 translated and preflight-passed
+52d4ed59fa3c553e8c4801a625d1b27dae40490a	4a8d64a6332c0d7ed37383f45988d1e72b3813cb	2026-10-01 chore: records.py phase_gate reads registry file names, not acronyms; Stage 2 ladder 1 declared and
+57aaf6a77060e7fc4c3476f97bbca14df1527217	46080381de03f5b7c06c024ff0c3f5e43eb7088b	2026-09-30 docs: D1 lists every remaining audit hit; the bootstrap stamps are on the record
+598bfbcccc91c22a7838ae2fe0821fc269c2bc8f	e92256a28455a2b6e1d6ab5c3208f199513856d4	2026-10-02 docs: manuscript takes the owner's Google Docs edits (keywords, abstract, introduction, II.C/E/F) a
+5a412031e61b71b4638646cbc650584aa8b04e9d	cbbf8373a3da4fdf02492bda87ea7c814491484e	2026-09-30 probe: batch 13 review applied — Intan trio ME on ART share counts (as IntanBM), flow numerators AR
+5d57746daac740ad338f81c84f0e426920d9fba4	ada5a785d1bb0d419df8e5f085db0cbdbdcd354c	2026-10-01 harness: alpha-review fixes to the D7 layer — effective ex-years reported (2001,2021), name-cap exc
+5f8760770bf00d52a1df97b0144a074a4f1ee4ec	3fea663ed7a7852a8d8d1bf6af1a05e4b54af033	2026-09-30 screen: Stage 1 batch 5 (run 007) — MaxRet passes (IC 0.0233, NW t 3.42); 11 rejected on ic_tstat_n
+624bd9c40b5729475f38c52e91035aa87e702d1d	0883bba886145c7160b1fa34a22ba7fd0eaddd29	2026-09-30 probe: Phase A batch 02 translated, reviewed and fixed; batch 03 specs and fields
+62bfa9ec96f100f526c76f1af0e1c24be3cbda24	a3be918bd15563fcdc56dde646d31be41ddb626c	2026-09-30 probe: Phase A batch 19 part 2 — RDAbility, RDIPO, RDcap (preflight), RDS (data) to the frontier
+639ce43843d1f89b7a15ce841c8d2f53e191254b	4aa9892b453971e6f00046d71b20e3a0326dc944	2026-10-01 ratchet: ladder 3 declared (run 032: OperProfRD, IdioVol3F, NetEquityFinance, CF, STreversal vs v9)
+6503a25cd8b42d5855e569f3f5a13f41f3ffc381	9b3501c66ee34de34794169fbc0ff745bbba1f00	2026-10-01 harness: --return-start skip1 diagnostic (HARNESS 3561590b660a -> aef490297071, pytest 459); run 05
+67017cc86376afe0f620caa38369ba8c65f3dd59	2f96243ed318883a5fd3c3f49defd3af48a62da7	2026-10-03 docs: paper tables regenerated by build_tables after the repo_published event (event counts only)
+705d9f94c674c0e5fb0d8e9717a38164a1d40fd1	486a814b859e9988caaf3aa2459175a5f1cf3ef3	2026-09-30 chore: bootstrap V4 from the V3 skeleton with the market-neutral, sector-relative construction
+737b2c06fcbd38daf30d9c45a890f5926cdfaff1	f9706aa482c473b11cf83cb8ea6cf446e72a85d0	2026-09-30 probe: Phase A batch 17 closed — OrgCap translated and preflight-passed; OptionVolume2, OrderBacklo
+74eaad843573d2ba0f643941d487ecd0a5b95d2c	e056a3fb3a05eb11cb27da53ac02c5b0b8b951a5	2026-10-01 ratchet: v10 = v9 + IdioVol3F (run 032 rung 2: resid t 2.030731, guard t 0.89; thinnest pass); base
+78e1ad357a58e5f281a58d1cc8f4a81c6fe767c2	9c65382390904667fd5ae6ec80463b8057d4eba1	2026-10-01 ratchet: v6 = v5 + GP (run 023 rung 1: resid t 2.74, guard t 0.43); baseline run 024 reproduces the
+7995f395ee957ae0ffc6ad070836e6e1003a084e	a86661473c0e83d2af7444294575c0ad6f675587	2026-10-01 screen: Stage 1 batch 8 (run 010) — RoE, STreversal, ShareIss1Y, ShareIss5Y, TrendFactor pass; 7 re
+79bde3d72ea5af07526f7df438a009c055448a40	50afc167adc64b9bc30c5b489bc14a2577330096	2026-09-30 probe: Phase A batch 21 part 2 — RoE, SP, STreversal, ShareIss1Y translated and preflight-passed
+7b09d9d3eb7125a0f087d1ce985947d12450cd6a	7b8a65de122f9e4a1206ef9aee2eb6dfc40c7e7d	2026-09-30 probe: Phase A batch 09 translated and preflight-passed (EquityDuration, EarningsSurprise, EntMult)
+7fb7fcbc79c5be3f656c75951fdf532536a82999	8a6e880e4efa3fad78a5f252880dd40d09029cb8	2026-10-01 ratchet: v5 = v4 + XFIN (run 012 rung 5: resid t 3.27, guard t -0.64; every diagnostic worsened, ac
+807c1d29bbabcbaf9e7deca4b80d4f7c1783e2b8	d28b5bbe8accc0c1ba19eff9a2b414509b81d06c	2026-10-01 ratchet: Stage 2 ladder 2 (run 023) evaluated — GP, MaxRet, roaq, RoE pass; ShareIss1Y rejected (re
+819cb5792302f3311bfb01cda83baf0fa5ef714e	0cde9bc4348aaaad09567b5975786c8bceda97d1	2026-10-04 docs: manuscript replaces computing jargon with finance wording (spend, bytes, snapshot, block, cut
+82f4cece06d2667350e33523fca8d39b4acad18b	35ef5d737123c28d8e8471f543db1452eb196c77	2026-09-30 probe: Phase A batch 12 closed — IntMom, IntanBM translated and preflight-passed; IndMom, IndRetBig
+83db457b9e5657c285b9e2cbb108f0a70893191a	418d2b6942b0d49b9fe2af4b14d80e7aa92fc286	2026-10-01 screen: Stage 1 batch 9 (run 011) — 8 pass incl. BidAskSpreadFlip at the 2.74 bar; dNoa, grcapx, gr
+8a941fe411d31824859da82bbdad137b20c559d6	e8773f1e19c4fba375507be264fec05be85a0c84	2026-09-30 screen: Stage 1 batch 1 (run 003) — CBOperProf passes (IC 0.0209, NW t 3.74); 11 rejected on ic_tst
+8be8add7a888a2f42c3cfdc2b0c2b5f3db3c31d3	062fc5594afbab7095aad350c0c2ef7736fa8530	2026-10-03 docs: manuscript takes the owner's Word edits (six rewritten paragraphs in Reading the Result and L
+8bf75a9f4b3d95ba62bda04fefe4b50da6f2e08f	3ea97c21aab5bd599bb26bd2711461a4922010b5	2026-10-02 docs: manuscript DOCX layout (title page on one page, fixed table grid) checked by rendering throug
+8d1895afe8b653a542338219328e38c5a05cf58a	35403e2e232c1f28d9887b8eadb3784e23f50094	2026-10-01 harness: TB3MS external table + excess-of-rf hedge diagnostic beside the declared hedge (owner-appr
+92132d6ab73437d119422f393807d0bfef80cf6d	958f646c230cfbb4d7285b10b3e2f3cd11abb74a	2026-09-30 probe: Phase A batch 20 closed — REV6, RIO_Disp (data), RIO_MB, RIO_Turnover (data start) to the fr
+933f72a56c5f3a37604a38edcdf89cf65aade017	c2a784c88f63378e68af5197b77c5bc655436597	2026-09-30 probe: Phase A fetch batches 01-02 — 16 specs, 9 infeasible, AM and Accruals translated, preflighte
+986de788e33ee4b0708e87cfbe81e563fd54edc0	5af4933ca87313f8ae804e69ade5d8838cff35a6	2026-10-01 ratchet: v13 = v12 + VolumeTrend (run 037 rung 2: resid t 2.043637, guard t -0.09; second liquidity
+99ce4011d1963df46b2ea8d5dfc00750ca2f5849	f5832d5f8adebcf338156c9c9e63386f8a7463cf	2026-09-30 screen: Stage 1 batch 4 (run 006) — GP, IdioVol3F, IdioVolAHT pass; 9 rejected; GrLTNOA flip qualif
+9a9293adea55d30c1d9a4ada1c96d76b2dcfc65c	eebce6c1c4f8e7cbf71b680b4dbdf8787d4e2416	2026-10-01 ratchet: Stage 2 ladder 3 (run 032) evaluated — IdioVol3F (resid t 2.030731) and STreversal (3.81) 
+9adc95cc10b541c2ff08afa2524a81fd367d292a	5fc32046142db36737ed64aa10987d127b2c0085	2026-09-30 probe: Phase A batch 15 part 1 — MomOffSeason06YrPlus translated and preflight-passed; MomOffSeason
+9b17042ce8b0fd1ad568fa8dd6fb934ddcf23ee0	62f98a208d07f642e96be08d9678b46c4df60fb9	2026-10-02 docs: manuscript in the owner's previous-version layout (PDF + DOCX) built from records; methodolog
+9c3bd1c860ae8c4da06d94828242d1fdedc1973e	b90cafa7ee8e71165918125b6a89aac50ddfdff8	2026-10-03 docs: manuscript footnote carries the repository link (https://github.com/Erfan94/autonomous-factor
+9ca72f2c5113ffcd7b559ef0cda52cf435d511ea	d886f00b13c3f3b97c4a9bac32cbc32b4b8ac5fb	2026-10-01 ratchet: v7 = v6 + MaxRet (run 023 rung 3: resid t 4.01, guard t 1.75; opens volatility, 7 families
+9d80c1ef82ba4f14e7663bce65ef783a0254af9d	70bb97f970f56dd678e9db8cad5bbc062f0d3412	2026-10-01 ratchet: v8 = v7 + roaq (run 023 rung 4: resid t 3.73, guard t 1.95; raw and hedged delta agree in 
+9ef77fb2fcfac0161ae72f092552ee2f1104e5c0	5bdb9b711b818df8f451239f5ceeb8cbba1376e2	2026-09-30 construct: v0 baseline measured and constructed — runs 001 (stage 2) and 002 (stage 3), manifest bl
+9f4e88ea7a927b780426290eec626e9f2eb2ba72	7d8f7e10e2b9cea2227d29c494005996e117dcf6	2026-09-30 probe: Phase A batch 16 part 1 — MomSeasonShort, NOA, NetDebtFinance translated and preflight-passe
+9f95f366732933235bf3bd368c5500302a52ab8c	4911cdf1c6451e7187b64027cf375b6bb54a0924	2026-10-01 ratchet: v3 = v2 + ShareIss5Y (run 012 rung 3: resid t 3.61, guard t 2.83; opens external_financing
+a425a6fe381d7db8859263a8c320157a9a85da9d	500aa6fb7fe9ce895852c19b1f8dbad46964ed9f	2026-10-04 docs: manuscript says in-sample instead of in-window throughout (text, table headers, Table III lab
+a4b81b1753277543a068d9cd5f5788ec41b40cde	e42583e632a6e2e982cb6b765748c6ecec1bcb2d	2026-10-02 docs: manuscript equations typeset (MathML in the PDF, native Word equations in the DOCX; inline sy
+a8bf1b9144e8b3d1aea266bab25c16c790590fc0	f982475de17525c3ad4baf8ce71c66158bb47aed	2026-09-30 docs: journal and session state at Phase A close (UNACCOUNTED 0)
+a94b1f285c9a17f512ad28a341c97084d695af1c	e8aa124b5b75d9867cbeeef0706e39c5f7dadd35	2026-09-30 screen: Stage 1 batch 3 (run 005) — 0 pass, 12 rejected (EarningsConsistency on ic_mean at t 2.60; 
+a9d5af25651e3293338d8a606415cdddc235c8ba	93a90062533b93c4045842e12acb228f79e2fe34	2026-09-30 probe: batch 08 review applied — EP earnings lagged to t-6 so price follows the period end; EBM tex
+a9d6ba7675e6acee6a6319834aa11c692e7b9ce0	14e1f44532404a2dbbd72c6fd6e84c31837db4b4	2026-09-30 chore: the layer test fixture names its composite v0, not the predecessor's version
+aa12f9c87e979e8b9abc34c18a4f67b48498581d	31c2f15962b0e2493d62b2c2256f8ab54734bbc4	2026-10-01 ratchet: v9 = v8 + RoE (run 023 rung 5: resid t 2.41, guard t -1.26; every LS diagnostic worsened, 
+ad4a13946608797c44f182e13a3ab0ab8d0b09fb	cf03c22bf4939be082bfe3cabaef45e29ef4ca01	2026-10-01 ratchet: Phase D closed — 24/24 passers Stage 2-tested in 5 ladders (14 accepted, 10 rejected, 0 in
+b2152f4e7d4e9afaea8326d5fa04d7687264f055	45461dbf1a99ef616eb60c5a9e6a39d77ed4f31e	2026-09-30 probe: Phase A batch 11 part 1 translated and preflight-passed (GrLTNOA, GrSaleToGrInv, GrSaleToGrO
+b2a70e6888d6977e56bd19a41610495332f7007e	971da8b8623fbdb8f1150c772a1aaa166d9d3924	2026-09-30 probe: Phase A batch 26 part 1 — sinAlgo, skew1, tang (data), std_turn (preflight) to the frontier
+b301313320757c4cc83b1ac42fdce47fecd83117	c9465fb30d7b5b558e631c85f055fc08cb68b741	2026-10-03 docs: public README describing the project (agentic loop, rules, results, layout, reproduction, sta
+b318dcd49d5e294ef932828dab47a7774b5d16d2	4db71ad5b87a200cd3f19da0f0ce158fc87e484e	2026-10-01 ratchet: Stage 2 ladder 4 (run 037) evaluated — zerotrade6M (opens liquidity, 9th family), VolumeTr
+b5f2a77acb89876818c417af80b8349b564dbcd0	1072fb2952fb0350040c32d5c59200a9f83c3dcb	2026-10-02 docs: manuscript corrected after a read-only audit (stop-and-ask count 5 in 3 answers, hedge-term c
+b892fd8b64e49682d94694640db6b6bb2a40b726	b0b2ccc95f239f27d0750d5c1e55f6e6924db28a	2026-10-01 ratchet: v2 = v1 + CBOperProf (run 012 rung 2: resid t 3.02, guard t 0.95); baseline run 015 reprod
+ba822a37081ad806b6ceb7b82feead0a21f5e9df	59ba2c20b72e8d158c602d8ed43ec7db3f7f84b3	2026-10-01 ratchet: v4 = v3 + cfp (run 012 rung 4: resid t 2.97, guard t 2.19); baseline run 019 reproduces th
+bd15a837f3370f0b753b1c5c982ec2ecaf1b326d	64dc1fe2d4403dfd934aed656e0102a2379654e1	2026-10-02 docs: paper draft — paper/paper.md generated from records by paper/build_tables.py (56 tables, ever
+bf17998008c0e298d7a7171f84d3aca7d9039462	ae2caac742bfb850dae544aebccbb65669d4f913	2026-10-01 ratchet: v12 = v11 + zerotrade6M (run 037 rung 1: resid t 2.686514, guard t 1.72; opens liquidity, 
+c76c0d0b4ee1a6c6fbef817959e083ae387787a2	9a7155fc5720117fe47e287b4bdcceae65b491ef	2026-09-30 probe: Phase A batch 18 closed — PctAcc translated and preflight-passed
+c98c63affd16a6f54ec445763e47392a078566cc	201f0798c761727f92df2edb01e94709b7eb083e	2026-10-02 construct: holdout SPENT once under D8 (owner yes, stop-and-ask 5) — runs 054-057 on v14: IC 0.030 
+cacafa8fb213e1a41c6f6b551e6a19b1d60f8006	89f141bb2297eb43ee90ca79c23fa07e4302a65c	2026-10-04 docs: manuscript drops the operational-incident narratives (Section X removed, its reviewer finding
+cc192093fac389102d692b3e7d78a7526d34534a	12fd40d14401ee3a7552dc5b184b40db3f418cf9	2026-10-02 docs: manuscript documents this version only (owner instruction): Section II.K rewritten as the rat
+cd16b8fa1982282624d320bd39c457fa6986e98b	f57db009f4287a4e6d0f78d2103ccc5337a2ce3f	2026-09-30 probe: Phase A batch 17 part 1 — OPLeverage, OperProfRD translated and preflight-passed; OScore (bi
+cd5bc3d082dfc93bedbcdc37eb133698c678faf2	db8a97311c02abb7ef31a94af3442214e7e0adf9	2026-09-30 probe: batch 09 review applied — text and lookback fixes (EquityDuration, EarningsSurprise, EntMult
+cf0794544248e9422496ac30b7a470214515cc9e	60c6eb9d65a5343339f1e11cc8d13c6967d83f8d	2026-09-30 probe: batch 17 review applied (OrgCap fiscal-year and start fixes); batch 18 part 1 specs — PS, Pa
+d03d408605d3a7b1f0b8939f14101f6e01ecc664	3029cdc3d4b458160ce28663bb89475346e14702	2026-10-07 docs: README header links the paper PDF next to SSRN; the Word file leaves the repository (kept loc
+d47702100d15c53518e6cde106a1ccbce8741d4c	8509b6edce0c6aedfb82d0a9a01b8cba2d27ddca	2026-10-01 data: D8 refresh — DATA_SHA 198b281de1a0 -> 42587e08609a (13 Sharadar tables full history to 2026-1
+dad66c0d272e438b66b42b55e20022e2c9d2bdcd	1f90eec78686192211e6dd1f2ae32066d36ef214	2026-09-30 probe: Phase A batches 24-25 — cfp, dNoa, grcapx3y, roaq translated and preflight-passed; betaVIX, 
+dbbad83b4c7fbf19646072f194b80e6abc20307e	9dafa53109204d1b54c9b2424342171845ae7995	2026-09-30 probe: Phase A batch 07 — DelCOL, DelEqu, DelFINL, DelNetFin translated and preflight-passed; DelDR
+de3f3b6102c10c7deb5e99d6557cb064afc44073	79f20daccc891f204234434bdc921899bc5d2153	2026-09-30 docs: v0 open items measured — delisting count sound; early Prof/Inv coverage is Sharadar ART, 3 si
+de5ec33249098443b083232c52d2f5c4622ab0bb	5b706b7b33e417d12ac9f6bd0891fe3757bc99af	2026-09-30 probe: Phase A batch 16 closed — NetEquityFinance, NetPayoutYield translated and preflight-passed (
+e0587cc3531e2ae3a907d08bbe343a1713aa0341	9b9f09b3bbaf2dcaf1bee98e47bdafd25ae9884c	2026-10-01 chore: ladder 4 acceptance decision logged; v12 apply blocked by a permission denial on the file mo
+e0ca35cb55d86f9d123ba36d960a579a861437b8	5d0e4cac45388cd2a4c8afb30201dbd7e1e152cb	2026-10-03 chore: repo_published logged — release (search history + README + GPL-2.0 LICENSE, commit c9465fb) 
+e17f2ce7c32264ea45e8c5a14c6c2365efbe95e1	00a4c4d5cdc7fcca24686ec060904cb6989ab1e0	2026-09-30 config: D11 — the Stage 1 spread bar reads the raw D10−D1; the Stage 2 guard reads the hedged blend
+e439fe5ffd0e4712aa1b2c96042dfb36e96be9f1	b398fb2b7bd0bb7c6aa764bf655122468388c219	2026-10-01 ratchet: ladder 4 declared (run 037: zerotrade6M, VolumeTrend, zerotrade12M, RealizedVol, TrendFact
+e49055cf461a4e70e5f4545c44041de7f6e0d1f7	a7a71c215c0fe9721603f7a35d56ed232589a7f4	2026-09-30 probe: batches 10-11 review applied — current-SIC ruling (D3/HX-2) recorded as a field_map trap; Gr
+e5d6eb469fc3c6736f14141567dabae9726074c0	36ab6d25b7816e66a2b3ed4bd442b37bd7e9a920	2026-09-30 docs: session state through Phase A fetch batch 10
+e64e417dfc0efee07c8303afc8d186d9cfb48242	56a47b73ac7ff19dd967c6df280e8eb542ef4ca1	2026-10-01 screen: Stage 1 batch 7 (run 009) — OperProfRD, PctAcc, RealizedVol pass; 9 rejected (OPLeverage on
+e6e04066f05b37b4c0a343f1a1f7572d1ee87105	b22761149e3c9e5eccdc0e9d058784a7063622dd	2026-10-01 chore: session state after skip1 diagnostic; awaiting owner on stop-and-ask 3
+e7db91ab6cfb89df440fcaffd2579d04f643cf10	b38f042eb0539bfc62a85631d61b9f1aba8b9f32	2026-09-30 probe: Phase A batch 10 — GP translated and preflight-passed; FR, FirmAge, FirmAgeMom, ForecastDisp
+ecda29a3a353aa3051ccff48cbd04ce405231f45	48b9c522deea292936e003f54041568923227446	2026-10-03 docs: manuscript takes the owner's Word edits (title "Agents Propose, Code Decides: ...", Section I
+eed34bc84669efd38dfd568059a0fc9f3886e969	9d4d96ff7204f63e24d1bc57a13178bf98795278	2026-09-30 probe: Phase A batch 12 part 1 — IdioVol3F, IdioVolAHT, Illiquidity translated and preflight-passed
+f2724968014102ccb4c61585b70729f9203e24f6	32b00e2ec1d0c36faaa0e4c476139b829fab5461	2026-09-30 probe: batch 21-23 review applied — ShareIss5Y history_months=65 (OSAP t-65 merge), VolMkt inputs, 
+f362f86c6b5696e84539fb80d59677e4b8ae646e	0feba7307fca698bb4b11a29a3305105d27c067d	2026-10-02 docs: paper revised after read-only review (hedged OOS headline, hedge-term direction, regime cuts,
+f5e511dac3d76302faba2bcea1dfb61fb9a278f9	0c66914fc5a0e85900abf7d5df04d4c8c46d5d6b	2026-09-30 probe: Phase A batch 13 closed — InvGrowth, IntanSP, IntanEP, IntanCFP translated and preflight-pas
+f662aa8ac4b49ce650e8c87cc7ebfb4cc7d275fe	6c84f4cff806a6c708e20d765113281f4d56aef6	2026-09-30 probe: Phase A batch 08 closed (EBM, EP, EarningsConsistency, DolVol pass; EarnSupBig mass point) a
+f7f0be0af9368dd06ef8c79ec9f975a7f6a40030	e2cce272c94bdfdc0b74f89142894e95a4222df7	2026-09-30 probe: Phase A batch 14 part 2 — Mom6m, Mom12mOffSeason, MomOffSeason translated and preflight-pass
+fafe11d1c642117274c04a38815dc89b806a3fb9	dc13dbf2245d8ba5fac9a7c5150011661f3d6d80	2026-10-04 docs: manuscript uses "large language model (LLM)" consistently (abstract, footnote, introduction, 

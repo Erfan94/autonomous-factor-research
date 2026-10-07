@@ -1,3 +1,3 @@
 # False positive: a fields_verified event maps two harness-built series to the note "measured, no key"
 # (no field-map key); gitleaks reads the field name as a generic API key. No credential is involved.
-624bd9c40b5729475f38c52e91035aa87e702d1d:research/events.jsonl:generic-api-key:102
+0883bba886145c7160b1fa34a22ba7fd0eaddd29:research/events.jsonl:generic-api-key:102
